@@ -1,7 +1,10 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include <MetaData.h>
-#include <ChessPiece.h>
+#include "../../ChessProject/MetaData.h"
+#include "../../ChessProject/ChessPiece.h"
+#include "../../ChessProject/ChessBoard.h"
+#include "../../ChessProject/ChessBoardTest.h"
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace ChessTest
@@ -172,6 +175,90 @@ namespace ChessTest
 			Assert::IsFalse(p.doesExist());
 			Assert::AreEqual((int)ChessColor::NoColor, (int)*p.getColor());
 			Assert::AreEqual((int)PieceType::NoType, (int)*p.getType());
+		}
+		TEST_METHOD(CordIsValidOnBoardTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			
+			Assert::IsTrue(board.coordIsValid(0));
+			Assert::IsTrue(board.coordIsValid(1));
+			Assert::IsTrue(board.coordIsValid(2));
+			Assert::IsTrue(board.coordIsValid(3));
+			Assert::IsTrue(board.coordIsValid(4));
+			Assert::IsTrue(board.coordIsValid(5));
+			Assert::IsTrue(board.coordIsValid(6));
+			Assert::IsTrue(board.coordIsValid(7));
+			
+			Assert::IsFalse(board.coordIsValid(-1));
+			Assert::IsFalse(board.coordIsValid(8));		
+		}
+		TEST_METHOD(CordSetIsValidOnBoardTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			
+			for (char file = 'a'; file <= 'h'; file++)
+			{
+				for (int rank = 1; rank <= 8; rank++)
+				{
+					Assert::IsTrue(board.coordSetIsValid(file, rank));
+				}
+			}
+		}
+		TEST_METHOD(BoardConvertingCoordsTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			Assert::AreEqual(0, board.file2Coords('a'));
+			Assert::AreEqual(1, board.file2Coords('b'));
+			Assert::AreEqual(2, board.file2Coords('c'));
+			Assert::AreEqual(3, board.file2Coords('d'));
+			Assert::AreEqual(4, board.file2Coords('e'));
+			Assert::AreEqual(5, board.file2Coords('f'));
+			Assert::AreEqual(6, board.file2Coords('g'));
+			Assert::AreEqual(7, board.file2Coords('h'));
+
+			Assert::AreEqual(-1, board.file2Coords('i'));
+			Assert::AreEqual(-1, board.file2Coords('!'));
+			Assert::AreEqual(-1, board.file2Coords(' '));
+			
+			Assert::AreEqual(0, board.rank2Coords(1));
+			Assert::AreEqual(1, board.rank2Coords(2));
+			Assert::AreEqual(2, board.rank2Coords(3));
+			Assert::AreEqual(3, board.rank2Coords(4));
+			Assert::AreEqual(4, board.rank2Coords(5));
+			Assert::AreEqual(5, board.rank2Coords(6));
+			Assert::AreEqual(6, board.rank2Coords(7));
+			Assert::AreEqual(7, board.rank2Coords(8));
+
+			Assert::AreEqual(-1, board.rank2Coords(9));
+			Assert::AreEqual(-1, board.rank2Coords(0));
+		}
+		TEST_METHOD(PieceEqualOperatorTest)
+		{
+			ChessPiece wr = ChessPiece(PieceType::Rook, ChessColor::White);
+			ChessPiece anotherWr = ChessPiece(PieceType::Rook, ChessColor::White);
+
+			ChessPiece br = ChessPiece(PieceType::Rook, ChessColor::Black);
+			ChessPiece anotherBr = ChessPiece(PieceType::Rook, ChessColor::Black);
+
+			Assert::IsFalse(wr == br);
+			Assert::IsFalse(wr == anotherBr);
+
+			Assert::IsTrue(wr == anotherWr);
+			Assert::IsTrue(br == anotherBr);
+
+			//doesnt work for some reason
+			//Assert::AreNotEqual(wr, br);
+		}
+		TEST_METHOD(BoardSetGetAtPositionTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			ChessPiece wr = ChessPiece(PieceType::Rook, ChessColor::White);
+			board.setPieceAt(&wr, 'a', 1);
+			ChessPiece* gottenPiece = board.getAtPosition('a', 1);
+			Assert::IsTrue(wr == *gottenPiece);
+			gottenPiece = board.getAtPosition('a', 2);
+			Assert::IsFalse(wr == *gottenPiece);
+
 		}
 	};
 }

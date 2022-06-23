@@ -30,6 +30,9 @@
     <ClCompile Include="..\..\ChessProject\ChessBoard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\ChessProject\ChessBoardTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ChessProject\ChessBoard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\ChessProject\ChessBoardTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

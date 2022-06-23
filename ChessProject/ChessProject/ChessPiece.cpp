@@ -16,7 +16,17 @@ PieceType* ChessPiece::getType()
 {
 	return &type;
 }
+int ChessPiece::getTypeVal() const
+{
+	return (int)type;
+}
 ChessColor* ChessPiece::getColor()
 {
 	return &color;
+}
+
+bool ChessPiece::operator ==(const ChessPiece& other) const
+{
+	return (int)other.type == (int)type &&
+		(int)other.color == (int)color;
 }

@@ -11,6 +11,7 @@ public:
 	ChessPiece();
 	bool doesExist();
 	PieceType* getType();
+	int getTypeVal()const;
 	ChessColor* getColor();
+	bool operator ==(const ChessPiece& other) const;
 };
-

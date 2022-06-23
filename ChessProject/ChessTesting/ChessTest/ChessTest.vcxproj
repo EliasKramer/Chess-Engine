@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\ChessProject\ChessBoard.cpp" />
+    <ClCompile Include="..\..\ChessProject\ChessBoardTest.cpp" />
     <ClCompile Include="..\..\ChessProject\ChessPiece.cpp" />
     <ClCompile Include="..\..\ChessProject\MetaData.cpp" />
     <ClCompile Include="ChessTest.cpp" />
@@ -170,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\ChessProject\ChessBoard.h" />
+    <ClInclude Include="..\..\ChessProject\ChessBoardTest.h" />
     <ClInclude Include="..\..\ChessProject\ChessPiece.h" />
     <ClInclude Include="..\..\ChessProject\MetaData.h" />
     <ClInclude Include="pch.h" />
