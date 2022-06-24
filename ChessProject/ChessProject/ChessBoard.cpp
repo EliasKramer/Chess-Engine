@@ -6,51 +6,30 @@ ChessBoard::ChessBoard()
 	initBoard();
 }
 
-ChessPiece* ChessBoard::getAtPosition(char file, unsigned short rank)
+ChessPiece* ChessBoard::getAtPosition(Coordinate* coord)
 {
-	return coordSetIsValid(file, rank) ?
-		board[file2Coords(file),rank2Coords(rank)] :
+	return coord->isValid() ?
+		board[coord->getFileAsPosition(), coord->getRankAsPosition()] :
 		nullptr;
+}
+
+
+
+void ChessBoard::setPieceAt(ChessPiece* piece, Coordinate* coord)
+{
+	if (coord->isValid())
+	{
+		int file = coord->getFileAsPosition();
+		int rank = coord->getRankAsPosition();
+		ChessPiece toDel = 
+			board[file][rank];
+		board[file][rank] = *piece;
+		//delete& toDel;
+	}
 }
 
 void ChessBoard::initBoard()
 {
 	ChessPiece wr = ChessPiece(PieceType::Rook, ChessColor::White);
-	setPieceAt(&wr, 'a', 1);
-
-	
-}
-
-void ChessBoard::setPieceAt(ChessPiece* piece, char file, unsigned short rank)
-{
-	int actualFile = file2Coords(file);
-	int actualRank = rank2Coords(rank);
-	if (actualFile != -1 && actualRank != -1)
-	{
-		ChessPiece toDel = board[actualFile][actualRank];
-		board[actualFile][actualRank] = *piece;
-		//delete& toDel;
-	}
-}
-
-int ChessBoard::file2Coords(char file)
-{
-	int result = file - 'a';
-	return coordIsValid(result) ? result : -1;
-}
-
-int ChessBoard::rank2Coords(unsigned short rank)
-{
-	int result = rank - 1;
-	return coordIsValid(result) ? result : -1;
-}
-
-bool ChessBoard::coordIsValid(int coord)
-{
-	return coord < BOARD_SIZE && coord >= 0;
-}
-
-bool ChessBoard::coordSetIsValid(char file, unsigned short rank)
-{
-	return coordIsValid(file2Coords(file)) && coordIsValid(rank2Coords(rank));
+	//setPieceAt(&wr, 'a', 1);
 }

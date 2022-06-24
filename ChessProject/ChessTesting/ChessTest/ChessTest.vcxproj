@@ -160,7 +160,9 @@
     <ClCompile Include="..\..\ChessProject\ChessBoard.cpp" />
     <ClCompile Include="..\..\ChessProject\ChessBoardTest.cpp" />
     <ClCompile Include="..\..\ChessProject\ChessPiece.cpp" />
+    <ClCompile Include="..\..\ChessProject\Coordinate.cpp" />
     <ClCompile Include="..\..\ChessProject\MetaData.cpp" />
+    <ClCompile Include="..\..\ChessProject\Move.cpp" />
     <ClCompile Include="ChessTest.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -173,7 +175,9 @@
     <ClInclude Include="..\..\ChessProject\ChessBoard.h" />
     <ClInclude Include="..\..\ChessProject\ChessBoardTest.h" />
     <ClInclude Include="..\..\ChessProject\ChessPiece.h" />
+    <ClInclude Include="..\..\ChessProject\Coordinate.h" />
     <ClInclude Include="..\..\ChessProject\MetaData.h" />
+    <ClInclude Include="..\..\ChessProject\Move.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>

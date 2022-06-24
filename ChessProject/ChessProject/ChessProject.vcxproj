@@ -143,13 +143,17 @@
     <ClCompile Include="ChessBoardTest.cpp" />
     <ClCompile Include="ChessPiece.cpp" />
     <ClCompile Include="ChessProject.cpp" />
+    <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="MetaData.cpp" />
+    <ClCompile Include="Move.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChessBoard.h" />
     <ClInclude Include="ChessBoardTest.h" />
     <ClInclude Include="ChessPiece.h" />
+    <ClInclude Include="Coordinate.h" />
     <ClInclude Include="MetaData.h" />
+    <ClInclude Include="Move.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

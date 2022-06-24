@@ -4,7 +4,8 @@
 #include "../../ChessProject/ChessPiece.h"
 #include "../../ChessProject/ChessBoard.h"
 #include "../../ChessProject/ChessBoardTest.h"
-
+#include "../../ChessProject/Move.h"
+#include "../../ChessProject/Coordinate.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace ChessTest
@@ -176,62 +177,6 @@ namespace ChessTest
 			Assert::AreEqual((int)ChessColor::NoColor, (int)*p.getColor());
 			Assert::AreEqual((int)PieceType::NoType, (int)*p.getType());
 		}
-		TEST_METHOD(CordIsValidOnBoardTest)
-		{
-			ChessBoardTest board = ChessBoardTest();
-			
-			Assert::IsTrue(board.coordIsValid(0));
-			Assert::IsTrue(board.coordIsValid(1));
-			Assert::IsTrue(board.coordIsValid(2));
-			Assert::IsTrue(board.coordIsValid(3));
-			Assert::IsTrue(board.coordIsValid(4));
-			Assert::IsTrue(board.coordIsValid(5));
-			Assert::IsTrue(board.coordIsValid(6));
-			Assert::IsTrue(board.coordIsValid(7));
-			
-			Assert::IsFalse(board.coordIsValid(-1));
-			Assert::IsFalse(board.coordIsValid(8));		
-		}
-		TEST_METHOD(CordSetIsValidOnBoardTest)
-		{
-			ChessBoardTest board = ChessBoardTest();
-			
-			for (char file = 'a'; file <= 'h'; file++)
-			{
-				for (int rank = 1; rank <= 8; rank++)
-				{
-					Assert::IsTrue(board.coordSetIsValid(file, rank));
-				}
-			}
-		}
-		TEST_METHOD(BoardConvertingCoordsTest)
-		{
-			ChessBoardTest board = ChessBoardTest();
-			Assert::AreEqual(0, board.file2Coords('a'));
-			Assert::AreEqual(1, board.file2Coords('b'));
-			Assert::AreEqual(2, board.file2Coords('c'));
-			Assert::AreEqual(3, board.file2Coords('d'));
-			Assert::AreEqual(4, board.file2Coords('e'));
-			Assert::AreEqual(5, board.file2Coords('f'));
-			Assert::AreEqual(6, board.file2Coords('g'));
-			Assert::AreEqual(7, board.file2Coords('h'));
-
-			Assert::AreEqual(-1, board.file2Coords('i'));
-			Assert::AreEqual(-1, board.file2Coords('!'));
-			Assert::AreEqual(-1, board.file2Coords(' '));
-			
-			Assert::AreEqual(0, board.rank2Coords(1));
-			Assert::AreEqual(1, board.rank2Coords(2));
-			Assert::AreEqual(2, board.rank2Coords(3));
-			Assert::AreEqual(3, board.rank2Coords(4));
-			Assert::AreEqual(4, board.rank2Coords(5));
-			Assert::AreEqual(5, board.rank2Coords(6));
-			Assert::AreEqual(6, board.rank2Coords(7));
-			Assert::AreEqual(7, board.rank2Coords(8));
-
-			Assert::AreEqual(-1, board.rank2Coords(9));
-			Assert::AreEqual(-1, board.rank2Coords(0));
-		}
 		TEST_METHOD(PieceEqualOperatorTest)
 		{
 			ChessPiece wr = ChessPiece(PieceType::Rook, ChessColor::White);
@@ -253,12 +198,62 @@ namespace ChessTest
 		{
 			ChessBoardTest board = ChessBoardTest();
 			ChessPiece wr = ChessPiece(PieceType::Rook, ChessColor::White);
-			board.setPieceAt(&wr, 'a', 1);
-			ChessPiece* gottenPiece = board.getAtPosition('a', 1);
+			board.setPieceAt(&wr, &Coordinate('a', 1));
+			ChessPiece* gottenPiece = board.getAtPosition(&Coordinate('a', 1));
 			Assert::IsTrue(wr == *gottenPiece);
-			gottenPiece = board.getAtPosition('a', 2);
+			gottenPiece = board.getAtPosition(&Coordinate('a', 2));
 			Assert::IsFalse(wr == *gottenPiece);
 
+		}
+		TEST_METHOD(NormalCoordinatesTest)
+		{
+			Coordinate a1 = Coordinate('a', 1);
+			Coordinate h8 = Coordinate('h', 8);
+			Assert::AreEqual(a1.getFileNormal(), 'a');
+			Assert::AreEqual(h8.getFileNormal(), 'h');
+			Assert::AreEqual((int)a1.getRankNormal(), 1);
+			Assert::AreEqual((int)h8.getRankNormal(), 8);
+			
+			Assert::AreEqual((int)a1.getFileAsPosition(), 0);
+			Assert::AreEqual((int)h8.getFileAsPosition(), 7);
+
+			Assert::AreEqual((int)a1.getRankAsPosition(), 0);
+			Assert::AreEqual((int)h8.getRankAsPosition(), 7);
+			
+			Coordinate arrA1 = Coordinate((unsigned short)0, (unsigned short)0);
+			Coordinate arrH8 = Coordinate((unsigned short)7, (unsigned short)7);
+			
+			Assert::IsTrue(a1 == arrA1);
+			Assert::IsTrue(h8 == arrH8);
+
+			Assert::AreEqual(arrA1.getFileNormal(), 'a');
+			Assert::AreEqual(arrH8.getFileNormal(), 'h');
+			Assert::AreEqual((int)arrA1.getRankNormal(), 1);
+			Assert::AreEqual((int)arrH8.getRankNormal(), 8);
+
+			Assert::AreEqual((int)arrA1.getFileAsPosition(), 0);
+			Assert::AreEqual((int)arrH8.getFileAsPosition(), 7);
+
+			Assert::AreEqual((int)arrA1.getRankAsPosition(), 0);
+			Assert::AreEqual((int)arrH8.getRankAsPosition(), 7);
+		}
+		TEST_METHOD(ValidCoordinatesTest)
+		{
+			Coordinate a1 = Coordinate('a', 1);
+			Coordinate h8 = Coordinate('h', 8);
+			Coordinate invalid1 = Coordinate('!', 1);
+			Coordinate invalid2 = Coordinate('a', 9);
+			Coordinate invalid3 = Coordinate('c', 22);
+
+			Assert::IsTrue(a1.isValid());
+			Assert::IsTrue(h8.isValid());
+			Assert::IsFalse(invalid1.isValid());
+			Assert::IsFalse(invalid2.isValid());
+			Assert::IsFalse(invalid3.isValid());
+		}
+		TEST_METHOD(MoveTest)
+		{
+			
 		}
 	};
 }
