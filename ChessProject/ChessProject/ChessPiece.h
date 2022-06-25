@@ -9,7 +9,7 @@ private:
 public:
 	ChessPiece(PieceType givenType, ChessColor givenColor);
 	ChessPiece();
-	bool doesExist();
+	bool isValid();
 	PieceType* getType();
 	int getTypeVal()const;
 	ChessColor* getColor();

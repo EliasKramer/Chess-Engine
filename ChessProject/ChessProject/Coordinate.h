@@ -5,6 +5,7 @@ private:
 	unsigned short file;
 	unsigned short rank;
 public:
+	Coordinate();
 	Coordinate(char givenFile, unsigned short givenRank);
 	Coordinate(unsigned short givenFile, unsigned short givenRank);
 	//used for board position as known
@@ -16,4 +17,5 @@ public:
 	//is on an 8x8 chess board
 	bool isValid();
 	bool operator ==(const Coordinate& other) const;
+	bool operator !=(const Coordinate& other) const;
 };

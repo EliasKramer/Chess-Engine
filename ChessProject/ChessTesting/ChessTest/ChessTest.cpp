@@ -164,16 +164,16 @@ namespace ChessTest
 			ChessPiece valid = ChessPiece(rook, white);
 
 
-			Assert::IsFalse(allInvalid.doesExist());
-			Assert::IsFalse(invalidType.doesExist());
-			Assert::IsFalse(invalidColor.doesExist());
-			Assert::IsFalse(empty.doesExist());
-			Assert::IsTrue(valid.doesExist());
+			Assert::IsFalse(allInvalid.isValid());
+			Assert::IsFalse(invalidType.isValid());
+			Assert::IsFalse(invalidColor.isValid());
+			Assert::IsFalse(empty.isValid());
+			Assert::IsTrue(valid.isValid());
 		}
 		TEST_METHOD(DefaultConstructorPieceTest)
 		{
 			ChessPiece p = ChessPiece();
-			Assert::IsFalse(p.doesExist());
+			Assert::IsFalse(p.isValid());
 			Assert::AreEqual((int)ChessColor::NoColor, (int)*p.getColor());
 			Assert::AreEqual((int)PieceType::NoType, (int)*p.getType());
 		}
@@ -251,9 +251,128 @@ namespace ChessTest
 			Assert::IsFalse(invalid2.isValid());
 			Assert::IsFalse(invalid3.isValid());
 		}
+		TEST_METHOD(EqualCoordinatesTest)
+		{
+			Coordinate a1 = Coordinate('a', 1);
+			Coordinate h8 = Coordinate('h', 8);
+			Coordinate a1Copy = Coordinate('a', 1);
+			Coordinate h8Copy = Coordinate('h', 8);
+			Coordinate invalid1 = Coordinate('!', 1);
+			Coordinate invalid2 = Coordinate('a', 9);
+			Coordinate invalid3 = Coordinate('c', 22);
+
+			Assert::IsTrue(a1 == a1Copy);
+			Assert::IsFalse(a1 != a1Copy);
+
+			Assert::IsTrue(h8 == h8Copy);
+			Assert::IsFalse(h8 != h8Copy);
+			
+			Assert::IsFalse(a1 == h8);
+			Assert::IsTrue(a1 != h8);
+			
+			Assert::IsFalse(a1 == invalid1);
+			Assert::IsTrue(a1 != invalid1);
+
+			Assert::IsFalse(a1 == invalid2);
+			Assert::IsTrue(a1 != invalid2);
+			
+			Assert::IsFalse(a1 == invalid3);
+			Assert::IsTrue(a1 != invalid3);
+		}
 		TEST_METHOD(MoveTest)
 		{
-			
+			Move defaultConstructor = Move();
+			Assert::IsFalse(defaultConstructor.getDestination()->isValid());
+			Assert::IsFalse(defaultConstructor.getStart()->isValid());
+			Assert::IsTrue(nullptr == defaultConstructor.getPiece());
+			Assert::IsFalse(defaultConstructor.isValid());
+
+			Move move = Move(
+				&ChessPiece(PieceType::Rook, ChessColor::White),
+				&Coordinate('a', 1),
+				&Coordinate('b', 2));
+
+			Assert::IsTrue(move.getStart()->isValid());
+			Assert::IsTrue(move.getDestination()->isValid());
+			Assert::IsFalse(*(move.getDestination()) == *(move.getStart()));
+			Assert::IsFalse(nullptr == move.getPiece());
+			Assert::IsTrue(move.getPiece()->isValid());
+
+			Assert::IsTrue(PieceType::Rook == *(move.getPiece()->getType()));
+			Assert::IsTrue(ChessColor::White == *(move.getPiece()->getColor()));
+
+			Assert::IsTrue(Coordinate('a', 1) == *(move.getStart()));
+			Assert::IsTrue(Coordinate('b', 2) == *(move.getDestination()));
+
+			Assert::IsTrue(move.isValid());
+		}
+		TEST_METHOD(defaultBoardSetupTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('a', 1))) ==
+				ChessPiece(PieceType::Rook, ChessColor::White));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('b', 1))) ==
+				ChessPiece(PieceType::Knight, ChessColor::White));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('c', 1))) ==
+				ChessPiece(PieceType::Bishop, ChessColor::White));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('d', 1))) ==
+				ChessPiece(PieceType::Queen, ChessColor::White));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('e', 1))) ==
+				ChessPiece(PieceType::King, ChessColor::White));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('f', 1))) ==
+				ChessPiece(PieceType::Bishop, ChessColor::White));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('g', 1))) ==
+				ChessPiece(PieceType::Knight, ChessColor::White));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('h', 1))) ==
+				ChessPiece(PieceType::Rook, ChessColor::White));
+			for(char file = 'a'; file <= 'h'; file++)
+			{
+				Assert::IsTrue(
+					*(board.getAtPosition(&Coordinate(file, 2))) ==
+					ChessPiece(PieceType::Pawn, ChessColor::White));
+				for(int rank = 3; rank <= 6; rank++)
+				{
+					Assert::IsFalse(board.getAtPosition(&Coordinate(file, rank))->isValid());
+					Assert::IsTrue(
+						*(board.getAtPosition(&Coordinate(file, rank))) ==
+						ChessPiece(PieceType::NoType, ChessColor::NoColor));
+				}
+				Assert::IsTrue(
+					*(board.getAtPosition(&Coordinate(file, 7))) ==
+					ChessPiece(PieceType::Pawn, ChessColor::Black));
+			}
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('a', 8))) ==
+				ChessPiece(PieceType::Rook, ChessColor::Black));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('b', 8))) ==
+				ChessPiece(PieceType::Knight, ChessColor::Black));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('c', 8))) ==
+				ChessPiece(PieceType::Bishop, ChessColor::Black));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('d', 8))) ==
+				ChessPiece(PieceType::Queen, ChessColor::Black));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('e', 8))) ==
+				ChessPiece(PieceType::King, ChessColor::Black));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('f', 8))) ==
+				ChessPiece(PieceType::Bishop, ChessColor::Black));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('g', 8))) ==
+				ChessPiece(PieceType::Knight, ChessColor::Black));
+			Assert::IsTrue(
+				*(board.getAtPosition(&Coordinate('h', 8))) ==
+				ChessPiece(PieceType::Rook, ChessColor::Black));
 		}
 	};
 }

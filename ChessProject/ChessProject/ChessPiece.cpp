@@ -8,7 +8,7 @@ ChessPiece::ChessPiece(PieceType givenType, ChessColor givenColor)
 }
 ChessPiece::ChessPiece() : ChessPiece(PieceType::NoType, ChessColor::NoColor)
 {}
-bool ChessPiece::doesExist()
+bool ChessPiece::isValid()
 {
 	return exists;
 }

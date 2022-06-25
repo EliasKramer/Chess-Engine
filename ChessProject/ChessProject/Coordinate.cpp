@@ -1,5 +1,10 @@
 #include "Coordinate.h"
 #include "MetaData.h"
+Coordinate::Coordinate()
+{
+	file = -1;
+	rank = -1;
+}
 Coordinate::Coordinate(char givenFile, unsigned short givenRank)
 {
 	file = (givenFile - 'a');
@@ -41,4 +46,9 @@ bool Coordinate::isValid()
 bool Coordinate::operator ==(const Coordinate& other) const
 {
 	return other.rank == rank && other.file == file;
+}
+
+bool Coordinate::operator!=(const Coordinate& other) const
+{
+	return !(operator ==(other));
 }
