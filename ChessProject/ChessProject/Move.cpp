@@ -4,14 +4,12 @@ Move::Move()
 {
 	start = Coordinate();
 	destination = Coordinate();
-	piece = nullptr;
 }
 
-Move::Move(ChessPiece* givenPiece,
+Move::Move(
 	Coordinate* givenStart,
 	Coordinate* givenDestination)
 {
-	piece = givenPiece;
 	start = *givenStart;
 	destination = *givenDestination;
 }
@@ -26,16 +24,10 @@ Coordinate* Move::getDestination()
 	return &destination;
 }
 
-ChessPiece* Move::getPiece()
-{
-	return piece;
-}
-
 bool Move::isValid()
 {
 	return
 		start.isValid() &&
 		destination.isValid() &&
-		start != destination &&
-		piece != nullptr && piece->isValid();
+		start != destination;
 }

@@ -9,9 +9,31 @@ ChessBoard::ChessBoard()
 ChessPiece* ChessBoard::getAtPosition(Coordinate* coord)
 {
 	return coord->isValid() ?
-		&board[coord->getFileAsPosition()][ coord->getRankAsPosition()] :
+		&board[coord->getFileAsPosition()][coord->getRankAsPosition()] :
 		nullptr;
 }
+
+ChessColor* ChessBoard::getTurnColor()
+{
+	ChessColor white = ChessColor::White;
+	ChessColor black = ChessColor::Black;
+	return isWhiteTurn ? &white : &black;
+}
+
+bool ChessBoard::executeMove(Move* givenMove)
+{
+	if (givenMove->isValid())
+	{
+		setPieceAt(
+			getAtPosition(
+				givenMove->getStart()),
+			givenMove->getDestination());
+		return true;
+	}
+	return false;
+}
+
+
 
 void ChessBoard::setPieceAt(ChessPiece* piece, Coordinate* coord)
 {
@@ -23,6 +45,8 @@ void ChessBoard::setPieceAt(ChessPiece* piece, Coordinate* coord)
 		board[file][rank] = *piece;
 	}
 }
+
+
 
 void ChessBoard::initBoard()
 {
@@ -49,16 +73,16 @@ void ChessBoard::initBoard()
 	piece = ChessPiece(PieceType::Bishop, ChessColor::White);
 	position = Coordinate('f', 1);
 	setPieceAt(&piece, &position);
-	
+
 	piece = ChessPiece(PieceType::Knight, ChessColor::White);
 	position = Coordinate('g', 1);
 	setPieceAt(&piece, &position);
-	
+
 	piece = ChessPiece(PieceType::Rook, ChessColor::White);
 	position = Coordinate('h', 1);
 	setPieceAt(&piece, &position);
 
-	for(char file = 'a'; file <= 'h'; file++)
+	for (char file = 'a'; file <= 'h'; file++)
 	{
 		piece = ChessPiece(PieceType::Pawn, ChessColor::White);
 		position = Coordinate(file, 2);
@@ -70,20 +94,20 @@ void ChessBoard::initBoard()
 			position = Coordinate(file, rank);
 			setPieceAt(&piece, &position);
 		}
-		
+
 		piece = ChessPiece(PieceType::Pawn, ChessColor::Black);
 		position = Coordinate(file, 7);
 		setPieceAt(&piece, &position);
 	}
-	
+
 	piece = ChessPiece(PieceType::Rook, ChessColor::Black);
 	position = Coordinate('a', 8);
 	setPieceAt(&piece, &position);
-	
+
 	piece = ChessPiece(PieceType::Knight, ChessColor::Black);
 	position = Coordinate('b', 8);
 	setPieceAt(&piece, &position);
-	
+
 	piece = ChessPiece(PieceType::Bishop, ChessColor::Black);
 	position = Coordinate('c', 8);
 	setPieceAt(&piece, &position);
@@ -91,15 +115,15 @@ void ChessBoard::initBoard()
 	piece = ChessPiece(PieceType::Queen, ChessColor::Black);
 	position = Coordinate('d', 8);
 	setPieceAt(&piece, &position);
-	
+
 	piece = ChessPiece(PieceType::King, ChessColor::Black);
 	position = Coordinate('e', 8);
 	setPieceAt(&piece, &position);
-	
+
 	piece = ChessPiece(PieceType::Bishop, ChessColor::Black);
 	position = Coordinate('f', 8);
 	setPieceAt(&piece, &position);
-	
+
 	piece = ChessPiece(PieceType::Knight, ChessColor::Black);
 	position = Coordinate('g', 8);
 	setPieceAt(&piece, &position);
@@ -107,4 +131,74 @@ void ChessBoard::initBoard()
 	piece = ChessPiece(PieceType::Rook, ChessColor::Black);
 	position = Coordinate('h', 8);
 	setPieceAt(&piece, &position);
+}
+short ChessBoard::ifNegativMakePositive(short a)
+{
+	return a < 0 ? -a : a;
+}
+bool ChessBoard::moveIsLegal(Move* givenMove)
+{
+	if (!givenMove->isValid())
+	{
+		return false;
+	}
+
+	ChessPiece* piece = getAtPosition(givenMove->getStart());
+	if (!piece->isValid())
+	{
+		return false;
+	}
+
+	bool pieceToMoveIsWhite =
+		*piece->getColor() == ChessColor::White;
+	if (isWhiteTurn != pieceToMoveIsWhite)
+	{
+		return false;
+	}
+
+	if (!typeMoveLegal(piece->getType(), givenMove))
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool ChessBoard::typeMoveLegal(PieceType* piece, Move* givenMove)
+{
+	switch (*piece)
+	{
+	case PieceType::Rook:
+		return straightLineCheck(givenMove);
+	case PieceType::Pawn:
+		return true;
+	case PieceType::Knight:
+		return true;
+	case PieceType::Bishop:
+		return diagonalLineCheck(givenMove);
+	case PieceType::Queen:
+		return true;
+	case PieceType::King:
+		return true;
+	default:
+		return false;
+		break;
+	}
+}
+
+bool ChessBoard::straightLineCheck(Move* givenMove)
+{
+	Coordinate* start = givenMove->getStart();
+	Coordinate* dest = givenMove->getDestination();
+
+	return (start->getFileAsPosition() == dest->getFileAsPosition()) ||
+		(start->getRankAsPosition() == dest->getRankAsPosition());
+}
+
+bool ChessBoard::diagonalLineCheck(Move* givenMove)
+{
+	Coordinate* start = givenMove->getStart();
+	Coordinate* dest = givenMove->getDestination();
+	return ifNegativMakePositive((short)start->getFileAsPosition() - (short)dest->getFileAsPosition()) ==
+		ifNegativMakePositive((short)start->getRankAsPosition() - (short)dest->getRankAsPosition());
 }

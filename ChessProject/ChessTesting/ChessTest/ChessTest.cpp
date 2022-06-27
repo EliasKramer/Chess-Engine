@@ -284,22 +284,15 @@ namespace ChessTest
 			Move defaultConstructor = Move();
 			Assert::IsFalse(defaultConstructor.getDestination()->isValid());
 			Assert::IsFalse(defaultConstructor.getStart()->isValid());
-			Assert::IsTrue(nullptr == defaultConstructor.getPiece());
 			Assert::IsFalse(defaultConstructor.isValid());
 
 			Move move = Move(
-				&ChessPiece(PieceType::Rook, ChessColor::White),
 				&Coordinate('a', 1),
 				&Coordinate('b', 2));
 
 			Assert::IsTrue(move.getStart()->isValid());
 			Assert::IsTrue(move.getDestination()->isValid());
 			Assert::IsFalse(*(move.getDestination()) == *(move.getStart()));
-			Assert::IsFalse(nullptr == move.getPiece());
-			Assert::IsTrue(move.getPiece()->isValid());
-
-			Assert::IsTrue(PieceType::Rook == *(move.getPiece()->getType()));
-			Assert::IsTrue(ChessColor::White == *(move.getPiece()->getColor()));
 
 			Assert::IsTrue(Coordinate('a', 1) == *(move.getStart()));
 			Assert::IsTrue(Coordinate('b', 2) == *(move.getDestination()));
@@ -373,6 +366,167 @@ namespace ChessTest
 			Assert::IsTrue(
 				*(board.getAtPosition(&Coordinate('h', 8))) ==
 				ChessPiece(PieceType::Rook, ChessColor::Black));
+		}
+		TEST_METHOD(chessboardExecuteMoveTest)
+		{
+			//do move is doing the move and just checks if it is possible.
+			//not if it is legal.
+			ChessBoardTest board = ChessBoardTest();
+
+			Coordinate start = Coordinate('a', 1);
+			Coordinate dest = Coordinate('b', 2);
+			Coordinate invalid = Coordinate();
+
+			Move move = Move(&start, &dest);
+			Assert::IsTrue(board.executeMove(&move));
+			
+			move = Move(&start, &start);
+			Assert::IsFalse(board.executeMove(&move));
+
+			move = Move(&invalid, &invalid);
+			Assert::IsFalse(board.executeMove(&move));
+
+			move = Move(&start, &invalid);
+			Assert::IsFalse(board.executeMove(&move));
+			
+			move = Move(&invalid, &dest);
+			Assert::IsFalse(board.executeMove(&move));
+		}
+		TEST_METHOD(chessBoardClearTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+			for(char file = 'a'; file <= 'h'; file++)
+			{
+				for(int rank = 1; rank <= 8; rank++)
+				{
+					Assert::IsFalse(board.getAtPosition(&Coordinate(file, rank))->isValid());
+					Assert::IsTrue(
+						*(board.getAtPosition(&Coordinate(file, rank))) ==
+						ChessPiece(PieceType::NoType, ChessColor::NoColor));
+				}
+			}
+		}
+		TEST_METHOD(chessBoardSetAndGetTurnColorTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			ChessColor white = ChessColor::White;
+			ChessColor black = ChessColor::Black;
+
+			Assert::IsTrue((int)*board.getTurnColor() == (int)ChessColor::White);
+			board.setTurnColor(&black);
+			Assert::IsTrue((int)*board.getTurnColor() == (int)ChessColor::Black);
+			board.setTurnColor(&white);
+			Assert::IsTrue((int)*board.getTurnColor() == (int)ChessColor::White);
+			board.setTurnColor(&white);
+			Assert::IsTrue((int)*board.getTurnColor() == (int)ChessColor::White);
+		}
+		TEST_METHOD(chessBoardLegalMoveValidInputsTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			//invalid, because move coords are not valid
+			//last coord not valid
+			Move invalidMove = Move(&Coordinate('a',1),&Coordinate());
+			Assert::IsFalse(board.moveIsLegal(&invalidMove));
+			//first coord not valid
+			invalidMove = Move(&Coordinate(), &Coordinate('b', 5));
+			Assert::IsFalse(board.moveIsLegal(&invalidMove));
+			//start and dest are same
+			invalidMove = Move(&Coordinate('a', 1), &Coordinate('a', 1));
+			Assert::IsFalse(board.moveIsLegal(&invalidMove));
+			//no coord is valid
+			invalidMove = Move(&Coordinate(), &Coordinate());
+			Assert::IsFalse(board.moveIsLegal(&invalidMove));
+			
+			//no piece at that field
+			Coordinate piecePos = Coordinate('a', 2);
+			Move testMove = Move(&piecePos, &Coordinate('a', 3));
+			Assert::IsFalse(board.moveIsLegal(&testMove));
+			
+			//now we set a piece at that coord. the move should be legal
+			board.setPieceAt(&ChessPiece(PieceType::Pawn, ChessColor::White), &piecePos);
+			Assert::IsTrue(board.moveIsLegal(&testMove));
+
+			//not his turn - should be false
+			ChessColor white = ChessColor::White;
+			ChessColor black = ChessColor::Black;
+			
+			board.setTurnColor(&black);
+			Assert::IsFalse(board.moveIsLegal(&testMove));
+
+			//his turn again - should be true like before
+			board.setTurnColor(&white);
+			Assert::IsTrue(board.moveIsLegal(&testMove));
+		}
+		TEST_METHOD(chessBoardLegalRookMoveTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+			
+			PieceType pieceType = PieceType::Rook;
+			
+			//valid moves
+			Move move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			
+			//invalid moves
+			move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
+			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('c', 7));
+			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('b', 1), &Coordinate('a', 2));
+			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('h', 8));
+			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+		}
+		TEST_METHOD(chessBoardLegalBishopMoveTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			PieceType pieceType = PieceType::Bishop;
+
+			//valid moves
+			Move move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('c', 3));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('e', 5), &Coordinate('h', 2));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('d', 4), &Coordinate('b', 6));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('b', 3));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('h', 8));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('h', 8), &Coordinate('a', 1));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('a', 8), &Coordinate('h', 1));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('h', 1), &Coordinate('a', 8));
+			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+
+			//invalid moves
+			move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
+			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
+			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
+			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
+			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
+			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
 		}
 	};
 }
