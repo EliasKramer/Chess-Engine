@@ -465,68 +465,251 @@ namespace ChessTest
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
 			
-			PieceType pieceType = PieceType::Rook;
-			
+			ChessPiece wr = ChessPiece(PieceType::Rook, ChessColor::White);
+
 			//valid moves
 			Move move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wr, &move));
 			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wr, &move));
 			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wr, &move));
 			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wr, &move));
 			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wr, &move));
 			
 			//invalid moves
 			move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
-			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wr, &move));
 			move = Move(&Coordinate('a', 1), &Coordinate('c', 7));
-			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wr, &move));
 			move = Move(&Coordinate('b', 1), &Coordinate('a', 2));
-			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wr, &move));
 			move = Move(&Coordinate('a', 1), &Coordinate('h', 8));
-			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wr, &move));
 		}
 		TEST_METHOD(chessBoardLegalBishopMoveTest)
 		{
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
 
-			PieceType pieceType = PieceType::Bishop;
+			ChessPiece wb = ChessPiece(PieceType::Bishop, ChessColor::White);
 
 			//valid moves
 			Move move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('a', 1), &Coordinate('c', 3));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('e', 5), &Coordinate('h', 2));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('d', 4), &Coordinate('b', 6));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('d', 5), &Coordinate('b', 3));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('a', 1), &Coordinate('h', 8));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('h', 8), &Coordinate('a', 1));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('a', 8), &Coordinate('h', 1));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('h', 1), &Coordinate('a', 8));
-			Assert::IsTrue(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 
 			//invalid moves
 			move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
-			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
-			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
-			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
-			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wb, &move));
 			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
-			Assert::IsFalse(board.typeMoveLegal(&pieceType, &move));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wb, &move));
+		}
+		TEST_METHOD(chessBoardLegalQueenMoveTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+			
+			ChessPiece wq = ChessPiece(PieceType::Queen, ChessColor::White);
+
+			//valid moves
+			Move move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('c', 3));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('e', 5), &Coordinate('h', 2));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('d', 4), &Coordinate('b', 6));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('b', 3));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+
+			//invalid moves
+			move = Move(&Coordinate('a', 1), &Coordinate('c', 2));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('c', 8));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('e', 7));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('c', 7));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('b', 6));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('b', 4));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('c', 3));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('e', 3));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('f', 4));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('f', 6));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
+		}
+		TEST_METHOD(chessBoardLegalKnightMoveTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+			
+			ChessPiece wn = ChessPiece(PieceType::Knight, ChessColor::White);
+			
+			//valid moves
+			Move move = Move(&Coordinate('a', 1), &Coordinate('b', 3));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('c', 2));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('e', 7));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('c', 7));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('b', 6));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('b', 4));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('c', 3));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('e', 3));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('f', 4));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('f', 6));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+
+			//invalid moves
+			move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('c', 3));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('e', 5), &Coordinate('h', 2));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('d', 4), &Coordinate('b', 6));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('b', 3));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
+		}
+		TEST_METHOD(chessBoardLegalKingMoveTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			ChessPiece bk = ChessPiece(PieceType::King, ChessColor::Black);
+
+			//valid moves
+			Move move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('b', 1));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('g', 5), &Coordinate('h', 6));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('g', 5), &Coordinate('h', 5));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('g', 5), &Coordinate('h', 4));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('g', 5), &Coordinate('f', 6));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('g', 5), &Coordinate('f', 5));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('g', 5), &Coordinate('f', 4));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('g', 5), &Coordinate('g', 6));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('g', 5), &Coordinate('g', 4));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+
+			//invalid moves
+			move = Move(&Coordinate('a', 1), &Coordinate('b', 3));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('c', 2));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('e', 7));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('c', 7));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('b', 6));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('b', 4));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('c', 3));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('e', 3));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('f', 4));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('f', 6));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('a', 1), &Coordinate('c', 3));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('e', 5), &Coordinate('h', 2));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('d', 4), &Coordinate('b', 6));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			move = Move(&Coordinate('d', 5), &Coordinate('b', 3));
+			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+		}
+		TEST_METHOD(chessBoardLegalPawnMoveTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			ChessPiece pawn = ChessPiece(PieceType::Pawn, ChessColor::White);
+
+
+			//valid moves
+			Move move = Move(&Coordinate('a', 2), &Coordinate('a', 4));
+			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&pawn, &move));
 		}
 	};
 }

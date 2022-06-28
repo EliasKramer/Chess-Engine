@@ -10,5 +10,5 @@ public:
 	void setTurnColor(ChessColor* color);
 	bool executeMove(Move* givenMove);
 	bool moveIsLegal(Move* givenMove);
-	bool typeMoveLegal(PieceType* type, Move* givenMove);
+	bool pieceIsAlledToMoveInThisWay(ChessPiece* type, Move* givenMove);
 };

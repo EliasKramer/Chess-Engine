@@ -156,7 +156,7 @@ bool ChessBoard::moveIsLegal(Move* givenMove)
 		return false;
 	}
 
-	if (!typeMoveLegal(piece->getType(), givenMove))
+	if (!pieceIsAlledToMoveInThisWay(piece, givenMove))
 	{
 		return false;
 	}
@@ -164,21 +164,27 @@ bool ChessBoard::moveIsLegal(Move* givenMove)
 	return true;
 }
 
-bool ChessBoard::typeMoveLegal(PieceType* piece, Move* givenMove)
+bool ChessBoard::pieceIsAlledToMoveInThisWay(ChessPiece* piece, Move* givenMove)
 {
-	switch (*piece)
+	switch (*piece->getType())
 	{
 	case PieceType::Rook:
-		return straightLineCheck(givenMove);
-	case PieceType::Pawn:
-		return true;
-	case PieceType::Knight:
-		return true;
+		return 
+			straightLineCheck(givenMove);
 	case PieceType::Bishop:
-		return diagonalLineCheck(givenMove);
+		return 
+			diagonalLineCheck(givenMove);
 	case PieceType::Queen:
-		return true;
+		return 
+			straightLineCheck(givenMove) ||
+			diagonalLineCheck(givenMove);
+	case PieceType::Knight:
+		return 
+			knightMoveCheck(givenMove);
 	case PieceType::King:
+		return 
+			kingMoveCheck(givenMove);
+	case PieceType::Pawn:
 		return true;
 	default:
 		return false;
@@ -201,4 +207,32 @@ bool ChessBoard::diagonalLineCheck(Move* givenMove)
 	Coordinate* dest = givenMove->getDestination();
 	return ifNegativMakePositive((short)start->getFileAsPosition() - (short)dest->getFileAsPosition()) ==
 		ifNegativMakePositive((short)start->getRankAsPosition() - (short)dest->getRankAsPosition());
+}
+
+bool ChessBoard::knightMoveCheck(Move* givenMove)
+{
+	Coordinate* start = givenMove->getStart();
+	Coordinate* dest = givenMove->getDestination();
+	short fileDiff = ifNegativMakePositive((short)start->getFileAsPosition() - (short)dest->getFileAsPosition());
+	short rankDiff = ifNegativMakePositive((short)start->getRankAsPosition() - (short)dest->getRankAsPosition());
+	return (fileDiff == 1 && rankDiff == 2) ||
+		(fileDiff == 2 && rankDiff == 1);
+}
+
+bool ChessBoard::kingMoveCheck(Move* givenMove)
+{
+	Coordinate* start = givenMove->getStart();
+	Coordinate* dest = givenMove->getDestination();
+	short fileDiff = ifNegativMakePositive((short)start->getFileAsPosition() - (short)dest->getFileAsPosition());
+	short rankDiff = ifNegativMakePositive((short)start->getRankAsPosition() - (short)dest->getRankAsPosition());
+	return (fileDiff <= 1 && rankDiff <= 1);
+}
+
+bool ChessBoard::pawnMoveCheck(Move* givenMove)
+{
+	Coordinate* start = givenMove->getStart();
+	Coordinate* dest = givenMove->getDestination();
+	short fileDiff = ifNegativMakePositive((short)start->getFileAsPosition() - (short)dest->getFileAsPosition());
+	short rankDiff = ifNegativMakePositive((short)start->getRankAsPosition() - (short)dest->getRankAsPosition());
+	return (fileDiff == 0 && rankDiff == 1);
 }

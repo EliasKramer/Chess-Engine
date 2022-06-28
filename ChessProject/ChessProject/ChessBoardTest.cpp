@@ -31,7 +31,7 @@ bool ChessBoardTest::moveIsLegal(Move* givenMove)
     return ChessBoard::moveIsLegal(givenMove);
 }
 
-bool ChessBoardTest::typeMoveLegal(PieceType* type, Move* givenMove)
+bool ChessBoardTest::pieceIsAlledToMoveInThisWay(ChessPiece* type, Move* givenMove)
 {
-	return ChessBoard::typeMoveLegal(type,givenMove);
+	return ChessBoard::pieceIsAlledToMoveInThisWay(type,givenMove);
 }

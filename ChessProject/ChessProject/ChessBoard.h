@@ -11,7 +11,7 @@ protected:
 	bool executeMove(Move* givenMove);
 	//legal checks
 	bool moveIsLegal(Move* givenMove); 
-	bool typeMoveLegal(PieceType* piece, Move* givenMove);
+	bool pieceIsAlledToMoveInThisWay(ChessPiece* piece, Move* givenMove);
 public:
 	ChessBoard();
 	ChessPiece* getAtPosition(Coordinate* coord);
@@ -21,6 +21,9 @@ private:
 	//move checks
 	bool straightLineCheck(Move* givenMove);
 	bool diagonalLineCheck(Move* givenMove);
+	bool knightMoveCheck(Move* givenMove);
+	bool kingMoveCheck(Move* givenMove);
+	bool pawnMoveCheck(Move* givenMove);
 	//maths
 	short ifNegativMakePositive(short a);
 };
