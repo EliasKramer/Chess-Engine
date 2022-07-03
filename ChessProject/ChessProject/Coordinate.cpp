@@ -5,13 +5,13 @@ Coordinate::Coordinate()
 	file = -1;
 	rank = -1;
 }
-Coordinate::Coordinate(char givenFile, unsigned short givenRank)
+Coordinate::Coordinate(char givenFile, short givenRank)
 {
 	file = (givenFile - 'a');
 	rank = (givenRank - 1);
 }
 
-Coordinate::Coordinate(unsigned short givenFile, unsigned short givenRank)
+Coordinate::Coordinate(short givenFile, short givenRank)
 {
 	file = givenFile;
 	rank = givenRank;
@@ -22,17 +22,17 @@ char Coordinate::getFileNormal()
 	return (char)(file + 'a');
 }
 
-unsigned short Coordinate::getRankNormal()
+short Coordinate::getRankNormal()
 {
 	return (unsigned short)(rank + 1);
 }
 
-unsigned short Coordinate::getFileAsPosition()
+short Coordinate::getFileAsPosition()
 {
 	return file;
 }
 
-unsigned short Coordinate::getRankAsPosition()
+short Coordinate::getRankAsPosition()
 {
 	return rank;
 }

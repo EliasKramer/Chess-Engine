@@ -2,18 +2,18 @@
 class Coordinate
 {
 private:
-	unsigned short file;
-	unsigned short rank;
+	short file;
+	short rank;
 public:
 	Coordinate();
-	Coordinate(char givenFile, unsigned short givenRank);
-	Coordinate(unsigned short givenFile, unsigned short givenRank);
+	Coordinate(char givenFile, short givenRank);
+	Coordinate(short givenFile, short givenRank);
 	//used for board position as known
 	char getFileNormal();
-	unsigned short getRankNormal();
+	short getRankNormal();
 	//used for array position
-	unsigned short getFileAsPosition();
-	unsigned short getRankAsPosition();
+	short getFileAsPosition();
+	short getRankAsPosition();
 	//is on an 8x8 chess board
 	bool isValid();
 	bool operator ==(const Coordinate& other) const;

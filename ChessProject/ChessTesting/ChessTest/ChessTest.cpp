@@ -221,8 +221,8 @@ namespace ChessTest
 			Assert::AreEqual((int)a1.getRankAsPosition(), 0);
 			Assert::AreEqual((int)h8.getRankAsPosition(), 7);
 
-			Coordinate arrA1 = Coordinate((unsigned short)0, (unsigned short)0);
-			Coordinate arrH8 = Coordinate((unsigned short)7, (unsigned short)7);
+			Coordinate arrA1 = Coordinate((short)0, (short)0);
+			Coordinate arrH8 = Coordinate((short)7, (short)7);
 
 			Assert::IsTrue(a1 == arrA1);
 			Assert::IsTrue(h8 == arrH8);

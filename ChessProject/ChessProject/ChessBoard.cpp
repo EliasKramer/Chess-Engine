@@ -150,8 +150,8 @@ std::list<Move> ChessBoard::getAllMovesInDirection(
 	do
 	{
 		nextCoord = Coordinate(
-			(unsigned short)((short)nextCoord.getFileAsPosition() + fileAddingValue),
-			(unsigned short)((short)nextCoord.getRankAsPosition() + rankAddingValue));
+			(short)((short)nextCoord.getFileAsPosition() + fileAddingValue),
+			(short)((short)nextCoord.getRankAsPosition() + rankAddingValue));
 
 		Move moveToCheck = Move(start, &nextCoord);
 
@@ -238,7 +238,7 @@ std::list<Move> ChessBoard::getAllKnightMoves(ChessColor* color, Coordinate* coo
 	unsigned short rank = coord->getRankAsPosition();
 	std::list<Move> retVal;
 
-	unsigned short addingVals[8][2] = {
+	short addingVals[8][2] = {
 		{ 1, 2 },
 		{ 2, 1 },
 		{ 2, -1 },
@@ -252,8 +252,8 @@ std::list<Move> ChessBoard::getAllKnightMoves(ChessColor* color, Coordinate* coo
 	for (int i = 0; i < 8; i++)
 	{
 		Move moveToCheck = Move(coord, &Coordinate(
-			(unsigned short)(file + addingVals[i][0]),
-			(unsigned short)(rank + addingVals[i][1])));
+			(short)(file + addingVals[i][0]),
+			(short)(rank + addingVals[i][1])));
 
 		ifCanGoThereAdd(
 			color,
@@ -322,8 +322,8 @@ std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord
 		//new pos is 1 field in direction where the piece is headed 
 		//and once on 1 field either left or right (depending on what iteration of the loop it is)
 		Coordinate targetPos = Coordinate(
-			(unsigned short)(coord->getFileAsPosition() + fileAddingValue),
-			(unsigned short)(coord->getRankAsPosition() + (rankMultiplier * 1)));
+			(short)(coord->getFileAsPosition() + fileAddingValue),
+			(short)(coord->getRankAsPosition() + (rankMultiplier * 1)));
 		
 		//new position is on the board
 		if (targetPos.isValid())
@@ -351,8 +351,8 @@ std::list<Move> ChessBoard::getAllKingMoves(ChessColor* color, Coordinate* coord
 		for(short rank = coord->getRankAsPosition()-1; rank <= coord->getRankAsPosition()+1; rank++)
 		{
 			Coordinate newPos = Coordinate(
-				(unsigned short)file,
-				(unsigned short)rank);
+				file,
+				rank);
 			Move move = Move(coord, &newPos);
 			ifCanGoThereAdd(color, &move, retVal);
 		}
