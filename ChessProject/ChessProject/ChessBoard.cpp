@@ -1,5 +1,4 @@
 #include "ChessBoard.h"
-
 ChessBoard::ChessBoard()
 {
 	isWhiteTurn = true;
@@ -28,11 +27,11 @@ bool ChessBoard::executeMove(Move* givenMove)
 			getAtPosition(
 				givenMove->getStart()),
 			givenMove->getDestination());
+		//set start to invalid
 		return true;
 	}
 	return false;
 }
-
 
 
 void ChessBoard::setPieceAt(ChessPiece* piece, Coordinate* coord)
@@ -132,107 +131,258 @@ void ChessBoard::initBoard()
 	position = Coordinate('h', 8);
 	setPieceAt(&piece, &position);
 }
-short ChessBoard::ifNegativMakePositive(short a)
+
+std::list<Move> ChessBoard::getAllMoves()
 {
-	return a < 0 ? -a : a;
-}
-bool ChessBoard::moveIsLegal(Move* givenMove)
-{
-	if (!givenMove->isValid())
-	{
-		return false;
-	}
-
-	ChessPiece* piece = getAtPosition(givenMove->getStart());
-	if (!piece->isValid())
-	{
-		return false;
-	}
-
-	bool pieceToMoveIsWhite =
-		*piece->getColor() == ChessColor::White;
-	if (isWhiteTurn != pieceToMoveIsWhite)
-	{
-		return false;
-	}
-
-	if (!pieceIsAlledToMoveInThisWay(piece, givenMove))
-	{
-		return false;
-	}
-
-	return true;
+	std::list<Move> resultList;
+	return resultList;
 }
 
-bool ChessBoard::pieceIsAlledToMoveInThisWay(ChessPiece* piece, Move* givenMove)
+std::list<Move> ChessBoard::getAllMovesInDirection(
+	Coordinate* start,
+	ChessColor* color,
+	short fileAddingValue,
+	short rankAddingValue)
+{
+	std::list<Move> possibleMoves;
+	bool shouldContinue = true;
+	Coordinate nextCoord = *start;
+	do
+	{
+		nextCoord = Coordinate(
+			(unsigned short)((short)nextCoord.getFileAsPosition() + fileAddingValue),
+			(unsigned short)((short)nextCoord.getRankAsPosition() + rankAddingValue));
+
+		Move moveToCheck = Move(start, &nextCoord);
+
+		shouldContinue = ifCanGoThereAdd(
+			color,
+			&moveToCheck,
+			possibleMoves
+		);
+	} while (shouldContinue);
+
+	return possibleMoves;
+}
+
+std::list<Move> ChessBoard::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
 {
 	switch (*piece->getType())
 	{
 	case PieceType::Rook:
-		return 
-			straightLineCheck(givenMove);
+		return getAllStraightMoves(piece->getColor(), coord);
 	case PieceType::Bishop:
-		return 
-			diagonalLineCheck(givenMove);
+		return getAllDiagonalMoves(piece->getColor(), coord);
 	case PieceType::Queen:
-		return 
-			straightLineCheck(givenMove) ||
-			diagonalLineCheck(givenMove);
+		return getAllQueenMoves(piece->getColor(), coord);
 	case PieceType::Knight:
-		return 
-			knightMoveCheck(givenMove);
-	case PieceType::King:
-		return 
-			kingMoveCheck(givenMove);
+		return getAllKnightMoves(piece->getColor(), coord);
 	case PieceType::Pawn:
-		return true;
+		return getAllPawnMoves(piece->getColor(), coord);
 	default:
-		return false;
+		return std::list<Move>();
 		break;
 	}
 }
 
-bool ChessBoard::straightLineCheck(Move* givenMove)
+std::list<Move> ChessBoard::getAllStraightMoves(ChessColor* color, Coordinate* coord)
 {
-	Coordinate* start = givenMove->getStart();
-	Coordinate* dest = givenMove->getDestination();
+	std::list<Move> possibleMoves;
 
-	return (start->getFileAsPosition() == dest->getFileAsPosition()) ||
-		(start->getRankAsPosition() == dest->getRankAsPosition());
+	possibleMoves.splice(
+		possibleMoves.end(),
+		getAllMovesInDirection(coord, color, 1, 0));
+	possibleMoves.splice(
+		possibleMoves.end(),
+		getAllMovesInDirection(coord, color, -1, 0));
+	possibleMoves.splice(
+		possibleMoves.end(),
+		getAllMovesInDirection(coord, color, 0, 1));
+	possibleMoves.splice(
+		possibleMoves.end(),
+		getAllMovesInDirection(coord, color, 0, -1));
+	return possibleMoves;
 }
 
-bool ChessBoard::diagonalLineCheck(Move* givenMove)
+std::list<Move> ChessBoard::getAllDiagonalMoves(ChessColor* color, Coordinate* coord)
 {
-	Coordinate* start = givenMove->getStart();
-	Coordinate* dest = givenMove->getDestination();
-	return ifNegativMakePositive((short)start->getFileAsPosition() - (short)dest->getFileAsPosition()) ==
-		ifNegativMakePositive((short)start->getRankAsPosition() - (short)dest->getRankAsPosition());
+	std::list<Move> possibleMoves;
+
+	possibleMoves.splice(
+		possibleMoves.end(),
+		getAllMovesInDirection(coord, color, 1, 1));
+	possibleMoves.splice(
+		possibleMoves.end(),
+		getAllMovesInDirection(coord, color, -1, 1));
+	possibleMoves.splice(
+		possibleMoves.end(),
+		getAllMovesInDirection(coord, color, 1, -1));
+	possibleMoves.splice(
+		possibleMoves.end(),
+		getAllMovesInDirection(coord, color, -1, -1));
+	return possibleMoves;
+}
+std::list<Move> ChessBoard::getAllQueenMoves(ChessColor* color, Coordinate* coord)
+{
+	std::list<Move> retVal =
+		getAllStraightMoves(color, coord);
+	retVal.splice(
+		retVal.end(),
+		getAllDiagonalMoves(color, coord));
+	return retVal;
 }
 
-bool ChessBoard::knightMoveCheck(Move* givenMove)
+std::list<Move> ChessBoard::getAllKnightMoves(ChessColor* color, Coordinate* coord)
 {
-	Coordinate* start = givenMove->getStart();
-	Coordinate* dest = givenMove->getDestination();
-	short fileDiff = ifNegativMakePositive((short)start->getFileAsPosition() - (short)dest->getFileAsPosition());
-	short rankDiff = ifNegativMakePositive((short)start->getRankAsPosition() - (short)dest->getRankAsPosition());
-	return (fileDiff == 1 && rankDiff == 2) ||
-		(fileDiff == 2 && rankDiff == 1);
+	unsigned short file = coord->getFileAsPosition();
+	unsigned short rank = coord->getRankAsPosition();
+	std::list<Move> retVal;
+
+	unsigned short addingVals[8][2] = {
+		{ 1, 2 },
+		{ 2, 1 },
+		{ 2, -1 },
+		{ 1, -2 },
+		{ -1, -2 },
+		{ -2, -1 },
+		{ -2, 1 },
+		{ -1, 2 }
+	};
+
+	for (int i = 0; i < 8; i++)
+	{
+		Move moveToCheck = Move(coord, &Coordinate(
+			(unsigned short)(file + addingVals[i][0]),
+			(unsigned short)(rank + addingVals[i][1])));
+
+		ifCanGoThereAdd(
+			color,
+			&moveToCheck,
+			retVal);
+	}
+	return retVal;
 }
 
-bool ChessBoard::kingMoveCheck(Move* givenMove)
+std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord)
 {
-	Coordinate* start = givenMove->getStart();
-	Coordinate* dest = givenMove->getDestination();
-	short fileDiff = ifNegativMakePositive((short)start->getFileAsPosition() - (short)dest->getFileAsPosition());
-	short rankDiff = ifNegativMakePositive((short)start->getRankAsPosition() - (short)dest->getRankAsPosition());
-	return (fileDiff <= 1 && rankDiff <= 1);
+	std::list<Move> retVal;
+
+	short startRank = *color == ChessColor::White ? 2 : 7;
+
+	short rankMultiplier = *color == ChessColor::White ? 1 : -1;
+
+
+	//check moving forward noramlly
+	Coordinate newPos = Coordinate(
+		coord->getFileAsPosition(),
+		(unsigned short)(coord->getRankAsPosition() + (rankMultiplier * 1)));
+	//new position is on the board
+	if (newPos.isValid())
+	{
+		//new position is empty
+		ChessPiece* pieceAtNewPos = getAtPosition(&newPos);
+		if (!pieceAtNewPos->isValid())
+		{
+			Move move = Move(coord, &newPos);
+			retVal.push_back(move);
+		}
+	}
+
+	//check moving 2 fields at start
+	if (coord->getRankNormal() == startRank)
+	{
+		Coordinate targetPos = Coordinate(
+			coord->getFileAsPosition(),
+			(unsigned short)(coord->getRankAsPosition() + (rankMultiplier * 2)));
+		
+		//new position is on the board
+		if (targetPos.isValid()) //should never be invalid, maybe remove it? idk
+		{
+			//new position is empty
+			ChessPiece* pieceAtNewPos = getAtPosition(&targetPos);
+
+			Coordinate fieldBetween = Coordinate(
+				coord->getFileAsPosition(),
+				(unsigned short)(coord->getRankAsPosition() + (rankMultiplier * 1)));
+			
+			ChessPiece* pieceBetween = getAtPosition(&fieldBetween);
+
+			if (!pieceAtNewPos->isValid() && !pieceBetween->isValid())
+			{
+				Move move = Move(coord, &targetPos);
+				retVal.push_back(move);
+			}
+		}
+	}
+
+	//checking if you can attack a piece
+	//loop has always 2 iterations -> once with -1 and once with 1
+	for(short fileAddingValue = -1; fileAddingValue <= 1; fileAddingValue += 2)
+	{
+		//new pos is 1 field in direction where the piece is headed 
+		//and once on 1 field either left or right (depending on what iteration of the loop it is)
+		Coordinate targetPos = Coordinate(
+			(unsigned short)(coord->getFileAsPosition() + fileAddingValue),
+			(unsigned short)(coord->getRankAsPosition() + (rankMultiplier * 1)));
+		
+		//new position is on the board
+		if (targetPos.isValid())
+		{
+			//new position is empty
+			ChessPiece* pieceAtNewPos = getAtPosition(&targetPos);
+
+			if (pieceAtNewPos->isValid() && pieceAtNewPos->getColor() != color)
+			{
+				Move move = Move(coord, &targetPos);
+				retVal.push_back(move);
+			}
+		}
+	}
+
+	return retVal;
 }
 
-bool ChessBoard::pawnMoveCheck(Move* givenMove)
+std::list<Move> ChessBoard::getAllKingMoves(ChessColor* color, Coordinate* coord)
 {
-	Coordinate* start = givenMove->getStart();
-	Coordinate* dest = givenMove->getDestination();
-	short fileDiff = ifNegativMakePositive((short)start->getFileAsPosition() - (short)dest->getFileAsPosition());
-	short rankDiff = ifNegativMakePositive((short)start->getRankAsPosition() - (short)dest->getRankAsPosition());
-	return (fileDiff == 0 && rankDiff == 1);
+	std::list<Move> retVal;
+
+	for(short file = coord->getFileAsPosition()-1; file <= coord->getFileAsPosition()+1; file++)
+	{
+		for(short rank = coord->getRankAsPosition()-1; rank <= coord->getRankAsPosition()+1; rank++)
+		{
+			Coordinate newPos = Coordinate(
+				(unsigned short)file,
+				(unsigned short)rank);
+			Move move = Move(coord, &newPos);
+			ifCanGoThereAdd(color, &move, retVal);
+		}
+	}
+
+	return retVal;
+}
+
+bool ChessBoard::ifCanGoThereAdd(ChessColor* currColor, Move* move, std::list<Move>& possibleMoves)
+{
+	//if the move is valid -> start != destination and both coords exist on the board
+	if (move->getDestination()->isValid())
+	{
+		ChessPiece destinationPiece = *getAtPosition(move->getDestination());
+		if (destinationPiece.isValid())
+		{
+			//you cant go to a field where one of your pieces stand
+			if ((int)*destinationPiece.getColor() != (int)*currColor)
+			{
+				possibleMoves.push_back(*move);
+			}
+			//you can take a piece if it is from the opponent
+			return false;
+		}
+		else {
+			//can go to an empty field
+			possibleMoves.push_back(*move);
+			return true;
+		}
+	}
+	//returns if it should continue the iteration
+	return false;
 }

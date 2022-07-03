@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "CppUnitTest.h"
+#include <list>
 #include "../../ChessProject/MetaData.h"
 #include "../../ChessProject/ChessPiece.h"
 #include "../../ChessProject/ChessBoard.h"
@@ -26,7 +27,7 @@ namespace ChessTest
 			std::string b = "B";
 			std::string w = "W";
 			Assert::AreNotEqual(b, w);
-			
+
 			std::string blackString = "Black";
 			std::string whiteString = "White";
 
@@ -39,7 +40,7 @@ namespace ChessTest
 			Assert::AreEqual(w, shortWhite);
 			std::string shortBlack = getShortNameOfChessColor(&black);
 			Assert::AreEqual(b, shortBlack);
-			
+
 			std::string longWhite = getLongNameOfChessColor(&white);
 			Assert::AreEqual(whiteString, longWhite);
 			std::string longBlack = getLongNameOfChessColor(&black);
@@ -56,7 +57,7 @@ namespace ChessTest
 			PieceType bishop = PieceType::Bishop;
 			PieceType queen = PieceType::Queen;
 			PieceType king = PieceType::King;
-			
+
 			std::string pawnLongString = "Pawn";
 			std::string pawnShortString = "P";
 			Assert::AreEqual(pawnLongString, getLongNameOfChessType(&pawn));
@@ -101,7 +102,7 @@ namespace ChessTest
 			PieceType bishop = PieceType::Bishop;
 			PieceType queen = PieceType::Queen;
 			PieceType king = PieceType::King;
-			
+
 			Assert::AreEqual(USHRT_MAX, (int)getValueOfType(&king));
 			Assert::AreEqual(9, (int)getValueOfType(&queen));
 			Assert::AreEqual(5, (int)getValueOfType(&rook));
@@ -124,7 +125,7 @@ namespace ChessTest
 			ChessPiece wq(PieceType::Queen, ChessColor::White);
 			ChessPiece bq(PieceType::Queen, ChessColor::Black);
 
-			Assert::AreEqual((int)PieceType::Pawn,(int)*wp.getType());
+			Assert::AreEqual((int)PieceType::Pawn, (int)*wp.getType());
 			Assert::AreEqual((int)PieceType::Pawn, (int)*bp.getType());
 			Assert::AreEqual((int)PieceType::Rook, (int)*wr.getType());
 			Assert::AreEqual((int)PieceType::Rook, (int)*br.getType());
@@ -156,7 +157,7 @@ namespace ChessTest
 			ChessColor noColor = ChessColor::NoColor;
 			PieceType rook = PieceType::Rook;
 			ChessColor white = ChessColor::White;
-			
+
 			ChessPiece allInvalid = ChessPiece(noType, noColor);
 			ChessPiece invalidType = ChessPiece(noType, white);
 			ChessPiece invalidColor = ChessPiece(rook, noColor);
@@ -213,16 +214,16 @@ namespace ChessTest
 			Assert::AreEqual(h8.getFileNormal(), 'h');
 			Assert::AreEqual((int)a1.getRankNormal(), 1);
 			Assert::AreEqual((int)h8.getRankNormal(), 8);
-			
+
 			Assert::AreEqual((int)a1.getFileAsPosition(), 0);
 			Assert::AreEqual((int)h8.getFileAsPosition(), 7);
 
 			Assert::AreEqual((int)a1.getRankAsPosition(), 0);
 			Assert::AreEqual((int)h8.getRankAsPosition(), 7);
-			
+
 			Coordinate arrA1 = Coordinate((unsigned short)0, (unsigned short)0);
 			Coordinate arrH8 = Coordinate((unsigned short)7, (unsigned short)7);
-			
+
 			Assert::IsTrue(a1 == arrA1);
 			Assert::IsTrue(h8 == arrH8);
 
@@ -266,16 +267,16 @@ namespace ChessTest
 
 			Assert::IsTrue(h8 == h8Copy);
 			Assert::IsFalse(h8 != h8Copy);
-			
+
 			Assert::IsFalse(a1 == h8);
 			Assert::IsTrue(a1 != h8);
-			
+
 			Assert::IsFalse(a1 == invalid1);
 			Assert::IsTrue(a1 != invalid1);
 
 			Assert::IsFalse(a1 == invalid2);
 			Assert::IsTrue(a1 != invalid2);
-			
+
 			Assert::IsFalse(a1 == invalid3);
 			Assert::IsTrue(a1 != invalid3);
 		}
@@ -326,12 +327,12 @@ namespace ChessTest
 			Assert::IsTrue(
 				*(board.getAtPosition(&Coordinate('h', 1))) ==
 				ChessPiece(PieceType::Rook, ChessColor::White));
-			for(char file = 'a'; file <= 'h'; file++)
+			for (char file = 'a'; file <= 'h'; file++)
 			{
 				Assert::IsTrue(
 					*(board.getAtPosition(&Coordinate(file, 2))) ==
 					ChessPiece(PieceType::Pawn, ChessColor::White));
-				for(int rank = 3; rank <= 6; rank++)
+				for (int rank = 3; rank <= 6; rank++)
 				{
 					Assert::IsFalse(board.getAtPosition(&Coordinate(file, rank))->isValid());
 					Assert::IsTrue(
@@ -379,7 +380,7 @@ namespace ChessTest
 
 			Move move = Move(&start, &dest);
 			Assert::IsTrue(board.executeMove(&move));
-			
+
 			move = Move(&start, &start);
 			Assert::IsFalse(board.executeMove(&move));
 
@@ -388,7 +389,7 @@ namespace ChessTest
 
 			move = Move(&start, &invalid);
 			Assert::IsFalse(board.executeMove(&move));
-			
+
 			move = Move(&invalid, &dest);
 			Assert::IsFalse(board.executeMove(&move));
 		}
@@ -396,9 +397,9 @@ namespace ChessTest
 		{
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
-			for(char file = 'a'; file <= 'h'; file++)
+			for (char file = 'a'; file <= 'h'; file++)
 			{
-				for(int rank = 1; rank <= 8; rank++)
+				for (int rank = 1; rank <= 8; rank++)
 				{
 					Assert::IsFalse(board.getAtPosition(&Coordinate(file, rank))->isValid());
 					Assert::IsTrue(
@@ -421,295 +422,415 @@ namespace ChessTest
 			board.setTurnColor(&white);
 			Assert::IsTrue((int)*board.getTurnColor() == (int)ChessColor::White);
 		}
-		TEST_METHOD(chessBoardLegalMoveValidInputsTest)
+		TEST_METHOD(boardGetAllMovesNoMovesAvailible)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+			std::list<Move> possibleMoves = board.getAllMoves();
+
+			Assert::AreEqual((int)possibleMoves.size(), 0);
+		}
+		TEST_METHOD(boardGetMovesInDirectionWithoutObstaclesTest)
 		{
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
 
-			//invalid, because move coords are not valid
-			//last coord not valid
-			Move invalidMove = Move(&Coordinate('a',1),&Coordinate());
-			Assert::IsFalse(board.moveIsLegal(&invalidMove));
-			//first coord not valid
-			invalidMove = Move(&Coordinate(), &Coordinate('b', 5));
-			Assert::IsFalse(board.moveIsLegal(&invalidMove));
-			//start and dest are same
-			invalidMove = Move(&Coordinate('a', 1), &Coordinate('a', 1));
-			Assert::IsFalse(board.moveIsLegal(&invalidMove));
-			//no coord is valid
-			invalidMove = Move(&Coordinate(), &Coordinate());
-			Assert::IsFalse(board.moveIsLegal(&invalidMove));
-			
-			//no piece at that field
-			Coordinate piecePos = Coordinate('a', 2);
-			Move testMove = Move(&piecePos, &Coordinate('a', 3));
-			Assert::IsFalse(board.moveIsLegal(&testMove));
-			
-			//now we set a piece at that coord. the move should be legal
-			board.setPieceAt(&ChessPiece(PieceType::Pawn, ChessColor::White), &piecePos);
-			Assert::IsTrue(board.moveIsLegal(&testMove));
-
-			//not his turn - should be false
+			Coordinate start = Coordinate('a', 1);
 			ChessColor white = ChessColor::White;
-			ChessColor black = ChessColor::Black;
-			
-			board.setTurnColor(&black);
-			Assert::IsFalse(board.moveIsLegal(&testMove));
 
-			//his turn again - should be true like before
-			board.setTurnColor(&white);
-			Assert::IsTrue(board.moveIsLegal(&testMove));
+			std::list<Move> moves =
+				board.getAllMovesInDirection(&start, &white, 1, 0);
+			Assert::AreEqual(7, (int)moves.size());
+			char file = 'b';
+			for (
+				std::list<Move>::iterator it = moves.begin();
+				it != moves.end();
+				++it) {
+				Assert::IsTrue(it->isValid());
+
+				Assert::IsTrue(Coordinate(file, (unsigned short)1) == *it->getDestination());
+				Assert::IsTrue(Coordinate('a', 1) == *it->getStart());
+				file++;
+			}
+
+			moves =
+				board.getAllMovesInDirection(&start, &white, -1, 0);
+			Assert::AreEqual(0, (int)moves.size());
+
+			moves =
+				board.getAllMovesInDirection(&start, &white, 0, -1);
+			Assert::AreEqual(0, (int)moves.size());
+
+			moves =
+				board.getAllMovesInDirection(&start, &white, 0, 1);
+			Assert::AreEqual(7, (int)moves.size());
+
+			moves =
+				board.getAllMovesInDirection(&start, &white, 1, 1);
+			Assert::AreEqual(7, (int)moves.size());
+
+			moves =
+				board.getAllMovesInDirection(&start, &white, 1, -1);
+			Assert::AreEqual(0, (int)moves.size());
+
+			//check every direction in the middle of the field
+			start = Coordinate('d', 5);
+
+			//straigt lines
+			moves =
+				board.getAllMovesInDirection(&start, &white, 1, 0);
+			Assert::AreEqual(4, (int)moves.size());
+
+			moves =
+				board.getAllMovesInDirection(&start, &white, -1, 0);
+			Assert::AreEqual(3, (int)moves.size());
+
+			moves =
+				board.getAllMovesInDirection(&start, &white, 0, -1);
+			Assert::AreEqual(4, (int)moves.size());
+
+			moves =
+				board.getAllMovesInDirection(&start, &white, 0, 1);
+			Assert::AreEqual(3, (int)moves.size());
+
+			//diagonal checks
+			moves =
+				board.getAllMovesInDirection(&start, &white, 1, 1);
+			Assert::AreEqual(3, (int)moves.size());
+
+			moves =
+				board.getAllMovesInDirection(&start, &white, 1, -1);
+			Assert::AreEqual(4, (int)moves.size());
+
+			moves =
+				board.getAllMovesInDirection(&start, &white, -1, 1);
+			Assert::AreEqual(3, (int)moves.size());
+
+			moves =
+				board.getAllMovesInDirection(&start, &white, -1, -1);
+			Assert::AreEqual(3, (int)moves.size());
 		}
-		TEST_METHOD(chessBoardLegalRookMoveTest)
-		{
-			ChessBoardTest board = ChessBoardTest();
-			board.clearBoard();
-			
-			ChessPiece wr = ChessPiece(PieceType::Rook, ChessColor::White);
-
-			//valid moves
-			Move move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wr, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wr, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wr, &move));
-			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wr, &move));
-			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wr, &move));
-			
-			//invalid moves
-			move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wr, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('c', 7));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wr, &move));
-			move = Move(&Coordinate('b', 1), &Coordinate('a', 2));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wr, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('h', 8));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wr, &move));
-		}
-		TEST_METHOD(chessBoardLegalBishopMoveTest)
-		{
-			ChessBoardTest board = ChessBoardTest();
-			board.clearBoard();
-
-			ChessPiece wb = ChessPiece(PieceType::Bishop, ChessColor::White);
-
-			//valid moves
-			Move move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('c', 3));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('e', 5), &Coordinate('h', 2));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('d', 4), &Coordinate('b', 6));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('b', 3));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('h', 8));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('h', 8), &Coordinate('a', 1));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('a', 8), &Coordinate('h', 1));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('h', 1), &Coordinate('a', 8));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-
-			//invalid moves
-			move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wb, &move));
-		}
-		TEST_METHOD(chessBoardLegalQueenMoveTest)
-		{
-			ChessBoardTest board = ChessBoardTest();
-			board.clearBoard();
-			
-			ChessPiece wq = ChessPiece(PieceType::Queen, ChessColor::White);
-
-			//valid moves
-			Move move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('c', 3));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('e', 5), &Coordinate('h', 2));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('d', 4), &Coordinate('b', 6));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('b', 3));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-
-			//invalid moves
-			move = Move(&Coordinate('a', 1), &Coordinate('c', 2));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('c', 8));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('e', 7));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('c', 7));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('b', 6));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('b', 4));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('c', 3));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('e', 3));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('f', 4));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('f', 6));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wq, &move));
-		}
-		TEST_METHOD(chessBoardLegalKnightMoveTest)
-		{
-			ChessBoardTest board = ChessBoardTest();
-			board.clearBoard();
-			
-			ChessPiece wn = ChessPiece(PieceType::Knight, ChessColor::White);
-			
-			//valid moves
-			Move move = Move(&Coordinate('a', 1), &Coordinate('b', 3));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('c', 2));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('e', 7));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('c', 7));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('b', 6));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('b', 4));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('c', 3));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('e', 3));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('f', 4));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('f', 6));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-
-			//invalid moves
-			move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('c', 3));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('e', 5), &Coordinate('h', 2));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('d', 4), &Coordinate('b', 6));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('b', 3));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&wn, &move));
-		}
-		TEST_METHOD(chessBoardLegalKingMoveTest)
+		TEST_METHOD(boardGetMovesInDirectionWithObstaclesTest)
 		{
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
 
-			ChessPiece bk = ChessPiece(PieceType::King, ChessColor::Black);
+			board.setPieceAt(&ChessPiece(
+				PieceType::Rook, ChessColor::Black),
+				&Coordinate('g', 4));
 
-			//valid moves
-			Move move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('b', 2));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('b', 1));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('g', 5), &Coordinate('h', 6));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('g', 5), &Coordinate('h', 5));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('g', 5), &Coordinate('h', 4));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('g', 5), &Coordinate('f', 6));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('g', 5), &Coordinate('f', 5));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('g', 5), &Coordinate('f', 4));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('g', 5), &Coordinate('g', 6));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('g', 5), &Coordinate('g', 4));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			Coordinate start = Coordinate('d', 4);
+			ChessColor white = ChessColor::White;
 
-			//invalid moves
-			move = Move(&Coordinate('a', 1), &Coordinate('b', 3));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('c', 2));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('e', 7));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('c', 7));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('b', 6));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('b', 4));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('c', 3));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('e', 3));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('f', 4));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('f', 6));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('a', 8));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('h', 1));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('h', 1), &Coordinate('h', 8));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('d', 1), &Coordinate('d', 6));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('a', 1), &Coordinate('c', 3));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('e', 5), &Coordinate('h', 2));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('d', 4), &Coordinate('b', 6));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
-			move = Move(&Coordinate('d', 5), &Coordinate('b', 3));
-			Assert::IsFalse(board.pieceIsAlledToMoveInThisWay(&bk, &move));
+			std::list<Move> moves =
+				board.getAllMovesInDirection(&start, &white, 1, 0);
+			Assert::AreEqual(3, (int)moves.size());
+
+			board.setPieceAt(&ChessPiece(
+				PieceType::Rook, ChessColor::White),
+				&Coordinate('g', 4));
+			moves =
+				board.getAllMovesInDirection(&start, &white, 1, 0);
+			Assert::AreEqual(2, (int)moves.size());
 		}
-		TEST_METHOD(chessBoardLegalPawnMoveTest)
+		TEST_METHOD(boardGetSimpleMovementOfPiecesTest)
 		{
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
 
-			ChessPiece pawn = ChessPiece(PieceType::Pawn, ChessColor::White);
+			Coordinate coord = Coordinate('a', 1);
 
+			//test moves at a1
+			std::list<Move> allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Rook, ChessColor::White),
+					&coord);
+			Assert::AreEqual(14, (int)allMoves.size());
 
-			//valid moves
-			Move move = Move(&Coordinate('a', 2), &Coordinate('a', 4));
-			Assert::IsTrue(board.pieceIsAlledToMoveInThisWay(&pawn, &move));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Bishop, ChessColor::White),
+					&coord);
+			Assert::AreEqual(7, (int)allMoves.size());
+
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Queen, ChessColor::White),
+					&coord);
+			Assert::AreEqual(21, (int)allMoves.size());
+
+			coord = Coordinate('e', 4);
+
+			//test moves on e4 without obstacles
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Rook, ChessColor::White),
+					&coord);
+			Assert::AreEqual(14, (int)allMoves.size());
+
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Bishop, ChessColor::White),
+					&coord);
+			Assert::AreEqual(13, (int)allMoves.size());
+
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Queen, ChessColor::White),
+					&coord);
+			Assert::AreEqual(27, (int)allMoves.size());
+
+			//test moves on e4 with enemy obstacle
+			board.setPieceAt(
+				&ChessPiece(PieceType::Rook, ChessColor::Black),
+				&Coordinate('c', 4));
+
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Rook, ChessColor::White),
+					&coord);
+			Assert::AreEqual(12, (int)allMoves.size());
+
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Bishop, ChessColor::White),
+					&coord);
+			Assert::AreEqual(13, (int)allMoves.size());
+
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Queen, ChessColor::White),
+					&coord);
+			Assert::AreEqual(25, (int)allMoves.size());
+
+			//test moves on e4 with friendly obstacle
+			board.setPieceAt(
+				&ChessPiece(PieceType::Rook, ChessColor::White),
+				&Coordinate('c', 4));
+
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Rook, ChessColor::White),
+					&coord);
+			Assert::AreEqual(11, (int)allMoves.size());
+
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Bishop, ChessColor::White),
+					&coord);
+			Assert::AreEqual(13, (int)allMoves.size());
+
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Queen, ChessColor::White),
+					&coord);
+			Assert::AreEqual(24, (int)allMoves.size());
+		}
+		TEST_METHOD(boardGetMovementOfKnightTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			Coordinate start = Coordinate('a', 1);
+			std::list<Move> allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Knight, ChessColor::White),
+					&start);
+			Assert::AreEqual(2, (int)allMoves.size());
+
+			start = Coordinate('e', 4);
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Knight, ChessColor::White),
+					&start);
+			Assert::AreEqual(8, (int)allMoves.size());
+
+			start = Coordinate('b', 7);
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Knight, ChessColor::White),
+					&start);
+			Assert::AreEqual(4, (int)allMoves.size());
+
+			start = Coordinate('d', 7);
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Knight, ChessColor::White),
+					&start);
+			Assert::AreEqual(6, (int)allMoves.size());
+		}
+		TEST_METHOD(boardGetMovementOfPawnForwardTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			//normal start position 2 possible moves
+			//white
+			std::list<Move> allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::White),
+					&Coordinate('a', 2));
+			Assert::AreEqual(2, (int)allMoves.size());
+			//black
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::Black),
+					&Coordinate('a', 7));
+			Assert::AreEqual(2, (int)allMoves.size());
+
+			//normal start position
+			//cannot move, because blocked field in front
+			//white
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::Black),
+				&Coordinate('a', 3));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::White),
+					&Coordinate('a', 2));
+			Assert::AreEqual(0, (int)allMoves.size());
+			//black
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::White),
+				&Coordinate('a', 6));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::Black),
+					&Coordinate('a', 7));
+			Assert::AreEqual(0, (int)allMoves.size());
+
+			//normal start position
+			//can move 1, because the 2nd field move is blocked
+			//white
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::Black),
+				&Coordinate('a', 4));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::White),
+					&Coordinate('a', 2));
+			Assert::AreEqual(1, (int)allMoves.size());
+			//black
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::White),
+				&Coordinate('a', 5));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::Black),
+					&Coordinate('a', 7));
+			Assert::AreEqual(1, (int)allMoves.size());
+
+			//not at start position
+			//can move one forward
+			//white
+			board.clearBoard();
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::White),
+					&Coordinate('d', 5));
+			Assert::AreEqual(1, (int)allMoves.size());
+			//black
+			board.clearBoard();
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::Black),
+					&Coordinate('d', 4));
+			Assert::AreEqual(1, (int)allMoves.size());
+
+			//unrealistic scenario, because pawn should transform into another piece
+			//pawn on the other side and cannot move, because board ends
+			//white
+			board.clearBoard();
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::White),
+					&Coordinate('d', 8));
+			Assert::AreEqual(0, (int)allMoves.size());
+			//black
+			board.clearBoard();
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::Black),
+					&Coordinate('d', 1));
+			Assert::AreEqual(0, (int)allMoves.size());
+		}
+		TEST_METHOD(boardGetMovementOfPawnTakingAPieceTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+			
+			//not start position
+			//move forward is blocked, but can take a piece
+			//white
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::Black),
+				&Coordinate('a', 5));
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::Black),
+				&Coordinate('b', 5));
+			std::list<Move> allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::White),
+					&Coordinate('a', 4));
+			Assert::AreEqual(1, (int)allMoves.size());
+			//black
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::White),
+				&Coordinate('a', 4));
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::White),
+				&Coordinate('b', 4));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::Black),
+					&Coordinate('a', 5));
+			Assert::AreEqual(1, (int)allMoves.size());
+
+			//on start position
+			//can take left and right
+			//can move 2 forward -> nothing blocked
+			//white
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::Black),
+				&Coordinate('d', 3));
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::Black),
+				&Coordinate('f', 3));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::White),
+					&Coordinate('e', 2));
+			Assert::AreEqual(4, (int)allMoves.size());
+			//black
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::White),
+				&Coordinate('d', 6));
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::White),
+				&Coordinate('f', 6));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::Black),
+					&Coordinate('e', 7));
+			Assert::AreEqual(4, (int)allMoves.size());
+		}
+		TEST_METHOD(boardSetLastMoveTest)
+		{
+
+		}
+		TEST_METHOD(boardGetMovementOfPawnEnPassantTest)
+		{
+			
+		}
+		TEST_METHOD(boardGetMovementOfKingTest)
+		{
+			
 		}
 	};
 }

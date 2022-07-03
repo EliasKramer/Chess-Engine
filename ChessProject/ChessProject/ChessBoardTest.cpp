@@ -26,12 +26,12 @@ bool ChessBoardTest::executeMove(Move* givenMove)
     return ChessBoard::executeMove(givenMove);
 }
 
-bool ChessBoardTest::moveIsLegal(Move* givenMove)
+std::list<Move> ChessBoardTest::getAllMovesInDirection(Coordinate* start, ChessColor* color, short fileAddingValue, short rankAddingValue)
 {
-    return ChessBoard::moveIsLegal(givenMove);
+	return ChessBoard::getAllMovesInDirection(start, color,fileAddingValue,rankAddingValue);
 }
 
-bool ChessBoardTest::pieceIsAlledToMoveInThisWay(ChessPiece* type, Move* givenMove)
+std::list<Move> ChessBoardTest::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
 {
-	return ChessBoard::pieceIsAlledToMoveInThisWay(type,givenMove);
+	return ChessBoard::getAllMovesOfPiece(piece, coord);
 }
