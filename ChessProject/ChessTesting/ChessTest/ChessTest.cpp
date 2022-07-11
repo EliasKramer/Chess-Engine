@@ -7,6 +7,7 @@
 #include "../../ChessProject/ChessBoardTest.h"
 #include "../../ChessProject/Move.h"
 #include "../../ChessProject/Coordinate.h"
+#include "TestMethods.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace ChessTest
@@ -761,7 +762,7 @@ namespace ChessTest
 		{
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
-			
+
 			//not start position
 			//move forward is blocked, but can take a piece
 			//white
@@ -819,18 +820,192 @@ namespace ChessTest
 					PieceType::Pawn, ChessColor::Black),
 					&Coordinate('e', 7));
 			Assert::AreEqual(4, (int)allMoves.size());
-		}
-		TEST_METHOD(boardSetLastMoveTest)
-		{
 
+			//on start position
+			//front blocked by opponent piece
+			//cannot take right piece, because it is from the same color
+			//cannot take left because no enemy piece is there
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::Black),
+				&Coordinate('c', 3));
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::White),
+				&Coordinate('d', 3));
+			allMoves = board.getAllMovesOfPiece(
+				&ChessPiece(PieceType::Pawn, ChessColor::White),
+				&Coordinate('c', 2));
+			Assert::AreEqual(0, (int)allMoves.size());
+		}
+		TEST_METHOD(moveEqualTest)
+		{
+			Move first = Move(
+				&Coordinate('a', 1),
+				&Coordinate('a', 2));
+			Move second = Move(
+				&Coordinate('a', 1),
+				&Coordinate('a', 2));
+			Assert::IsTrue(first == second);
+			Assert::IsFalse(first != second);
+
+			Move third = Move(
+				&Coordinate('a', 1),
+				&Coordinate('a', 3));
+			Assert::IsFalse(first == third);
+			Assert::IsFalse(second == third);
+			Assert::IsTrue(first != third);
+			Assert::IsTrue(second != third);
+		}
+		TEST_METHOD(boardLastMoveTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			//Even if the move is not set, the last move should exist. But its an invalid move
+			Move move = Move();
+			Assert::IsTrue(move == board.getLastMove());
+
+			//An invalid move is still accpeted as last move,
+			//because it will be only set when it is valid
+			move = Move(
+				&Coordinate('a', 1),
+				&Coordinate('a', 1));
+			board.setLastMove(&move);
+			Assert::IsTrue(move == board.getLastMove());
+
+			//obviously a valid move is accepted as last move
+			move = Move(
+				&Coordinate('a', 1),
+				&Coordinate('a', 2));
+			board.setLastMove(&move);
+
+			Assert::IsTrue(move == board.getLastMove());
 		}
 		TEST_METHOD(boardGetMovementOfPawnEnPassantTest)
 		{
-			
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			//only 2 pieces on the board
+			//can do 2 moves: en passant and move forward
+			//white
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::Black),
+				&Coordinate('a', 5));
+			board.setLastMove(&Move(
+				&Coordinate('a', 7),
+				&Coordinate('a', 5)));
+
+			std::list<Move> allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::White),
+					&Coordinate('b', 5));
+			Assert::AreEqual(2, (int)allMoves.size());
+			Assert::IsTrue(
+				containsMove(allMoves,
+					Move(
+						&Coordinate('b', 5),
+						&Coordinate('a', 6)
+					)));
+			//black
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::White),
+				&Coordinate('a', 4));
+			board.setLastMove(&Move(
+				&Coordinate('a', 2),
+				&Coordinate('a', 4)));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::Black),
+					&Coordinate('b', 4));
+			Assert::AreEqual(2, (int)allMoves.size());
+			Assert::IsTrue(
+				containsMove(allMoves,
+					Move(
+						&Coordinate('b', 4),
+						&Coordinate('a', 3)
+					)));
+
+			//cannot do en passant.
+			//move is correct, but not the right piece
+			//white
+			board.setPieceAt(
+				&ChessPiece(PieceType::Rook, ChessColor::Black),
+				&Coordinate('a', 5));
+			board.setLastMove(&Move(
+				&Coordinate('a', 7),
+				&Coordinate('a', 5)));
+
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::White),
+					&Coordinate('b', 5));
+			Assert::AreEqual(1, (int)allMoves.size());
+			//black
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Rook, ChessColor::White),
+				&Coordinate('a', 4));
+			board.setLastMove(&Move(
+				&Coordinate('a', 2),
+				&Coordinate('a', 4)));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::Black),
+					&Coordinate('b', 4));
+			Assert::AreEqual(1, (int)allMoves.size());
 		}
 		TEST_METHOD(boardGetMovementOfKingTest)
 		{
-			
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			//king is free to move
+			std::list<Move> allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::King, ChessColor::White),
+					&Coordinate('e', 4));
+			Assert::AreEqual(8, (int)allMoves.size());
+
+			//king is in a corner
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::King, ChessColor::White),
+					&Coordinate('a', 1));
+			Assert::AreEqual(3, (int)allMoves.size());
+
+			//king is on the side of the board
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::King, ChessColor::White),
+					&Coordinate('e', 1));
+			Assert::AreEqual(5, (int)allMoves.size());
+
+			//king can take a piece
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Knight, ChessColor::Black),
+				&Coordinate('e', 5));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::King, ChessColor::White),
+					&Coordinate('e', 4));
+			Assert::AreEqual(8, (int)allMoves.size());
+
+			//king cannot take a piece of the same color
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Knight, ChessColor::White),
+				&Coordinate('e', 5));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::King, ChessColor::White),
+					&Coordinate('e', 4));
+			Assert::AreEqual(7, (int)allMoves.size());
+		}
+		TEST_METHOD(boardCastlingTest)
+		{
 		}
 	};
 }

@@ -179,10 +179,23 @@ std::list<Move> ChessBoard::getAllMovesOfPiece(ChessPiece* piece, Coordinate* co
 		return getAllKnightMoves(piece->getColor(), coord);
 	case PieceType::Pawn:
 		return getAllPawnMoves(piece->getColor(), coord);
+	case PieceType::King:
+		return getAllKingMoves(piece->getColor(), coord);
 	default:
 		return std::list<Move>();
 		break;
 	}
+}
+
+void ChessBoard::setLastMove(Move* move)
+{
+	lastMove = *move;
+}
+
+Move ChessBoard::getLastMove()
+{
+	//returns value instead of pointer to avoid manipulating it directly
+	return lastMove;
 }
 
 std::list<Move> ChessBoard::getAllStraightMoves(ChessColor* color, Coordinate* coord)
@@ -267,23 +280,23 @@ std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord
 {
 	std::list<Move> retVal;
 
-	short startRank = *color == ChessColor::White ? 2 : 7;
+	const short startRank = *color == ChessColor::White ? 2 : 7;
 
-	short rankMultiplier = *color == ChessColor::White ? 1 : -1;
+	const short rankMultiplier = *color == ChessColor::White ? 1 : -1;
 
 
 	//check moving forward noramlly
-	Coordinate newPos = Coordinate(
+	Coordinate oneForward = Coordinate(
 		coord->getFileAsPosition(),
 		(unsigned short)(coord->getRankAsPosition() + (rankMultiplier * 1)));
 	//new position is on the board
-	if (newPos.isValid())
+	if (oneForward.isValid())
 	{
 		//new position is empty
-		ChessPiece* pieceAtNewPos = getAtPosition(&newPos);
+		ChessPiece* pieceAtNewPos = getAtPosition(&oneForward);
 		if (!pieceAtNewPos->isValid())
 		{
-			Move move = Move(coord, &newPos);
+			Move move = Move(coord, &oneForward);
 			retVal.push_back(move);
 		}
 	}
@@ -294,18 +307,14 @@ std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord
 		Coordinate targetPos = Coordinate(
 			coord->getFileAsPosition(),
 			(unsigned short)(coord->getRankAsPosition() + (rankMultiplier * 2)));
-		
+
 		//new position is on the board
 		if (targetPos.isValid()) //should never be invalid, maybe remove it? idk
 		{
 			//new position is empty
 			ChessPiece* pieceAtNewPos = getAtPosition(&targetPos);
 
-			Coordinate fieldBetween = Coordinate(
-				coord->getFileAsPosition(),
-				(unsigned short)(coord->getRankAsPosition() + (rankMultiplier * 1)));
-			
-			ChessPiece* pieceBetween = getAtPosition(&fieldBetween);
+			ChessPiece* pieceBetween = getAtPosition(&oneForward);
 
 			if (!pieceAtNewPos->isValid() && !pieceBetween->isValid())
 			{
@@ -317,24 +326,56 @@ std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord
 
 	//checking if you can attack a piece
 	//loop has always 2 iterations -> once with -1 and once with 1
-	for(short fileAddingValue = -1; fileAddingValue <= 1; fileAddingValue += 2)
+	for (short fileAddingValue = -1; fileAddingValue <= 1; fileAddingValue += 2)
 	{
+		const short currentFileAsPos = (short)(coord->getFileAsPosition() + fileAddingValue);
+		const short rankOfCurrentPiece = (short)(coord->getRankAsPosition());
 		//new pos is 1 field in direction where the piece is headed 
 		//and once on 1 field either left or right (depending on what iteration of the loop it is)
 		Coordinate targetPos = Coordinate(
-			(short)(coord->getFileAsPosition() + fileAddingValue),
-			(short)(coord->getRankAsPosition() + (rankMultiplier * 1)));
-		
+			currentFileAsPos,
+			rankOfCurrentPiece + (rankMultiplier * 1));
+
 		//new position is on the board
 		if (targetPos.isValid())
 		{
 			//new position is empty
 			ChessPiece* pieceAtNewPos = getAtPosition(&targetPos);
 
-			if (pieceAtNewPos->isValid() && pieceAtNewPos->getColor() != color)
+			if (pieceAtNewPos->isValid())
 			{
-				Move move = Move(coord, &targetPos);
-				retVal.push_back(move);
+				if (*pieceAtNewPos->getColor() != *color)
+				{
+					Move move = Move(coord, &targetPos);
+					retVal.push_back(move);
+				}
+			}
+			else {
+				//en passant implemenation
+
+				//current piece is on the right rank
+				if (coord->getRankNormal() == (*color == White ? 5 : 4))
+				{
+					Coordinate posOfPieceToTake =
+						Coordinate(currentFileAsPos, rankOfCurrentPiece);
+					//if the opponent did a move, where i could perform en passant
+					//a opposite colored pawn should stand either left or right to my current pawn
+					if (
+						*getAtPosition(&posOfPieceToTake) ==
+						ChessPiece(PieceType::Pawn, (*color == White ? Black : White)))
+					{
+						//if an that did a double move last turn, i can perform en passant
+						const Move lastMoveIfWantToEnPassant = Move(
+							&Coordinate(currentFileAsPos, rankOfCurrentPiece + (rankMultiplier * 2)),
+							&posOfPieceToTake);
+
+						if (lastMoveIfWantToEnPassant == getLastMove())
+						{
+							Move move = Move(coord, &targetPos);
+							retVal.push_back(move);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -346,14 +387,16 @@ std::list<Move> ChessBoard::getAllKingMoves(ChessColor* color, Coordinate* coord
 {
 	std::list<Move> retVal;
 
-	for(short file = coord->getFileAsPosition()-1; file <= coord->getFileAsPosition()+1; file++)
+	for (short file = coord->getFileAsPosition() - 1; file <= coord->getFileAsPosition() + 1; file++)
 	{
-		for(short rank = coord->getRankAsPosition()-1; rank <= coord->getRankAsPosition()+1; rank++)
+		for (short rank = coord->getRankAsPosition() - 1; rank <= coord->getRankAsPosition() + 1; rank++)
 		{
-			Coordinate newPos = Coordinate(
-				file,
-				rank);
+			Coordinate newPos = Coordinate(file, rank);
 			Move move = Move(coord, &newPos);
+
+			//the function checks if the move is valid,
+			//thus i dont have to check if the current pos is the same as starting pos
+			//or if it is valid
 			ifCanGoThereAdd(color, &move, retVal);
 		}
 	}
@@ -364,7 +407,7 @@ std::list<Move> ChessBoard::getAllKingMoves(ChessColor* color, Coordinate* coord
 bool ChessBoard::ifCanGoThereAdd(ChessColor* currColor, Move* move, std::list<Move>& possibleMoves)
 {
 	//if the move is valid -> start != destination and both coords exist on the board
-	if (move->getDestination()->isValid())
+	if (move->isValid())
 	{
 		ChessPiece destinationPiece = *getAtPosition(move->getDestination());
 		if (destinationPiece.isValid())

@@ -31,3 +31,13 @@ bool Move::isValid()
 		destination.isValid() &&
 		start != destination;
 }
+
+bool Move::operator==(const Move& other) const
+{
+	return start == other.start && destination == other.destination;
+}
+
+bool Move::operator!=(const Move& other) const
+{
+	return !(operator ==(other));
+}

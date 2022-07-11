@@ -17,21 +17,24 @@ Coordinate::Coordinate(short givenFile, short givenRank)
 	rank = givenRank;
 }
 
+//chess coordinate based file
 char Coordinate::getFileNormal()
 {
 	return (char)(file + 'a');
 }
 
+//chess coordinate based rank
 short Coordinate::getRankNormal()
 {
 	return (unsigned short)(rank + 1);
 }
 
+//0 based file for arrays
 short Coordinate::getFileAsPosition()
 {
 	return file;
 }
-
+//0 based rank for arrays
 short Coordinate::getRankAsPosition()
 {
 	return rank;

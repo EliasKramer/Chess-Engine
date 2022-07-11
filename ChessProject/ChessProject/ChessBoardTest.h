@@ -9,6 +9,8 @@ public:
 	void clearBoard();
 	void setTurnColor(ChessColor* color);
 	bool executeMove(Move* givenMove);
+	void setLastMove(Move* move);
+	Move getLastMove();
 	std::list<Move> getAllMovesInDirection(
 		Coordinate* start,
 		ChessColor* color,

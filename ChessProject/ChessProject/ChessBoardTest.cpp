@@ -26,6 +26,16 @@ bool ChessBoardTest::executeMove(Move* givenMove)
     return ChessBoard::executeMove(givenMove);
 }
 
+void ChessBoardTest::setLastMove(Move* move)
+{
+	ChessBoard::setLastMove(move);
+}
+
+Move ChessBoardTest::getLastMove()
+{
+	return ChessBoard::getLastMove();
+}
+
 std::list<Move> ChessBoardTest::getAllMovesInDirection(Coordinate* start, ChessColor* color, short fileAddingValue, short rankAddingValue)
 {
 	return ChessBoard::getAllMovesInDirection(start, color,fileAddingValue,rankAddingValue);
