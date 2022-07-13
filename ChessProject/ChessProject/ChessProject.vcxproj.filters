@@ -36,6 +36,12 @@
     <ClCompile Include="Coordinate.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="RayCastOptions.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCastResult.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChessPiece.h">
@@ -57,6 +63,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="Coordinate.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="RayCastOptions.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="RayCastResult.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

@@ -146,6 +146,8 @@
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="MetaData.cpp" />
     <ClCompile Include="Move.cpp" />
+    <ClCompile Include="RayCastOptions.cpp" />
+    <ClCompile Include="RayCastResult.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChessBoard.h" />
@@ -154,6 +156,8 @@
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="MetaData.h" />
     <ClInclude Include="Move.h" />
+    <ClInclude Include="RayCastOptions.h" />
+    <ClInclude Include="RayCastResult.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>

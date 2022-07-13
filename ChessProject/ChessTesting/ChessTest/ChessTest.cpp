@@ -7,6 +7,8 @@
 #include "../../ChessProject/ChessBoardTest.h"
 #include "../../ChessProject/Move.h"
 #include "../../ChessProject/Coordinate.h"
+#include "../../ChessProject/RayCastOptions.h"
+#include "../../ChessProject/RayCastResult.h"
 #include "TestMethods.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -955,6 +957,22 @@ namespace ChessTest
 					PieceType::Pawn, ChessColor::Black),
 					&Coordinate('b', 4));
 			Assert::AreEqual(1, (int)allMoves.size());
+
+			//cannot do en passant.
+			//pawn didnt do a double move in the last turn
+			//white
+			board.clearBoard();
+			board.setPieceAt(
+				&ChessPiece(PieceType::Pawn, ChessColor::Black),
+				&Coordinate('a', 5));
+			board.setLastMove(&Move(
+				&Coordinate('a', 6),
+				&Coordinate('a', 5)));
+			allMoves =
+				board.getAllMovesOfPiece(&ChessPiece(
+					PieceType::Pawn, ChessColor::White),
+					&Coordinate('b', 5));
+			Assert::AreEqual(1, (int)allMoves.size());
 		}
 		TEST_METHOD(boardGetMovementOfKingTest)
 		{
@@ -1006,6 +1024,62 @@ namespace ChessTest
 		}
 		TEST_METHOD(boardCastlingTest)
 		{
+		}
+		TEST_METHOD(raycastOptionsTest)
+		{
+			RayCastOptions options = RayCastOptions();
+			
+			Assert::IsTrue(options.getStart() == Coordinate());
+			Assert::AreEqual(options.getMaxIterations(), (short)-1);
+			Assert::AreEqual(options.getAddingValToFile(), (short)-1);
+			Assert::AreEqual(options.getAddingValToRank(), (short)-1);
+			Assert::IsFalse(options.getNeedsMoveList());
+			Assert::IsTrue(options.getImaginaryMove() == Move());
+
+			Coordinate start = Coordinate('a', 1);
+			Move imaginaryMove = Move(
+				&Coordinate('a', 1),
+				&Coordinate('a', 2));
+			
+			options = RayCastOptions(
+				&start,
+				(short)1,
+				(short)1,
+				(short)1,
+				true,
+				&imaginaryMove
+			);
+
+			Assert::IsTrue(options.getStart() == start);
+			Assert::AreEqual(options.getMaxIterations(), (short)1);
+			Assert::AreEqual(options.getAddingValToFile(), (short)1);
+			Assert::AreEqual(options.getAddingValToRank(), (short)1);
+			Assert::IsTrue(options.getNeedsMoveList());
+			Assert::IsTrue(options.getImaginaryMove() == imaginaryMove);
+		}
+		TEST_METHOD(raycastResultTest)
+		{
+			RayCastResult result = RayCastResult();
+			
+			Assert::IsFalse(result.getIsUnderAttack());
+			Assert::IsTrue(result.getRayCastMoves() == std::list<Move>());
+
+			result.addRayCastMove(&Move(
+				&Coordinate('a', 1),
+				&Coordinate('a', 2)));
+			result.setIsUnderAttack(true);
+
+			Assert::AreEqual((int)result.getRayCastMoves().size(), 1);
+			Assert::IsTrue(result.getIsUnderAttack());
+			
+			result = RayCastResult(true, result.getRayCastMoves());
+			
+			Assert::IsTrue(result.getIsUnderAttack());
+			Assert::AreEqual((int)result.getRayCastMoves().size(), 1);
+		}
+		TEST_METHOD(executeRayCastTest)
+		{
+			
 		}
 	};
 }

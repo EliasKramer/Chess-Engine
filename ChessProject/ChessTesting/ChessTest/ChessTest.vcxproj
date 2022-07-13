@@ -163,6 +163,8 @@
     <ClCompile Include="..\..\ChessProject\Coordinate.cpp" />
     <ClCompile Include="..\..\ChessProject\MetaData.cpp" />
     <ClCompile Include="..\..\ChessProject\Move.cpp" />
+    <ClCompile Include="..\..\ChessProject\RayCastOptions.cpp" />
+    <ClCompile Include="..\..\ChessProject\RayCastResult.cpp" />
     <ClCompile Include="ChessTest.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -179,6 +181,8 @@
     <ClInclude Include="..\..\ChessProject\Coordinate.h" />
     <ClInclude Include="..\..\ChessProject\MetaData.h" />
     <ClInclude Include="..\..\ChessProject\Move.h" />
+    <ClInclude Include="..\..\ChessProject\RayCastOptions.h" />
+    <ClInclude Include="..\..\ChessProject\RayCastResult.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TestMethods.h" />
   </ItemGroup>

@@ -144,6 +144,9 @@ std::list<Move> ChessBoard::getAllMovesInDirection(
 	short fileAddingValue,
 	short rankAddingValue)
 {
+	//starts from start coordinate and adds adding-Values,
+	//till the coordinates are either invalid or a piece stands in the way
+	
 	std::list<Move> possibleMoves;
 	bool shouldContinue = true;
 	Coordinate nextCoord = *start;
@@ -197,7 +200,17 @@ Move ChessBoard::getLastMove()
 	//returns value instead of pointer to avoid manipulating it directly
 	return lastMove;
 }
-
+RayCastResult* ChessBoard::executeRayCast(RayCastOptions* options)
+{
+	//todo
+	return nullptr;
+}
+/*
+bool ChessBoard::fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color)
+{
+	return false;
+}
+*/
 std::list<Move> ChessBoard::getAllStraightMoves(ChessColor* color, Coordinate* coord)
 {
 	std::list<Move> possibleMoves;
@@ -251,7 +264,7 @@ std::list<Move> ChessBoard::getAllKnightMoves(ChessColor* color, Coordinate* coo
 	unsigned short rank = coord->getRankAsPosition();
 	std::list<Move> retVal;
 
-	short addingVals[8][2] = {
+	const short addingVals[8][2] = {
 		{ 1, 2 },
 		{ 2, 1 },
 		{ 2, -1 },
@@ -279,50 +292,37 @@ std::list<Move> ChessBoard::getAllKnightMoves(ChessColor* color, Coordinate* coo
 std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord)
 {
 	std::list<Move> retVal;
-
 	const short startRank = *color == ChessColor::White ? 2 : 7;
 
 	const short rankMultiplier = *color == ChessColor::White ? 1 : -1;
 
-
-	//check moving forward noramlly
-	Coordinate oneForward = Coordinate(
-		coord->getFileAsPosition(),
-		(unsigned short)(coord->getRankAsPosition() + (rankMultiplier * 1)));
-	//new position is on the board
-	if (oneForward.isValid())
+	//checking for moves forward
+	//loop has alway 2 iterations -> checks 1 and 2 fields forwards
+	for (int rankAdding = 1; rankAdding <= 2; rankAdding++)
 	{
-		//new position is empty
-		ChessPiece* pieceAtNewPos = getAtPosition(&oneForward);
-		if (!pieceAtNewPos->isValid())
-		{
-			Move move = Move(coord, &oneForward);
-			retVal.push_back(move);
-		}
-	}
-
-	//check moving 2 fields at start
-	if (coord->getRankNormal() == startRank)
-	{
-		Coordinate targetPos = Coordinate(
+		Coordinate currPosToCheck = Coordinate(
 			coord->getFileAsPosition(),
-			(unsigned short)(coord->getRankAsPosition() + (rankMultiplier * 2)));
-
+			(short)(coord->getRankAsPosition() + (rankMultiplier * rankAdding)));
+		
 		//new position is on the board
-		if (targetPos.isValid()) //should never be invalid, maybe remove it? idk
+		//if a pawn wants to go 2 fields it has to be at the start rank
+		if (currPosToCheck.isValid() &&
+			(rankAdding != 2 || coord->getRankNormal() == startRank))
 		{
-			//new position is empty
-			ChessPiece* pieceAtNewPos = getAtPosition(&targetPos);
-
-			ChessPiece* pieceBetween = getAtPosition(&oneForward);
-
-			if (!pieceAtNewPos->isValid() && !pieceBetween->isValid())
+			ChessPiece* pieceAtNewPos = getAtPosition(&currPosToCheck);
+			if (pieceAtNewPos->isValid())
 			{
-				Move move = Move(coord, &targetPos);
+				//no need going forward another time, if path is blocked
+				break;	
+			}
+			else {
+				//new position is empty
+				Move move = Move(coord, &currPosToCheck);
 				retVal.push_back(move);
 			}
 		}
 	}
+
 
 	//checking if you can attack a piece
 	//loop has always 2 iterations -> once with -1 and once with 1
@@ -339,38 +339,43 @@ std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord
 		//new position is on the board
 		if (targetPos.isValid())
 		{
-			//new position is empty
 			ChessPiece* pieceAtNewPos = getAtPosition(&targetPos);
 
+			//if there is a piece at the currently check position
 			if (pieceAtNewPos->isValid())
 			{
+				//if the piece is of the opposite color
 				if (*pieceAtNewPos->getColor() != *color)
 				{
+					//the move is valid and can be done
 					Move move = Move(coord, &targetPos);
 					retVal.push_back(move);
 				}
 			}
+			//if one field diagonal in front is free
 			else {
 				//en passant implemenation
-
-				//current piece is on the right rank
+				
+				//current piece is on the right rank to perform en passant
 				if (coord->getRankNormal() == (*color == White ? 5 : 4))
 				{
 					Coordinate posOfPieceToTake =
 						Coordinate(currentFileAsPos, rankOfCurrentPiece);
+					
 					//if the opponent did a move, where i could perform en passant
 					//a opposite colored pawn should stand either left or right to my current pawn
 					if (
 						*getAtPosition(&posOfPieceToTake) ==
 						ChessPiece(PieceType::Pawn, (*color == White ? Black : White)))
 					{
-						//if an that did a double move last turn, i can perform en passant
+						//if that very pawn next to the current pawn did do a double move last turn
 						const Move lastMoveIfWantToEnPassant = Move(
 							&Coordinate(currentFileAsPos, rankOfCurrentPiece + (rankMultiplier * 2)),
 							&posOfPieceToTake);
 
 						if (lastMoveIfWantToEnPassant == getLastMove())
 						{
+							//the en passant move is possible
 							Move move = Move(coord, &targetPos);
 							retVal.push_back(move);
 						}
@@ -412,12 +417,13 @@ bool ChessBoard::ifCanGoThereAdd(ChessColor* currColor, Move* move, std::list<Mo
 		ChessPiece destinationPiece = *getAtPosition(move->getDestination());
 		if (destinationPiece.isValid())
 		{
-			//you cant go to a field where one of your pieces stand
-			if ((int)*destinationPiece.getColor() != (int)*currColor)
+			//you can take a piece if it is from the opponent
+			if (*destinationPiece.getColor() != *currColor)
 			{
 				possibleMoves.push_back(*move);
 			}
-			//you can take a piece if it is from the opponent
+
+			//you cant go to a field where one of your pieces stand
 			return false;
 		}
 		else {

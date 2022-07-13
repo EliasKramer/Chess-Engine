@@ -17,4 +17,6 @@ public:
 		short fileAddingValue,
 		short rankAddingValue);
 	std::list<Move> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
+	//bool fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color);
+	RayCastResult* executeRayCast(RayCastOptions* options);
 };

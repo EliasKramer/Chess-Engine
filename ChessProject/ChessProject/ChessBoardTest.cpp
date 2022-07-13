@@ -45,3 +45,12 @@ std::list<Move> ChessBoardTest::getAllMovesOfPiece(ChessPiece* piece, Coordinate
 {
 	return ChessBoard::getAllMovesOfPiece(piece, coord);
 }
+RayCastResult* ChessBoardTest::executeRayCast(RayCastOptions* options)
+{
+	return ChessBoard::executeRayCast(options);
+}
+/*
+bool ChessBoardTest::fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color)
+{
+	return ChessBoard::fieldGetsAttackedByEnemy(coord, color);
+}*/

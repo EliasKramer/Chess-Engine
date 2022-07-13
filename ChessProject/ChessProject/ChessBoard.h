@@ -2,6 +2,8 @@
 #include "ChessPiece.h"
 #include "Coordinate.h"
 #include "Move.h"
+#include "RayCastOptions.h"
+#include "RayCastResult.h"
 #include <list>
 class ChessBoard
 {
@@ -19,7 +21,11 @@ protected:
 		short rankAddingValue);
 	std::list<Move> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
 	void setLastMove(Move* move);
+	//no pointer to avoid setting it without permission
 	Move getLastMove();
+	//bool fieldIsUnderAttack(Coordinate* coord, ChessColor* color);
+	RayCastResult* executeRayCast(RayCastOptions* options);
+	
 public:
 	//constructor
 	ChessBoard();
@@ -33,6 +39,10 @@ private:
 	//set the board up
 	void initBoard();
 	
+	//todo
+	//with fn pointers for different purposes
+	//void addIfNoPiece
+
 	//all the moves that can be made by a piece
 	std::list<Move> getAllStraightMoves(ChessColor* color, Coordinate* coord);
 	std::list<Move> getAllDiagonalMoves(ChessColor* color, Coordinate* coord);
