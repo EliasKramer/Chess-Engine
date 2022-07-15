@@ -45,7 +45,7 @@ std::vector<Move> ChessBoardTest::getAllMovesOfPiece(ChessPiece* piece, Coordina
 {
 	return ChessBoard::getAllMovesOfPiece(piece, coord);
 }
-RayCastResult* ChessBoardTest::executeRayCast(RayCastOptions* options)
+RayCastResult ChessBoardTest::executeRayCast(RayCastOptions* options)
 {
 	return ChessBoard::executeRayCast(options);
 }

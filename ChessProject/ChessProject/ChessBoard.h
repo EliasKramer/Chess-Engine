@@ -23,7 +23,7 @@ protected:
 	void setLastMove(Move* move);
 	Move getLastMove();
 	//bool fieldIsUnderAttack(Coordinate* coord, ChessColor* color);
-	RayCastResult* executeRayCast(RayCastOptions* options);
+	RayCastResult executeRayCast(RayCastOptions* options);
 	ChessPiece getAtPostitionWithMoveDone(Coordinate* coord, Move* move);
 public:
 	//constructor

@@ -28,8 +28,7 @@ public:
 		short addingValToFile,
 		short addingValToRank,
 		bool needsMoveList,
-		ChessColor* color,
-		Move* imaginaryMove);
+		ChessColor* color);
 	
 	Coordinate getStart();
 	short getMaxIterations();
@@ -38,5 +37,12 @@ public:
 	bool getNeedsMoveList();
 	ChessColor getColor();
 	Move getImaginaryMove();
+	
+	void setStart(Coordinate* val);
+	void setMaxIterations(short val);
+	void setAddingValFile(short val);
+	void setAddingValRank(short val);
+	void setNeedsMoveList(bool val);
+	void setColor(ChessColor* val);
+	void setImaginaryMove(Move* val);
 };
-

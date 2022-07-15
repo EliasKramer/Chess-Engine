@@ -203,13 +203,14 @@ Move ChessBoard::getLastMove()
 	//returns value instead of pointer to avoid manipulating it directly
 	return lastMove;
 }
-RayCastResult* ChessBoard::executeRayCast(RayCastOptions* options)
+RayCastResult ChessBoard::executeRayCast(RayCastOptions* options)
 {
+	RayCastResult result = RayCastResult();
+	Coordinate start = options->getStart();
 	Coordinate currentCoord = options->getStart();
 	short iterationCount = 0;
 	short maxIterations = options->getMaxIterations();
 	Move imaginaryMove = options->getImaginaryMove();
-	bool shouldCalculateWithImaginaryMove = imaginaryMove.isValid();
 	do
 	{
 		iterationCount++;
@@ -217,40 +218,38 @@ RayCastResult* ChessBoard::executeRayCast(RayCastOptions* options)
 			(short)(currentCoord.getFileAsPosition() + options->getAddingValToFile()),
 			currentCoord.getRankAsPosition() + options->getAddingValToRank());
 
-		ChessPiece pieceAtCurrentPos = getAtPosition(&currentCoord);
+		Move currentMoveToCheck = Move(&start, &currentCoord);
 
-		if (shouldCalculateWithImaginaryMove)
+		if (!currentCoord.isValid())
 		{
-			if (currentCoord == imaginaryMove.getStart())
-			{
-				pieceAtCurrentPos = ChessPiece();
-			}
-			if (currentCoord == imaginaryMove.getDestination())
-			{
-				//pieceAtCurrentPos = imaginaryMove.();
-			}
+			break;
 		}
-		if ((shouldCalculateWithImaginaryMove && currentCoord == imaginaryMove.getStart()) ||
-			!pieceAtCurrentPos.isValid())
-		{
-			//field is empty
-		}
-		else if ((shouldCalculateWithImaginaryMove && currentCoord == imaginaryMove.getStart()) ||
-			(pieceAtCurrentPos.getColor() == options->getColor()))
-		{
 
+		ChessPiece pieceAtCurrentPos = getAtPostitionWithMoveDone(&currentCoord, &imaginaryMove);
+
+		if (!pieceAtCurrentPos.isValid())
+		{
+			if (options->getNeedsMoveList())
+			{
+				result.addRayCastMove(&currentMoveToCheck);
+			}
 		}
-		//ooposite
+		else if(pieceAtCurrentPos.getColor() == options->getColor())
+		{
+			break;
+		}
 		else {
-
+			if (options->getNeedsMoveList())
+			{
+				result.addRayCastMove(&currentMoveToCheck);
+			}
+			break;
 		}
-
-
 	} while (
 		((maxIterations == -1) || iterationCount < maxIterations) &&
 		currentCoord.isValid());
 
-	return nullptr;
+	return result;
 }
 ChessPiece ChessBoard::getAtPostitionWithMoveDone(Coordinate* coord, Move* move)
 {
@@ -260,54 +259,57 @@ ChessPiece ChessBoard::getAtPostitionWithMoveDone(Coordinate* coord, Move* move)
 	ChessPiece pieceAtStart = getAtPosition(&start);
 	ChessPiece pieceAtDest = getAtPosition(&dest);
 
-	if (*coord == dest)
+	if (move->isValid())
 	{
-		return pieceAtStart;
-	}
-	else if (*coord == start)
-	{
-		return ChessPiece();
-	}
-	else if (pieceAtStart.getType() == PieceType::Pawn &&
-		start.getFileAsPosition() != dest.getFileAsPosition() &&
-		!pieceAtDest.isValid())
-	{
-		//en passant handling
-		//the check is not that accurate, 
-		//because the moves comes only here if it has been checked as valid
-		Coordinate enPassantPieceTaken = Coordinate(dest.getFileAsPosition(), start.getRankAsPosition());
-
-		if (*coord == enPassantPieceTaken)
+		if (*coord == dest)
 		{
-			//if en passant would be performed,
-			//and the coord of the piece taken matches the searched one,
-			//then return an empty field / invalid chess piece
+			return pieceAtStart;
+		}
+		else if (*coord == start)
+		{
 			return ChessPiece();
 		}
-	}
-	else if (pieceAtStart.getType() == PieceType::King)
-	{
-		//castling handling here
-		short castlingRank = pieceAtStart.getColor() == ChessColor::White ? 1 : 8;
-		//king stands on start field
-		if (start == Coordinate('e', castlingRank) &&
-			dest.getRankNormal() == castlingRank)
+		else if (pieceAtStart.getType() == PieceType::Pawn &&
+			start.getFileAsPosition() != dest.getFileAsPosition() &&
+			!pieceAtDest.isValid())
 		{
-			if (dest.getFileNormal() == 'c')
+			//en passant handling
+			//the check is not that accurate, 
+			//because the moves comes only here if it has been checked as valid
+			Coordinate enPassantPieceTaken = Coordinate(dest.getFileAsPosition(), start.getRankAsPosition());
+
+			if (*coord == enPassantPieceTaken)
 			{
-				Move rookMove = 
-					Move(
-						&Coordinate('a', castlingRank),
-						&Coordinate('d', castlingRank));
-				return getAtPostitionWithMoveDone(coord, &rookMove);
+				//if en passant would be performed,
+				//and the coord of the piece taken matches the searched one,
+				//then return an empty field / invalid chess piece
+				return ChessPiece();
 			}
-			else if (dest.getFileNormal() == 'g')
+		}
+		else if (pieceAtStart.getType() == PieceType::King)
+		{
+			//castling handling here
+			short castlingRank = pieceAtStart.getColor() == ChessColor::White ? 1 : 8;
+			//king stands on start field
+			if (start == Coordinate('e', castlingRank) &&
+				dest.getRankNormal() == castlingRank)
 			{
-				Move rookMove =
-					Move(
-						&Coordinate('h', castlingRank),
-						&Coordinate('f', castlingRank));
-				return getAtPostitionWithMoveDone(coord, &rookMove);
+				if (dest.getFileNormal() == 'c')
+				{
+					Move rookMove =
+						Move(
+							&Coordinate('a', castlingRank),
+							&Coordinate('d', castlingRank));
+					return getAtPostitionWithMoveDone(coord, &rookMove);
+				}
+				else if (dest.getFileNormal() == 'g')
+				{
+					Move rookMove =
+						Move(
+							&Coordinate('h', castlingRank),
+							&Coordinate('f', castlingRank));
+					return getAtPostitionWithMoveDone(coord, &rookMove);
+				}
 			}
 		}
 	}

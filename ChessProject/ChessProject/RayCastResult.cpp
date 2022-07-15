@@ -38,6 +38,17 @@ void RayCastResult::addRayCastMove(Move* value)
 	_rayCastMoves.push_back(*value);
 }
 
+void RayCastResult::updateIsUnderAttack(PieceType* type, ChessPiece(*getPieceAt)(Coordinate*))
+{
+	Coordinate destinationOfLatestRaycast = _rayCastMoves.back().getDestination();
+	ChessPiece latestRayCastHit = getPieceAt(&destinationOfLatestRaycast);
+
+	if (latestRayCastHit.isValid() && latestRayCastHit.getType() == *type)
+	{
+		_isUnderAttack = true;
+	}
+}
+
 RayCastResult operator+(const RayCastResult& first, const RayCastResult& second)
 {
 	std::vector<Move> first_moves = first._rayCastMoves;

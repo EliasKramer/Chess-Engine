@@ -18,6 +18,6 @@ public:
 		short rankAddingValue);
 	std::vector<Move> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
 	//bool fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color);
-	RayCastResult* executeRayCast(RayCastOptions* options);
+	RayCastResult executeRayCast(RayCastOptions* options);
 	ChessPiece getAtPostitionWithMoveDone(Coordinate* coord, Move* move);
 };
