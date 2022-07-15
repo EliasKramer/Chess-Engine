@@ -1,6 +1,6 @@
 #pragma once
 #include "Move.h"
-
+#include "MetaData.h"
 class RayCastOptions
 {
 private:
@@ -14,6 +14,8 @@ private:
 	short _addingValToRank;
 	//result needs all moves
 	bool _needsMoveList;
+	//color of piece you want to raycast
+	ChessColor _color;
 	//do the raycast as if this move is done,
 	//but dont actually do it
 	Move _imaginaryMove;
@@ -26,6 +28,7 @@ public:
 		short addingValToFile,
 		short addingValToRank,
 		bool needsMoveList,
+		ChessColor* color,
 		Move* imaginaryMove);
 	
 	Coordinate getStart();
@@ -33,6 +36,7 @@ public:
 	short getAddingValToFile();
 	short getAddingValToRank();
 	bool getNeedsMoveList();
+	ChessColor getColor();
 	Move getImaginaryMove();
 };
 

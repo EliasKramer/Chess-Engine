@@ -71,13 +71,13 @@
     <ClInclude Include="..\..\ChessProject\Coordinate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TestMethods.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\ChessProject\RayCastOptions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\ChessProject\RayCastResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMethods.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

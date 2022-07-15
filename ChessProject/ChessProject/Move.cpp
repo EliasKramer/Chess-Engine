@@ -14,14 +14,14 @@ Move::Move(
 	destination = *givenDestination;
 }
 
-Coordinate* Move::getStart()
+Coordinate Move::getStart()
 {
-	return &start;
+	return start;
 }
 
-Coordinate* Move::getDestination()
+Coordinate Move::getDestination()
 {
-	return &destination;
+	return destination;
 }
 
 bool Move::isValid()

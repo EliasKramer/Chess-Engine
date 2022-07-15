@@ -1,5 +1,9 @@
 #include "TestMethods.h"
-bool containsMove(const std::list<Move>& list, Move x)
+bool containsMove(const std::vector<Move>& list, Move* x)
 {
-	return std::find(list.begin(), list.end(), x) != list.end();
+	return std::find(list.begin(), list.end(), *x) != list.end();
+}
+
+void testGetAtPositionWtihMoveDoneKingMoves(ChessColor* col)
+{
 }

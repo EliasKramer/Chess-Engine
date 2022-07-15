@@ -10,8 +10,8 @@ public:
 	ChessPiece(PieceType givenType, ChessColor givenColor);
 	ChessPiece();
 	bool isValid();
-	PieceType* getType();
+	PieceType getType();
 	int getTypeVal()const;
-	ChessColor* getColor();
+	ChessColor getColor();
 	bool operator ==(const ChessPiece& other) const;
 };

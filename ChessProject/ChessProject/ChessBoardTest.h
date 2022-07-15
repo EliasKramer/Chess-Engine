@@ -11,12 +11,13 @@ public:
 	bool executeMove(Move* givenMove);
 	void setLastMove(Move* move);
 	Move getLastMove();
-	std::list<Move> getAllMovesInDirection(
+	std::vector<Move> getAllMovesInDirection(
 		Coordinate* start,
 		ChessColor* color,
 		short fileAddingValue,
 		short rankAddingValue);
-	std::list<Move> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
+	std::vector<Move> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
 	//bool fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color);
 	RayCastResult* executeRayCast(RayCastOptions* options);
+	ChessPiece getAtPostitionWithMoveDone(Coordinate* coord, Move* move);
 };

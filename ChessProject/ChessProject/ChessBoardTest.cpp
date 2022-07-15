@@ -36,18 +36,22 @@ Move ChessBoardTest::getLastMove()
 	return ChessBoard::getLastMove();
 }
 
-std::list<Move> ChessBoardTest::getAllMovesInDirection(Coordinate* start, ChessColor* color, short fileAddingValue, short rankAddingValue)
+std::vector<Move> ChessBoardTest::getAllMovesInDirection(Coordinate* start, ChessColor* color, short fileAddingValue, short rankAddingValue)
 {
 	return ChessBoard::getAllMovesInDirection(start, color,fileAddingValue,rankAddingValue);
 }
 
-std::list<Move> ChessBoardTest::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
+std::vector<Move> ChessBoardTest::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
 {
 	return ChessBoard::getAllMovesOfPiece(piece, coord);
 }
 RayCastResult* ChessBoardTest::executeRayCast(RayCastOptions* options)
 {
 	return ChessBoard::executeRayCast(options);
+}
+ChessPiece ChessBoardTest::getAtPostitionWithMoveDone(Coordinate* coord, Move* move)
+{
+	return ChessBoard::getAtPostitionWithMoveDone(coord,move);
 }
 /*
 bool ChessBoardTest::fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color)

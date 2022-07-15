@@ -1,5 +1,6 @@
 #pragma once
-#include <algorithm>
-#include <list>
 #include "../../ChessProject/Move.h"
-bool containsMove(const std::list<Move>& list, Move x);
+#include <vector>
+bool containsMove(const std::vector<Move>& list, Move* x);
+
+void testGetAtPositionWtihMoveDoneKingMoves(ChessColor* col);

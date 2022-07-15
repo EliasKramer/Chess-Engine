@@ -12,17 +12,17 @@ bool ChessPiece::isValid()
 {
 	return exists;
 }
-PieceType* ChessPiece::getType()
+PieceType ChessPiece::getType()
 {
-	return &type;
+	return type;
 }
 int ChessPiece::getTypeVal() const
 {
 	return (int)type;
 }
-ChessColor* ChessPiece::getColor()
+ChessColor ChessPiece::getColor()
 {
-	return &color;
+	return color;
 }
 
 bool ChessPiece::operator ==(const ChessPiece& other) const

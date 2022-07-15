@@ -5,28 +5,30 @@ ChessBoard::ChessBoard()
 	initBoard();
 }
 
-ChessPiece* ChessBoard::getAtPosition(Coordinate* coord)
+ChessPiece ChessBoard::getAtPosition(Coordinate* coord)
 {
 	return coord->isValid() ?
-		&board[coord->getFileAsPosition()][coord->getRankAsPosition()] :
-		nullptr;
+		board[coord->getFileAsPosition()][coord->getRankAsPosition()] :
+		ChessPiece();
 }
 
-ChessColor* ChessBoard::getTurnColor()
+ChessColor ChessBoard::getTurnColor()
 {
-	ChessColor white = ChessColor::White;
-	ChessColor black = ChessColor::Black;
-	return isWhiteTurn ? &white : &black;
+	return isWhiteTurn ? ChessColor::White : ChessColor::Black;
 }
 
 bool ChessBoard::executeMove(Move* givenMove)
 {
 	if (givenMove->isValid())
 	{
+		Coordinate start = givenMove->getStart();
+		Coordinate dest = givenMove->getDestination();
+
+		ChessPiece piece = getAtPosition(
+			&start);
 		setPieceAt(
-			getAtPosition(
-				givenMove->getStart()),
-			givenMove->getDestination());
+			&piece,
+			&dest);
 		//set start to invalid
 		return true;
 	}
@@ -132,13 +134,13 @@ void ChessBoard::initBoard()
 	setPieceAt(&piece, &position);
 }
 
-std::list<Move> ChessBoard::getAllMoves()
+std::vector<Move> ChessBoard::getAllMoves()
 {
-	std::list<Move> resultList;
+	std::vector<Move> resultList;
 	return resultList;
 }
 
-std::list<Move> ChessBoard::getAllMovesInDirection(
+std::vector<Move> ChessBoard::getAllMovesInDirection(
 	Coordinate* start,
 	ChessColor* color,
 	short fileAddingValue,
@@ -146,8 +148,8 @@ std::list<Move> ChessBoard::getAllMovesInDirection(
 {
 	//starts from start coordinate and adds adding-Values,
 	//till the coordinates are either invalid or a piece stands in the way
-	
-	std::list<Move> possibleMoves;
+
+	std::vector<Move> possibleMoves;
 	bool shouldContinue = true;
 	Coordinate nextCoord = *start;
 	do
@@ -168,24 +170,25 @@ std::list<Move> ChessBoard::getAllMovesInDirection(
 	return possibleMoves;
 }
 
-std::list<Move> ChessBoard::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
+std::vector<Move> ChessBoard::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
 {
-	switch (*piece->getType())
+	ChessColor col = piece->getColor();
+	switch (piece->getType())
 	{
 	case PieceType::Rook:
-		return getAllStraightMoves(piece->getColor(), coord);
+		return getAllStraightMoves(&col, coord);
 	case PieceType::Bishop:
-		return getAllDiagonalMoves(piece->getColor(), coord);
+		return getAllDiagonalMoves(&col, coord);
 	case PieceType::Queen:
-		return getAllQueenMoves(piece->getColor(), coord);
+		return getAllQueenMoves(&col, coord);
 	case PieceType::Knight:
-		return getAllKnightMoves(piece->getColor(), coord);
+		return getAllKnightMoves(&col, coord);
 	case PieceType::Pawn:
-		return getAllPawnMoves(piece->getColor(), coord);
+		return getAllPawnMoves(&col, coord);
 	case PieceType::King:
-		return getAllKingMoves(piece->getColor(), coord);
+		return getAllKingMoves(&col, coord);
 	default:
-		return std::list<Move>();
+		return std::vector<Move>();
 		break;
 	}
 }
@@ -202,8 +205,116 @@ Move ChessBoard::getLastMove()
 }
 RayCastResult* ChessBoard::executeRayCast(RayCastOptions* options)
 {
-	//todo
+	Coordinate currentCoord = options->getStart();
+	short iterationCount = 0;
+	short maxIterations = options->getMaxIterations();
+	Move imaginaryMove = options->getImaginaryMove();
+	bool shouldCalculateWithImaginaryMove = imaginaryMove.isValid();
+	do
+	{
+		iterationCount++;
+		currentCoord = Coordinate(
+			(short)(currentCoord.getFileAsPosition() + options->getAddingValToFile()),
+			currentCoord.getRankAsPosition() + options->getAddingValToRank());
+
+		ChessPiece pieceAtCurrentPos = getAtPosition(&currentCoord);
+
+		if (shouldCalculateWithImaginaryMove)
+		{
+			if (currentCoord == imaginaryMove.getStart())
+			{
+				pieceAtCurrentPos = ChessPiece();
+			}
+			if (currentCoord == imaginaryMove.getDestination())
+			{
+				//pieceAtCurrentPos = imaginaryMove.();
+			}
+		}
+		if ((shouldCalculateWithImaginaryMove && currentCoord == imaginaryMove.getStart()) ||
+			!pieceAtCurrentPos.isValid())
+		{
+			//field is empty
+		}
+		else if ((shouldCalculateWithImaginaryMove && currentCoord == imaginaryMove.getStart()) ||
+			(pieceAtCurrentPos.getColor() == options->getColor()))
+		{
+
+		}
+		//ooposite
+		else {
+
+		}
+
+
+	} while (
+		((maxIterations == -1) || iterationCount < maxIterations) &&
+		currentCoord.isValid());
+
 	return nullptr;
+}
+ChessPiece ChessBoard::getAtPostitionWithMoveDone(Coordinate* coord, Move* move)
+{
+	Coordinate start = move->getStart();
+	Coordinate dest = move->getDestination();
+
+	ChessPiece pieceAtStart = getAtPosition(&start);
+	ChessPiece pieceAtDest = getAtPosition(&dest);
+
+	if (*coord == dest)
+	{
+		return pieceAtStart;
+	}
+	else if (*coord == start)
+	{
+		return ChessPiece();
+	}
+	else if (pieceAtStart.getType() == PieceType::Pawn &&
+		start.getFileAsPosition() != dest.getFileAsPosition() &&
+		!pieceAtDest.isValid())
+	{
+		//en passant handling
+		//the check is not that accurate, 
+		//because the moves comes only here if it has been checked as valid
+		Coordinate enPassantPieceTaken = Coordinate(dest.getFileAsPosition(), start.getRankAsPosition());
+
+		if (*coord == enPassantPieceTaken)
+		{
+			//if en passant would be performed,
+			//and the coord of the piece taken matches the searched one,
+			//then return an empty field / invalid chess piece
+			return ChessPiece();
+		}
+	}
+	else if (pieceAtStart.getType() == PieceType::King)
+	{
+		//castling handling here
+		short castlingRank = pieceAtStart.getColor() == ChessColor::White ? 1 : 8;
+		//king stands on start field
+		if (start == Coordinate('e', castlingRank) &&
+			dest.getRankNormal() == castlingRank)
+		{
+			if (dest.getFileNormal() == 'c')
+			{
+				Move rookMove = 
+					Move(
+						&Coordinate('a', castlingRank),
+						&Coordinate('d', castlingRank));
+				return getAtPostitionWithMoveDone(coord, &rookMove);
+			}
+			else if (dest.getFileNormal() == 'g')
+			{
+				Move rookMove =
+					Move(
+						&Coordinate('h', castlingRank),
+						&Coordinate('f', castlingRank));
+				return getAtPostitionWithMoveDone(coord, &rookMove);
+			}
+		}
+	}
+
+	//if the move has no effect on the getting, then just get it like 
+	//you would without move
+	return getAtPosition(coord);
 }
 /*
 bool ChessBoard::fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color)
@@ -211,58 +322,84 @@ bool ChessBoard::fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color)
 	return false;
 }
 */
-std::list<Move> ChessBoard::getAllStraightMoves(ChessColor* color, Coordinate* coord)
+std::vector<Move> ChessBoard::getAllStraightMoves(ChessColor* color, Coordinate* coord)
 {
-	std::list<Move> possibleMoves;
+	std::vector<Move> possibleMoves;
 
-	possibleMoves.splice(
+	std::vector<Move> newMovesRight = getAllMovesInDirection(coord, color, 1, 0);
+	possibleMoves.insert(
 		possibleMoves.end(),
-		getAllMovesInDirection(coord, color, 1, 0));
-	possibleMoves.splice(
+		newMovesRight.begin(),
+		newMovesRight.end());
+
+	std::vector<Move> newMovesLeft = getAllMovesInDirection(coord, color, -1, 0);
+	possibleMoves.insert(
 		possibleMoves.end(),
-		getAllMovesInDirection(coord, color, -1, 0));
-	possibleMoves.splice(
+		newMovesLeft.begin(),
+		newMovesLeft.end());
+
+	std::vector<Move> newMovesUp = getAllMovesInDirection(coord, color, 0, 1);
+	possibleMoves.insert(
 		possibleMoves.end(),
-		getAllMovesInDirection(coord, color, 0, 1));
-	possibleMoves.splice(
+		newMovesUp.begin(),
+		newMovesUp.end());
+
+	std::vector<Move> newMovesDown = getAllMovesInDirection(coord, color, 0, -1);
+	possibleMoves.insert(
 		possibleMoves.end(),
-		getAllMovesInDirection(coord, color, 0, -1));
+		newMovesDown.begin(),
+		newMovesDown.end());
 	return possibleMoves;
 }
 
-std::list<Move> ChessBoard::getAllDiagonalMoves(ChessColor* color, Coordinate* coord)
+std::vector<Move> ChessBoard::getAllDiagonalMoves(ChessColor* color, Coordinate* coord)
 {
-	std::list<Move> possibleMoves;
+	std::vector<Move> possibleMoves;
 
-	possibleMoves.splice(
+	std::vector<Move> leftUp = getAllMovesInDirection(coord, color, 1, 1);
+	possibleMoves.insert(
 		possibleMoves.end(),
-		getAllMovesInDirection(coord, color, 1, 1));
-	possibleMoves.splice(
+		leftUp.begin(),
+		leftUp.end());
+
+	std::vector<Move> rightUp = getAllMovesInDirection(coord, color, -1, 1);
+	possibleMoves.insert(
 		possibleMoves.end(),
-		getAllMovesInDirection(coord, color, -1, 1));
-	possibleMoves.splice(
+		rightUp.begin(),
+		rightUp.end());
+
+	std::vector<Move> leftDown = getAllMovesInDirection(coord, color, 1, -1);
+	possibleMoves.insert(
 		possibleMoves.end(),
-		getAllMovesInDirection(coord, color, 1, -1));
-	possibleMoves.splice(
+		leftDown.begin(),
+		leftDown.end());
+
+	std::vector<Move> rightDown = getAllMovesInDirection(coord, color, -1, -1);
+	possibleMoves.insert(
 		possibleMoves.end(),
-		getAllMovesInDirection(coord, color, -1, -1));
+		rightDown.begin(),
+		rightDown.end());
 	return possibleMoves;
 }
-std::list<Move> ChessBoard::getAllQueenMoves(ChessColor* color, Coordinate* coord)
+std::vector<Move> ChessBoard::getAllQueenMoves(ChessColor* color, Coordinate* coord)
 {
-	std::list<Move> retVal =
+	std::vector<Move> retVal =
 		getAllStraightMoves(color, coord);
-	retVal.splice(
+
+	std::vector<Move> diagonalMoves = getAllDiagonalMoves(color, coord);
+	retVal.insert(
 		retVal.end(),
-		getAllDiagonalMoves(color, coord));
+		diagonalMoves.begin(),
+		diagonalMoves.end());
+
 	return retVal;
 }
 
-std::list<Move> ChessBoard::getAllKnightMoves(ChessColor* color, Coordinate* coord)
+std::vector<Move> ChessBoard::getAllKnightMoves(ChessColor* color, Coordinate* coord)
 {
 	unsigned short file = coord->getFileAsPosition();
 	unsigned short rank = coord->getRankAsPosition();
-	std::list<Move> retVal;
+	std::vector<Move> retVal;
 
 	const short addingVals[8][2] = {
 		{ 1, 2 },
@@ -289,9 +426,9 @@ std::list<Move> ChessBoard::getAllKnightMoves(ChessColor* color, Coordinate* coo
 	return retVal;
 }
 
-std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord)
+std::vector<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord)
 {
-	std::list<Move> retVal;
+	std::vector<Move> retVal;
 	const short startRank = *color == ChessColor::White ? 2 : 7;
 
 	const short rankMultiplier = *color == ChessColor::White ? 1 : -1;
@@ -303,17 +440,17 @@ std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord
 		Coordinate currPosToCheck = Coordinate(
 			coord->getFileAsPosition(),
 			(short)(coord->getRankAsPosition() + (rankMultiplier * rankAdding)));
-		
+
 		//new position is on the board
 		//if a pawn wants to go 2 fields it has to be at the start rank
 		if (currPosToCheck.isValid() &&
 			(rankAdding != 2 || coord->getRankNormal() == startRank))
 		{
-			ChessPiece* pieceAtNewPos = getAtPosition(&currPosToCheck);
-			if (pieceAtNewPos->isValid())
+			ChessPiece pieceAtNewPos = getAtPosition(&currPosToCheck);
+			if (pieceAtNewPos.isValid())
 			{
 				//no need going forward another time, if path is blocked
-				break;	
+				break;
 			}
 			else {
 				//new position is empty
@@ -339,13 +476,13 @@ std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord
 		//new position is on the board
 		if (targetPos.isValid())
 		{
-			ChessPiece* pieceAtNewPos = getAtPosition(&targetPos);
+			ChessPiece pieceAtNewPos = getAtPosition(&targetPos);
 
 			//if there is a piece at the currently check position
-			if (pieceAtNewPos->isValid())
+			if (pieceAtNewPos.isValid())
 			{
 				//if the piece is of the opposite color
-				if (*pieceAtNewPos->getColor() != *color)
+				if (pieceAtNewPos.getColor() != *color)
 				{
 					//the move is valid and can be done
 					Move move = Move(coord, &targetPos);
@@ -355,17 +492,17 @@ std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord
 			//if one field diagonal in front is free
 			else {
 				//en passant implemenation
-				
+
 				//current piece is on the right rank to perform en passant
 				if (coord->getRankNormal() == (*color == White ? 5 : 4))
 				{
 					Coordinate posOfPieceToTake =
 						Coordinate(currentFileAsPos, rankOfCurrentPiece);
-					
+
 					//if the opponent did a move, where i could perform en passant
 					//a opposite colored pawn should stand either left or right to my current pawn
 					if (
-						*getAtPosition(&posOfPieceToTake) ==
+						getAtPosition(&posOfPieceToTake) ==
 						ChessPiece(PieceType::Pawn, (*color == White ? Black : White)))
 					{
 						//if that very pawn next to the current pawn did do a double move last turn
@@ -388,9 +525,9 @@ std::list<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord
 	return retVal;
 }
 
-std::list<Move> ChessBoard::getAllKingMoves(ChessColor* color, Coordinate* coord)
+std::vector<Move> ChessBoard::getAllKingMoves(ChessColor* color, Coordinate* coord)
 {
-	std::list<Move> retVal;
+	std::vector<Move> retVal;
 
 	for (short file = coord->getFileAsPosition() - 1; file <= coord->getFileAsPosition() + 1; file++)
 	{
@@ -409,16 +546,17 @@ std::list<Move> ChessBoard::getAllKingMoves(ChessColor* color, Coordinate* coord
 	return retVal;
 }
 
-bool ChessBoard::ifCanGoThereAdd(ChessColor* currColor, Move* move, std::list<Move>& possibleMoves)
+bool ChessBoard::ifCanGoThereAdd(ChessColor* currColor, Move* move, std::vector<Move>& possibleMoves)
 {
 	//if the move is valid -> start != destination and both coords exist on the board
 	if (move->isValid())
 	{
-		ChessPiece destinationPiece = *getAtPosition(move->getDestination());
+		Coordinate dest = move->getDestination();
+		ChessPiece destinationPiece = getAtPosition(&dest);
 		if (destinationPiece.isValid())
 		{
 			//you can take a piece if it is from the opponent
-			if (*destinationPiece.getColor() != *currColor)
+			if (destinationPiece.getColor() != *currColor)
 			{
 				possibleMoves.push_back(*move);
 			}

@@ -10,8 +10,8 @@ public:
 	Move();
 	Move(Coordinate* givenStart,
 		Coordinate* givenDestination);
-	Coordinate* getStart();
-	Coordinate* getDestination();
+	Coordinate getStart();
+	Coordinate getDestination();
 	bool isValid();
 	bool operator ==(const Move& other) const;
 	bool operator !=(const Move& other) const;
