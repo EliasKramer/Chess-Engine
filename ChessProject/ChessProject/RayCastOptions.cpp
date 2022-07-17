@@ -3,8 +3,6 @@
 RayCastOptions::RayCastOptions()
 {
 	_maxIterations = -1;
-	_addingValToFile = -1;
-	_addingValToRank = -1;
 	_needsMoveList = false;
 	_color = ChessColor::NoColor;
 	_imaginaryMove = Move();
@@ -13,42 +11,28 @@ RayCastOptions::RayCastOptions()
 RayCastOptions::RayCastOptions(
 	Coordinate* start,
 	short maxIterations,
-	short addingValToFile,
-	short addingValToRank,
 	bool needsMoveList,
 	ChessColor* color)
 {
-	_start = *start;
+	_origin = *start;
 	if (maxIterations <= 0)
 	{
 		maxIterations = -1;
 	}
 	_maxIterations = maxIterations;
-	_addingValToFile = addingValToFile;
-	_addingValToRank = addingValToRank;
 	_needsMoveList = needsMoveList;
 	_color = *color;
 	_imaginaryMove = Move();
 }
 
-Coordinate RayCastOptions::getStart()
+Coordinate RayCastOptions::getOrigin()
 {
-	return _start;
+	return _origin;
 }
 
 short RayCastOptions::getMaxIterations()
 {
 	return _maxIterations;
-}
-
-short RayCastOptions::getAddingValToFile()
-{
-	return _addingValToFile;
-}
-
-short RayCastOptions::getAddingValToRank()
-{
-	return _addingValToFile;
 }
 
 bool RayCastOptions::getNeedsMoveList()
@@ -68,22 +52,12 @@ Move RayCastOptions::getImaginaryMove()
 
 void RayCastOptions::setStart(Coordinate* val)
 {
-	_start = *val;
+	_origin = *val;
 }
 
 void RayCastOptions::setMaxIterations(short val)
 {
 	_maxIterations = val;
-}
-
-void RayCastOptions::setAddingValFile(short val)
-{
-	_addingValToFile = val;
-}
-
-void RayCastOptions::setAddingValRank(short val)
-{
-	_addingValToRank = val;
 }
 
 void RayCastOptions::setNeedsMoveList(bool val)

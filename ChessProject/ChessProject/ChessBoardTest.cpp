@@ -45,13 +45,20 @@ std::vector<Move> ChessBoardTest::getAllMovesOfPiece(ChessPiece* piece, Coordina
 {
 	return ChessBoard::getAllMovesOfPiece(piece, coord);
 }
-RayCastResult ChessBoardTest::executeRayCast(RayCastOptions* options)
+RayCastResult ChessBoardTest::executeSingleRayCast(RayCastOptions* options, short fileAddingVal, short rankAddingVal)
 {
-	return ChessBoard::executeRayCast(options);
+	return ChessBoard::executeSingleRayCast(options, fileAddingVal, rankAddingVal);
 }
 ChessPiece ChessBoardTest::getAtPostitionWithMoveDone(Coordinate* coord, Move* move)
 {
 	return ChessBoard::getAtPostitionWithMoveDone(coord,move);
+}
+RayCastResult ChessBoardTest::executeRayCast(
+	PieceType* type,
+	RayCastOptions* options,
+	bool shouldCalculateIfItIsUnderAttack)
+{
+	return ChessBoard::executeRayCast(type, options, shouldCalculateIfItIsUnderAttack);
 }
 /*
 bool ChessBoardTest::fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color)

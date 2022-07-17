@@ -22,9 +22,23 @@ protected:
 	std::vector<Move> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
 	void setLastMove(Move* move);
 	Move getLastMove();
+	
 	//bool fieldIsUnderAttack(Coordinate* coord, ChessColor* color);
-	RayCastResult executeRayCast(RayCastOptions* options);
-	ChessPiece getAtPostitionWithMoveDone(Coordinate* coord, Move* move);
+	
+	//execute a single raycast
+	RayCastResult executeSingleRayCast(
+		RayCastOptions* options,
+		short fileAddingVal,
+		short rankAddingVal);
+	//execute a raycast for a given piece type
+	RayCastResult executeRayCast(
+		PieceType* type,
+		RayCastOptions* options,
+		bool shouldCalculateIfItIsUnderAttack);
+
+	ChessPiece getAtPostitionWithMoveDone(
+		Coordinate* coord,
+		Move* move);
 public:
 	//constructor
 	ChessBoard();

@@ -1,19 +1,50 @@
 #include "RayCastResult.h"
 #include <vector>
 
+bool RayCastResult::checkIfDestinationInMovesIsTheSameType(PieceType* type, std::function<ChessPiece(Coordinate*)> getPieceAt)
+{
+	for (Move move : _rayCastMoves)
+	{
+		if (move.isValid())
+		{
+			Coordinate dest = move.getDestination();
+			if (getPieceAt(&dest).getType() == *type)
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 RayCastResult::RayCastResult()
 {
-	_isUnderAttack = false;
 	_rayCastMoves = std::vector<Move>();
 }
 
-RayCastResult::RayCastResult(bool isUnderAttack, std::vector<Move> rayCastMoves)
+RayCastResult::RayCastResult(std::vector<Move> rayCastMoves)
 {
-	_isUnderAttack = isUnderAttack;
 	_rayCastMoves = rayCastMoves;
 }
 
-bool RayCastResult::getIsUnderAttack()
+void RayCastResult::calculateIfIsUnderAttack(
+	PieceType* type,
+	std::function<ChessPiece(Coordinate*)> getPieceAt)
+{
+	_isUnderAttack = checkIfDestinationInMovesIsTheSameType(type, getPieceAt);
+}
+
+void RayCastResult::calculateIfIsUnderAttack(std::vector<PieceType*> types, std::function<ChessPiece(Coordinate*)> getPieceAt)
+{
+	bool result = false;
+	for (PieceType* type : types)
+	{
+		result = result || checkIfDestinationInMovesIsTheSameType(type, getPieceAt);
+	}
+	_isUnderAttack = result;
+}
+
+bool RayCastResult::originPieceIsUnderAttack()
 {
 	return _isUnderAttack;
 }
@@ -21,32 +52,6 @@ bool RayCastResult::getIsUnderAttack()
 std::vector<Move> RayCastResult::getRayCastMoves()
 {
 	return _rayCastMoves;
-}
-
-void RayCastResult::setIsUnderAttack(bool value)
-{
-	_isUnderAttack = value;
-}
-
-void RayCastResult::setRayCastMoves(std::vector<Move> value)
-{
-	_rayCastMoves = value;
-}
-
-void RayCastResult::addRayCastMove(Move* value)
-{
-	_rayCastMoves.push_back(*value);
-}
-
-void RayCastResult::updateIsUnderAttack(PieceType* type, ChessPiece(*getPieceAt)(Coordinate*))
-{
-	Coordinate destinationOfLatestRaycast = _rayCastMoves.back().getDestination();
-	ChessPiece latestRayCastHit = getPieceAt(&destinationOfLatestRaycast);
-
-	if (latestRayCastHit.isValid() && latestRayCastHit.getType() == *type)
-	{
-		_isUnderAttack = true;
-	}
 }
 
 RayCastResult operator+(const RayCastResult& first, const RayCastResult& second)
@@ -59,10 +64,8 @@ RayCastResult operator+(const RayCastResult& first, const RayCastResult& second)
 		second_moves.begin(),
 		second_moves.end());
 
-	return RayCastResult(
-		first._isUnderAttack || second._isUnderAttack,
-		first_moves
-	);
+	RayCastResult result = RayCastResult(first_moves);
+	result._isUnderAttack = first._isUnderAttack || second._isUnderAttack;
 
-	return RayCastResult();
+	return result;
 }

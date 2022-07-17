@@ -287,18 +287,18 @@ namespace ChessTest
 		{
 			Move defaultConstructor = Move();
 			Assert::IsFalse(defaultConstructor.getDestination().isValid());
-			Assert::IsFalse(defaultConstructor.getStart().isValid());
+			Assert::IsFalse(defaultConstructor.getOrigin().isValid());
 			Assert::IsFalse(defaultConstructor.isValid());
 
 			Move move = Move(
 				&Coordinate('a', 1),
 				&Coordinate('b', 2));
 
-			Assert::IsTrue(move.getStart().isValid());
+			Assert::IsTrue(move.getOrigin().isValid());
 			Assert::IsTrue(move.getDestination().isValid());
-			Assert::IsFalse((move.getDestination()) == (move.getStart()));
+			Assert::IsFalse((move.getDestination()) == (move.getOrigin()));
 
-			Assert::IsTrue(Coordinate('a', 1) == (move.getStart()));
+			Assert::IsTrue(Coordinate('a', 1) == (move.getOrigin()));
 			Assert::IsTrue(Coordinate('b', 2) == (move.getDestination()));
 
 			Assert::IsTrue(move.isValid());
@@ -452,7 +452,7 @@ namespace ChessTest
 				Assert::IsTrue(it->isValid());
 
 				Assert::IsTrue(Coordinate(file, (unsigned short)1) == it->getDestination());
-				Assert::IsTrue(Coordinate('a', 1) == it->getStart());
+				Assert::IsTrue(Coordinate('a', 1) == it->getOrigin());
 				file++;
 			}
 
@@ -1029,10 +1029,8 @@ namespace ChessTest
 		{
 			RayCastOptions options = RayCastOptions();
 
-			Assert::IsTrue(options.getStart() == Coordinate());
+			Assert::IsTrue(options.getOrigin() == Coordinate());
 			Assert::AreEqual(options.getMaxIterations(), (short)-1);
-			Assert::AreEqual(options.getAddingValToFile(), (short)-1);
-			Assert::AreEqual(options.getAddingValToRank(), (short)-1);
 			Assert::IsFalse(options.getNeedsMoveList());
 			Assert::IsTrue(options.getColor() == ChessColor::NoColor);
 			Assert::IsTrue(options.getImaginaryMove() == Move());
@@ -1045,17 +1043,13 @@ namespace ChessTest
 			options = RayCastOptions(
 				&start,
 				(short)1,
-				(short)1,
-				(short)1,
 				true,
 				&col
 			);
 			options.setImaginaryMove(&imaginaryMove);
-			
-			Assert::IsTrue(options.getStart() == start);
+
+			Assert::IsTrue(options.getOrigin() == start);
 			Assert::AreEqual(options.getMaxIterations(), (short)1);
-			Assert::AreEqual(options.getAddingValToFile(), (short)1);
-			Assert::AreEqual(options.getAddingValToRank(), (short)1);
 			Assert::IsTrue(options.getNeedsMoveList());
 			Assert::IsTrue(options.getColor() == col);
 			Assert::IsTrue(options.getImaginaryMove() == imaginaryMove);
@@ -1063,16 +1057,12 @@ namespace ChessTest
 			Coordinate newStartCoord = Coordinate('h', 2);
 			options.setStart(&newStartCoord);
 			options.setMaxIterations(3);
-			options.setAddingValFile(3);
-			options.setAddingValFile(3);
 			options.setNeedsMoveList(false);
 			ChessColor newColor = ChessColor::Black;
 			options.setColor(&newColor);
-			
-			Assert::IsTrue(newStartCoord == options.getStart());
+
+			Assert::IsTrue(newStartCoord == options.getOrigin());
 			Assert::AreEqual((short)3, options.getMaxIterations());
-			Assert::AreEqual((short)3, options.getAddingValToFile());
-			Assert::AreEqual((short)3, options.getAddingValToRank());
 			Assert::IsFalse(options.getNeedsMoveList());
 			Assert::IsTrue(options.getColor() == newColor);
 		}
@@ -1080,84 +1070,61 @@ namespace ChessTest
 		{
 			RayCastResult result = RayCastResult();
 
-			Assert::IsFalse(result.getIsUnderAttack());
 			Assert::IsTrue(result.getRayCastMoves() == std::vector<Move>());
+			Assert::AreEqual((int)result.getRayCastMoves().size(), 0);
 
-			result.addRayCastMove(&Move(
-				&Coordinate('a', 1),
-				&Coordinate('a', 2)));
-			result.setIsUnderAttack(true);
+			result = RayCastResult(result.getRayCastMoves());
+			Assert::AreEqual((int)result.getRayCastMoves().size(), 0);
 
-			Assert::AreEqual((int)result.getRayCastMoves().size(), 1);
-			Assert::IsTrue(result.getIsUnderAttack());
+			std::vector<Move> movesToAdd = std::vector<Move>();
+			movesToAdd.push_back(Move(
+				&Coordinate('b', 1),
+				&Coordinate('c', 2)
+			));
+			movesToAdd.push_back(Move(
+				&Coordinate('d', 1),
+				&Coordinate('e', 2)
+			));
 
-			result = RayCastResult(true, result.getRayCastMoves());
+			result = RayCastResult(movesToAdd);
 
-			Assert::IsTrue(result.getIsUnderAttack());
-			Assert::AreEqual((int)result.getRayCastMoves().size(), 1);
+			//see if list didnt change
+			Assert::AreEqual(2, (int)movesToAdd.size());
+			//see if it is added
+			Assert::AreEqual(2, (int)result.getRayCastMoves().size());
+
 		}
 		TEST_METHOD(addingRayCastResultTest)
 		{
 			std::vector<Move> rcMoves1 = {
 				Move(&Coordinate('a', 1), &Coordinate('a', 2))
 			};
-			RayCastResult rcResult1 = RayCastResult(false, rcMoves1);
+			RayCastResult rcResult1 = RayCastResult(rcMoves1);
 
 			std::vector<Move> rcMoves2 = {
 				Move(&Coordinate('a', 2), &Coordinate('a', 3))
 			};
-			RayCastResult rcResult2 = RayCastResult(true, rcMoves2);
+			RayCastResult rcResult2 = RayCastResult(rcMoves2);
 
 			//add the lists and do the or operator on the "isunderattack"
 			RayCastResult addedResult = rcResult1 + rcResult2;
-			Assert::IsTrue(addedResult.getIsUnderAttack());
 
 			//the added moves should be all two lists combined
 			Assert::AreEqual((int)addedResult.getRayCastMoves().size(), 2);
 
-			//the list should be containing both values
+			//the combnined result should be containing both values
 			Assert::IsTrue(containsMove(addedResult.getRayCastMoves(),
 				&Move(&Coordinate('a', 1), &Coordinate('a', 2))));
 			Assert::IsTrue(containsMove(addedResult.getRayCastMoves(),
 				&Move(&Coordinate('a', 2), &Coordinate('a', 3))));
 
-			//adding an item to one of the lists
-			rcResult2.addRayCastMove(&Move(
-				&Coordinate('a', 3),
-				&Coordinate('a', 4)));
-
-			//the combined result should not be changed
-			Assert::IsFalse(containsMove(addedResult.getRayCastMoves(),
-				&Move(&Coordinate('a', 3), &Coordinate('a', 4))));
-			Assert::AreEqual((int)addedResult.getRayCastMoves().size(), 2);
-
-			//the actual list should be changed
-			Assert::IsTrue(containsMove(rcResult2.getRayCastMoves(),
-				&Move(&Coordinate('a', 3), &Coordinate('a', 4))));
-			Assert::AreEqual((int)rcResult2.getRayCastMoves().size(), 2);
-
-			//do the same with the second list
-			//adding an item to one of the lists
-			rcResult1.addRayCastMove(&Move(
-				&Coordinate('a', 8),
-				&Coordinate('a', 7)));
-
-			//the combined result should not be changed
-			Assert::IsFalse(containsMove(addedResult.getRayCastMoves(),
-				&Move(&Coordinate('a', 8), &Coordinate('a', 7))));
-			Assert::AreEqual((int)addedResult.getRayCastMoves().size(), 2);
-
-			//the actual list should be changed
+			//the other rcresults should not be changed in any way
+			Assert::AreEqual((int)rcResult1.getRayCastMoves().size(), 1);
 			Assert::IsTrue(containsMove(rcResult1.getRayCastMoves(),
-				&Move(&Coordinate('a', 8), &Coordinate('a', 7))));
-			Assert::AreEqual((int)rcResult1.getRayCastMoves().size(), 2);
-
-			rcResult1.setRayCastMoves(std::vector<Move>());
-			rcResult2.setRayCastMoves(std::vector<Move>());
-
-			Assert::AreEqual((int)rcResult1.getRayCastMoves().size(), 0);
-			Assert::AreEqual((int)rcResult2.getRayCastMoves().size(), 0);
-			Assert::AreEqual((int)addedResult.getRayCastMoves().size(), 2);
+				&Move(&Coordinate('a', 1), &Coordinate('a', 2))));
+			Assert::AreEqual((int)rcResult2.getRayCastMoves().size(), 1);
+			Assert::IsTrue(containsMove(rcResult2.getRayCastMoves(),
+				&Move(&Coordinate('a', 2), &Coordinate('a', 3))));
 		}
 		TEST_METHOD(getAtPositionWithMoveDoneTest)
 		{
@@ -1263,7 +1230,7 @@ namespace ChessTest
 				board.getAtPosition(&validCoord) ==
 				board.getAtPostitionWithMoveDone(&validCoord, &move));
 		}
-		TEST_METHOD(executeRayCastTest)
+		TEST_METHOD(executeSingleRayCastTest)
 		{
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
@@ -1275,16 +1242,101 @@ namespace ChessTest
 			RayCastOptions rcOptions = RayCastOptions(
 				&start,
 				-1,
-				1,
-				1,
 				true,
 				&rcColor
 			);
 
-			RayCastResult rcResult = board.executeRayCast(&rcOptions);
-			
+			RayCastResult rcResult = board.executeSingleRayCast(&rcOptions, 1, 1);
+
 			Assert::AreEqual(7, (int)rcResult.getRayCastMoves().size());
-			
+
+			//try a raycast with the a same colored piece in the way
+			board.clearBoard();
+
+			ChessPiece sameColorPieceInTheWay =
+				ChessPiece(PieceType::Rook, ChessColor::White);
+			Coordinate posWherePieceIsInTheWay =
+				Coordinate('e', 5);
+			board.setPieceAt(&sameColorPieceInTheWay, &posWherePieceIsInTheWay);
+
+			rcResult = board.executeSingleRayCast(&rcOptions, 1, 1);
+
+			Assert::AreEqual(3, (int)rcResult.getRayCastMoves().size());
+
+			//try a raycast with the a different colored piece in the way
+			board.clearBoard();
+
+			ChessPiece differentColorPieceInTheWay =
+				ChessPiece(PieceType::Rook, ChessColor::Black);
+			Coordinate posWherePieceIsInTheWay2 =
+				Coordinate('e', 5);
+			board.setPieceAt(&differentColorPieceInTheWay, &posWherePieceIsInTheWay2);
+
+			rcResult = board.executeSingleRayCast(&rcOptions, 1, 1);
+
+			Assert::AreEqual(4, (int)rcResult.getRayCastMoves().size());
+
+			//try a raycast with a max iteration of 1
+			board.clearBoard();
+			rcOptions.setMaxIterations(1);
+			rcResult = board.executeSingleRayCast(&rcOptions, 1, 1);
+			Assert::AreEqual(1, (int)rcResult.getRayCastMoves().size());
+
+			//try a raycast with a max iteration of 1
+			//but the one place is occupied by a the same colored piece
+			board.clearBoard();
+			rcOptions.setMaxIterations(1);
+
+			sameColorPieceInTheWay = ChessPiece(PieceType::Rook, ChessColor::White);
+			posWherePieceIsInTheWay = Coordinate('b', 2);
+			board.setPieceAt(&sameColorPieceInTheWay, &posWherePieceIsInTheWay);
+
+			rcResult = board.executeSingleRayCast(&rcOptions, 1, 1);
+			Assert::AreEqual(0, (int)rcResult.getRayCastMoves().size());
+
+			//try a raycast with "move list not needed" option on "false"
+			//it is expected, that there will be no moves.
+			board.clearBoard();
+			ChessColor white = ChessColor::White;
+			rcOptions = RayCastOptions(
+				&start,
+				-1,
+				false,
+				&white);
+			rcResult = board.executeSingleRayCast(&rcOptions, 0, 1);
+			Assert::AreEqual(0, (int)rcResult.getRayCastMoves().size());
+
+			//try a raycast with "move list not needed" option on "false"
+			//it is expected, that the list contains one move.
+			//that is because you need at least one move to calculate if the field gets attacked
+			board.clearBoard();
+			white = ChessColor::White;
+			rcOptions = RayCastOptions(
+				&start,
+				-1,
+				false,
+				&white);
+			rcResult = board.executeSingleRayCast(&rcOptions, 0, 1);
+			Assert::AreEqual(0, (int)rcResult.getRayCastMoves().size());
+		}
+		TEST_METHOD(executeSpecificRayCastsTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			PieceType rookType = PieceType::Rook;
+			Coordinate start = Coordinate('d', 1);
+			ChessColor white = ChessColor::White;
+			RayCastOptions options = RayCastOptions(
+				&start,
+				-1,
+				true,
+				&white
+			);
+
+			RayCastResult rcResult = board.executeRayCast(&rookType, &options, false);
+
+			Assert::AreEqual(14, (int)rcResult.getRayCastMoves().size());
 		}
 	};
 }

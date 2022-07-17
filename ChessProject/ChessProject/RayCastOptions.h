@@ -4,14 +4,10 @@
 class RayCastOptions
 {
 private:
-	//the coordinate where the raycast should start
-	Coordinate _start;
+	//the coordinate where the raycast starts
+	Coordinate _origin;
 	//the max number of iterations the raycast can do (-1 for disabling)
 	short _maxIterations;
-	//adding this value to the file every iteration
-	short _addingValToFile;
-	//adding this value to the rank every iteration
-	short _addingValToRank;
 	//result needs all moves
 	bool _needsMoveList;
 	//color of piece you want to raycast
@@ -25,23 +21,17 @@ public:
 	RayCastOptions(
 		Coordinate* start,
 		short maxIterations,
-		short addingValToFile,
-		short addingValToRank,
 		bool needsMoveList,
 		ChessColor* color);
 	
-	Coordinate getStart();
+	Coordinate getOrigin();
 	short getMaxIterations();
-	short getAddingValToFile();
-	short getAddingValToRank();
 	bool getNeedsMoveList();
 	ChessColor getColor();
 	Move getImaginaryMove();
 	
 	void setStart(Coordinate* val);
 	void setMaxIterations(short val);
-	void setAddingValFile(short val);
-	void setAddingValRank(short val);
 	void setNeedsMoveList(bool val);
 	void setColor(ChessColor* val);
 	void setImaginaryMove(Move* val);

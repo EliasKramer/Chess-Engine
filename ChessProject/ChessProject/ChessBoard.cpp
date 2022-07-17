@@ -21,7 +21,7 @@ bool ChessBoard::executeMove(Move* givenMove)
 {
 	if (givenMove->isValid())
 	{
-		Coordinate start = givenMove->getStart();
+		Coordinate start = givenMove->getOrigin();
 		Coordinate dest = givenMove->getDestination();
 
 		ChessPiece piece = getAtPosition(
@@ -203,11 +203,14 @@ Move ChessBoard::getLastMove()
 	//returns value instead of pointer to avoid manipulating it directly
 	return lastMove;
 }
-RayCastResult ChessBoard::executeRayCast(RayCastOptions* options)
+RayCastResult ChessBoard::executeSingleRayCast(
+	RayCastOptions* options,
+	short fileAddingVal,
+	short rankAddingVal)
 {
-	RayCastResult result = RayCastResult();
-	Coordinate start = options->getStart();
-	Coordinate currentCoord = options->getStart();
+	std::vector<Move> result = std::vector<Move>();
+	Coordinate start = options->getOrigin();
+	Coordinate currentCoord = options->getOrigin();
 	short iterationCount = 0;
 	short maxIterations = options->getMaxIterations();
 	Move imaginaryMove = options->getImaginaryMove();
@@ -215,8 +218,8 @@ RayCastResult ChessBoard::executeRayCast(RayCastOptions* options)
 	{
 		iterationCount++;
 		currentCoord = Coordinate(
-			(short)(currentCoord.getFileAsPosition() + options->getAddingValToFile()),
-			currentCoord.getRankAsPosition() + options->getAddingValToRank());
+			(short)(currentCoord.getFileAsPosition() + fileAddingVal),
+			currentCoord.getRankAsPosition() + rankAddingVal);
 
 		Move currentMoveToCheck = Move(&start, &currentCoord);
 
@@ -231,29 +234,96 @@ RayCastResult ChessBoard::executeRayCast(RayCastOptions* options)
 		{
 			if (options->getNeedsMoveList())
 			{
-				result.addRayCastMove(&currentMoveToCheck);
+				//a move to an empty field should only be relevant if
+				//you need a move list
+				result.push_back(currentMoveToCheck);
 			}
 		}
-		else if(pieceAtCurrentPos.getColor() == options->getColor())
+		else if (pieceAtCurrentPos.getColor() == options->getColor())
 		{
 			break;
 		}
 		else {
-			if (options->getNeedsMoveList())
-			{
-				result.addRayCastMove(&currentMoveToCheck);
-			}
+			//even if the options do not require list of moves,
+			//you should add a move, when it is a capture move.
+			//that way, the caller of this function can calculate
+			//if the current piece gets attacked or not
+			result.push_back(currentMoveToCheck);
 			break;
+		}
+
+		//should never occur, but it acts as a failsave when a infinite loop happens
+		if (iterationCount >= 8)
+		{
+			throw "A single Raycast should not be longer than 8 iterations.";
 		}
 	} while (
 		((maxIterations == -1) || iterationCount < maxIterations) &&
 		currentCoord.isValid());
 
-	return result;
+	return RayCastResult(result);
+}
+RayCastResult ChessBoard::executeRayCast(
+	PieceType* type,
+	RayCastOptions* options,
+	bool shouldCalculateIfItIsUnderAttack)
+{	
+	switch (*type)
+	{
+	case PieceType::Pawn:
+		throw "can not raycast a pawn move";
+	case PieceType::Rook:
+		
+		RayCastResult result = RayCastResult();
+		
+		//do 2 iterrations. one time with -1 and one time with 1
+		for (short addingVal = -1; addingVal <= 1; addingVal += 2)
+		{
+			result = result + executeSingleRayCast(
+				options,
+				addingVal,
+				0);
+			result = result + executeSingleRayCast(
+				options,
+				0,
+				addingVal);
+		}
+
+		if (shouldCalculateIfItIsUnderAttack)
+		{
+			std::function<ChessPiece(Coordinate*)> getPieceAt =
+				[this](Coordinate* coord) { return getAtPosition(coord); };
+			
+			// a queen can also attack the way a rook does,
+			// so if it gets hit by the raycast it attacks the current field
+			PieceType queenType = PieceType::Queen;
+			std::vector<PieceType*> typesThatCanAttackTheOriginField = {
+				&queenType,
+				type
+			};
+			result.calculateIfIsUnderAttack(
+				typesThatCanAttackTheOriginField, getPieceAt);
+		}
+
+		return result;
+		/*
+	case PieceType::Bishop:
+		return executeBishopRayCast(&options);
+	case PieceType::Queen:
+		return executeQueenRayCast(&options);
+	case PieceType::Knight:
+		return executeKnightRayCast(&options);
+	case PieceType::King:
+		return executeKingRayCast(&options);
+	default:
+		throw "should have found a piece type";
+		break;*/
+	}
+	return RayCastResult();
 }
 ChessPiece ChessBoard::getAtPostitionWithMoveDone(Coordinate* coord, Move* move)
 {
-	Coordinate start = move->getStart();
+	Coordinate start = move->getOrigin();
 	Coordinate dest = move->getDestination();
 
 	ChessPiece pieceAtStart = getAtPosition(&start);
@@ -326,32 +396,14 @@ bool ChessBoard::fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color)
 */
 std::vector<Move> ChessBoard::getAllStraightMoves(ChessColor* color, Coordinate* coord)
 {
-	std::vector<Move> possibleMoves;
-
-	std::vector<Move> newMovesRight = getAllMovesInDirection(coord, color, 1, 0);
-	possibleMoves.insert(
-		possibleMoves.end(),
-		newMovesRight.begin(),
-		newMovesRight.end());
-
-	std::vector<Move> newMovesLeft = getAllMovesInDirection(coord, color, -1, 0);
-	possibleMoves.insert(
-		possibleMoves.end(),
-		newMovesLeft.begin(),
-		newMovesLeft.end());
-
-	std::vector<Move> newMovesUp = getAllMovesInDirection(coord, color, 0, 1);
-	possibleMoves.insert(
-		possibleMoves.end(),
-		newMovesUp.begin(),
-		newMovesUp.end());
-
-	std::vector<Move> newMovesDown = getAllMovesInDirection(coord, color, 0, -1);
-	possibleMoves.insert(
-		possibleMoves.end(),
-		newMovesDown.begin(),
-		newMovesDown.end());
-	return possibleMoves;
+	RayCastOptions options = RayCastOptions(
+		coord,
+		-1,
+		true,
+		color
+	);
+	PieceType rook = PieceType::Rook;
+	return executeRayCast(&rook, &options,false).getRayCastMoves();
 }
 
 std::vector<Move> ChessBoard::getAllDiagonalMoves(ChessColor* color, Coordinate* coord)

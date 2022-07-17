@@ -1,29 +1,37 @@
 #pragma once
 #include "Move.h"
 #include <vector>
+#include <functional>
 class RayCastResult
 {
 private:
-	//raycast ends in an opposite colored piece, that can attack you
-	bool _isUnderAttack;
 	//all destinations are the fields, that hit the raycast
 	std::vector<Move> _rayCastMoves;
-	
+
+	//if the raycast-start-field is under attack
+	bool _isUnderAttack = false;
+
+	bool checkIfDestinationInMovesIsTheSameType(
+		PieceType* type,
+		std::function<ChessPiece(Coordinate*)> getPieceAt);
+
 	friend RayCastResult operator+ (const RayCastResult& first, const RayCastResult& second);
 public:
 	RayCastResult();
-	RayCastResult(bool isUnderAttack, std::vector<Move> rayCastMoves);
+	RayCastResult(std::vector<Move> rayCastMoves);
 
-	bool getIsUnderAttack();
+	void calculateIfIsUnderAttack(
+		PieceType* type,
+		std::function<ChessPiece(Coordinate*)> getPieceAt);
+	void calculateIfIsUnderAttack(
+		std::vector<PieceType*> types, 
+		std::function<ChessPiece(Coordinate*)> getPieceAt);
+	
+	// you have to caluclate if it is under attack before.
+	bool originPieceIsUnderAttack();
+	// get all fields that the raycast hit.
+	// the move list will be made out of the origin field of the raycast
+	// and each hit field of the raycast as destination.
 	std::vector<Move> getRayCastMoves();
-
-	void setIsUnderAttack(bool value);
-	void setRayCastMoves(std::vector<Move> value);
-
-	void addRayCastMove(Move* value);
-
-	//gets the lastest raycast hit and if the piece there is the same type 
-	//as the given argument, it is considered attacked
-	void updateIsUnderAttack(PieceType* type, ChessPiece (*getPieceAt)(Coordinate*));
 };
 RayCastResult operator+ (const RayCastResult& first, const RayCastResult& second);

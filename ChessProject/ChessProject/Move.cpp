@@ -14,7 +14,7 @@ Move::Move(
 	destination = *givenDestination;
 }
 
-Coordinate Move::getStart()
+Coordinate Move::getOrigin()
 {
 	return start;
 }

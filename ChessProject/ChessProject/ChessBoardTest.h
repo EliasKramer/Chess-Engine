@@ -18,6 +18,13 @@ public:
 		short rankAddingValue);
 	std::vector<Move> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
 	//bool fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color);
-	RayCastResult executeRayCast(RayCastOptions* options);
+	RayCastResult executeSingleRayCast(
+		RayCastOptions* options,
+		short fileAddingVal,
+		short rankAddingVal);
 	ChessPiece getAtPostitionWithMoveDone(Coordinate* coord, Move* move);
+	RayCastResult executeRayCast(
+		PieceType* type, 
+		RayCastOptions* options,
+		bool shouldCalculateIfItIsUnderAttack);
 };

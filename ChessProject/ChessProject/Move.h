@@ -10,7 +10,7 @@ public:
 	Move();
 	Move(Coordinate* givenStart,
 		Coordinate* givenDestination);
-	Coordinate getStart();
+	Coordinate getOrigin();
 	Coordinate getDestination();
 	bool isValid();
 	bool operator ==(const Move& other) const;
