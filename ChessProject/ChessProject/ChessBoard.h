@@ -52,9 +52,9 @@ private:
 	//set the board up
 	void initBoard();
 	
-	//todo
-	//with fn pointers for different purposes
-	//void addIfNoPiece
+	RayCastResult executeStraightLineRayCast(
+		RayCastOptions* options,
+		bool shouldCalculateIfItIsUnderAttack);
 
 	//all the moves that can be made by a piece
 	std::vector<Move> getAllStraightMoves(ChessColor* color, Coordinate* coord);

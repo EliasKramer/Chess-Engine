@@ -134,6 +134,43 @@ void ChessBoard::initBoard()
 	setPieceAt(&piece, &position);
 }
 
+RayCastResult ChessBoard::executeStraightLineRayCast(RayCastOptions* options, bool shouldCalculateIfItIsUnderAttack)
+{
+	RayCastResult result = RayCastResult();
+
+	//do 2 iterrations. one time with -1 and one time with 1
+	for (short addingVal = -1; addingVal <= 1; addingVal += 2)
+	{
+		result = result + executeSingleRayCast(
+			options,
+			addingVal,
+			0);
+		result = result + executeSingleRayCast(
+			options,
+			0,
+			addingVal);
+	}
+
+	if (shouldCalculateIfItIsUnderAttack)
+	{
+		std::function<ChessPiece(Coordinate*)> getPieceAt =
+			[this](Coordinate* coord) { return getAtPosition(coord); };
+
+		// a queen can also attack the way a rook does,
+		// so if it gets hit by the raycast it attacks the current field
+		PieceType queenType = PieceType::Queen;
+		PieceType rookType = PieceType::Rook;
+		std::vector<PieceType*> typesThatCanAttackTheOriginField = {
+			&queenType,
+			&rookType
+		};
+		result.calculateIfIsUnderAttack(
+			typesThatCanAttackTheOriginField, getPieceAt);
+	}
+
+	return result;
+}
+
 std::vector<Move> ChessBoard::getAllMoves()
 {
 	std::vector<Move> resultList;
@@ -273,39 +310,8 @@ RayCastResult ChessBoard::executeRayCast(
 	case PieceType::Pawn:
 		throw "can not raycast a pawn move";
 	case PieceType::Rook:
+		return executeStraightLineRayCast(options, shouldCalculateIfItIsUnderAttack);
 		
-		RayCastResult result = RayCastResult();
-		
-		//do 2 iterrations. one time with -1 and one time with 1
-		for (short addingVal = -1; addingVal <= 1; addingVal += 2)
-		{
-			result = result + executeSingleRayCast(
-				options,
-				addingVal,
-				0);
-			result = result + executeSingleRayCast(
-				options,
-				0,
-				addingVal);
-		}
-
-		if (shouldCalculateIfItIsUnderAttack)
-		{
-			std::function<ChessPiece(Coordinate*)> getPieceAt =
-				[this](Coordinate* coord) { return getAtPosition(coord); };
-			
-			// a queen can also attack the way a rook does,
-			// so if it gets hit by the raycast it attacks the current field
-			PieceType queenType = PieceType::Queen;
-			std::vector<PieceType*> typesThatCanAttackTheOriginField = {
-				&queenType,
-				type
-			};
-			result.calculateIfIsUnderAttack(
-				typesThatCanAttackTheOriginField, getPieceAt);
-		}
-
-		return result;
 		/*
 	case PieceType::Bishop:
 		return executeBishopRayCast(&options);
