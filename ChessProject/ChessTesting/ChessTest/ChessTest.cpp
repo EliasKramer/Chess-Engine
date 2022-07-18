@@ -433,109 +433,6 @@ namespace ChessTest
 
 			Assert::AreEqual((int)possibleMoves.size(), 0);
 		}
-		TEST_METHOD(boardGetMovesInDirectionWithoutObstaclesTest)
-		{
-			ChessBoardTest board = ChessBoardTest();
-			board.clearBoard();
-
-			Coordinate start = Coordinate('a', 1);
-			ChessColor white = ChessColor::White;
-
-			std::vector<Move> moves =
-				board.getAllMovesInDirection(&start, &white, 1, 0);
-			Assert::AreEqual(7, (int)moves.size());
-			char file = 'b';
-			for (
-				std::vector<Move>::iterator it = moves.begin();
-				it != moves.end();
-				++it) {
-				Assert::IsTrue(it->isValid());
-
-				Assert::IsTrue(Coordinate(file, (unsigned short)1) == it->getDestination());
-				Assert::IsTrue(Coordinate('a', 1) == it->getOrigin());
-				file++;
-			}
-
-			moves =
-				board.getAllMovesInDirection(&start, &white, -1, 0);
-			Assert::AreEqual(0, (int)moves.size());
-
-			moves =
-				board.getAllMovesInDirection(&start, &white, 0, -1);
-			Assert::AreEqual(0, (int)moves.size());
-
-			moves =
-				board.getAllMovesInDirection(&start, &white, 0, 1);
-			Assert::AreEqual(7, (int)moves.size());
-
-			moves =
-				board.getAllMovesInDirection(&start, &white, 1, 1);
-			Assert::AreEqual(7, (int)moves.size());
-
-			moves =
-				board.getAllMovesInDirection(&start, &white, 1, -1);
-			Assert::AreEqual(0, (int)moves.size());
-
-			//check every direction in the middle of the field
-			start = Coordinate('d', 5);
-
-			//straigt lines
-			moves =
-				board.getAllMovesInDirection(&start, &white, 1, 0);
-			Assert::AreEqual(4, (int)moves.size());
-
-			moves =
-				board.getAllMovesInDirection(&start, &white, -1, 0);
-			Assert::AreEqual(3, (int)moves.size());
-
-			moves =
-				board.getAllMovesInDirection(&start, &white, 0, -1);
-			Assert::AreEqual(4, (int)moves.size());
-
-			moves =
-				board.getAllMovesInDirection(&start, &white, 0, 1);
-			Assert::AreEqual(3, (int)moves.size());
-
-			//diagonal checks
-			moves =
-				board.getAllMovesInDirection(&start, &white, 1, 1);
-			Assert::AreEqual(3, (int)moves.size());
-
-			moves =
-				board.getAllMovesInDirection(&start, &white, 1, -1);
-			Assert::AreEqual(4, (int)moves.size());
-
-			moves =
-				board.getAllMovesInDirection(&start, &white, -1, 1);
-			Assert::AreEqual(3, (int)moves.size());
-
-			moves =
-				board.getAllMovesInDirection(&start, &white, -1, -1);
-			Assert::AreEqual(3, (int)moves.size());
-		}
-		TEST_METHOD(boardGetMovesInDirectionWithObstaclesTest)
-		{
-			ChessBoardTest board = ChessBoardTest();
-			board.clearBoard();
-
-			board.setPieceAt(&ChessPiece(
-				PieceType::Rook, ChessColor::Black),
-				&Coordinate('g', 4));
-
-			Coordinate start = Coordinate('d', 4);
-			ChessColor white = ChessColor::White;
-
-			std::vector<Move> moves =
-				board.getAllMovesInDirection(&start, &white, 1, 0);
-			Assert::AreEqual(3, (int)moves.size());
-
-			board.setPieceAt(&ChessPiece(
-				PieceType::Rook, ChessColor::White),
-				&Coordinate('g', 4));
-			moves =
-				board.getAllMovesInDirection(&start, &white, 1, 0);
-			Assert::AreEqual(2, (int)moves.size());
-		}
 		TEST_METHOD(boardGetSimpleMovementOfPiecesTest)
 		{
 			ChessBoardTest board = ChessBoardTest();
@@ -1065,6 +962,9 @@ namespace ChessTest
 			Assert::AreEqual((short)3, options.getMaxIterations());
 			Assert::IsFalse(options.getNeedsMoveList());
 			Assert::IsTrue(options.getColor() == newColor);
+
+			options = RayCastOptions(&start, false, &col);
+			Assert::AreEqual((short) -1, options.getMaxIterations());
 		}
 		TEST_METHOD(raycastResultTest)
 		{
@@ -1337,6 +1237,11 @@ namespace ChessTest
 			RayCastResult rcResult = board.executeRayCast(&rookType, &options, false);
 
 			Assert::AreEqual(14, (int)rcResult.getRayCastMoves().size());
+		}
+		TEST_METHOD(fieldIsUnderAttack)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
 		}
 	};
 }

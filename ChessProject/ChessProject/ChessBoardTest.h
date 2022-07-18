@@ -11,11 +11,6 @@ public:
 	bool executeMove(Move* givenMove);
 	void setLastMove(Move* move);
 	Move getLastMove();
-	std::vector<Move> getAllMovesInDirection(
-		Coordinate* start,
-		ChessColor* color,
-		short fileAddingValue,
-		short rankAddingValue);
 	std::vector<Move> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
 	//bool fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color);
 	RayCastResult executeSingleRayCast(
@@ -27,4 +22,5 @@ public:
 		PieceType* type, 
 		RayCastOptions* options,
 		bool shouldCalculateIfItIsUnderAttack);
+	bool fieldIsUnderAttack(Coordinate* coord, ChessColor* color);
 };

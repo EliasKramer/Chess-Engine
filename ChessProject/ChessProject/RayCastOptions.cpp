@@ -10,6 +10,14 @@ RayCastOptions::RayCastOptions()
 
 RayCastOptions::RayCastOptions(
 	Coordinate* start,
+	bool needsMoveList,
+	ChessColor* color)
+	
+	: RayCastOptions(start, -1, needsMoveList, color)
+{}
+
+RayCastOptions::RayCastOptions(
+	Coordinate* start,
 	short maxIterations,
 	bool needsMoveList,
 	ChessColor* color)

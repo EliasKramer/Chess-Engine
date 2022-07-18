@@ -20,6 +20,11 @@ public:
 	
 	RayCastOptions(
 		Coordinate* start,
+		bool needsMoveList,
+		ChessColor* color);
+
+	RayCastOptions(
+		Coordinate* start,
 		short maxIterations,
 		bool needsMoveList,
 		ChessColor* color);
