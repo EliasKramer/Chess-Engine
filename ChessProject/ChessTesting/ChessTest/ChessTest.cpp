@@ -964,7 +964,7 @@ namespace ChessTest
 			Assert::IsTrue(options.getColor() == newColor);
 
 			options = RayCastOptions(&start, false, &col);
-			Assert::AreEqual((short) -1, options.getMaxIterations());
+			Assert::AreEqual((short)-1, options.getMaxIterations());
 		}
 		TEST_METHOD(raycastResultTest)
 		{
@@ -1238,10 +1238,189 @@ namespace ChessTest
 
 			Assert::AreEqual(14, (int)rcResult.getRayCastMoves().size());
 		}
+		TEST_METHOD(clearPieceAtPositionTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+			Coordinate coord = Coordinate('a', 1);
+			ChessPiece piece = ChessPiece(PieceType::Rook, ChessColor::White);
+			board.setPieceAt(&piece, &coord);
+			Assert::IsTrue(board.getAtPosition(&coord) == piece);
+			board.clearPieceAt(&coord);
+			Assert::IsTrue(board.getAtPosition(&coord) == ChessPiece());
+		}
 		TEST_METHOD(fieldIsUnderAttack)
 		{
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
+
+			ChessColor white = ChessColor::White;
+			ChessColor black = ChessColor::Black;
+
+			Coordinate fieldToAttack = Coordinate('e', 4);
+
+			//a single knight attacks
+			Coordinate enemyPos = Coordinate('f', 6);
+			ChessPiece enemyPiece = ChessPiece(PieceType::Knight, black);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
+
+			//3 pawns protect the king - knight can still attack
+			Coordinate blockingPos1 = Coordinate('e', 5);
+			Coordinate blockingPos2 = Coordinate('f', 5);
+			Coordinate blockingPos3 = Coordinate('f', 4);
+			ChessPiece blockingPiece = ChessPiece(PieceType::Pawn, white);
+			board.setPieceAt(&blockingPiece, &blockingPos1);
+			board.setPieceAt(&blockingPiece, &blockingPos2);
+			board.setPieceAt(&blockingPiece, &blockingPos3);
+
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
+			board.clearBoard();
+
+			//pawn attacks
+			enemyPos = Coordinate('f', 5);
+			enemyPiece = ChessPiece(PieceType::Pawn, black);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
+			board.clearPieceAt(&enemyPos);
+
+			enemyPos = Coordinate('d', 5);
+			enemyPiece = ChessPiece(PieceType::Pawn, black);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
+			board.clearPieceAt(&enemyPos);
+
+			//pawn does not attack - stands before piece
+			enemyPos = Coordinate('e', 5);
+			enemyPiece = ChessPiece(PieceType::Pawn, black);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+
+			Assert::IsFalse(board.fieldIsUnderAttack(&fieldToAttack, &white));
+			board.clearPieceAt(&enemyPos);
+
+			//pawn does not attack - stands behind piece
+			enemyPos = Coordinate('f', 3);
+			enemyPiece = ChessPiece(PieceType::Pawn, black);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+
+			Assert::IsFalse(board.fieldIsUnderAttack(&fieldToAttack, &white));
+
+			enemyPiece = ChessPiece(PieceType::Pawn, white);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &black));
+			board.clearPieceAt(&enemyPos);
+
+			//rook attacks
+			enemyPos = Coordinate('e', 1);
+			enemyPiece = ChessPiece(PieceType::Rook, black);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
+
+			//rook does not attack - stands before piece
+			blockingPos1 = Coordinate('e', 3);
+			blockingPiece = ChessPiece(PieceType::Bishop, white);
+			board.setPieceAt(&blockingPiece, &blockingPos1);
+
+			Assert::IsFalse(board.fieldIsUnderAttack(&fieldToAttack, &white));
+			board.clearBoard();
+
+			//gets attacked by king
+			enemyPos = Coordinate('e', 3);
+			enemyPiece = ChessPiece(PieceType::King, black);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
+			board.clearPieceAt(&enemyPos);
+
+			enemyPos = Coordinate('d', 3);
+			enemyPiece = ChessPiece(PieceType::King, black);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
+			board.clearBoard();
+
+			//gets attacked by bishop
+			enemyPos = Coordinate('a', 8);
+			enemyPiece = ChessPiece(PieceType::Bishop, white);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &black));
+
+			enemyPiece = ChessPiece(PieceType::Bishop, black);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
+
+			//bishop is blocked by pawn
+			blockingPos1 = Coordinate('b', 7);
+			blockingPiece = ChessPiece(PieceType::Pawn, white);
+			board.setPieceAt(&blockingPiece, &blockingPos1);
+
+			Assert::IsFalse(board.fieldIsUnderAttack(&fieldToAttack, &white));
+
+			//bishop blocked by same colored rook
+			blockingPiece = ChessPiece(PieceType::Rook, black);
+			board.setPieceAt(&blockingPiece, &blockingPos1);
+
+			Assert::IsFalse(board.fieldIsUnderAttack(&fieldToAttack, &white));
+
+			//queen attacks piece straight
+			enemyPos = Coordinate('g', 4);
+			enemyPiece = ChessPiece(PieceType::Queen, black);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+			
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
+			
+			//queen gets blocked by same colored Pawn
+			blockingPiece = ChessPiece(PieceType::Pawn, black);
+			blockingPos1 = Coordinate('f', 4);
+			board.setPieceAt(&blockingPiece, &blockingPos1);
+
+			Assert::IsFalse(board.fieldIsUnderAttack(&fieldToAttack, &white));
+			board.clearBoard();
+
+			//queen attacks piece diagonal
+			enemyPos = Coordinate('h', 7);
+			board.setPieceAt(&enemyPiece, &enemyPos);
+
+			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
+			
+			//queen gets blocked by opposite colored piece
+
+			blockingPiece = ChessPiece(PieceType::Bishop, white);
+			blockingPos1 = Coordinate('g', 6);
+			board.setPieceAt(&blockingPiece, &blockingPos1);
+			
+			Assert::IsFalse(board.fieldIsUnderAttack(&fieldToAttack, &white));
+		}
+		TEST_METHOD(searchForPieceTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			Coordinate pos = Coordinate('e', 8);
+			ChessColor white = ChessColor::White;
+
+			ChessPiece piece = ChessPiece(PieceType::Pawn, white);
+
+			Assert::IsTrue(Coordinate() == board.searchForPiece(&piece));
+			board.setPieceAt(&piece, &pos);
+			Assert::IsTrue(pos == board.searchForPiece(&piece));
+
+			board.clearBoard();
+
+			pos = Coordinate('b', 3);
+			ChessColor black = ChessColor::Black;
+
+			piece = ChessPiece(PieceType::King, black);
+
+			Assert::IsTrue(Coordinate() == board.searchForPiece(&piece));
+			board.setPieceAt(&piece, &pos);
+			Assert::IsTrue(pos == board.searchForPiece(&piece));
 		}
 	};
 }

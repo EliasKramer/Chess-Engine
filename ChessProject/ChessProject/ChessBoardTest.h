@@ -6,6 +6,7 @@ public:
 	void setPieceAt(
 		ChessPiece* piece,
 		Coordinate* coord);
+	void clearPieceAt(Coordinate* coord);
 	void clearBoard();
 	void setTurnColor(ChessColor* color);
 	bool executeMove(Move* givenMove);
@@ -23,4 +24,5 @@ public:
 		RayCastOptions* options,
 		bool shouldCalculateIfItIsUnderAttack);
 	bool fieldIsUnderAttack(Coordinate* coord, ChessColor* color);
+	Coordinate searchForPiece(ChessPiece* piece);
 };

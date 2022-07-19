@@ -34,6 +34,21 @@ void ChessBoard::setPieceAt(ChessPiece* piece, Coordinate* coord)
 	}
 }
 
+Coordinate ChessBoard::searchForPiece(ChessPiece* piece)
+{
+	for (short file = 0; file < BOARD_SIZE; file++)
+	{
+		for (short rank = 0; rank < BOARD_SIZE; rank++)
+		{
+			if (board[file][rank] == *piece)
+			{
+				return Coordinate(file, rank);
+			}
+		}
+	}
+	return Coordinate();
+}
+
 bool ChessBoard::executeMove(Move* givenMove)
 {
 	if (givenMove->isValid())
@@ -168,6 +183,13 @@ bool ChessBoard::fieldIsUnderAttack(Coordinate* coord, ChessColor* color)
 	raycastResult = raycastResult + executeKnightRayCast(&options, true);
 	
 	return pawnAttacksThisField || raycastResult.originPieceIsUnderAttack();
+}
+
+bool ChessBoard::colorIsInCheck(ChessColor* col)
+{
+	ChessPiece kingToSearch(PieceType::King, *col);
+	Coordinate kingCoord = searchForPiece(&kingToSearch);
+	return fieldIsUnderAttack(&kingCoord, col);
 }
 
 void ChessBoard::initBoard()

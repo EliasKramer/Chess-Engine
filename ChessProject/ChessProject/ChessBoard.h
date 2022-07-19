@@ -23,7 +23,9 @@ protected:
 	Move lastMove;
 
 	void setPieceAt(ChessPiece* piece, Coordinate* coord);
-	
+
+	Coordinate searchForPiece(ChessPiece* piece);
+
 	bool executeMove(Move* givenMove);
 	
 	std::vector<Move> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
@@ -35,6 +37,8 @@ protected:
 	ChessPiece getAtPostitionWithMoveDone(Coordinate* coord, Move* move);
 
 	bool fieldIsUnderAttack(Coordinate* coord, ChessColor* color);
+
+	bool colorIsInCheck(ChessColor* col);
 private:
 	//set the board up
 	void initBoard();
