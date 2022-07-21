@@ -25,4 +25,6 @@ public:
 		bool shouldCalculateIfItIsUnderAttack);
 	bool fieldIsUnderAttack(Coordinate* coord, ChessColor* color);
 	Coordinate searchForPiece(ChessPiece* piece);
+	bool isInCheck(ChessColor* col);
+	bool isInCheck(ChessColor* col, Move* move);
 };

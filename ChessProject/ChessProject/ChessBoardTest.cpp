@@ -70,3 +70,13 @@ Coordinate ChessBoardTest::searchForPiece(ChessPiece* piece)
 {
 	return ChessBoard::searchForPiece(piece);
 }
+
+bool ChessBoardTest::isInCheck(ChessColor* col)
+{
+	return ChessBoard::isInCheck(col);
+}
+
+bool ChessBoardTest::isInCheck(ChessColor* col, Move* move)
+{
+	return ChessBoard::isInCheck(col, move);
+}

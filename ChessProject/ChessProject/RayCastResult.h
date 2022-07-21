@@ -13,7 +13,8 @@ private:
 
 	bool checkIfDestinationInMovesIsTheSameType(
 		PieceType* type,
-		std::function<ChessPiece(Coordinate*)> getPieceAt);
+		std::function<ChessPiece(Coordinate*, Move*)> getPieceAt,
+		Move* imaginaryMove);
 
 	friend RayCastResult operator+ (const RayCastResult& first, const RayCastResult& second);
 public:
@@ -22,10 +23,12 @@ public:
 
 	void calculateIfIsUnderAttack(
 		PieceType* type,
-		std::function<ChessPiece(Coordinate*)> getPieceAt);
+		std::function<ChessPiece(Coordinate*, Move*)> getPieceAt,
+		Move* move);
 	void calculateIfIsUnderAttack(
 		std::vector<PieceType*> types, 
-		std::function<ChessPiece(Coordinate*)> getPieceAt);
+		std::function<ChessPiece(Coordinate*, Move*)> getPieceAt,
+		Move* move);
 	
 	// you have to caluclate if it is under attack before.
 	bool originPieceIsUnderAttack();

@@ -919,9 +919,6 @@ namespace ChessTest
 					&Coordinate('e', 4));
 			Assert::AreEqual(7, (int)allMoves.size());
 		}
-		TEST_METHOD(boardCastlingTest)
-		{
-		}
 		TEST_METHOD(raycastOptionsTest)
 		{
 			RayCastOptions options = RayCastOptions();
@@ -1421,6 +1418,93 @@ namespace ChessTest
 			Assert::IsTrue(Coordinate() == board.searchForPiece(&piece));
 			board.setPieceAt(&piece, &pos);
 			Assert::IsTrue(pos == board.searchForPiece(&piece));
+		}
+		TEST_METHOD(isInCheckTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+			
+			//white king is under attack from black pawn
+			ChessColor white = ChessColor::White;
+			ChessColor black = ChessColor::Black;
+			
+			ChessPiece piece = ChessPiece(PieceType::King, white);
+			Coordinate pos = Coordinate('c', 4);
+			board.setPieceAt(&piece, &pos);
+			
+			ChessPiece enemyPiece = ChessPiece(PieceType::Pawn, ChessColor::Black);
+			Coordinate enemyCoord = Coordinate('d', 5);
+			board.setPieceAt(&enemyPiece, &enemyCoord);
+			
+			Assert::IsTrue(board.isInCheck(&white));
+			board.clearPieceAt(&enemyCoord);
+
+			//white king is not in check. queen is friendly
+			ChessPiece friendlyPiece = ChessPiece(PieceType::Queen, ChessColor::White);
+			Coordinate friendlyCoord = Coordinate('d', 4);
+			board.setPieceAt(&friendlyPiece, &friendlyCoord);
+
+			Assert::IsFalse(board.isInCheck(&white));
+			board.clearPieceAt(&friendlyCoord);
+
+			//black king is under attack from white pawn
+			piece = ChessPiece(PieceType::King, black);
+			pos = Coordinate('c', 4);
+			board.setPieceAt(&piece, &pos);
+
+			enemyPiece = ChessPiece(PieceType::Pawn, ChessColor::White);
+			enemyCoord = Coordinate('d', 3);
+			board.setPieceAt(&enemyPiece, &enemyCoord);
+
+			Assert::IsTrue(board.isInCheck(&black));
+			board.clearPieceAt(&enemyCoord);
+			
+			//black king is not in check. queen is friendly
+
+			friendlyPiece = ChessPiece(PieceType::Queen, ChessColor::Black);
+			friendlyCoord = Coordinate('d', 4);
+			board.setPieceAt(&friendlyPiece, &friendlyCoord);
+			
+			Assert::IsFalse(board.isInCheck(&black));
+		}
+		TEST_METHOD(isInCheckWithMoveTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+			
+			//white king
+			//is not under attack, because pawn moved past
+			ChessColor white = ChessColor::White;
+			ChessColor black = ChessColor::Black;
+			
+			ChessPiece piece = ChessPiece(PieceType::King, white);
+			Coordinate pos = Coordinate('c', 4);
+			board.setPieceAt(&piece, &pos);
+			
+			ChessPiece enemyPiece = ChessPiece(PieceType::Pawn, ChessColor::Black);
+			Coordinate enemyCoord = Coordinate('d', 5);
+			board.setPieceAt(&enemyPiece, &enemyCoord);
+			Coordinate nextEnemyCoord = Coordinate('d', 6);
+			Move enemyMove = Move(&enemyCoord, &nextEnemyCoord);
+
+			Assert::IsFalse(board.isInCheck(&white, &enemyMove));
+			board.clearPieceAt(&enemyCoord);
+
+			//is under attack, because knight moved in
+			enemyPiece = ChessPiece(PieceType::Knight, ChessColor::Black);
+			enemyCoord = Coordinate('g', 4);
+			board.setPieceAt(&enemyPiece, &enemyCoord);
+			nextEnemyCoord = Coordinate('e', 3);
+			enemyMove = Move(&enemyCoord, &nextEnemyCoord);
+			
+			//eliminate code duplicates "gets attacked by" in rook, bishop and knight
+
+			Assert::IsTrue(board.isInCheck(&white, &enemyMove));
+			board.clearPieceAt(&enemyCoord);
+
+		}
+		TEST_METHOD(boardCastlingTest)
+		{
 		}
 	};
 }

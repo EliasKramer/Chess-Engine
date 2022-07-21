@@ -37,8 +37,12 @@ protected:
 	ChessPiece getAtPostitionWithMoveDone(Coordinate* coord, Move* move);
 
 	bool fieldIsUnderAttack(Coordinate* coord, ChessColor* color);
+	
+	bool fieldIsUnderAttack(Coordinate* coord, ChessColor* color, Move* madeMove);
+	
+	bool isInCheck(ChessColor* col);
 
-	bool colorIsInCheck(ChessColor* col);
+	bool isInCheck(ChessColor* col, Move* madeMove);
 private:
 	//set the board up
 	void initBoard();
@@ -78,5 +82,5 @@ private:
 	//all the moves that can be made by a pawn
 	std::vector<Move> getAllPawnMoves(ChessColor* color, Coordinate* coord);
 
-	bool fieldGetsAttackedByPawn(Coordinate* coord, ChessColor* color);
+	bool fieldGetsAttackedByPawn(Coordinate* coord, ChessColor* color, Move* madeMove);
 };
