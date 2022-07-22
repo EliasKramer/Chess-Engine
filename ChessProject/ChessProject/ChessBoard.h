@@ -21,6 +21,13 @@ protected:
 	bool isWhiteTurn;
 	ChessPiece board[BOARD_SIZE][BOARD_SIZE];
 	Move lastMove;
+	bool canCastle[2][2];
+
+	void updateCastlingAbility(Move* move);
+	
+	void setCanCastle(ChessColor col, CastleType cType, bool value);
+
+	bool getCanCastle(ChessColor col, CastleType cType);
 
 	void setPieceAt(ChessPiece* piece, Coordinate* coord);
 
@@ -77,10 +84,27 @@ private:
 		RayCastOptions* options,
 		bool shouldCalculateIfItIsUnderAttack);
 
+	void calculateIfRayCastResultIsUnderAttackByType(PieceType* type, RayCastResult& rcResult, Move* imaginaryMove);
+
 	/*--- Raycasts ---*/
+
+	/*--- Castling ---*/
+
+	void addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<Move>& moves);
+
+	bool fieldIsEmptyAndNotUnderAttack(ChessColor* col, Coordinate* coord);
+
+	/*--- Castling ---*/
+
+	/*--- Pawn Move Set ---*/
 
 	//all the moves that can be made by a pawn
 	std::vector<Move> getAllPawnMoves(ChessColor* color, Coordinate* coord);
 
+	//all the fields that a pawn can attack.
+	//not including en passant moves, since this is only used for checking if
+	//a king is under check or can castle
 	bool fieldGetsAttackedByPawn(Coordinate* coord, ChessColor* color, Move* madeMove);
+	
+	/*--- Pawn Move Set ---*/
 };

@@ -11,11 +11,6 @@ private:
 	//if the raycast-start-field is under attack
 	bool _isUnderAttack = false;
 
-	bool checkIfDestinationInMovesIsTheSameType(
-		PieceType* type,
-		std::function<ChessPiece(Coordinate*, Move*)> getPieceAt,
-		Move* imaginaryMove);
-
 	friend RayCastResult operator+ (const RayCastResult& first, const RayCastResult& second);
 public:
 	RayCastResult();
@@ -23,10 +18,6 @@ public:
 
 	void calculateIfIsUnderAttack(
 		PieceType* type,
-		std::function<ChessPiece(Coordinate*, Move*)> getPieceAt,
-		Move* move);
-	void calculateIfIsUnderAttack(
-		std::vector<PieceType*> types, 
 		std::function<ChessPiece(Coordinate*, Move*)> getPieceAt,
 		Move* move);
 	

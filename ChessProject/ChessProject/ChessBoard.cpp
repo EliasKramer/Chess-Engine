@@ -2,6 +2,16 @@
 ChessBoard::ChessBoard()
 {
 	isWhiteTurn = true;
+
+	//at the start kings can castle in each direction
+	for (int color = 0; color < 2; color++)
+	{
+		for (int direction = 0; direction < 2; direction++)
+		{
+			canCastle[color][direction] = true;
+		}
+	}
+
 	initBoard();
 }
 
@@ -21,6 +31,63 @@ std::vector<Move> ChessBoard::getAllMoves()
 {
 	std::vector<Move> resultList;
 	return resultList;
+}
+
+void ChessBoard::updateCastlingAbility(Move* move)
+{
+	Coordinate start = move->getStart();
+	Coordinate dest = move->getDestination();
+
+	//2 iterations - one with 1 and one with 8
+	for (short rank = 1; rank <= 8; rank += 7)
+	{
+		ChessColor currColor = rank == 1 ? ChessColor::White : ChessColor::Black;
+
+		Coordinate kingPos = Coordinate('e', rank);
+
+		//if something gets on the king position or starts from the king position
+		//you cant castle no more on both sides
+		if (start == kingPos ||
+			dest == kingPos)
+		{
+			setCanCastle(currColor, CastleType::Long, false);
+			setCanCastle(currColor, CastleType::Short, false);
+		}
+
+		//if something gets on the a rook or the a rook moves you cannot castle long anymore
+		Coordinate longRook = Coordinate('a', rank);
+		if (start == longRook ||
+			dest == longRook)
+		{
+			setCanCastle(currColor, CastleType::Long, false);
+		}
+
+		//if something gets on the h rook or the a rook moves you cannot castle short anymore
+		Coordinate shortRook = Coordinate('h', rank);
+		if (start == shortRook ||
+			dest == shortRook)
+		{
+			setCanCastle(currColor, CastleType::Short, false);
+		}
+	}
+}
+
+void ChessBoard::setCanCastle(ChessColor col, CastleType cType, bool value)
+{
+	if (col != ChessColor::NoColor)
+	{
+		canCastle[col][cType] = value;
+	}
+}
+
+//returns true unless the king or the rook moved (or rook got taken)
+bool ChessBoard::getCanCastle(ChessColor col, CastleType cType)
+{
+	if (col == ChessColor::NoColor)
+	{
+		return false;
+	}
+	return canCastle[col][cType];
 }
 
 void ChessBoard::setPieceAt(ChessPiece* piece, Coordinate* coord)
@@ -53,7 +120,7 @@ bool ChessBoard::executeMove(Move* givenMove)
 {
 	if (givenMove->isValid())
 	{
-		Coordinate start = givenMove->getOrigin();
+		Coordinate start = givenMove->getStart();
 		Coordinate dest = givenMove->getDestination();
 
 		ChessPiece piece = getAtPosition(
@@ -80,6 +147,14 @@ std::vector<Move> ChessBoard::getAllMovesOfPiece(ChessPiece* piece, Coordinate* 
 	{
 		return getAllPawnMoves(&col, coord);
 	}
+	else if (piece->getType() == PieceType::King)
+	{
+		//add all normal moves of a king
+		std::vector<Move> retVal = executeRayCast(&type, &options, false).getRayCastMoves();
+		//add some moves if the king can castle
+		addCastleMovesIfPossibleForColor(&col, retVal);
+		return retVal;
+	}
 	else
 	{
 		return executeRayCast(&type, &options, false).getRayCastMoves();
@@ -98,7 +173,7 @@ Move ChessBoard::getLastMove()
 
 ChessPiece ChessBoard::getAtPostitionWithMoveDone(Coordinate* coord, Move* move)
 {
-	Coordinate start = move->getOrigin();
+	Coordinate start = move->getStart();
 	Coordinate dest = move->getDestination();
 
 	ChessPiece pieceAtStart = getAtPosition(&start);
@@ -402,28 +477,21 @@ RayCastResult ChessBoard::executeStraightLineRayCast(RayCastOptions* options, bo
 
 	if (shouldCalculateIfItIsUnderAttack)
 	{
-		std::function<ChessPiece(Coordinate*, Move*)> getPieceAt =
-			[this](Coordinate* coord, Move* move) { return getAtPostitionWithMoveDone(coord, move); };
-
-		// a queen can also attack the way a rook does,
-		// so if it gets hit by the raycast it attacks the current field
-		PieceType queenType = PieceType::Queen;
-		PieceType rookType = PieceType::Rook;
-		std::vector<PieceType*> typesThatCanAttackTheOriginField = {
-			&queenType,
-			&rookType
-		};
-		if (options->getMaxIterations() == 1)
-		{
-			PieceType kingType = PieceType::King;
-			typesThatCanAttackTheOriginField.push_back(&kingType);
-		}
-
 		Move imaginaryMove = options->getImaginaryMove();
 
-		result.calculateIfIsUnderAttack(
-			typesThatCanAttackTheOriginField, getPieceAt, &imaginaryMove);
+		PieceType type = PieceType::NoType;
 
+		if (options->getMaxIterations() == 1)
+		{
+			type = PieceType::King;
+			calculateIfRayCastResultIsUnderAttackByType(&type, result, &imaginaryMove);
+		}
+		else {
+			type = PieceType::Queen;
+			calculateIfRayCastResultIsUnderAttackByType(&type, result, &imaginaryMove);
+			type = PieceType::Rook;
+			calculateIfRayCastResultIsUnderAttackByType(&type, result, &imaginaryMove);
+		}
 	}
 
 	return result;
@@ -450,27 +518,21 @@ RayCastResult ChessBoard::executeDiagonalRayCast(RayCastOptions* options, bool s
 	}
 	if (shouldCalculateIfItIsUnderAttack)
 	{
-		std::function<ChessPiece(Coordinate*, Move*)> getPieceAt =
-			[this](Coordinate* coord, Move* move) { return getAtPostitionWithMoveDone(coord, move); };
-
-		// a queen can also attack the way a bishop does,
-		// so if it gets hit by the raycast it attacks the current field
-		PieceType queenType = PieceType::Queen;
-		PieceType bishopType = PieceType::Bishop;
-		std::vector<PieceType*> typesThatCanAttackTheOriginField = {
-			&queenType,
-			&bishopType
-		};
-		if (options->getMaxIterations() == 1)
-		{
-			PieceType kingType = PieceType::King;
-			typesThatCanAttackTheOriginField.push_back(&kingType);
-		}
-
 		Move imaginaryMove = options->getImaginaryMove();
 
-		result.calculateIfIsUnderAttack(
-			typesThatCanAttackTheOriginField, getPieceAt, &imaginaryMove);
+		PieceType type = PieceType::NoType;
+
+		if (options->getMaxIterations() == 1)
+		{
+			type = PieceType::King;
+			calculateIfRayCastResultIsUnderAttackByType(&type, result, &imaginaryMove);
+		}
+		else {
+			type = PieceType::Queen;
+			calculateIfRayCastResultIsUnderAttackByType(&type, result, &imaginaryMove);
+			type = PieceType::Bishop;
+			calculateIfRayCastResultIsUnderAttackByType(&type, result, &imaginaryMove);
+		}
 	}
 	return result;
 }
@@ -510,14 +572,11 @@ RayCastResult ChessBoard::executeKnightRayCast(RayCastOptions* options, bool sho
 
 	if (shouldCalculateIfItIsUnderAttack)
 	{
-		std::function<ChessPiece(Coordinate*,  Move*)> getPieceAt =
-			[this](Coordinate* coord, Move* move) { return getAtPostitionWithMoveDone(coord, move); };
-		PieceType knightType = PieceType::Knight;
-
 		Move imaginaryMove = options->getImaginaryMove();
 
-		result.calculateIfIsUnderAttack(
-			&knightType, getPieceAt, &imaginaryMove);
+		PieceType type = PieceType::Knight;
+
+		calculateIfRayCastResultIsUnderAttackByType(&type, result, &imaginaryMove);
 	}
 	return result;
 }
@@ -530,8 +589,65 @@ RayCastResult ChessBoard::executeKingRayCast(RayCastOptions* options, bool shoul
 		executeStraightLineRayCast(options, shouldCalculateIfItIsUnderAttack);
 }
 
+void ChessBoard::calculateIfRayCastResultIsUnderAttackByType(PieceType* type, RayCastResult& rcResult, Move* imaginaryMove)
+{
+	std::function<ChessPiece(Coordinate*, Move*)> getPieceAt =
+		[this](Coordinate* coord, Move* move) { return getAtPostitionWithMoveDone(coord, move); };
+
+	rcResult.calculateIfIsUnderAttack(
+		type, getPieceAt, imaginaryMove);
+}
+
 /*--- Raycasts ---*/
 
+/*--- Castling ---*/
+void ChessBoard::addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<Move>& moves)
+{
+	short rank = *col == ChessColor::White ? 1 : 8;
+
+	Coordinate kingCoord = Coordinate('e', rank);
+	ChessPiece p = getAtPosition(&kingCoord);
+
+	if (p.isValid() && !fieldIsUnderAttack(&kingCoord, col))
+	{
+
+		if (getCanCastle(*col, CastleType::Long))
+		{
+			Coordinate longCastleOne = Coordinate('d', rank);
+			Coordinate longCastleTwo = Coordinate('c', rank);
+			if (fieldIsEmptyAndNotUnderAttack(col, &longCastleOne) &&
+				fieldIsEmptyAndNotUnderAttack(col, &longCastleTwo))
+			{
+				Move moveToAdd = Move(&kingCoord, &longCastleTwo);
+				moves.push_back(moveToAdd);
+			}
+		}
+		if (getCanCastle(*col, CastleType::Short))
+		{
+			Coordinate shortCastleOne = Coordinate('f', rank);
+			Coordinate shortCastleTwo = Coordinate('g', rank);
+			if (fieldIsEmptyAndNotUnderAttack(col, &shortCastleOne) &&
+				fieldIsEmptyAndNotUnderAttack(col, &shortCastleTwo))
+			{
+				Move moveToAdd = Move(&kingCoord, &shortCastleTwo);
+				moves.push_back(moveToAdd);
+			}
+		}
+	}
+}
+
+bool ChessBoard::fieldIsEmptyAndNotUnderAttack(ChessColor* col, Coordinate* coord)
+{
+	if (!getAtPosition(coord).isValid() &&
+		!fieldIsUnderAttack(coord, col))
+	{
+		return true;
+	}
+	return false;
+}
+/*--- Castling ---*/
+
+/*--- Pawn Move Set ---*/
 std::vector<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord)
 {
 	std::vector<Move> retVal;
@@ -641,7 +757,7 @@ bool ChessBoard::fieldGetsAttackedByPawn(Coordinate* coord, ChessColor* color, M
 		Coordinate currCoordToCheck = Coordinate(
 			(short)(coord->getFileAsPosition() + fileAddingValue),
 			(short)(coord->getRankAsPosition() + rankAddingValue));
-		
+
 		if (currCoordToCheck.isValid())
 		{
 			ChessPiece pieceAtNewPos = getAtPostitionWithMoveDone(&currCoordToCheck, madeMove);
@@ -655,4 +771,5 @@ bool ChessBoard::fieldGetsAttackedByPawn(Coordinate* coord, ChessColor* color, M
 	}
 	return false;
 }
+/*--- Pawn Move Set ---*/
 

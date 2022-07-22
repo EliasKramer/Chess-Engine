@@ -19,6 +19,15 @@ void ChessBoardTest::clearBoard()
 			board[file][rank] = ChessPiece();
 		}
 	}
+	//if you clear a board you cannot castle anymore
+	for (int color = 0; color < 2; color++)
+	{
+		for (int direction = 0; direction < 2; direction++)
+		{
+			canCastle[color][direction] = false;
+		}
+	}
+
 }
 
 void ChessBoardTest::setTurnColor(ChessColor* color)
@@ -79,4 +88,30 @@ bool ChessBoardTest::isInCheck(ChessColor* col)
 bool ChessBoardTest::isInCheck(ChessColor* col, Move* move)
 {
 	return ChessBoard::isInCheck(col, move);
+}
+
+void ChessBoardTest::setCanCastle(ChessColor col, CastleType cType, bool value)
+{
+	ChessBoard::setCanCastle(col, cType, value);
+}
+
+bool ChessBoardTest::getCanCastle(ChessColor col, CastleType cType)
+{
+	return ChessBoard::getCanCastle(col, cType);
+}
+
+void ChessBoardTest::setCanCastleAll(bool value)
+{
+	for (int color = 0; color < 2; color++)
+	{
+		for (int direction = 0; direction < 2; direction++)
+		{
+			canCastle[color][direction] = value;
+		}
+	}
+}
+
+void ChessBoardTest::updateCastlingAbility(Move* move)
+{
+	ChessBoard::updateCastlingAbility(move);
 }

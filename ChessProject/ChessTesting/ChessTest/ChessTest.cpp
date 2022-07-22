@@ -287,18 +287,18 @@ namespace ChessTest
 		{
 			Move defaultConstructor = Move();
 			Assert::IsFalse(defaultConstructor.getDestination().isValid());
-			Assert::IsFalse(defaultConstructor.getOrigin().isValid());
+			Assert::IsFalse(defaultConstructor.getStart().isValid());
 			Assert::IsFalse(defaultConstructor.isValid());
 
 			Move move = Move(
 				&Coordinate('a', 1),
 				&Coordinate('b', 2));
 
-			Assert::IsTrue(move.getOrigin().isValid());
+			Assert::IsTrue(move.getStart().isValid());
 			Assert::IsTrue(move.getDestination().isValid());
-			Assert::IsFalse((move.getDestination()) == (move.getOrigin()));
+			Assert::IsFalse((move.getDestination()) == (move.getStart()));
 
-			Assert::IsTrue(Coordinate('a', 1) == (move.getOrigin()));
+			Assert::IsTrue(Coordinate('a', 1) == (move.getStart()));
 			Assert::IsTrue(Coordinate('b', 2) == (move.getDestination()));
 
 			Assert::IsTrue(move.isValid());
@@ -1369,9 +1369,9 @@ namespace ChessTest
 			enemyPos = Coordinate('g', 4);
 			enemyPiece = ChessPiece(PieceType::Queen, black);
 			board.setPieceAt(&enemyPiece, &enemyPos);
-			
+
 			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
-			
+
 			//queen gets blocked by same colored Pawn
 			blockingPiece = ChessPiece(PieceType::Pawn, black);
 			blockingPos1 = Coordinate('f', 4);
@@ -1385,13 +1385,13 @@ namespace ChessTest
 			board.setPieceAt(&enemyPiece, &enemyPos);
 
 			Assert::IsTrue(board.fieldIsUnderAttack(&fieldToAttack, &white));
-			
+
 			//queen gets blocked by opposite colored piece
 
 			blockingPiece = ChessPiece(PieceType::Bishop, white);
 			blockingPos1 = Coordinate('g', 6);
 			board.setPieceAt(&blockingPiece, &blockingPos1);
-			
+
 			Assert::IsFalse(board.fieldIsUnderAttack(&fieldToAttack, &white));
 		}
 		TEST_METHOD(searchForPieceTest)
@@ -1423,19 +1423,19 @@ namespace ChessTest
 		{
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
-			
+
 			//white king is under attack from black pawn
 			ChessColor white = ChessColor::White;
 			ChessColor black = ChessColor::Black;
-			
+
 			ChessPiece piece = ChessPiece(PieceType::King, white);
 			Coordinate pos = Coordinate('c', 4);
 			board.setPieceAt(&piece, &pos);
-			
+
 			ChessPiece enemyPiece = ChessPiece(PieceType::Pawn, ChessColor::Black);
 			Coordinate enemyCoord = Coordinate('d', 5);
 			board.setPieceAt(&enemyPiece, &enemyCoord);
-			
+
 			Assert::IsTrue(board.isInCheck(&white));
 			board.clearPieceAt(&enemyCoord);
 
@@ -1458,29 +1458,29 @@ namespace ChessTest
 
 			Assert::IsTrue(board.isInCheck(&black));
 			board.clearPieceAt(&enemyCoord);
-			
+
 			//black king is not in check. queen is friendly
 
 			friendlyPiece = ChessPiece(PieceType::Queen, ChessColor::Black);
 			friendlyCoord = Coordinate('d', 4);
 			board.setPieceAt(&friendlyPiece, &friendlyCoord);
-			
+
 			Assert::IsFalse(board.isInCheck(&black));
 		}
 		TEST_METHOD(isInCheckWithMoveTest)
 		{
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
-			
+
 			//white king
 			//is not under attack, because pawn moved past
 			ChessColor white = ChessColor::White;
 			ChessColor black = ChessColor::Black;
-			
+
 			ChessPiece piece = ChessPiece(PieceType::King, white);
 			Coordinate pos = Coordinate('c', 4);
 			board.setPieceAt(&piece, &pos);
-			
+
 			ChessPiece enemyPiece = ChessPiece(PieceType::Pawn, ChessColor::Black);
 			Coordinate enemyCoord = Coordinate('d', 5);
 			board.setPieceAt(&enemyPiece, &enemyCoord);
@@ -1496,15 +1496,250 @@ namespace ChessTest
 			board.setPieceAt(&enemyPiece, &enemyCoord);
 			nextEnemyCoord = Coordinate('e', 3);
 			enemyMove = Move(&enemyCoord, &nextEnemyCoord);
-			
-			//eliminate code duplicates "gets attacked by" in rook, bishop and knight
 
 			Assert::IsTrue(board.isInCheck(&white, &enemyMove));
-			board.clearPieceAt(&enemyCoord);
+			board.clearBoard();
 
+			//is under attack because en passant moved two blocked pieces away and opend the way for the enemy rook
+			piece = ChessPiece(PieceType::King, black);
+			pos = Coordinate('a', 4);
+			board.setPieceAt(&piece, &pos);
+
+			ChessPiece friendlyPiece = ChessPiece(PieceType::Pawn, ChessColor::Black);
+			Coordinate friendlyCoord = Coordinate('b', 4);
+			board.setPieceAt(&friendlyPiece, &friendlyCoord);
+
+			enemyPiece = ChessPiece(PieceType::Rook, ChessColor::White);
+			enemyCoord = Coordinate('h', 4);
+			board.setPieceAt(&enemyPiece, &enemyCoord);
+
+			ChessPiece enemyPiece2 = ChessPiece(PieceType::Pawn, ChessColor::White);
+			Coordinate enemyCoord2 = Coordinate('c', 4);
+			board.setPieceAt(&enemyPiece2, &enemyCoord2);
+
+			Coordinate nextPosOfFriendlyPiece = Coordinate('c', 3);
+			Move friendlyMove = Move(&friendlyCoord, &nextPosOfFriendlyPiece);
+
+			Assert::IsTrue(board.isInCheck(&black, &friendlyMove));
+		}
+		TEST_METHOD(basicCastleVariablesAndFunctionsTest)
+		{
+			CastleType shortCastle = CastleType::Short;
+			CastleType longCastle = CastleType::Long;
+
+			Assert::AreEqual(0, (int)shortCastle);
+			Assert::AreEqual(1, (int)longCastle);
+
+			ChessColor white = ChessColor::White;
+			ChessColor black = ChessColor::Black;
+
+			Assert::AreEqual(0, (int)white);
+			Assert::AreEqual(1, (int)black);
+
+			ChessBoardTest board = ChessBoardTest();
+
+			Assert::IsTrue(board.getCanCastle(white, shortCastle));
+			Assert::IsTrue(board.getCanCastle(white, longCastle));
+			Assert::IsTrue(board.getCanCastle(black, shortCastle));
+			Assert::IsTrue(board.getCanCastle(black, longCastle));
+
+			board.setCanCastle(white, shortCastle, false);
+			board.setCanCastle(white, longCastle, false);
+			board.setCanCastle(black, shortCastle, false);
+			board.setCanCastle(black, longCastle, false);
+
+			Assert::IsFalse(board.getCanCastle(white, shortCastle));
+			Assert::IsFalse(board.getCanCastle(white, longCastle));
+			Assert::IsFalse(board.getCanCastle(black, shortCastle));
+			Assert::IsFalse(board.getCanCastle(black, longCastle));
+
+			board.setCanCastle(white, shortCastle, true);
+			Assert::IsTrue(board.getCanCastle(white, shortCastle));
+
+			board.setCanCastleAll(false);
+			Assert::IsFalse(board.getCanCastle(white, shortCastle));
+		}
+		TEST_METHOD(moveDisablesCastlingAbility)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			CastleType shortCastle = CastleType::Short;
+			CastleType longCastle = CastleType::Long;
+			ChessColor white = ChessColor::White;
+			ChessColor black = ChessColor::Black;
+
+			//cannot castle after clearing board
+			Assert::IsFalse(board.getCanCastle(white, shortCastle));
+			Assert::IsFalse(board.getCanCastle(white, longCastle));
+			Assert::IsFalse(board.getCanCastle(black, shortCastle));
+			Assert::IsFalse(board.getCanCastle(black, longCastle));
+
+			board.setCanCastleAll(true);
+
+			//move didnt affect the castling ability
+			Move move = Move(&Coordinate('e', 2), &Coordinate('e', 3));
+			board.updateCastlingAbility(&move);
+			Assert::IsTrue(board.getCanCastle(white, shortCastle));
+			Assert::IsTrue(board.getCanCastle(white, longCastle));
+			Assert::IsTrue(board.getCanCastle(black, shortCastle));
+			Assert::IsTrue(board.getCanCastle(black, longCastle));
+
+			//move started on a1 - white cant castle long
+			move = Move(&Coordinate('a', 1), &Coordinate('a', 2));
+			board.updateCastlingAbility(&move);
+			Assert::IsTrue(board.getCanCastle(white, shortCastle));
+			Assert::IsFalse(board.getCanCastle(white, longCastle));
+			Assert::IsTrue(board.getCanCastle(black, shortCastle));
+			Assert::IsTrue(board.getCanCastle(black, longCastle));
+			board.setCanCastleAll(true);
+
+			//move ended on a1 - white cant castle long
+			move = Move(&Coordinate('a', 2), &Coordinate('a', 1));
+			board.updateCastlingAbility(&move);
+			Assert::IsTrue(board.getCanCastle(white, shortCastle));
+			Assert::IsFalse(board.getCanCastle(white, longCastle));
+			Assert::IsTrue(board.getCanCastle(black, shortCastle));
+			Assert::IsTrue(board.getCanCastle(black, longCastle));
+			board.setCanCastleAll(true);
+
+			//move started on h8 - black cant castle short
+			move = Move(&Coordinate('h', 8), &Coordinate('h', 7));
+			board.updateCastlingAbility(&move);
+			Assert::IsTrue(board.getCanCastle(white, shortCastle));
+			Assert::IsTrue(board.getCanCastle(white, longCastle));
+			Assert::IsFalse(board.getCanCastle(black, shortCastle));
+			Assert::IsTrue(board.getCanCastle(black, longCastle));
+			board.setCanCastleAll(true);
+
+			//move ended on e8 - black cant castle on both sides
+			move = Move(&Coordinate('e', 7), &Coordinate('e', 8));
+			board.updateCastlingAbility(&move);
+			Assert::IsTrue(board.getCanCastle(white, shortCastle));
+			Assert::IsTrue(board.getCanCastle(white, longCastle));
+			Assert::IsFalse(board.getCanCastle(black, shortCastle));
+			Assert::IsFalse(board.getCanCastle(black, longCastle));
 		}
 		TEST_METHOD(boardCastlingTest)
 		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			CastleType shortCastle = CastleType::Short;
+			CastleType longCastle = CastleType::Long;
+			ChessColor white = ChessColor::White;
+			ChessColor black = ChessColor::Black;
+			board.setCanCastleAll(true);
+
+			//white king castling with free space
+			ChessPiece wk = ChessPiece(PieceType::King, white);
+			Coordinate whiteKingPos = Coordinate('e', 1);
+			board.setPieceAt(&wk, &whiteKingPos);
+
+			Move expectedShortMoveWhite = Move(&whiteKingPos, &Coordinate('g', 1));
+			Move expectedLongMoveWhite = Move(&whiteKingPos, &Coordinate('c', 1));
+
+			std::vector<Move> moves = board.getAllMovesOfPiece(&wk, &whiteKingPos);
+			Assert::AreEqual(7, (int)moves.size());
+			Assert::IsTrue(containsMove(moves, &expectedShortMoveWhite));
+			Assert::IsTrue(containsMove(moves, &expectedLongMoveWhite));
+
+			board.setCanCastle(white, shortCastle, false);
+			moves = board.getAllMovesOfPiece(&wk, &whiteKingPos);
+			Assert::AreEqual(6, (int)moves.size());
+			Assert::IsFalse(containsMove(moves, &expectedShortMoveWhite));
+			Assert::IsTrue(containsMove(moves, &expectedLongMoveWhite));
+
+			board.setCanCastle(white, longCastle, false);
+			moves = board.getAllMovesOfPiece(&wk, &whiteKingPos);
+			Assert::AreEqual(5, (int)board.getAllMovesOfPiece(&wk, &whiteKingPos).size());
+			Assert::IsFalse(containsMove(moves, &expectedShortMoveWhite));
+			Assert::IsFalse(containsMove(moves, &expectedLongMoveWhite));
+
+			//black king castling with free space
+			ChessPiece bk = ChessPiece(PieceType::King, black);
+			Coordinate blackKingPos = Coordinate('e', 8);
+			board.setPieceAt(&bk, &blackKingPos);
+
+			Move expectedShortMoveBlack = Move(&blackKingPos, &Coordinate('g', 8));
+			Move expectedLongMoveBlack = Move(&blackKingPos, &Coordinate('c', 8));
+
+			moves = board.getAllMovesOfPiece(&bk, &blackKingPos);
+			Assert::AreEqual(7, (int)moves.size());
+			Assert::IsTrue(containsMove(moves, &expectedShortMoveBlack));
+			Assert::IsTrue(containsMove(moves, &expectedLongMoveBlack));
+
+			board.setCanCastle(black, shortCastle, false);
+			moves = board.getAllMovesOfPiece(&bk, &blackKingPos);
+			Assert::AreEqual(6, (int)moves.size());
+			Assert::IsFalse(containsMove(moves, &expectedShortMoveBlack));
+			Assert::IsTrue(containsMove(moves, &expectedLongMoveBlack));
+
+			board.setCanCastle(black, longCastle, false);
+			moves = board.getAllMovesOfPiece(&bk, &blackKingPos);
+			Assert::AreEqual(5, (int)moves.size());
+			Assert::IsFalse(containsMove(moves, &expectedShortMoveBlack));
+			Assert::IsFalse(containsMove(moves, &expectedLongMoveBlack));
+
+			//now it is not relevant if the king or rook is moved
+			board.setCanCastleAll(true);
+
+			//white some piece stands in the way
+			ChessPiece friendlyBlockingPiece = ChessPiece(PieceType::Bishop, white);
+			Coordinate friendlyBlockingPiecePos = Coordinate('g', 1);
+			board.setPieceAt(&friendlyBlockingPiece, &friendlyBlockingPiecePos);
+
+			moves = board.getAllMovesOfPiece(&wk, &whiteKingPos);
+			Assert::AreEqual(6, (int)moves.size());
+			Assert::IsFalse(containsMove(moves, &expectedShortMoveWhite));
+			Assert::IsTrue(containsMove(moves, &expectedLongMoveWhite));
+			board.clearPieceAt(&friendlyBlockingPiecePos);
+
+			//white cant castle long - someone attacks the final pos
+			ChessPiece br = ChessPiece(PieceType::Rook, black);
+			Coordinate blackRookPos = Coordinate('c', 4);
+			board.setPieceAt(&br, &blackRookPos);
+
+			moves = board.getAllMovesOfPiece(&wk, &whiteKingPos);
+			Assert::AreEqual(6, (int)moves.size());
+			Assert::IsTrue(containsMove(moves, &expectedShortMoveWhite));
+			Assert::IsFalse(containsMove(moves, &expectedLongMoveWhite));
+			board.clearPieceAt(&blackRookPos);
+
+			//black some piece stands in the way
+			ChessPiece friendlyBlockingPiece2 = ChessPiece(PieceType::Bishop, black);
+			Coordinate friendlyBlockingPiecePos2 = Coordinate('g', 8);
+			board.setPieceAt(&friendlyBlockingPiece2, &friendlyBlockingPiecePos2);
+
+			moves = board.getAllMovesOfPiece(&bk, &blackKingPos);
+			Assert::AreEqual(6, (int)moves.size());
+			Assert::IsFalse(containsMove(moves, &expectedShortMoveBlack));
+			Assert::IsTrue(containsMove(moves, &expectedLongMoveBlack));
+			board.clearPieceAt(&friendlyBlockingPiecePos2);
+
+			//black cant castle long - someone attacks the way
+			ChessPiece wr = ChessPiece(PieceType::Rook, white);
+			Coordinate whiteRookPos = Coordinate('d', 7);
+			board.setPieceAt(&wr, &whiteRookPos);
+
+			moves = board.getAllMovesOfPiece(&bk, &blackKingPos);
+			Assert::AreEqual(6, (int)moves.size());
+			Assert::IsTrue(containsMove(moves, &expectedShortMoveBlack));
+			Assert::IsFalse(containsMove(moves, &expectedLongMoveBlack));
+			board.clearPieceAt(&whiteRookPos);
+
+			//black king is under attack - can do 5 moves, because this method
+			//doesnt check for legal moves
+			//it still rules out all castling moves, since you cannot castle out of a check
+
+			whiteRookPos = Coordinate('e', 6);
+			board.setPieceAt(&wr, &whiteRookPos);
+
+			moves = board.getAllMovesOfPiece(&bk, &blackKingPos);
+			Assert::AreEqual(5, (int)moves.size());
+			Assert::IsFalse(containsMove(moves, &expectedShortMoveBlack));
+			Assert::IsFalse(containsMove(moves, &expectedLongMoveBlack));
+			board.clearPieceAt(&whiteRookPos);
 		}
 	};
 }

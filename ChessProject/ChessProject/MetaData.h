@@ -16,6 +16,12 @@ enum PieceType
 	Pawn,
 	NoType
 };
+enum CastleType
+{
+	Short,
+	Long
+};
+
 const int BOARD_SIZE = 8;
 
 std::string getLongNameOfChessType(PieceType* type);

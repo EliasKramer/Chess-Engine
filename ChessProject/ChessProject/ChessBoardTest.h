@@ -27,4 +27,8 @@ public:
 	Coordinate searchForPiece(ChessPiece* piece);
 	bool isInCheck(ChessColor* col);
 	bool isInCheck(ChessColor* col, Move* move);
+	void setCanCastle(ChessColor col, CastleType cType, bool value);
+	bool getCanCastle(ChessColor col, CastleType cType);
+	void setCanCastleAll(bool value);
+	void updateCastlingAbility(Move* move);
 };

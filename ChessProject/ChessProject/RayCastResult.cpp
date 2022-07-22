@@ -1,26 +1,6 @@
 #include "RayCastResult.h"
 #include <vector>
 
-bool RayCastResult::checkIfDestinationInMovesIsTheSameType(
-	PieceType* type,
-	std::function<ChessPiece(Coordinate*, Move*)> getPieceAt,
-	Move* imaginaryMove)
-{
-	for (Move move : _rayCastMoves)
-	{
-		if (move.isValid())
-		{
-			Coordinate dest = move.getDestination();
-			ChessPiece p = getPieceAt(&dest, imaginaryMove);
-			if (p.getType() == *type)
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
-
 RayCastResult::RayCastResult()
 {
 	_rayCastMoves = std::vector<Move>();
@@ -34,22 +14,20 @@ RayCastResult::RayCastResult(std::vector<Move> rayCastMoves)
 void RayCastResult::calculateIfIsUnderAttack(
 	PieceType* type,
 	std::function<ChessPiece(Coordinate*, Move*)> getPieceAt,
-	Move* move)
+	Move* imaginaryMove)
 {
-	_isUnderAttack = checkIfDestinationInMovesIsTheSameType(type, getPieceAt, move);
-}
-
-void RayCastResult::calculateIfIsUnderAttack(
-	std::vector<PieceType*> types,
-	std::function<ChessPiece(Coordinate*, Move*)> getPieceAt,
-	Move* move)
-{
-	bool result = false;
-	for (PieceType* type : types)
+	for (Move move : _rayCastMoves)
 	{
-		result = result || checkIfDestinationInMovesIsTheSameType(type, getPieceAt, move);
+		if (move.isValid())
+		{
+			Coordinate dest = move.getDestination();
+			ChessPiece p = getPieceAt(&dest, imaginaryMove);
+			if (p.getType() == *type)
+			{
+				_isUnderAttack = true;
+			}
+		}
 	}
-	_isUnderAttack = result;
 }
 
 bool RayCastResult::originPieceIsUnderAttack()
