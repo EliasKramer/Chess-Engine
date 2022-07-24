@@ -13,7 +13,7 @@ public:
 	//aquire piece at the given coordinate
 	ChessPiece getAtPosition(Coordinate* coord);
 	//get all possible moves that can be made
-	std::vector<Move> getAllMoves(ChessColor* color);
+	std::vector<Move*> getAllMoves(ChessColor* color);
 
 protected:
 	ChessPiece board[BOARD_SIZE][BOARD_SIZE];
@@ -32,7 +32,7 @@ protected:
 
 	bool executeMove(Move* givenMove);
 	
-	std::vector<Move> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
+	std::vector<Move*> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
 	
 	void setLastMove(Move* move);
 	
@@ -87,7 +87,7 @@ private:
 
 	/*--- Castling ---*/
 
-	void addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<Move>& moves);
+	void addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<Move*>& moves);
 
 	bool fieldIsEmptyAndNotUnderAttack(ChessColor* col, Coordinate* coord);
 
@@ -96,7 +96,7 @@ private:
 	/*--- Pawn Move Set ---*/
 
 	//all the moves that can be made by a pawn
-	std::vector<Move> getAllPawnMoves(ChessColor* color, Coordinate* coord);
+	std::vector<Move*> getAllPawnMoves(ChessColor* color, Coordinate* coord);
 
 	//all the fields that a pawn can attack.
 	//not including en passant moves, since this is only used for checking if

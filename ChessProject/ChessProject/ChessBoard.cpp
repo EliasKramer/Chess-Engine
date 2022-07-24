@@ -20,9 +20,9 @@ ChessPiece ChessBoard::getAtPosition(Coordinate* coord)
 		ChessPiece();
 }
 
-std::vector<Move> ChessBoard::getAllMoves(ChessColor* color)
+std::vector<Move*> ChessBoard::getAllMoves(ChessColor* color)
 {
-	std::vector<Move> resultList;
+	std::vector<Move*> resultList;
 	
 	for (int file = 0; file < BOARD_SIZE; file++)
 	{
@@ -32,7 +32,7 @@ std::vector<Move> ChessBoard::getAllMoves(ChessColor* color)
 			{
 				Coordinate coord = Coordinate((short)file, (short)rank);
 				ChessPiece piece = board[file][rank];
-				std::vector<Move> appendingMoves = getAllMovesOfPiece(&piece, &coord);
+				std::vector<Move*> appendingMoves = getAllMovesOfPiece(&piece, &coord);
 				resultList.insert(
 					resultList.end(),
 					appendingMoves.begin(),
@@ -145,7 +145,7 @@ bool ChessBoard::executeMove(Move* givenMove)
 	return false;
 }
 
-std::vector<Move> ChessBoard::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
+std::vector<Move*> ChessBoard::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
 {
 	ChessColor col = piece->getColor();
 	PieceType type = piece->getType();
@@ -161,7 +161,7 @@ std::vector<Move> ChessBoard::getAllMovesOfPiece(ChessPiece* piece, Coordinate* 
 	else if (piece->getType() == PieceType::King)
 	{
 		//add all normal moves of a king
-		std::vector<Move> retVal = executeRayCast(&type, &options, false).getRayCastMoves();
+		std::vector<Move*> retVal = executeRayCast(&type, &options, false).getRayCastMoves();
 		//add some moves if the king can castle
 		addCastleMovesIfPossibleForColor(&col, retVal);
 		return retVal;
@@ -387,7 +387,7 @@ RayCastResult ChessBoard::executeSingleRayCast(
 	short fileAddingVal,
 	short rankAddingVal)
 {
-	std::vector<Move> result = std::vector<Move>();
+	std::vector<Move*> result = std::vector<Move*>();
 	Coordinate start = options->getOrigin();
 	Coordinate currentCoord = options->getOrigin();
 	short iterationCount = 0;
@@ -399,8 +399,6 @@ RayCastResult ChessBoard::executeSingleRayCast(
 		currentCoord = Coordinate(
 			(short)(currentCoord.getFileAsPosition() + fileAddingVal),
 			currentCoord.getRankAsPosition() + rankAddingVal);
-
-		Move currentMoveToCheck = Move(&start, &currentCoord);
 
 		if (!currentCoord.isValid())
 		{
@@ -415,7 +413,7 @@ RayCastResult ChessBoard::executeSingleRayCast(
 			{
 				//a move to an empty field should only be relevant if
 				//you need a move list
-				result.push_back(currentMoveToCheck);
+				result.push_back(new Move(&start, &currentCoord));
 			}
 		}
 		else if (pieceAtCurrentPos.getColor() == options->getColor())
@@ -427,7 +425,7 @@ RayCastResult ChessBoard::executeSingleRayCast(
 			//you should add a move, when it is a capture move.
 			//that way, the caller of this function can calculate
 			//if the current piece gets attacked or not
-			result.push_back(currentMoveToCheck);
+			result.push_back(new Move(&start, &currentCoord));
 			break;
 		}
 
@@ -612,7 +610,7 @@ void ChessBoard::calculateIfRayCastResultIsUnderAttackByType(PieceType* type, Ra
 /*--- Raycasts ---*/
 
 /*--- Castling ---*/
-void ChessBoard::addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<Move>& moves)
+void ChessBoard::addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<Move*>& moves)
 {
 	short rank = *col == ChessColor::White ? 1 : 8;
 
@@ -629,7 +627,7 @@ void ChessBoard::addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<M
 			if (fieldIsEmptyAndNotUnderAttack(col, &longCastleOne) &&
 				fieldIsEmptyAndNotUnderAttack(col, &longCastleTwo))
 			{
-				Move moveToAdd = Move(&kingCoord, &longCastleTwo);
+				Move* moveToAdd = new Move(&kingCoord, &longCastleTwo);
 				moves.push_back(moveToAdd);
 			}
 		}
@@ -640,7 +638,7 @@ void ChessBoard::addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<M
 			if (fieldIsEmptyAndNotUnderAttack(col, &shortCastleOne) &&
 				fieldIsEmptyAndNotUnderAttack(col, &shortCastleTwo))
 			{
-				Move moveToAdd = Move(&kingCoord, &shortCastleTwo);
+				Move* moveToAdd = new Move(&kingCoord, &shortCastleTwo);
 				moves.push_back(moveToAdd);
 			}
 		}
@@ -659,9 +657,9 @@ bool ChessBoard::fieldIsEmptyAndNotUnderAttack(ChessColor* col, Coordinate* coor
 /*--- Castling ---*/
 
 /*--- Pawn Move Set ---*/
-std::vector<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord)
+std::vector<Move*> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coord)
 {
-	std::vector<Move> retVal;
+	std::vector<Move*> retVal;
 	const short startRank = *color == ChessColor::White ? 2 : 7;
 
 	const short rankMultiplier = *color == ChessColor::White ? 1 : -1;
@@ -687,7 +685,7 @@ std::vector<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coo
 			}
 			else {
 				//new position is empty
-				Move move = Move(coord, &currPosToCheck);
+				Move* move = new Move(coord, &currPosToCheck);
 				retVal.push_back(move);
 			}
 		}
@@ -717,7 +715,7 @@ std::vector<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coo
 				if (pieceAtNewPos.getColor() != *color)
 				{
 					//the move is valid and can be done
-					Move move = Move(coord, &targetPos);
+					Move* move = new Move(coord, &targetPos);
 					retVal.push_back(move);
 				}
 			}
@@ -745,7 +743,7 @@ std::vector<Move> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* coo
 						if (lastMoveIfWantToEnPassant == getLastMove())
 						{
 							//the en passant move is possible
-							Move move = Move(coord, &targetPos);
+							Move* move = new Move(coord, &targetPos);
 							retVal.push_back(move);
 						}
 					}

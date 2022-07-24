@@ -6,7 +6,7 @@ class RayCastResult
 {
 private:
 	//all destinations are the fields, that hit the raycast
-	std::vector<Move> _rayCastMoves;
+	std::vector<Move*> _rayCastMoves;
 
 	//if the raycast-start-field is under attack
 	bool _isUnderAttack = false;
@@ -14,7 +14,7 @@ private:
 	friend RayCastResult operator+ (const RayCastResult& first, const RayCastResult& second);
 public:
 	RayCastResult();
-	RayCastResult(std::vector<Move> rayCastMoves);
+	RayCastResult(std::vector<Move*> rayCastMoves);
 
 	void calculateIfIsUnderAttack(
 		PieceType* type,
@@ -26,6 +26,6 @@ public:
 	// get all fields that the raycast hit.
 	// the move list will be made out of the origin field of the raycast
 	// and each hit field of the raycast as destination.
-	std::vector<Move> getRayCastMoves();
+	std::vector<Move*> getRayCastMoves();
 };
 RayCastResult operator+ (const RayCastResult& first, const RayCastResult& second);

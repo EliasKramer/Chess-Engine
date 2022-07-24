@@ -419,7 +419,7 @@ namespace ChessTest
 
 			board.clearBoard();
 			
-			std::vector<Move> possibleMoves = board.getAllMoves(&white);
+			std::vector<Move*> possibleMoves = board.getAllMoves(&white);
 			Assert::AreEqual((int)possibleMoves.size(), 0);
 
 			possibleMoves = board.getAllMoves(&white);
@@ -433,7 +433,7 @@ namespace ChessTest
 			Coordinate coord = Coordinate('a', 1);
 
 			//test moves at a1
-			std::vector<Move> allMoves =
+			std::vector<Move*> allMoves =
 				board.getAllMovesOfPiece(&ChessPiece(
 					PieceType::Rook, ChessColor::White),
 					&coord);
@@ -524,7 +524,7 @@ namespace ChessTest
 			board.clearBoard();
 
 			Coordinate start = Coordinate('a', 1);
-			std::vector<Move> allMoves =
+			std::vector<Move*> allMoves =
 				board.getAllMovesOfPiece(&ChessPiece(
 					PieceType::Knight, ChessColor::White),
 					&start);
@@ -558,7 +558,7 @@ namespace ChessTest
 
 			//normal start position 2 possible moves
 			//white
-			std::vector<Move> allMoves =
+			std::vector<Move*> allMoves =
 				board.getAllMovesOfPiece(&ChessPiece(
 					PieceType::Pawn, ChessColor::White),
 					&Coordinate('a', 2));
@@ -663,7 +663,7 @@ namespace ChessTest
 			board.setPieceAt(
 				&ChessPiece(PieceType::Pawn, ChessColor::Black),
 				&Coordinate('b', 5));
-			std::vector<Move> allMoves =
+			std::vector<Move*> allMoves =
 				board.getAllMovesOfPiece(&ChessPiece(
 					PieceType::Pawn, ChessColor::White),
 					&Coordinate('a', 4));
@@ -787,7 +787,7 @@ namespace ChessTest
 				&Coordinate('a', 7),
 				&Coordinate('a', 5)));
 
-			std::vector<Move> allMoves =
+			std::vector<Move*> allMoves =
 				board.getAllMovesOfPiece(&ChessPiece(
 					PieceType::Pawn, ChessColor::White),
 					&Coordinate('b', 5));
@@ -869,7 +869,7 @@ namespace ChessTest
 			board.clearBoard();
 
 			//king is free to move
-			std::vector<Move> allMoves =
+			std::vector<Move*> allMoves =
 				board.getAllMovesOfPiece(&ChessPiece(
 					PieceType::King, ChessColor::White),
 					&Coordinate('e', 4));
@@ -959,18 +959,18 @@ namespace ChessTest
 		{
 			RayCastResult result = RayCastResult();
 
-			Assert::IsTrue(result.getRayCastMoves() == std::vector<Move>());
+			Assert::IsTrue(result.getRayCastMoves() == std::vector<Move*>());
 			Assert::AreEqual((int)result.getRayCastMoves().size(), 0);
 
 			result = RayCastResult(result.getRayCastMoves());
 			Assert::AreEqual((int)result.getRayCastMoves().size(), 0);
 
-			std::vector<Move> movesToAdd = std::vector<Move>();
-			movesToAdd.push_back(Move(
+			std::vector<Move*> movesToAdd = std::vector<Move*>();
+			movesToAdd.push_back(new Move(
 				&Coordinate('b', 1),
 				&Coordinate('c', 2)
 			));
-			movesToAdd.push_back(Move(
+			movesToAdd.push_back(new Move(
 				&Coordinate('d', 1),
 				&Coordinate('e', 2)
 			));
@@ -985,13 +985,13 @@ namespace ChessTest
 		}
 		TEST_METHOD(addingRayCastResultTest)
 		{
-			std::vector<Move> rcMoves1 = {
-				Move(&Coordinate('a', 1), &Coordinate('a', 2))
+			std::vector<Move*> rcMoves1 = {
+				new Move(&Coordinate('a', 1), &Coordinate('a', 2))
 			};
 			RayCastResult rcResult1 = RayCastResult(rcMoves1);
 
-			std::vector<Move> rcMoves2 = {
-				Move(&Coordinate('a', 2), &Coordinate('a', 3))
+			std::vector<Move*> rcMoves2 = {
+				new Move(&Coordinate('a', 2), &Coordinate('a', 3))
 			};
 			RayCastResult rcResult2 = RayCastResult(rcMoves2);
 
@@ -1631,7 +1631,7 @@ namespace ChessTest
 			Move expectedShortMoveWhite = Move(&whiteKingPos, &Coordinate('g', 1));
 			Move expectedLongMoveWhite = Move(&whiteKingPos, &Coordinate('c', 1));
 
-			std::vector<Move> moves = board.getAllMovesOfPiece(&wk, &whiteKingPos);
+			std::vector<Move*> moves = board.getAllMovesOfPiece(&wk, &whiteKingPos);
 			Assert::AreEqual(7, (int)moves.size());
 			Assert::IsTrue(containsMove(moves, &expectedShortMoveWhite));
 			Assert::IsTrue(containsMove(moves, &expectedLongMoveWhite));

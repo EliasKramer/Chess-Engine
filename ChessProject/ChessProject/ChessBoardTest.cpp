@@ -44,7 +44,7 @@ Move ChessBoardTest::getLastMove()
 	return ChessBoard::getLastMove();
 }
 
-std::vector<Move> ChessBoardTest::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
+std::vector<Move*> ChessBoardTest::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
 {
 	return ChessBoard::getAllMovesOfPiece(piece, coord);
 }

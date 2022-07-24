@@ -11,7 +11,7 @@ public:
 	bool executeMove(Move* givenMove);
 	void setLastMove(Move* move);
 	Move getLastMove();
-	std::vector<Move> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
+	std::vector<Move*> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
 	//bool fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color);
 	RayCastResult executeSingleRayCast(
 		RayCastOptions* options,
