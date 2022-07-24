@@ -411,26 +411,18 @@ namespace ChessTest
 				}
 			}
 		}
-		TEST_METHOD(chessBoardSetAndGetTurnColorTest)
+		TEST_METHOD(boardGetAllMovesNoMovesAvailible)
 		{
 			ChessBoardTest board = ChessBoardTest();
 			ChessColor white = ChessColor::White;
 			ChessColor black = ChessColor::Black;
 
-			Assert::IsTrue((int)board.getTurnColor() == (int)ChessColor::White);
-			board.setTurnColor(&black);
-			Assert::IsTrue((int)board.getTurnColor() == (int)ChessColor::Black);
-			board.setTurnColor(&white);
-			Assert::IsTrue((int)board.getTurnColor() == (int)ChessColor::White);
-			board.setTurnColor(&white);
-			Assert::IsTrue((int)board.getTurnColor() == (int)ChessColor::White);
-		}
-		TEST_METHOD(boardGetAllMovesNoMovesAvailible)
-		{
-			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
-			std::vector<Move> possibleMoves = board.getAllMoves();
+			
+			std::vector<Move> possibleMoves = board.getAllMoves(&white);
+			Assert::AreEqual((int)possibleMoves.size(), 0);
 
+			possibleMoves = board.getAllMoves(&white);
 			Assert::AreEqual((int)possibleMoves.size(), 0);
 		}
 		TEST_METHOD(boardGetSimpleMovementOfPiecesTest)
@@ -1740,6 +1732,33 @@ namespace ChessTest
 			Assert::IsFalse(containsMove(moves, &expectedShortMoveBlack));
 			Assert::IsFalse(containsMove(moves, &expectedLongMoveBlack));
 			board.clearPieceAt(&whiteRookPos);
+		}
+		TEST_METHOD(getAllMovesTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+
+			ChessColor white = ChessColor::White;
+			ChessColor black = ChessColor::Black;
+
+			Assert::AreEqual(20, (int)board.getAllMoves(&white).size());
+			Assert::AreEqual(20, (int)board.getAllMoves(&black).size());
+
+			Coordinate coordToClear = Coordinate('f', 1);
+			board.clearPieceAt(&coordToClear);
+			coordToClear = Coordinate('g', 1);
+			board.clearPieceAt(&coordToClear);
+
+			//removing the light white bishop and the g-knight
+			//now king can castle and move one move rook can move two moves
+			//but the knight is not there anymore and thus cannot move 
+			Assert::AreEqual(22, (int)board.getAllMoves(&white).size());
+			
+			coordToClear = Coordinate('b', 1);
+			board.clearPieceAt(&coordToClear);
+			coordToClear = Coordinate('c', 1);
+			board.clearPieceAt(&coordToClear);
+			
+			Assert::AreEqual(24, (int)board.getAllMoves(&white).size());
 		}
 	};
 }

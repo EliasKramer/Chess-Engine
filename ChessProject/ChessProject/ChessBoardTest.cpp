@@ -27,12 +27,6 @@ void ChessBoardTest::clearBoard()
 			canCastle[color][direction] = false;
 		}
 	}
-
-}
-
-void ChessBoardTest::setTurnColor(ChessColor* color)
-{
-	isWhiteTurn = *color == ChessColor::White;
 }
 
 bool ChessBoardTest::executeMove(Move* givenMove)

@@ -1,8 +1,6 @@
 #include "ChessBoard.h"
 ChessBoard::ChessBoard()
 {
-	isWhiteTurn = true;
-
 	//at the start kings can castle in each direction
 	for (int color = 0; color < 2; color++)
 	{
@@ -22,14 +20,27 @@ ChessPiece ChessBoard::getAtPosition(Coordinate* coord)
 		ChessPiece();
 }
 
-ChessColor ChessBoard::getTurnColor()
-{
-	return isWhiteTurn ? ChessColor::White : ChessColor::Black;
-}
-
-std::vector<Move> ChessBoard::getAllMoves()
+std::vector<Move> ChessBoard::getAllMoves(ChessColor* color)
 {
 	std::vector<Move> resultList;
+	
+	for (int file = 0; file < BOARD_SIZE; file++)
+	{
+		for (int rank = 0; rank < BOARD_SIZE; rank++)
+		{
+			if (board[file][rank].getColor() == *color)
+			{
+				Coordinate coord = Coordinate((short)file, (short)rank);
+				ChessPiece piece = board[file][rank];
+				std::vector<Move> appendingMoves = getAllMovesOfPiece(&piece, &coord);
+				resultList.insert(
+					resultList.end(),
+					appendingMoves.begin(),
+					appendingMoves.end()
+				);
+			}
+		}
+	}
 	return resultList;
 }
 

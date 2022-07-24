@@ -8,7 +8,6 @@ public:
 		Coordinate* coord);
 	void clearPieceAt(Coordinate* coord);
 	void clearBoard();
-	void setTurnColor(ChessColor* color);
 	bool executeMove(Move* givenMove);
 	void setLastMove(Move* move);
 	Move getLastMove();

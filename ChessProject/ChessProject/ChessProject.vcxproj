@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -146,6 +146,7 @@
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="MetaData.cpp" />
     <ClCompile Include="Move.cpp" />
+    <ClCompile Include="MovePawnPromontion.cpp" />
     <ClCompile Include="RayCastOptions.cpp" />
     <ClCompile Include="RayCastResult.cpp" />
   </ItemGroup>
@@ -156,6 +157,7 @@
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="MetaData.h" />
     <ClInclude Include="Move.h" />
+    <ClInclude Include="MovePawnPromontion.h" />
     <ClInclude Include="RayCastOptions.h" />
     <ClInclude Include="RayCastResult.h" />
     <ClInclude Include="resource.h" />

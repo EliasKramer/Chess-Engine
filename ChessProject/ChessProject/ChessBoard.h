@@ -12,13 +12,10 @@ public:
 	ChessBoard();
 	//aquire piece at the given coordinate
 	ChessPiece getAtPosition(Coordinate* coord);
-	//get the color of the current turn
-	ChessColor getTurnColor();
 	//get all possible moves that can be made
-	std::vector<Move> getAllMoves();
+	std::vector<Move> getAllMoves(ChessColor* color);
 
 protected:
-	bool isWhiteTurn;
 	ChessPiece board[BOARD_SIZE][BOARD_SIZE];
 	Move lastMove;
 	bool canCastle[2][2];
