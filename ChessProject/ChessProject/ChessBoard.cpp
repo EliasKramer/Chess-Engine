@@ -22,8 +22,10 @@ ChessPiece ChessBoard::getAtPosition(Coordinate* coord)
 
 std::vector<Move*> ChessBoard::getAllMoves(ChessColor* color)
 {
-	std::vector<Move*> resultList;
+	std::vector<Move*> resultList = std::vector<Move*>();
 	
+	short rankForPawnPromotion = *color == ChessColor::White ? 8 : 1;
+
 	for (int file = 0; file < BOARD_SIZE; file++)
 	{
 		for (int rank = 0; rank < BOARD_SIZE; rank++)
@@ -33,11 +35,28 @@ std::vector<Move*> ChessBoard::getAllMoves(ChessColor* color)
 				Coordinate coord = Coordinate((short)file, (short)rank);
 				ChessPiece piece = board[file][rank];
 				std::vector<Move*> appendingMoves = getAllMovesOfPiece(&piece, &coord);
-				resultList.insert(
-					resultList.end(),
-					appendingMoves.begin(),
-					appendingMoves.end()
-				);
+
+				for (Move* currentMove : appendingMoves)
+				{
+					if (piece.getType() == PieceType::Pawn &&
+						currentMove->getDestination().getRankNormal() == rankForPawnPromotion)
+					{
+						Coordinate start = currentMove->getStart();
+						Coordinate destination = currentMove->getDestination();
+						
+						resultList.push_back(new MovePawnPromotion(&start, &destination, PieceType::Queen));
+						resultList.push_back(new MovePawnPromotion(&start, &destination, PieceType::Rook));
+						resultList.push_back(new MovePawnPromotion(&start, &destination, PieceType::Bishop));
+						resultList.push_back(new MovePawnPromotion(&start, &destination, PieceType::Knight));
+						
+						//deleting a move, that is not needed anymore, because it can be split in 4 different
+						delete currentMove;
+					}
+					else
+					{
+						resultList.push_back(currentMove);
+					}
+				}
 			}
 		}
 	}
@@ -619,7 +638,6 @@ void ChessBoard::addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<M
 
 	if (p.isValid() && !fieldIsUnderAttack(&kingCoord, col))
 	{
-
 		if (getCanCastle(*col, CastleType::Long))
 		{
 			Coordinate longCastleOne = Coordinate('d', rank);

@@ -2,6 +2,7 @@
 #include "ChessPiece.h"
 #include "Coordinate.h"
 #include "Move.h"
+#include "MovePawnPromotion.h"
 #include "RayCastOptions.h"
 #include "RayCastResult.h"
 #include <vector>
