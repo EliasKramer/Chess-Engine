@@ -23,7 +23,7 @@ ChessPiece ChessBoard::getAtPosition(Coordinate* coord)
 std::vector<Move*> ChessBoard::getAllMoves(ChessColor* color)
 {
 	std::vector<Move*> resultList = std::vector<Move*>();
-	
+
 	short rankForPawnPromotion = *color == ChessColor::White ? 8 : 1;
 
 	for (int file = 0; file < BOARD_SIZE; file++)
@@ -38,29 +38,31 @@ std::vector<Move*> ChessBoard::getAllMoves(ChessColor* color)
 
 				for (Move* currentMove : appendingMoves)
 				{
-					if (piece.getType() == PieceType::Pawn &&
-						currentMove->getDestination().getRankNormal() == rankForPawnPromotion)
-					{
-						Coordinate start = currentMove->getStart();
-						Coordinate destination = currentMove->getDestination();
-						
-						resultList.push_back(new MovePawnPromotion(&start, &destination, PieceType::Queen));
-						resultList.push_back(new MovePawnPromotion(&start, &destination, PieceType::Rook));
-						resultList.push_back(new MovePawnPromotion(&start, &destination, PieceType::Bishop));
-						resultList.push_back(new MovePawnPromotion(&start, &destination, PieceType::Knight));
-						
-						//deleting a move, that is not needed anymore, because it can be split in 4 different
-						delete currentMove;
-					}
-					else
-					{
-						resultList.push_back(currentMove);
-					}
+					resultList.push_back(currentMove);
 				}
 			}
 		}
 	}
 	return resultList;
+}
+
+std::string ChessBoard::toString()
+{
+	std::string result = "";
+	for (int file = 0; file < BOARD_SIZE; file++)
+	{
+		for (int rank = 0; rank < BOARD_SIZE; rank++)
+		{
+			ChessColor col = board[file][rank].getColor();
+			PieceType type = board[file][rank].getType();
+
+			std::string colorString = getShortNameOfChessColor(&col);
+			std::string typeString = getShortNameOfChessType(&type);
+			result += colorString + typeString + " | ";
+		}
+		result += "\n---------------------\n";
+	}
+	return result;
 }
 
 void ChessBoard::updateCastlingAbility(Move* move)
@@ -126,7 +128,6 @@ void ChessBoard::setPieceAt(ChessPiece* piece, Coordinate* coord)
 	{
 		int file = coord->getFileAsPosition();
 		int rank = coord->getRankAsPosition();
-		ChessPiece toDel = board[file][rank];
 		board[file][rank] = *piece;
 	}
 }
@@ -146,22 +147,15 @@ Coordinate ChessBoard::searchForPiece(ChessPiece* piece)
 	return Coordinate();
 }
 
-bool ChessBoard::executeMove(Move* givenMove)
+void ChessBoard::executeMove(Move* givenMove)
 {
-	if (givenMove->isValid())
-	{
-		Coordinate start = givenMove->getStart();
-		Coordinate dest = givenMove->getDestination();
+	std::function<ChessPiece(Coordinate*)> getAtPos =
+		[this](Coordinate* coord) { return getAtPosition(coord); };
 
-		ChessPiece piece = getAtPosition(
-			&start);
-		setPieceAt(
-			&piece,
-			&dest);
-		//set start to invalid
-		return true;
-	}
-	return false;
+	std::function<void(ChessPiece*, Coordinate*)> setAtPos =
+		[this](ChessPiece* piece, Coordinate* coord) { return setPieceAt(piece, coord); };
+
+	givenMove->execute(getAtPos, setAtPos);
 }
 
 std::vector<Move*> ChessBoard::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
@@ -682,6 +676,8 @@ std::vector<Move*> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* co
 
 	const short rankMultiplier = *color == ChessColor::White ? 1 : -1;
 
+	const short rankForPromotion = *color == ChessColor::White ? 8 : 1;
+
 	//checking for moves forward
 	//loop has alway 2 iterations -> checks 1 and 2 fields forwards
 	for (int rankAdding = 1; rankAdding <= 2; rankAdding++)
@@ -701,7 +697,20 @@ std::vector<Move*> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* co
 				//no need going forward another time, if path is blocked
 				break;
 			}
-			else {
+			else if (rankAdding == 1 &&
+				currPosToCheck.getRankAsPosition() == rankForPromotion)
+			{
+				retVal.push_back(
+					new MovePawnPromotion(coord, &currPosToCheck, PieceType::Queen));
+				retVal.push_back(
+					new MovePawnPromotion(coord, &currPosToCheck, PieceType::Rook));
+				retVal.push_back(
+					new MovePawnPromotion(coord, &currPosToCheck, PieceType::Bishop));
+				retVal.push_back(
+					new MovePawnPromotion(coord, &currPosToCheck, PieceType::Knight));
+			}
+			else
+			{
 				//new position is empty
 				Move* move = new Move(coord, &currPosToCheck);
 				retVal.push_back(move);

@@ -8,7 +8,7 @@ public:
 		Coordinate* coord);
 	void clearPieceAt(Coordinate* coord);
 	void clearBoard();
-	bool executeMove(Move* givenMove);
+	void executeMove(Move* givenMove);
 	void setLastMove(Move* move);
 	Move getLastMove();
 	std::vector<Move*> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);

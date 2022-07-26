@@ -182,6 +182,7 @@
     <ClInclude Include="..\..\ChessProject\Coordinate.h" />
     <ClInclude Include="..\..\ChessProject\MetaData.h" />
     <ClInclude Include="..\..\ChessProject\Move.h" />
+    <ClInclude Include="..\..\ChessProject\MovePawnPromotion.h" />
     <ClInclude Include="..\..\ChessProject\RayCastOptions.h" />
     <ClInclude Include="..\..\ChessProject\RayCastResult.h" />
     <ClInclude Include="pch.h" />

@@ -5,6 +5,7 @@
 #include "MovePawnPromotion.h"
 #include "RayCastOptions.h"
 #include "RayCastResult.h"
+#include "MetaData.h"
 #include <vector>
 class ChessBoard
 {
@@ -16,6 +17,7 @@ public:
 	//get all possible moves that can be made
 	std::vector<Move*> getAllMoves(ChessColor* color);
 
+	std::string toString();
 protected:
 	ChessPiece board[BOARD_SIZE][BOARD_SIZE];
 	Move lastMove;
@@ -31,7 +33,7 @@ protected:
 
 	Coordinate searchForPiece(ChessPiece* piece);
 
-	bool executeMove(Move* givenMove);
+	void executeMove(Move* givenMove);
 	
 	std::vector<Move*> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
 	

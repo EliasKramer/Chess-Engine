@@ -1,6 +1,10 @@
 #pragma once
-#include "Move.h"
 #include "MetaData.h"
+#include <functional>
+#include "ChessPiece.h"
+#include "Coordinate.h"
+#include "Move.h"
+
 class MovePawnPromotion : public Move
 {
 private:
@@ -11,5 +15,10 @@ public:
 		Coordinate* givenStart,
 		Coordinate* givenDestination,
 		PieceType givenPromotionType);
+
+	void execute(
+		std::function<ChessPiece(Coordinate*)> getAtPosition,
+		std::function<void(ChessPiece*, Coordinate*)> setPieceAt) override;
+
 	PieceType getPromotionType();
 };

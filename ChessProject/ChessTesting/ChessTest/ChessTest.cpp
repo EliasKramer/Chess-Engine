@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "CppUnitTest.h"
 #include <list>
+#include <iostream>
 #include "../../ChessProject/MetaData.h"
 #include "../../ChessProject/ChessPiece.h"
 #include "../../ChessProject/ChessBoard.h"
@@ -370,31 +371,6 @@ namespace ChessTest
 			Assert::IsTrue(
 				(board.getAtPosition(&Coordinate('h', 8))) ==
 				ChessPiece(PieceType::Rook, ChessColor::Black));
-		}
-		TEST_METHOD(chessboardExecuteMoveTest)
-		{
-			//do move is doing the move and just checks if it is possible.
-			//not if it is legal.
-			ChessBoardTest board = ChessBoardTest();
-
-			Coordinate start = Coordinate('a', 1);
-			Coordinate dest = Coordinate('b', 2);
-			Coordinate invalid = Coordinate();
-
-			Move move = Move(&start, &dest);
-			Assert::IsTrue(board.executeMove(&move));
-
-			move = Move(&start, &start);
-			Assert::IsFalse(board.executeMove(&move));
-
-			move = Move(&invalid, &invalid);
-			Assert::IsFalse(board.executeMove(&move));
-
-			move = Move(&start, &invalid);
-			Assert::IsFalse(board.executeMove(&move));
-
-			move = Move(&invalid, &dest);
-			Assert::IsFalse(board.executeMove(&move));
 		}
 		TEST_METHOD(chessBoardClearTest)
 		{
@@ -1759,6 +1735,17 @@ namespace ChessTest
 			board.clearPieceAt(&coordToClear);
 			
 			Assert::AreEqual(24, (int)board.getAllMoves(&white).size());
+		}
+		TEST_METHOD(executeMoveTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			MovePawnPromotion m = MovePawnPromotion(&Coordinate('a', 2), &Coordinate('a', 1), PieceType::Queen);
+
+			board.executeMove(&m);
+			
+			Assert::IsTrue(PieceType::Queen == board.getAtPosition(&Coordinate('a', 1)).getType());
 		}
 	};
 }

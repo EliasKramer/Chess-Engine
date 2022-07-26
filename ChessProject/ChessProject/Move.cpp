@@ -14,6 +14,10 @@ Move::Move(
 	destination = *givenDestination;
 }
 
+Move::~Move()
+{
+}
+
 Coordinate Move::getStart()
 {
 	return start;
@@ -30,6 +34,19 @@ bool Move::isValid()
 		start.isValid() &&
 		destination.isValid() &&
 		start != destination;
+}
+
+void Move::execute(
+	std::function<ChessPiece(Coordinate*)> getAtPosition,
+	std::function<void(ChessPiece*, Coordinate*)> setPieceAt)
+{
+	ChessPiece startPiece = getAtPosition(&start);
+	ChessPiece emptyPiece = ChessPiece();
+	if (isValid())
+	{
+		setPieceAt(&emptyPiece, &start);
+		setPieceAt(&startPiece, &destination);
+	}
 }
 
 bool Move::operator==(const Move& other) const
