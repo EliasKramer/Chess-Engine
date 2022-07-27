@@ -163,6 +163,8 @@
     <ClCompile Include="..\..\ChessProject\Coordinate.cpp" />
     <ClCompile Include="..\..\ChessProject\MetaData.cpp" />
     <ClCompile Include="..\..\ChessProject\Move.cpp" />
+    <ClCompile Include="..\..\ChessProject\MoveCastle.cpp" />
+    <ClCompile Include="..\..\ChessProject\MoveEnPassant.cpp" />
     <ClCompile Include="..\..\ChessProject\MovePawnPromotion.cpp" />
     <ClCompile Include="..\..\ChessProject\RayCastOptions.cpp" />
     <ClCompile Include="..\..\ChessProject\RayCastResult.cpp" />
@@ -182,6 +184,8 @@
     <ClInclude Include="..\..\ChessProject\Coordinate.h" />
     <ClInclude Include="..\..\ChessProject\MetaData.h" />
     <ClInclude Include="..\..\ChessProject\Move.h" />
+    <ClInclude Include="..\..\ChessProject\MoveCastle.h" />
+    <ClInclude Include="..\..\ChessProject\MoveEnPassant.h" />
     <ClInclude Include="..\..\ChessProject\MovePawnPromotion.h" />
     <ClInclude Include="..\..\ChessProject\RayCastOptions.h" />
     <ClInclude Include="..\..\ChessProject\RayCastResult.h" />

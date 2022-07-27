@@ -1741,11 +1741,50 @@ namespace ChessTest
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
 
-			MovePawnPromotion m = MovePawnPromotion(&Coordinate('a', 2), &Coordinate('a', 1), PieceType::Queen);
+			//Pawn promotion
+			MovePawnPromotion pm = MovePawnPromotion(&Coordinate('a', 2), &Coordinate('a', 1), PieceType::Queen);
 
-			board.executeMove(&m);
+			board.executeMove(&pm);
 			
 			Assert::IsTrue(PieceType::Queen == board.getAtPosition(&Coordinate('a', 1)).getType());
+			
+			board.clearBoard();
+			
+			//king castling
+			ChessColor white = ChessColor::White;
+			ChessColor black = ChessColor::Black;
+			
+			ChessPiece bk = ChessPiece(PieceType::King, black);
+			ChessPiece br = ChessPiece(PieceType::Rook, black);
+
+			board.setPieceAt(&bk, &Coordinate('e', 8));
+			board.setPieceAt(&br, &Coordinate('a', 8));
+
+			Move secondMove = Move(&Coordinate('a', 8),&Coordinate('d', 8));
+			MoveCastle cm = MoveCastle(&Coordinate('e', 8), &Coordinate('c', 8), secondMove);
+
+			board.executeMove(&cm);
+			
+			Assert::IsTrue(PieceType::King == board.getAtPosition(&Coordinate('c', 8)).getType());
+			Assert::IsTrue(PieceType::Rook == board.getAtPosition(&Coordinate('d', 8)).getType());
+
+			board.clearBoard();
+			//en passant executing
+			ChessPiece wp = ChessPiece(PieceType::Pawn, white);
+			ChessPiece bp = ChessPiece(PieceType::Pawn, black);
+			
+			board.setPieceAt(&wp, &Coordinate('d', 5));
+			board.setPieceAt(&bp, &Coordinate('e', 5));
+			
+			MoveEnPassant ep = MoveEnPassant(&Coordinate('d', 5), &Coordinate('e', 6), Coordinate('e', 5));
+
+			board.executeMove(&ep);
+
+			Assert::IsTrue(wp == board.getAtPosition(&Coordinate('e', 6)));
+			Assert::IsTrue(ChessPiece() == board.getAtPosition(&Coordinate('e', 5)));
+			Assert::IsTrue(ChessPiece() == board.getAtPosition(&Coordinate('d', 5)));
+
+			board.clearBoard();
 		}
 	};
 }

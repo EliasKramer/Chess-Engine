@@ -623,7 +623,9 @@ void ChessBoard::calculateIfRayCastResultIsUnderAttackByType(PieceType* type, Ra
 /*--- Raycasts ---*/
 
 /*--- Castling ---*/
-void ChessBoard::addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<Move*>& moves)
+void ChessBoard::addCastleMovesIfPossibleForColor(
+	ChessColor* col,
+	std::vector<Move*>& moves)
 {
 	short rank = *col == ChessColor::White ? 1 : 8;
 
@@ -636,10 +638,14 @@ void ChessBoard::addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<M
 		{
 			Coordinate longCastleOne = Coordinate('d', rank);
 			Coordinate longCastleTwo = Coordinate('c', rank);
+			Coordinate longCastleThree = Coordinate('b', rank);
 			if (fieldIsEmptyAndNotUnderAttack(col, &longCastleOne) &&
-				fieldIsEmptyAndNotUnderAttack(col, &longCastleTwo))
+				fieldIsEmptyAndNotUnderAttack(col, &longCastleTwo) &&
+				!getAtPosition(&longCastleThree).isValid())
 			{
-				Move* moveToAdd = new Move(&kingCoord, &longCastleTwo);
+				Move secondMove = Move(&Coordinate('a', rank), &Coordinate('d', rank));
+				Move* moveToAdd = 
+					new MoveCastle(&kingCoord, &longCastleTwo, secondMove);
 				moves.push_back(moveToAdd);
 			}
 		}
@@ -650,7 +656,8 @@ void ChessBoard::addCastleMovesIfPossibleForColor(ChessColor* col, std::vector<M
 			if (fieldIsEmptyAndNotUnderAttack(col, &shortCastleOne) &&
 				fieldIsEmptyAndNotUnderAttack(col, &shortCastleTwo))
 			{
-				Move* moveToAdd = new Move(&kingCoord, &shortCastleTwo);
+				Move secondMove = Move(&Coordinate('h', rank), &Coordinate('f', rank));
+				Move* moveToAdd = new MoveCastle(&kingCoord, &shortCastleTwo, secondMove);
 				moves.push_back(moveToAdd);
 			}
 		}
@@ -770,7 +777,8 @@ std::vector<Move*> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* co
 						if (lastMoveIfWantToEnPassant == getLastMove())
 						{
 							//the en passant move is possible
-							Move* move = new Move(coord, &targetPos);
+							Move* move = 
+								new MoveEnPassant(coord, &targetPos, posOfPieceToTake);
 							retVal.push_back(move);
 						}
 					}

@@ -45,6 +45,12 @@
     <ClCompile Include="MovePawnPromotion.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="MoveCastle.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveEnPassant.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChessPiece.h">
@@ -75,6 +81,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="MovePawnPromotion.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveCastle.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveEnPassant.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

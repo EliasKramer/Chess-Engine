@@ -146,6 +146,8 @@
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="MetaData.cpp" />
     <ClCompile Include="Move.cpp" />
+    <ClCompile Include="MoveCastle.cpp" />
+    <ClCompile Include="MoveEnPassant.cpp" />
     <ClCompile Include="MovePawnPromotion.cpp" />
     <ClCompile Include="RayCastOptions.cpp" />
     <ClCompile Include="RayCastResult.cpp" />
@@ -157,6 +159,8 @@
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="MetaData.h" />
     <ClInclude Include="Move.h" />
+    <ClInclude Include="MoveCastle.h" />
+    <ClInclude Include="MoveEnPassant.h" />
     <ClInclude Include="MovePawnPromotion.h" />
     <ClInclude Include="RayCastOptions.h" />
     <ClInclude Include="RayCastResult.h" />

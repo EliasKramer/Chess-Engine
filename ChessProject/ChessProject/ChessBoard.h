@@ -3,6 +3,8 @@
 #include "Coordinate.h"
 #include "Move.h"
 #include "MovePawnPromotion.h"
+#include "MoveCastle.h"
+#include "MoveEnPassant.h"
 #include "RayCastOptions.h"
 #include "RayCastResult.h"
 #include "MetaData.h"
