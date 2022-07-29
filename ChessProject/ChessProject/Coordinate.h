@@ -1,4 +1,5 @@
 #pragma once
+#include <string>
 class Coordinate
 {
 private:
@@ -16,6 +17,9 @@ public:
 	short getRankAsPosition();
 	//is on an 8x8 chess board
 	bool isValid();
+
+	std::string toString();
+
 	bool operator ==(const Coordinate& other) const;
 	bool operator !=(const Coordinate& other) const;
 };

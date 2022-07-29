@@ -1786,5 +1786,22 @@ namespace ChessTest
 
 			board.clearBoard();
 		}
+		TEST_METHOD(cannotExecuteMoveIfInCheckAfterTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			ChessPiece wk = ChessPiece(PieceType::King, ChessColor::White);
+			ChessPiece bq = ChessPiece(PieceType::Queen, ChessColor::Black);
+
+			board.setPieceAt(&wk, &Coordinate('a', 1));
+			board.setPieceAt(&bq, &Coordinate('a', 8));
+			
+			Move move = Move(&Coordinate('a', 1), &Coordinate('b', 1));
+
+			ChessColor white = ChessColor::White;
+
+			Assert::IsFalse(board.isInCheck(&white, &move));
+		}
 	};
 }

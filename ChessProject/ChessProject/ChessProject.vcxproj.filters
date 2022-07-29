@@ -13,81 +13,132 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Headerdateien\board">
+      <UniqueIdentifier>{803b0d4c-70bc-487b-bf01-a1e67a7c8603}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\raycast">
+      <UniqueIdentifier>{2dab4876-3d85-4d46-b2c9-86a148a79fe8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\moves">
+      <UniqueIdentifier>{5dcd9a0e-6a39-4865-ac14-4623ab4941a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\other">
+      <UniqueIdentifier>{e1485371-186e-4734-9f9f-d63fc60b283f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\board">
+      <UniqueIdentifier>{318edb90-4aa1-4f18-b8a6-f9d7a054f0db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\moves">
+      <UniqueIdentifier>{79266345-d569-4d8e-85b0-8139214f1f99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\raycast">
+      <UniqueIdentifier>{3f2115f9-c0d3-443b-9ef4-0a393bccfae5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\small_data">
+      <UniqueIdentifier>{75461b60-7dfc-4263-a3ea-a382d00fe93d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\small_data">
+      <UniqueIdentifier>{f3ddf847-e8a3-4951-8a05-2ef30e28c342}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\game">
+      <UniqueIdentifier>{f0a8d903-3ba0-4c96-954f-da4ea6412a43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\game">
+      <UniqueIdentifier>{9a5d2b62-2012-4094-9eb9-d3765557f7b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headerdateien\game\player">
+      <UniqueIdentifier>{7553d6f0-6569-4237-b3d5-272d389e0563}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Quelldateien\game\player">
+      <UniqueIdentifier>{da02f24f-333d-47cf-9dbf-dfab95c4dece}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChessProject.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="ChessPiece.cpp">
-      <Filter>Quelldateien</Filter>
+    <ClCompile Include="ChessBoardTest.cpp">
+      <Filter>Quelldateien\board</Filter>
     </ClCompile>
     <ClCompile Include="ChessBoard.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="MetaData.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="ChessBoardTest.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Move.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="Coordinate.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="RayCastOptions.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="RayCastResult.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="MovePawnPromotion.cpp">
-      <Filter>Quelldateien</Filter>
-    </ClCompile>
-    <ClCompile Include="MoveCastle.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\board</Filter>
     </ClCompile>
     <ClCompile Include="MoveEnPassant.cpp">
-      <Filter>Quelldateien</Filter>
+      <Filter>Quelldateien\moves</Filter>
+    </ClCompile>
+    <ClCompile Include="Move.cpp">
+      <Filter>Quelldateien\moves</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveCastle.cpp">
+      <Filter>Quelldateien\moves</Filter>
+    </ClCompile>
+    <ClCompile Include="MovePawnPromotion.cpp">
+      <Filter>Quelldateien\moves</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessPiece.cpp">
+      <Filter>Quelldateien\small_data</Filter>
+    </ClCompile>
+    <ClCompile Include="MetaData.cpp">
+      <Filter>Quelldateien\small_data</Filter>
+    </ClCompile>
+    <ClCompile Include="Coordinate.cpp">
+      <Filter>Quelldateien\small_data</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCastOptions.cpp">
+      <Filter>Quelldateien\raycast</Filter>
+    </ClCompile>
+    <ClCompile Include="RayCastResult.cpp">
+      <Filter>Quelldateien\raycast</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessProject.cpp">
+      <Filter>Quelldateien\game</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Quelldateien\game</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Quelldateien\game\player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ChessPiece.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="ChessBoardTest.h">
+      <Filter>Headerdateien\board</Filter>
     </ClInclude>
     <ClInclude Include="ChessBoard.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="MetaData.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="ChessBoardTest.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Move.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="Coordinate.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
-    <ClInclude Include="RayCastOptions.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\board</Filter>
     </ClInclude>
     <ClInclude Include="RayCastResult.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\raycast</Filter>
     </ClInclude>
-    <ClInclude Include="MovePawnPromotion.h">
-      <Filter>Headerdateien</Filter>
+    <ClInclude Include="RayCastOptions.h">
+      <Filter>Headerdateien\raycast</Filter>
+    </ClInclude>
+    <ClInclude Include="MetaData.h">
+      <Filter>Headerdateien\small_data</Filter>
+    </ClInclude>
+    <ClInclude Include="Coordinate.h">
+      <Filter>Headerdateien\small_data</Filter>
+    </ClInclude>
+    <ClInclude Include="ChessPiece.h">
+      <Filter>Headerdateien\small_data</Filter>
+    </ClInclude>
+    <ClInclude Include="Move.h">
+      <Filter>Headerdateien\moves</Filter>
     </ClInclude>
     <ClInclude Include="MoveCastle.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\moves</Filter>
+    </ClInclude>
+    <ClInclude Include="MovePawnPromotion.h">
+      <Filter>Headerdateien\moves</Filter>
     </ClInclude>
     <ClInclude Include="MoveEnPassant.h">
-      <Filter>Headerdateien</Filter>
+      <Filter>Headerdateien\moves</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Headerdateien\other</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Headerdateien\game</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Headerdateien\game\player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -46,6 +46,14 @@ bool Coordinate::isValid()
 		rank < BOARD_SIZE && rank >= 0;
 }
 
+std::string Coordinate::toString()
+{
+	std::string retVal = std::to_string(getFileNormal());
+	retVal += std::to_string((int)getRankNormal());
+
+	return retVal;
+}
+
 bool Coordinate::operator ==(const Coordinate& other) const
 {
 	return other.rank == rank && other.file == file;

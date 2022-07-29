@@ -19,7 +19,7 @@ public:
 	//get all possible moves that can be made
 	std::vector<Move*> getAllMoves(ChessColor* color);
 
-	std::string toString();
+	std::string toString(ChessColor color);
 protected:
 	ChessPiece board[BOARD_SIZE][BOARD_SIZE];
 	Move lastMove;

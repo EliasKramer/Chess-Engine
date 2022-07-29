@@ -38,7 +38,13 @@ std::vector<Move*> ChessBoard::getAllMoves(ChessColor* color)
 
 				for (Move* currentMove : appendingMoves)
 				{
-					resultList.push_back(currentMove);
+					if (!isInCheck(color, currentMove))
+					{
+						resultList.push_back(currentMove);
+					}
+					else {
+						delete currentMove;
+					}
 				}
 			}
 		}
@@ -46,12 +52,25 @@ std::vector<Move*> ChessBoard::getAllMoves(ChessColor* color)
 	return resultList;
 }
 
-std::string ChessBoard::toString()
+std::string ChessBoard::toString(ChessColor color)
 {
 	std::string result = "";
-	for (int file = 0; file < BOARD_SIZE; file++)
+
+	bool isWhite = color == ChessColor::White;
+
+	int rank = isWhite ? BOARD_SIZE-1 : 0;
+	int rankMax = isWhite ? 0 : BOARD_SIZE;
+
+	result +=
+		"  |  A |  B |  C |  D |  E |  F |  G |  H |";
+	result+=
+		"\n-------------------------------------------\n";
+
+	while(isWhite ? (rank >= rankMax) : (rank < rankMax))
 	{
-		for (int rank = 0; rank < BOARD_SIZE; rank++)
+		result += std::to_string(rank+1);
+		result += " | ";
+		for (int file = 0; file < BOARD_SIZE; file++)
 		{
 			ChessColor col = board[file][rank].getColor();
 			PieceType type = board[file][rank].getType();
@@ -60,7 +79,11 @@ std::string ChessBoard::toString()
 			std::string typeString = getShortNameOfChessType(&type);
 			result += colorString + typeString + " | ";
 		}
-		result += "\n---------------------\n";
+
+		result +=
+			"\n-------------------------------------------\n";
+		
+		isWhite ? rank-- : rank ++;
 	}
 	return result;
 }
@@ -269,10 +292,11 @@ bool ChessBoard::fieldIsUnderAttack(Coordinate* coord, ChessColor* color)
 	return fieldIsUnderAttack(coord, color, &m);
 }
 
-bool ChessBoard::fieldIsUnderAttack(Coordinate* coord, ChessColor* color, Move* madeMove)
+bool ChessBoard::fieldIsUnderAttack(
+	Coordinate* coord,
+	ChessColor* color,
+	Move* madeMove)
 {
-	bool pawnAttacksThisField = fieldGetsAttackedByPawn(coord, color, madeMove);
-
 	RayCastOptions options = RayCastOptions(
 		coord,
 		false,
@@ -280,8 +304,17 @@ bool ChessBoard::fieldIsUnderAttack(Coordinate* coord, ChessColor* color, Move* 
 
 	if (madeMove->isValid())
 	{
-		options.setImaginaryMove(madeMove);
+		if (*coord == madeMove->getStart())
+		{
+			Coordinate destination = madeMove->getDestination();
+			options.setStart(&destination);
+		}
+		else {
+			options.setImaginaryMove(madeMove);
+		}
 	}
+
+	bool pawnAttacksThisField = fieldGetsAttackedByPawn(coord, color, madeMove);
 
 	RayCastResult raycastResult = RayCastResult();
 

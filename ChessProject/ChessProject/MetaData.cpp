@@ -37,7 +37,7 @@ std::string getShortNameOfChessType(PieceType* type)
 	case PieceType::Pawn:
 		return "P";
 	default:
-		return "NoType";
+		return " ";
 	}
 }
 std::string getLongNameOfChessColor(ChessColor* color)
@@ -61,7 +61,7 @@ std::string getShortNameOfChessColor(ChessColor* color)
 	case ChessColor::Black:
 		return "B";
 	default:
-		return "NoColor";
+		return " ";
 	}
 }
 
