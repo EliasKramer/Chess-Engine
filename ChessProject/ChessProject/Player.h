@@ -5,6 +5,6 @@ class Player
 {
 public:
 	Player();
-	virtual Move getNextMove(std::vector<Move*> possibleMoves);
+	virtual Move* getNextMove(std::vector<Move*> possibleMoves);
 };
 

@@ -1,5 +1,4 @@
 #include "MoveEnPassant.h"
-
 MoveEnPassant::MoveEnPassant() : Move()
 {}
 

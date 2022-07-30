@@ -1803,5 +1803,64 @@ namespace ChessTest
 
 			Assert::IsFalse(board.isInCheck(&white, &move));
 		}
+		TEST_METHOD(playEnPassantGame)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			//w
+			board.executeMove(&Move(&Coordinate('e', 2), &Coordinate('e', 4)));
+			//b
+			board.executeMove(&Move(&Coordinate('d', 7), &Coordinate('d', 5)));
+			//w
+			board.executeMove(&Move(&Coordinate('e', 4), &Coordinate('d', 5)));
+			//b
+			board.executeMove(&Move(&Coordinate('e', 7), &Coordinate('e', 5)));
+			//w
+			ChessColor white = ChessColor::White;
+			
+			bool foundMove = false;
+			for (Move* move : board.getAllMoves(&white))
+			{
+				if (move->getStart().toString() == "d5" &&
+					move->getDestination().toString() == "e6")
+				{
+					foundMove = true;
+					board.executeMove(move);
+					break;
+				}
+			}
+			Assert::IsTrue(foundMove);
+			Assert::IsTrue(ChessPiece() == board.getAtPosition(&Coordinate('e', 5)));
+		}
+		TEST_METHOD(kingUnderAttackCannotMoveBackIfAttackedOnFrontTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			ChessPiece wk = ChessPiece(PieceType::King, ChessColor::White);
+			ChessPiece br = ChessPiece(PieceType::Rook, ChessColor::Black);
+
+			board.setPieceAt(&wk, &Coordinate('e', 2));
+			board.setPieceAt(&br, &Coordinate('e', 6));
+
+			ChessColor white = ChessColor::White;
+			Move move = Move(&Coordinate('e', 2), &Coordinate('e', 1));
+			Assert::IsFalse(containsMove(board.getAllMoves(&white), &move));
+		}
+		TEST_METHOD(kindUnderAttackFromPawnCanMoveAway)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			ChessPiece wk = ChessPiece(PieceType::King, ChessColor::White);
+			ChessPiece bp = ChessPiece(PieceType::Pawn, ChessColor::Black);
+
+			board.setPieceAt(&wk, &Coordinate('e', 1));
+			board.setPieceAt(&bp, &Coordinate('f', 2));
+
+			ChessColor white = ChessColor::White;
+			Move move = Move(&Coordinate('e', 1), &Coordinate('d', 2));
+			Assert::AreEqual(5, (int)board.getAllMoves(&white).size());
+			Assert::IsTrue(containsMove(board.getAllMoves(&white), &move));
+		}
 	};
 }

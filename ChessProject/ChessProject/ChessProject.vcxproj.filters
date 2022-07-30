@@ -96,6 +96,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>Quelldateien\game\player</Filter>
     </ClCompile>
+    <ClCompile Include="HumanPlayer.cpp">
+      <Filter>Quelldateien\game\player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChessBoardTest.h">
@@ -138,6 +141,9 @@
       <Filter>Headerdateien\game</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Headerdateien\game\player</Filter>
+    </ClInclude>
+    <ClInclude Include="HumanPlayer.h">
       <Filter>Headerdateien\game\player</Filter>
     </ClInclude>
   </ItemGroup>

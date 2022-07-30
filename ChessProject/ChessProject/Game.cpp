@@ -16,23 +16,28 @@ void Game::start()
 	bool gameOver = false;
 	int iterationCount = 0;
 
+	ChessColor white = ChessColor::White;
+	ChessColor black = ChessColor::Black;
+
 	while (!gameOver)
 	{
 		std::cout << board.toString(ChessColor::White);
 
 		std::cout << "White's turn" << std::endl;
+		
+		board.executeMove(playerWhite->getNextMove(board.getAllMoves(&white)));
 		//playerWhite->makeMove(board);
 		
 		std::cout << board.toString(ChessColor::Black);
 
 		std::cout << "Black's turn" << std::endl;
-		//playerBlack->makeMove(board);
-		
+		board.executeMove(playerWhite->getNextMove(board.getAllMoves(&black)));
+
 		//board.print();
 		
 		//gameOver = board.isGameOver();
 		iterationCount++;
 
-		gameOver = iterationCount >= 1;
+		gameOver = iterationCount >= 15;
 	}
 }

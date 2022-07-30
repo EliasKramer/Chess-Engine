@@ -29,11 +29,6 @@ void ChessBoardTest::clearBoard()
 	}
 }
 
-void ChessBoardTest::executeMove(Move* givenMove)
-{
-	ChessBoard::executeMove(givenMove);
-}
-
 void ChessBoardTest::setLastMove(Move* move)
 {
 	ChessBoard::setLastMove(move);

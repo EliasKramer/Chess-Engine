@@ -20,6 +20,9 @@ public:
 	std::vector<Move*> getAllMoves(ChessColor* color);
 
 	std::string toString(ChessColor color);
+
+	void executeMove(Move* givenMove);
+
 protected:
 	ChessPiece board[BOARD_SIZE][BOARD_SIZE];
 	Move lastMove;
@@ -34,8 +37,6 @@ protected:
 	void setPieceAt(ChessPiece* piece, Coordinate* coord);
 
 	Coordinate searchForPiece(ChessPiece* piece);
-
-	void executeMove(Move* givenMove);
 	
 	std::vector<Move*> getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord);
 	

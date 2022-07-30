@@ -48,7 +48,7 @@ bool Coordinate::isValid()
 
 std::string Coordinate::toString()
 {
-	std::string retVal = std::to_string(getFileNormal());
+	std::string retVal(1,getFileNormal());
 	retVal += std::to_string((int)getRankNormal());
 
 	return retVal;

@@ -2,10 +2,11 @@
 //
 #include "game.h"
 #include "Player.h"
+#include "HumanPlayer.h"
 int main()
 {
 	Game currentGame = Game(
-		std::make_unique<Player>(),
-		std::make_unique<Player>());
+		std::make_unique<HumanPlayer>(),
+		std::make_unique<HumanPlayer>());
 		currentGame.start();
 }

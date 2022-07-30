@@ -58,17 +58,17 @@ std::string ChessBoard::toString(ChessColor color)
 
 	bool isWhite = color == ChessColor::White;
 
-	int rank = isWhite ? BOARD_SIZE-1 : 0;
+	int rank = isWhite ? BOARD_SIZE - 1 : 0;
 	int rankMax = isWhite ? 0 : BOARD_SIZE;
 
 	result +=
 		"  |  A |  B |  C |  D |  E |  F |  G |  H |";
-	result+=
+	result +=
 		"\n-------------------------------------------\n";
 
-	while(isWhite ? (rank >= rankMax) : (rank < rankMax))
+	while (isWhite ? (rank >= rankMax) : (rank < rankMax))
 	{
-		result += std::to_string(rank+1);
+		result += std::to_string(rank + 1);
 		result += " | ";
 		for (int file = 0; file < BOARD_SIZE; file++)
 		{
@@ -82,8 +82,8 @@ std::string ChessBoard::toString(ChessColor color)
 
 		result +=
 			"\n-------------------------------------------\n";
-		
-		isWhite ? rank-- : rank ++;
+
+		isWhite ? rank-- : rank++;
 	}
 	return result;
 }
@@ -179,6 +179,9 @@ void ChessBoard::executeMove(Move* givenMove)
 		[this](ChessPiece* piece, Coordinate* coord) { return setPieceAt(piece, coord); };
 
 	givenMove->execute(getAtPos, setAtPos);
+
+	setLastMove(givenMove);
+	updateCastlingAbility(givenMove);
 }
 
 std::vector<Move*> ChessBoard::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
@@ -307,11 +310,11 @@ bool ChessBoard::fieldIsUnderAttack(
 		if (*coord == madeMove->getStart())
 		{
 			Coordinate destination = madeMove->getDestination();
+			//for pawnattacksfield later
+			*coord = destination;
 			options.setStart(&destination);
 		}
-		else {
-			options.setImaginaryMove(madeMove);
-		}
+		options.setImaginaryMove(madeMove);
 	}
 
 	bool pawnAttacksThisField = fieldGetsAttackedByPawn(coord, color, madeMove);
@@ -677,7 +680,7 @@ void ChessBoard::addCastleMovesIfPossibleForColor(
 				!getAtPosition(&longCastleThree).isValid())
 			{
 				Move secondMove = Move(&Coordinate('a', rank), &Coordinate('d', rank));
-				Move* moveToAdd = 
+				Move* moveToAdd =
 					new MoveCastle(&kingCoord, &longCastleTwo, secondMove);
 				moves.push_back(moveToAdd);
 			}
@@ -810,7 +813,7 @@ std::vector<Move*> ChessBoard::getAllPawnMoves(ChessColor* color, Coordinate* co
 						if (lastMoveIfWantToEnPassant == getLastMove())
 						{
 							//the en passant move is possible
-							Move* move = 
+							Move* move =
 								new MoveEnPassant(coord, &targetPos, posOfPieceToTake);
 							retVal.push_back(move);
 						}

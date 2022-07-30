@@ -145,6 +145,7 @@
     <ClCompile Include="ChessProject.cpp" />
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HumanPlayer.cpp" />
     <ClCompile Include="MetaData.cpp" />
     <ClCompile Include="Move.cpp" />
     <ClCompile Include="MoveCastle.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="ChessPiece.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="MetaData.h" />
     <ClInclude Include="Move.h" />
     <ClInclude Include="MoveCastle.h" />
