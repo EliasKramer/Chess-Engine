@@ -5,7 +5,6 @@ class ChessPiece
 private:
 	PieceType type;
 	ChessColor color;
-	bool exists;
 public:
 	ChessPiece(PieceType givenType, ChessColor givenColor);
 	ChessPiece();

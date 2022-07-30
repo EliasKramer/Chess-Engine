@@ -1,28 +1,26 @@
 #include "RayCastResult.h"
 #include <vector>
 
-RayCastResult::RayCastResult()
-{
-	_rayCastMoves = std::vector<Move*>();
-}
+RayCastResult::RayCastResult() :
+	_rayCastMoves(std::vector<Move*>())
+{}
 
-RayCastResult::RayCastResult(std::vector<Move*> rayCastMoves)
-{
-	_rayCastMoves = rayCastMoves;
-}
+RayCastResult::RayCastResult(std::vector<Move*> rayCastMoves):
+	_rayCastMoves(rayCastMoves)
+{}
 
 void RayCastResult::calculateIfIsUnderAttack(
-	PieceType* type,
+	PieceType type,
 	std::function<ChessPiece(Coordinate*, Move*)> getPieceAt,
-	Move* imaginaryMove)
+	Move imaginaryMove)
 {
 	for (Move* move : _rayCastMoves)
 	{
 		if (move->isValid())
 		{
 			Coordinate dest = move->getDestination();
-			ChessPiece p = getPieceAt(&dest, imaginaryMove);
-			if (p.getType() == *type)
+			ChessPiece p = getPieceAt(&dest, &imaginaryMove);
+			if (p.getType() == type)
 			{
 				_isUnderAttack = true;
 			}

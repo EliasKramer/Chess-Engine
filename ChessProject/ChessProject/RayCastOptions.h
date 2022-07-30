@@ -19,15 +19,15 @@ public:
 	RayCastOptions();
 	
 	RayCastOptions(
-		Coordinate* start,
+		Coordinate start,
 		bool needsMoveList,
-		ChessColor* color);
+		ChessColor color);
 
 	RayCastOptions(
-		Coordinate* start,
+		Coordinate start,
 		short maxIterations,
 		bool needsMoveList,
-		ChessColor* color);
+		ChessColor color);
 	
 	Coordinate getOrigin();
 	short getMaxIterations();
@@ -35,9 +35,9 @@ public:
 	ChessColor getColor();
 	Move getImaginaryMove();
 	
-	void setStart(Coordinate* val);
+	void setStart(Coordinate val);
 	void setMaxIterations(short val);
 	void setNeedsMoveList(bool val);
-	void setColor(ChessColor* val);
-	void setImaginaryMove(Move* val);
+	void setColor(ChessColor val);
+	void setImaginaryMove(Move val);
 };

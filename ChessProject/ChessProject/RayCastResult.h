@@ -17,9 +17,9 @@ public:
 	RayCastResult(std::vector<Move*> rayCastMoves);
 
 	void calculateIfIsUnderAttack(
-		PieceType* type,
+		PieceType type,
 		std::function<ChessPiece(Coordinate*, Move*)> getPieceAt,
-		Move* move);
+		Move move);
 	
 	// you have to caluclate if it is under attack before.
 	bool originPieceIsUnderAttack();

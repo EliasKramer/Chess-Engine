@@ -25,13 +25,13 @@ void Game::start()
 
 		std::cout << "White's turn" << std::endl;
 		
-		board.executeMove(playerWhite->getNextMove(board.getAllMoves(&white)));
+		board.executeMove(playerWhite->getNextMove(board.getAllMoves(white)));
 		//playerWhite->makeMove(board);
 		
 		std::cout << board.toString(ChessColor::Black);
 
 		std::cout << "Black's turn" << std::endl;
-		board.executeMove(playerWhite->getNextMove(board.getAllMoves(&black)));
+		board.executeMove(playerWhite->getNextMove(board.getAllMoves(black)));
 
 		//board.print();
 		

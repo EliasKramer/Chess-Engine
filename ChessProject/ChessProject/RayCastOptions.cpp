@@ -1,36 +1,35 @@
 #include "RayCastOptions.h"
 
-RayCastOptions::RayCastOptions()
-{
-	_maxIterations = -1;
-	_needsMoveList = false;
-	_color = ChessColor::NoColor;
-	_imaginaryMove = Move();
-}
+RayCastOptions::RayCastOptions() :
+	_maxIterations(-1),
+	_needsMoveList(false),
+	_color(ChessColor::NoColor),
+	_imaginaryMove(Move())
+{}
 
 RayCastOptions::RayCastOptions(
-	Coordinate* start,
+	Coordinate start,
 	bool needsMoveList,
-	ChessColor* color)
+	ChessColor color)
 	
 	: RayCastOptions(start, -1, needsMoveList, color)
 {}
 
 RayCastOptions::RayCastOptions(
-	Coordinate* start,
+	Coordinate start,
 	short maxIterations,
 	bool needsMoveList,
-	ChessColor* color)
+	ChessColor color) :
+	_origin(start),
+	_maxIterations(maxIterations),
+	_needsMoveList(needsMoveList),
+	_color(color),
+	_imaginaryMove(Move())
 {
-	_origin = *start;
 	if (maxIterations <= 0)
 	{
 		maxIterations = -1;
 	}
-	_maxIterations = maxIterations;
-	_needsMoveList = needsMoveList;
-	_color = *color;
-	_imaginaryMove = Move();
 }
 
 Coordinate RayCastOptions::getOrigin()
@@ -58,9 +57,9 @@ Move RayCastOptions::getImaginaryMove()
 	return _imaginaryMove;
 }
 
-void RayCastOptions::setStart(Coordinate* val)
+void RayCastOptions::setStart(Coordinate val)
 {
-	_origin = *val;
+	_origin = val;
 }
 
 void RayCastOptions::setMaxIterations(short val)
@@ -73,12 +72,12 @@ void RayCastOptions::setNeedsMoveList(bool val)
 	_needsMoveList = val;
 }
 
-void RayCastOptions::setColor(ChessColor* val)
+void RayCastOptions::setColor(ChessColor val)
 {
-	_color = *val;
+	_color = val;
 }
 
-void RayCastOptions::setImaginaryMove(Move* val)
+void RayCastOptions::setImaginaryMove(Move val)
 {
-	_imaginaryMove = *val;
+	_imaginaryMove = val;
 }

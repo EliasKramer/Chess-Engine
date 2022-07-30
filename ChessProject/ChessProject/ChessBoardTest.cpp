@@ -1,6 +1,6 @@
 #include "ChessBoardTest.h"
 
-void ChessBoardTest::setPieceAt(ChessPiece* piece, Coordinate* coord)
+void ChessBoardTest::setPieceAt(ChessPiece piece, Coordinate coord)
 {
 	ChessBoard::setPieceAt(piece, coord);
 }
@@ -39,11 +39,11 @@ Move ChessBoardTest::getLastMove()
 	return ChessBoard::getLastMove();
 }
 
-std::vector<Move*> ChessBoardTest::getAllMovesOfPiece(ChessPiece* piece, Coordinate* coord)
+std::vector<Move*> ChessBoardTest::getAllMovesOfPiece(ChessPiece piece, Coordinate coord)
 {
 	return ChessBoard::getAllMovesOfPiece(piece, coord);
 }
-RayCastResult ChessBoardTest::executeSingleRayCast(RayCastOptions* options, short fileAddingVal, short rankAddingVal)
+RayCastResult ChessBoardTest::executeSingleRayCast(RayCastOptions& options, short fileAddingVal, short rankAddingVal)
 {
 	return ChessBoard::executeSingleRayCast(options, fileAddingVal, rankAddingVal);
 }
@@ -52,29 +52,29 @@ ChessPiece ChessBoardTest::getAtPostitionWithMoveDone(Coordinate* coord, Move* m
 	return ChessBoard::getAtPostitionWithMoveDone(coord, move);
 }
 RayCastResult ChessBoardTest::executeRayCast(
-	PieceType* type,
-	RayCastOptions* options,
+	PieceType type,
+	RayCastOptions& options,
 	bool shouldCalculateIfItIsUnderAttack)
 {
 	return ChessBoard::executeRayCast(type, options, shouldCalculateIfItIsUnderAttack);
 }
 
-bool ChessBoardTest::fieldIsUnderAttack(Coordinate* coord, ChessColor* color)
+bool ChessBoardTest::fieldIsUnderAttack(Coordinate coord, ChessColor color)
 {
 	return ChessBoard::fieldIsUnderAttack(coord, color);
 }
 
-Coordinate ChessBoardTest::searchForPiece(ChessPiece* piece)
+Coordinate ChessBoardTest::searchForPiece(ChessPiece piece)
 {
 	return ChessBoard::searchForPiece(piece);
 }
 
-bool ChessBoardTest::isInCheck(ChessColor* col)
+bool ChessBoardTest::isInCheck(ChessColor col)
 {
 	return ChessBoard::isInCheck(col);
 }
 
-bool ChessBoardTest::isInCheck(ChessColor* col, Move* move)
+bool ChessBoardTest::isInCheck(ChessColor col, Move move)
 {
 	return ChessBoard::isInCheck(col, move);
 }
@@ -100,7 +100,7 @@ void ChessBoardTest::setCanCastleAll(bool value)
 	}
 }
 
-void ChessBoardTest::updateCastlingAbility(Move* move)
+void ChessBoardTest::updateCastlingAbility(Move move)
 {
 	ChessBoard::updateCastlingAbility(move);
 }

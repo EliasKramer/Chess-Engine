@@ -1,18 +1,14 @@
 #include "Move.h"
 
-Move::Move()
-{
-	start = Coordinate();
-	destination = Coordinate();
-}
+Move::Move()	
+{}
 
 Move::Move(
-	Coordinate* givenStart,
-	Coordinate* givenDestination)
-{
-	start = *givenStart;
-	destination = *givenDestination;
-}
+	Coordinate givenStart,
+	Coordinate givenDestination) :
+	start(givenStart),
+	destination(givenDestination)
+{}
 
 Move::~Move()
 {
@@ -37,15 +33,15 @@ bool Move::isValid()
 }
 
 void Move::execute(
-	std::function<ChessPiece(Coordinate*)> getAtPosition,
-	std::function<void(ChessPiece*, Coordinate*)> setPieceAt)
+	std::function<ChessPiece(Coordinate)> getAtPosition,
+	std::function<void(ChessPiece, Coordinate)> setPieceAt)
 {
-	ChessPiece startPiece = getAtPosition(&start);
+	ChessPiece startPiece = getAtPosition(start);
 	ChessPiece emptyPiece = ChessPiece();
 	if (isValid())
 	{
-		setPieceAt(&emptyPiece, &start);
-		setPieceAt(&startPiece, &destination);
+		setPieceAt(emptyPiece, start);
+		setPieceAt(startPiece, destination);
 	}
 }
 
