@@ -29,4 +29,5 @@ public:
 	bool getCanCastle(ChessColor col, CastleType cType);
 	void setCanCastleAll(bool value);
 	void updateCastlingAbility(Move move);
+	ChessBoardTest getCopy();
 };

@@ -104,6 +104,9 @@ private:
 	//all the moves that can be made by a pawn
 	std::vector<Move*> getAllPawnMoves(ChessColor color, Coordinate coord);
 
+	//add all types of promotion moves
+	void addPromotionMoves(Coordinate start, Coordinate dest, std::vector<Move*>& moves);
+
 	//all the fields that a pawn can attack.
 	//not including en passant moves, since this is only used for checking if
 	//a king is under check or can castle

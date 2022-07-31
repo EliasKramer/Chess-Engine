@@ -7,4 +7,3 @@ public:
 	Player();
 	virtual Move* getNextMove(std::vector<Move*> possibleMoves);
 };
-

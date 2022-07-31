@@ -65,6 +65,19 @@ std::string getShortNameOfChessColor(ChessColor* color)
 	}
 }
 
+ChessColor getOppositeColor(ChessColor color)
+{
+	if (color == ChessColor::NoColor)
+	{
+		return ChessColor::NoColor;
+	}
+	else {
+		return color == ChessColor::White ? 
+			ChessColor::Black : 
+			ChessColor::White;
+	}
+}
+
 unsigned short getValueOfType(PieceType* type)
 {
 	switch (*type)

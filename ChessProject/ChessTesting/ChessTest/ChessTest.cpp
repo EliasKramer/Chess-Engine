@@ -1858,7 +1858,7 @@ namespace ChessTest
 			Move move = Move(Coordinate('e', 2), Coordinate('e', 1));
 			Assert::IsFalse(containsMove(board.getAllMoves(white), &move));
 		}
-		TEST_METHOD(kindUnderAttackFromPawnCanMoveAway)
+		TEST_METHOD(kingUnderAttackFromPawnCanMoveAwayTest)
 		{
 			ChessBoardTest board = ChessBoardTest();
 			board.clearBoard();
@@ -1873,6 +1873,27 @@ namespace ChessTest
 			Move move = Move(Coordinate('e', 1), Coordinate('d', 2));
 			Assert::AreEqual(5, (int)board.getAllMoves(white).size());
 			Assert::IsTrue(containsMove(board.getAllMoves(white), &move));
+		}
+		TEST_METHOD(pawnPromotesOnForwardMoveAndOnTakingAPieceTest)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			board.clearBoard();
+
+			board.setPieceAt(ChessPiece(PieceType::Pawn, ChessColor::White), Coordinate('a', 7));
+			board.setPieceAt(ChessPiece(PieceType::Rook, ChessColor::Black), Coordinate('b', 8));
+			
+			std::vector<Move*> moves = board.getAllMoves(ChessColor::White);
+
+			Assert::AreEqual(8, (int)board.getAllMoves(ChessColor::White).size());
+		}
+		TEST_METHOD(recursivelyTestingAmountOfMoves)
+		{
+			ChessBoardTest board = ChessBoardTest();
+			Assert::AreEqual(20, getRecursivelyAllMovesForBoard(1, ChessColor::White, board));
+			Assert::AreEqual(400, getRecursivelyAllMovesForBoard(2, ChessColor::White, board));
+			Assert::AreEqual(8902, getRecursivelyAllMovesForBoard(3, ChessColor::White, board));
+			//Assert::AreEqual(197281, getRecursivelyAllMovesForBoard(4, ChessColor::White, board));
+			//Assert::AreEqual(4865609, getRecursivelyAllMovesForBoard(5, ChessColor::White, board));
 		}
 	};
 }

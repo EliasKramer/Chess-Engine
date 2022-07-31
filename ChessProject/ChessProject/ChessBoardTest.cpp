@@ -104,3 +104,19 @@ void ChessBoardTest::updateCastlingAbility(Move move)
 {
 	ChessBoard::updateCastlingAbility(move);
 }
+
+ChessBoardTest ChessBoardTest::getCopy()
+{
+	ChessBoardTest retVal = ChessBoardTest();
+
+	for (int file = 0; file < BOARD_SIZE; file++)
+	{
+		for (int rank = 0; rank < BOARD_SIZE; rank++)
+		{
+			retVal.setPieceAt(
+				board[file][rank],
+				Coordinate((short)file, (short)rank));
+		}
+	}
+	return retVal;
+}

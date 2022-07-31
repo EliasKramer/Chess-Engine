@@ -21,6 +21,13 @@ enum CastleType
 	Short,
 	Long
 };
+enum GameState
+{
+	Continuing,
+	Checkmate,
+	Stalemate
+};
+
 
 const int BOARD_SIZE = 8;
 
@@ -29,5 +36,7 @@ std::string getShortNameOfChessType(PieceType* type);
 
 std::string getLongNameOfChessColor(ChessColor* color);
 std::string getShortNameOfChessColor(ChessColor* color);
+
+ChessColor getOppositeColor(ChessColor color);
 
 unsigned short getValueOfType(PieceType* type);

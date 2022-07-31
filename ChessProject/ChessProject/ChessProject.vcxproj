@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\ChessTesting\ChessTest\TestMethods.cpp" />
     <ClCompile Include="ChessBoard.cpp" />
     <ClCompile Include="ChessBoardTest.cpp" />
     <ClCompile Include="ChessPiece.cpp" />
@@ -156,6 +157,7 @@
     <ClCompile Include="RayCastResult.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ChessTesting\ChessTest\TestMethods.h" />
     <ClInclude Include="ChessBoard.h" />
     <ClInclude Include="ChessBoardTest.h" />
     <ClInclude Include="ChessPiece.h" />

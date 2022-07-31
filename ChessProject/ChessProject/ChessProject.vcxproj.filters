@@ -99,6 +99,9 @@
     <ClCompile Include="HumanPlayer.cpp">
       <Filter>Quelldateien\game\player</Filter>
     </ClCompile>
+    <ClCompile Include="..\ChessTesting\ChessTest\TestMethods.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChessBoardTest.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="HumanPlayer.h">
       <Filter>Headerdateien\game\player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChessTesting\ChessTest\TestMethods.h">
+      <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

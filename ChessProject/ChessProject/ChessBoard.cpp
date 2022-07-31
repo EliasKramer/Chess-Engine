@@ -186,28 +186,35 @@ void ChessBoard::executeMove(Move* givenMove)
 
 std::vector<Move*> ChessBoard::getAllMovesOfPiece(ChessPiece piece, Coordinate coord)
 {
-	ChessColor col = piece.getColor();
-	PieceType type = piece.getType();
-	RayCastOptions options = RayCastOptions(
-		coord,
-		true,
-		col);
+	if (piece.isValid())
+	{
 
-	if (type == PieceType::Pawn)
-	{
-		return getAllPawnMoves(col, coord);
+		ChessColor col = piece.getColor();
+		PieceType type = piece.getType();
+		RayCastOptions options = RayCastOptions(
+			coord,
+			true,
+			col);
+
+		if (type == PieceType::Pawn)
+		{
+			return getAllPawnMoves(col, coord);
+		}
+		else if (type == PieceType::King)
+		{
+			//add all normal moves of a king
+			std::vector<Move*> retVal = executeRayCast(type, options, false).getRayCastMoves();
+			//add some moves if the king can castle
+			addCastleMovesIfPossibleForColor(col, retVal);
+			return retVal;
+		}
+		else
+		{
+			return executeRayCast(type, options, false).getRayCastMoves();
+		}
 	}
-	else if (type == PieceType::King)
-	{
-		//add all normal moves of a king
-		std::vector<Move*> retVal = executeRayCast(type, options, false).getRayCastMoves();
-		//add some moves if the king can castle
-		addCastleMovesIfPossibleForColor(col, retVal);
-		return retVal;
-	}
-	else
-	{
-		return executeRayCast(type, options, false).getRayCastMoves();
+	else {
+		return std::vector<Move*>();
 	}
 }
 
@@ -340,7 +347,16 @@ bool ChessBoard::isInCheck(ChessColor col, Move madeMove)
 {
 	ChessPiece kingToSearch(PieceType::King, col);
 	Coordinate kingCoord = searchForPiece(kingToSearch);
-	return fieldIsUnderAttack(kingCoord, col, madeMove);
+
+	if (kingCoord == Coordinate())
+	{
+		//in test cases there is often no king on the board.
+		return false;
+	}
+	else
+	{
+		return fieldIsUnderAttack(kingCoord, col, madeMove);
+	}
 }
 
 void ChessBoard::initBoard()
@@ -739,17 +755,11 @@ std::vector<Move*> ChessBoard::getAllPawnMoves(ChessColor color, Coordinate coor
 				//no need going forward another time, if path is blocked
 				break;
 			}
-			else if (rankAdding == 1 &&
-				currPosToCheck.getRankAsPosition() == rankForPromotion)
+			else if (
+				rankAdding == 1 &&
+				currPosToCheck.getRankNormal() == rankForPromotion)
 			{
-				retVal.push_back(
-					new MovePawnPromotion(coord, currPosToCheck, PieceType::Queen));
-				retVal.push_back(
-					new MovePawnPromotion(coord, currPosToCheck, PieceType::Rook));
-				retVal.push_back(
-					new MovePawnPromotion(coord, currPosToCheck, PieceType::Bishop));
-				retVal.push_back(
-					new MovePawnPromotion(coord, currPosToCheck, PieceType::Knight));
+				addPromotionMoves(coord, currPosToCheck, retVal);
 			}
 			else
 			{
@@ -783,9 +793,15 @@ std::vector<Move*> ChessBoard::getAllPawnMoves(ChessColor color, Coordinate coor
 				//if the piece is of the opposite color
 				if (pieceAtNewPos.getColor() != color)
 				{
-					//the move is valid and can be done
-					Move* move = new Move(coord, targetPos);
-					retVal.push_back(move);
+					if (targetPos.getRankNormal() == rankForPromotion)
+					{
+						addPromotionMoves(coord, targetPos, retVal);
+					}
+					else
+					{
+						Move* move = new Move(coord, targetPos);
+						retVal.push_back(move);
+					}
 				}
 			}
 			//if one field diagonal in front is free
@@ -823,6 +839,21 @@ std::vector<Move*> ChessBoard::getAllPawnMoves(ChessColor color, Coordinate coor
 	}
 
 	return retVal;
+}
+
+void ChessBoard::addPromotionMoves(
+	Coordinate start,
+	Coordinate dest,
+	std::vector<Move*>& moves)
+{
+	moves.push_back(
+		new MovePawnPromotion(start, dest, PieceType::Queen));
+	moves.push_back(
+		new MovePawnPromotion(start, dest, PieceType::Rook));
+	moves.push_back(
+		new MovePawnPromotion(start, dest, PieceType::Bishop));
+	moves.push_back(
+		new MovePawnPromotion(start, dest, PieceType::Knight));
 }
 
 bool ChessBoard::fieldGetsAttackedByPawn(Coordinate coord, ChessColor color, Move madeMove)
