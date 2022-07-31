@@ -35,7 +35,7 @@ std::vector<Move*> ChessBoard::getAllMoves(ChessColor color)
 				Coordinate coord = Coordinate((short)file, (short)rank);
 				ChessPiece piece = board[file][rank];
 				std::vector<Move*> appendingMoves = getAllMovesOfPiece(piece, coord);
-
+				
 				for (Move* currentMove : appendingMoves)
 				{
 					if (!isInCheck(color, *currentMove))

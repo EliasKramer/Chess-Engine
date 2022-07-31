@@ -1892,6 +1892,9 @@ namespace ChessTest
 			Assert::AreEqual(20, getRecursivelyAllMovesForBoard(1, ChessColor::White, board));
 			Assert::AreEqual(400, getRecursivelyAllMovesForBoard(2, ChessColor::White, board));
 			Assert::AreEqual(8902, getRecursivelyAllMovesForBoard(3, ChessColor::White, board));
+			
+			//too slow
+			
 			//Assert::AreEqual(197281, getRecursivelyAllMovesForBoard(4, ChessColor::White, board));
 			//Assert::AreEqual(4865609, getRecursivelyAllMovesForBoard(5, ChessColor::White, board));
 		}
