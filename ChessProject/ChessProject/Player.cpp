@@ -3,7 +3,7 @@
 Player::Player()
 {}
 
-Move* Player::getNextMove(std::vector<Move*> possibleMoves)
+std::unique_ptr<Move> Player::getNextMove(std::vector<std::unique_ptr<Move>> possibleMoves)
 {
 	throw "get next move called on base player class. not possible";
 }

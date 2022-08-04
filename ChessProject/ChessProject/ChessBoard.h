@@ -9,6 +9,7 @@
 #include "RayCastResult.h"
 #include "MetaData.h"
 #include <vector>
+#include <memory>
 class ChessBoard
 {
 public:
@@ -17,7 +18,7 @@ public:
 	//aquire piece at the given coordinate
 	ChessPiece getAtPosition(Coordinate coord);
 	//get all possible moves that can be made
-	std::vector<Move*> getAllMoves(ChessColor color);
+	std::vector<std::unique_ptr<Move>> getAllMoves(ChessColor color);
 
 	std::string toString(ChessColor color);
 
@@ -38,13 +39,13 @@ protected:
 
 	Coordinate searchForPiece(ChessPiece piece);
 	
-	std::vector<Move*> getAllMovesOfPiece(ChessPiece piece, Coordinate coord);
+	std::vector<std::unique_ptr<Move>> getAllMovesOfPiece(ChessPiece piece, Coordinate coord);
 	
 	void setLastMove(Move* move);
 	
 	Move getLastMove();	
 
-	ChessPiece getAtPostitionWithMoveDone(Coordinate* coord, Move* move);
+	ChessPiece getAtPostitionWithMoveDone(Coordinate coord, Move* move);
 
 	bool fieldIsUnderAttack(Coordinate coord, ChessColor color);
 	
@@ -87,13 +88,16 @@ private:
 		RayCastOptions& options,
 		bool shouldCalculateIfItIsUnderAttack);
 
-	void calculateIfRayCastResultIsUnderAttackByType(PieceType type, RayCastResult& rcResult, Move imaginaryMove);
+	void calculateIfRayCastResultIsUnderAttackByType(
+		PieceType type,
+		RayCastResult& rcResult,
+		Move imaginaryMove);
 
 	/*--- Raycasts ---*/
 
 	/*--- Castling ---*/
 
-	void addCastleMovesIfPossibleForColor(ChessColor col, std::vector<Move*>& moves);
+	void addCastleMovesIfPossibleForColor(ChessColor col, std::vector<std::unique_ptr<Move>>& moves);
 
 	bool fieldIsEmptyAndNotUnderAttack(ChessColor col, Coordinate coord);
 
@@ -102,10 +106,13 @@ private:
 	/*--- Pawn Move Set ---*/
 
 	//all the moves that can be made by a pawn
-	std::vector<Move*> getAllPawnMoves(ChessColor color, Coordinate coord);
+	std::vector<std::unique_ptr<Move>> getAllPawnMoves(ChessColor color, Coordinate coord);
 
 	//add all types of promotion moves
-	void addPromotionMoves(Coordinate start, Coordinate dest, std::vector<Move*>& moves);
+	void addPromotionMoves(
+		Coordinate start,
+		Coordinate dest,
+		std::vector<std::unique_ptr<Move>>& moves);
 
 	//all the fields that a pawn can attack.
 	//not including en passant moves, since this is only used for checking if

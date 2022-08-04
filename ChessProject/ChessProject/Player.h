@@ -1,9 +1,10 @@
 #pragma once
 #include "Move.h"
 #include <vector>
+#include <memory>
 class Player
 {
 public:
 	Player();
-	virtual Move* getNextMove(std::vector<Move*> possibleMoves);
+	virtual std::unique_ptr<Move> getNextMove(std::vector<std::unique_ptr<Move>> possibleMoves);
 };

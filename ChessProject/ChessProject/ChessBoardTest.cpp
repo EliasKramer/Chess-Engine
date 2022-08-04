@@ -39,7 +39,7 @@ Move ChessBoardTest::getLastMove()
 	return ChessBoard::getLastMove();
 }
 
-std::vector<Move*> ChessBoardTest::getAllMovesOfPiece(ChessPiece piece, Coordinate coord)
+std::vector<std::unique_ptr<Move>> ChessBoardTest::getAllMovesOfPiece(ChessPiece piece, Coordinate coord)
 {
 	return ChessBoard::getAllMovesOfPiece(piece, coord);
 }
@@ -47,7 +47,7 @@ RayCastResult ChessBoardTest::executeSingleRayCast(RayCastOptions& options, shor
 {
 	return ChessBoard::executeSingleRayCast(options, fileAddingVal, rankAddingVal);
 }
-ChessPiece ChessBoardTest::getAtPostitionWithMoveDone(Coordinate* coord, Move* move)
+ChessPiece ChessBoardTest::getAtPostitionWithMoveDone(Coordinate coord, Move* move)
 {
 	return ChessBoard::getAtPostitionWithMoveDone(coord, move);
 }

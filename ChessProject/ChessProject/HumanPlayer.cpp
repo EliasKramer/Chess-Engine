@@ -4,7 +4,7 @@ HumanPlayer::HumanPlayer()
 {
 }
 
-Move* HumanPlayer::getNextMove(std::vector<Move*> possibleMoves)
+std::unique_ptr<Move> HumanPlayer::getNextMove(std::vector<std::unique_ptr<Move>> possibleMoves)
 {
 	while (1)
 	{
@@ -23,9 +23,9 @@ Move* HumanPlayer::getNextMove(std::vector<Move*> possibleMoves)
 		std::cout << "starCoordString: " << starCoordString << "\n";
 		std::cout << "endCoordString: " << endCoordString << "\n";
 
-		std::vector<Move*> movesUserWantToDo;
+		std::vector<std::unique_ptr<Move>> movesUserWantToDo;
 
-		for (Move* currMove : possibleMoves)
+		for (std::unique_ptr<Move>& currMove : possibleMoves)
 		{
 			/*
 			std::cout << "currMove: " << currMove->getStart().toString()
@@ -34,7 +34,7 @@ Move* HumanPlayer::getNextMove(std::vector<Move*> possibleMoves)
 			if (currMove->getStart().toString() == starCoordString &&
 				currMove->getDestination().toString() == endCoordString)
 			{
-				movesUserWantToDo.push_back(currMove);
+				movesUserWantToDo.push_back(std::move(currMove));
 			}
 		}
 		
@@ -44,7 +44,7 @@ Move* HumanPlayer::getNextMove(std::vector<Move*> possibleMoves)
 		}
 		else if (movesUserWantToDo.size()  == 1)
 		{
-			return movesUserWantToDo.back();
+			return std::move(movesUserWantToDo.back());
 		}
 		else 
 		{
@@ -57,10 +57,10 @@ Move* HumanPlayer::getNextMove(std::vector<Move*> possibleMoves)
 
 				std::cin >> typeInput;
 				
-				for (Move* currMove : movesUserWantToDo)
+				for (std::unique_ptr<Move>& currMove : movesUserWantToDo)
 				{
-					//todo: cast this better
-					MovePawnPromotion* move = dynamic_cast<MovePawnPromotion*>(currMove);					
+					//this may cause some danger. idk
+					MovePawnPromotion* move = dynamic_cast<MovePawnPromotion*>(currMove.get());					
 					
 					if (move == nullptr)
 					{
@@ -70,7 +70,7 @@ Move* HumanPlayer::getNextMove(std::vector<Move*> possibleMoves)
 					PieceType type = move->getPromotionType();
 					if (getShortNameOfChessType(&type) == typeInput)
 					{
-						return currMove;
+						return std::move(currMove);
 					}
 				}
 			}

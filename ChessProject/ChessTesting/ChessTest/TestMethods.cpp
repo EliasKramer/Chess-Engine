@@ -1,16 +1,14 @@
 #include "TestMethods.h"
-bool containsMove(const std::vector<Move*>& list, Move* x)
+bool containsMove(const std::vector<std::unique_ptr<Move>>& list, Move x)
 {
-	//return false;
-	for (Move* move : list)
+	for (const std::unique_ptr<Move>& move : list)
 	{
-		if(*move == *x)
+		if(*move == x)
 		{
 			return true;
 		}
 	}
 	return false;
-	//return std::find(list.begin(), list.end(), x) != list.end();
 }
 
 int getRecursivelyAllMovesForBoard(int depth, ChessColor currColor, ChessBoardTest& board)
@@ -26,11 +24,11 @@ int getRecursivelyAllMovesForBoard(int depth, ChessColor currColor, ChessBoardTe
 	else 
 	{
 		int allMovesCount = 0;
-		for (Move* move : board.getAllMoves(currColor))
+		for (std::unique_ptr<Move>& move : board.getAllMoves(currColor))
 		{
 			ChessBoardTest copiedBoard = board.getCopy();
 
-			copiedBoard.executeMove(move);
+			copiedBoard.executeMove(move.get());
 			
 			allMovesCount += getRecursivelyAllMovesForBoard(
 				depth - 1,

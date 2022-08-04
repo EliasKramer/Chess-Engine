@@ -10,13 +10,13 @@ public:
 	void clearBoard();
 	void setLastMove(Move* move);
 	Move getLastMove();
-	std::vector<Move*> getAllMovesOfPiece(ChessPiece piece, Coordinate coord);
+	std::vector<std::unique_ptr<Move>> getAllMovesOfPiece(ChessPiece piece, Coordinate coord);
 	//bool fieldGetsAttackedByEnemy(Coordinate* coord, ChessColor* color);
 	RayCastResult executeSingleRayCast(
 		RayCastOptions& options,
 		short fileAddingVal,
 		short rankAddingVal);
-	ChessPiece getAtPostitionWithMoveDone(Coordinate* coord, Move* move);
+	ChessPiece getAtPostitionWithMoveDone(Coordinate coord, Move* move);
 	RayCastResult executeRayCast(
 		PieceType type, 
 		RayCastOptions& options,

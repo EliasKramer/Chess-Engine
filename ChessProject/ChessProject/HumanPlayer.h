@@ -6,5 +6,5 @@ class HumanPlayer : public Player
 {
 public:
 	HumanPlayer();
-	Move* getNextMove(std::vector<Move*> possibleMoves) override;
+	std::unique_ptr<Move> getNextMove(std::vector<std::unique_ptr<Move>> possibleMoves) override;
 };
