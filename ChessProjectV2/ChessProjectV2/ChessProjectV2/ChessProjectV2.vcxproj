@@ -129,11 +129,17 @@
   <ItemGroup>
     <ClCompile Include="BitBoard.cpp" />
     <ClCompile Include="ChessBoard.cpp" />
+    <ClCompile Include="ChessBoardTest.cpp" />
+    <ClCompile Include="ChessPiece.cpp" />
     <ClCompile Include="ChessProjectV2.cpp" />
+    <ClCompile Include="DataAndTypes.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitBoard.h" />
     <ClInclude Include="ChessBoard.h" />
+    <ClInclude Include="ChessBoardTest.h" />
+    <ClInclude Include="ChessPiece.h" />
+    <ClInclude Include="DataAndTypes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
