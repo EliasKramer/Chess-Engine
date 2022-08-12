@@ -33,6 +33,12 @@ namespace ChessBoardUnitTest
 
 			Assert::IsTrue(White == board.getTurnColor());
 
+			Assert::IsTrue(SQUARE_NONE == board.getEnPassantSquare());
+
+			Assert::IsTrue(0 == board.getHalfMoveClock());
+
+			Assert::IsTrue(1 == board.getMoveNumber());
+			
 			board.setupBoard();
 
 			Assert::AreEqual(RANK_1 | RANK_2 | RANK_7 | RANK_8, board.getAllPieces());
@@ -64,6 +70,12 @@ namespace ChessBoardUnitTest
 			Assert::IsTrue(board.casltingAllowed(Black, CastleShort));
 		
 			Assert::IsTrue(White == board.getTurnColor());
+
+			Assert::IsTrue(SQUARE_NONE == board.getEnPassantSquare());
+
+			Assert::IsTrue(0 == board.getHalfMoveClock());
+
+			Assert::IsTrue(1 == board.getMoveNumber());
 		}
 		TEST_METHOD(fenNotationSetup)
 		{
@@ -118,6 +130,44 @@ namespace ChessBoardUnitTest
 			Assert::IsTrue(boardFen.casltingAllowed(White, CastleShort));
 			Assert::IsTrue(boardFen.casltingAllowed(Black, CastleLong));
 			Assert::IsTrue(boardFen.casltingAllowed(Black, CastleShort));
+
+			Assert::IsTrue(SQUARE_NONE == boardNormal.getEnPassantSquare());
+			Assert::IsTrue(SQUARE_NONE == boardFen.getEnPassantSquare());
+
+			Assert::IsTrue(0 == boardNormal.getHalfMoveClock());
+			Assert::IsTrue(0 == boardFen.getHalfMoveClock());
+
+			Assert::IsTrue(1 == boardNormal.getMoveNumber());
+			Assert::IsTrue(1 == boardFen.getMoveNumber());
+		}
+		TEST_METHOD(fenNotationTests)
+		{
+			ChessBoardTest board("8/8/8/8/8/8/8/8 w KQkq e3 0 1");
+			Assert::IsTrue(E3 == board.getEnPassantSquare());
+
+			board = ChessBoardTest("8/8/8/8/8/8/8/8 w KQkq h6 0 1");
+			Assert::IsTrue(H6 == board.getEnPassantSquare());
+
+			board = ChessBoardTest("8/8/8/8/8/8/8/8 w Kq - 0 1");
+			Assert::IsTrue(board.casltingAllowed(White, CastleShort));
+			Assert::IsTrue(board.casltingAllowed(Black, CastleLong));
+			Assert::IsFalse(board.casltingAllowed(White, CastleLong));
+			Assert::IsFalse(board.casltingAllowed(Black, CastleShort));
+
+			board = ChessBoardTest("8/8/8/8/8/8/8/8 b KQkq - 0 1");
+			Assert::IsTrue(Black == board.getTurnColor());
+
+			board = ChessBoardTest("8/8/8/8/8/8/8/8 w KQkq - 99 1");
+			Assert::IsTrue(99 == board.getHalfMoveClock());
+
+			board = ChessBoardTest("8/8/8/8/8/8/8/8 w KQkq - 0 99");
+			Assert::IsTrue(99 == board.getMoveNumber());
+
+			board = ChessBoardTest("8/7p/8/8/8/8/8/3B w KQkq - 0 1");
+			Assert::IsTrue(BB_SQUARE[H7] == board.getAllPiecesOfType(Pawn));
+			Assert::IsTrue(BB_SQUARE[H7] == board.getAllPiecesOfColor(Black));
+			Assert::IsTrue(BB_SQUARE[D1] == board.getAllPiecesOfType(Bishop));
+			Assert::IsTrue(BB_SQUARE[D1] == board.getAllPiecesOfColor(White));
 		}
 	};
 }

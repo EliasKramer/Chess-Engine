@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "HelpMethods.h"
+#include "BitBoard.h"
 const int DIFFERENT_CHESS_COLORS = 2;
 
 enum ChessColor {
@@ -34,3 +35,6 @@ CastlingType getCastlingTypeOfFenChar(
 	char c,
 	std::string errorMsgPrefix = "ERROR");
 
+Square getSquareFromString(
+	std::string str,
+	std::string errorMsgPrefix = "ERROR");

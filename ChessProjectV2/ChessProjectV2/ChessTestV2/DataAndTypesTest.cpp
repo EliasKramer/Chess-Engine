@@ -55,5 +55,56 @@ namespace DataAndTypesTests
 				Assert::IsTrue(errorMsg == "Error Msg Prefix Could not convert Char to CastlingType");
 			}
 		}
+		TEST_METHOD(stringToSquare)
+		{
+			Assert::IsTrue(SQUARE_NONE == getSquareFromString("-"));
+			Assert::IsTrue(A1 == getSquareFromString("a1"));
+			Assert::IsTrue(H8 == getSquareFromString("h8"));
+			Assert::IsTrue(E4 == getSquareFromString("e4"));
+			Assert::IsTrue(D5 == getSquareFromString("d5"));
+			Assert::IsTrue(D6 == getSquareFromString("d6"));
+			Assert::IsTrue(D7 == getSquareFromString("d7"));
+			Assert::IsTrue(D8 == getSquareFromString("d8"));
+
+			try {
+				getSquareFromString("a");
+			}
+			catch (const std::string& errorMsg)
+			{
+				Assert::IsTrue(errorMsg == "ERROR Could not convert String to Square");
+			}
+
+			try {
+				getSquareFromString("a1", "Error Msg Prefix");
+			}
+			catch (const std::string& errorMsg)
+			{
+				Assert::IsTrue(errorMsg == "Error Msg Prefix Could not convert String to Square");
+			}
+
+			try {
+				getSquareFromString("h9", "Error Msg Prefix");
+			}
+			catch (const std::string& errorMsg)
+			{
+				Assert::IsTrue(errorMsg == "Error Msg Prefix Could not convert String to Square");
+			}
+
+			try {
+				getSquareFromString("i1", "Error Msg Prefix");
+			}
+			catch (const std::string& errorMsg)
+			{
+				Assert::IsTrue(errorMsg == "Error Msg Prefix Could not convert String to Square");
+			}
+
+			try {
+				getSquareFromString("a0", "Error Msg Prefix");
+			}
+			catch (const std::string& errorMsg)
+			{
+				Assert::IsTrue(errorMsg == "Error Msg Prefix Could not convert String to Square");
+			}
+		}
 	};
 }

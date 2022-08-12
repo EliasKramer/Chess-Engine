@@ -39,7 +39,6 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 		throw prefixForErrors + "It had not the right size";
 	}
 
-
 	//the implementation of the iteration will be a bit weird,
 	//since index 0 is a1 and in the fen code it is a8
 
@@ -64,6 +63,7 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 		{
 			currRankStartIdx -= 8;
 			currFile = -1;
+			currFile++;
 		}
 		else {
 			BitBoard bbToAdd = BB_SQUARE[boardPos];
@@ -73,10 +73,9 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 			_allPieces |= bbToAdd;
 			_piecesOfColor[piece.getColor()] |= bbToAdd;
 			_piecesOfType[piece.getType()] |= bbToAdd;
+			currFile++;
 		}
-		currFile++;
 	}
-
 
 	//get the turn color
 	if (split_fen_code[1].size() != 1)
@@ -102,15 +101,14 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 	}
 
 	//en passant field
-	//_enPassantSquare = stringToField(split_fen_code[3]);
+	_enPassantSquare = getSquareFromString(split_fen_code[3]);
 	
 	//anzahl 50 züge remis regel - 
+	//halbzüge seit letzem bauernzug oder schlagen einer figur
 	_halfMoveClock = std::stoi(split_fen_code[4]);
 
-	//halbzüge seit letzem bauernzug oder schlagen einer figur
-	_moveNumber = std::stoi(split_fen_code[5]);
-
 	//zugnummer
+	_moveNumber = std::stoi(split_fen_code[5]);
 }
 
 void ChessBoard::setupBoard()

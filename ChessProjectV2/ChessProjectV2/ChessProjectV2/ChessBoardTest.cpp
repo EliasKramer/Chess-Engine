@@ -35,12 +35,12 @@ ChessColor ChessBoardTest::getTurnColor()
 
 Square ChessBoardTest::getEnPassantSquare()
 {
-    return _lastEnPassantMove;
+    return _enPassantSquare;
 }
 
-uint16_t ChessBoardTest::getHalfMovesSinceLastCaptureOrPawnMove()
+uint16_t ChessBoardTest::getHalfMoveClock()
 {
-    return _halfMovesSincePawnOrCaptureMove;
+    return _halfMoveClock;
 }
 
 uint16_t ChessBoardTest::getMoveNumber()

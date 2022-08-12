@@ -23,10 +23,10 @@ protected:
 	//if an en passant move is possible, 
 	//the square, where the opponent has to go to
 	//will be stored here
-	Square _lastEnPassantMove;
+	Square _enPassantSquare;
 
 	//keeps track of the 50 moves rule
-	uint16_t _halfMovesSincePawnOrCaptureMove;
+	uint16_t _halfMoveClock;
 
 	//the move number. 
 	//increases every time when black makes a move

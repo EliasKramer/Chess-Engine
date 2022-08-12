@@ -15,6 +15,6 @@ public:
 	bool casltingAllowed(ChessColor color, CastlingType option);
 	ChessColor getTurnColor();
 	Square getEnPassantSquare();
-	uint16_t getHalfMovesSinceLastCaptureOrPawnMove();
+	uint16_t getHalfMoveClock();
 	uint16_t getMoveNumber();
 };
