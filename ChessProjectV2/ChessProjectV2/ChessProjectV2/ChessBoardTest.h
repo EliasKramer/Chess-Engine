@@ -12,5 +12,9 @@ public:
 	BitBoard getAllPieces();
 	BitBoard getAllPiecesOfColor(ChessColor color);
 	BitBoard getAllPiecesOfType(PieceType type);
-	BitBoard getAllAvailableCastleMoves();
+	bool casltingAllowed(ChessColor color, CastlingType option);
+	ChessColor getTurnColor();
+	Square getEnPassantSquare();
+	uint16_t getHalfMovesSinceLastCaptureOrPawnMove();
+	uint16_t getMoveNumber();
 };

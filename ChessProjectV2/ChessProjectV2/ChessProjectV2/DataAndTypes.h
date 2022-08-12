@@ -1,5 +1,6 @@
 #pragma once
-#include "ChessPiece.h"
+#include <string>
+#include "HelpMethods.h"
 const int DIFFERENT_CHESS_COLORS = 2;
 
 enum ChessColor {
@@ -17,3 +18,19 @@ enum PieceType {
 	Queen,
 	King
 };
+
+const int DIFFERENT_CASTLING_TYPES = 2;
+
+enum CastlingType {
+	CastleShort,
+	CastleLong
+};
+
+ChessColor getColorOfFenChar(
+	char c,
+	std::string errorMsgPrefix = "ERROR");
+
+CastlingType getCastlingTypeOfFenChar(
+	char c,
+	std::string errorMsgPrefix = "ERROR");
+

@@ -23,7 +23,27 @@ BitBoard ChessBoardTest::getAllPiecesOfType(PieceType type)
     return _piecesOfType[type];
 }
 
-BitBoard ChessBoardTest::getAllAvailableCastleMoves()
+bool ChessBoardTest::casltingAllowed(ChessColor color, CastlingType option)
 {
-    return _castlingAllowed;
+	return _canCastle[color][option];
+}
+
+ChessColor ChessBoardTest::getTurnColor()
+{
+    return _currentTurnColor;
+}
+
+Square ChessBoardTest::getEnPassantSquare()
+{
+    return _lastEnPassantMove;
+}
+
+uint16_t ChessBoardTest::getHalfMovesSinceLastCaptureOrPawnMove()
+{
+    return _halfMovesSincePawnOrCaptureMove;
+}
+
+uint16_t ChessBoardTest::getMoveNumber()
+{
+    return _moveNumber;
 }

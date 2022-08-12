@@ -7,25 +7,19 @@ ChessPiece::ChessPiece(
 	_type(type)
 {}
 
-ChessPiece::ChessPiece(char fen_char)
+ChessPiece::ChessPiece(char fenChar)
 {
-	if (fen_char >= 'a' && fen_char <= 'z')
+	_color = getColorOfFenChar(
+		fenChar,
+		"ERROR Chess Piece could not be created.");
+
+	
+	if (isUpperCase(fenChar))
 	{
-		_color = Black;
-	}
-	else if (fen_char >= 'A' && fen_char <= 'Z')
-	{
-		_color = White;
-		//makes a upper case char to a lower case.
-		//(for easier comparison later when trying to find type)
-		fen_char += ('a' - 'A');
-	}
-	else
-	{
-		throw "ERROR Tried to create Chess Piece from an invalid fen character. (Color not found)";
+		fenChar = tolower(fenChar);
 	}
 
-	switch (fen_char)
+	switch (fenChar)
 	{
 	case 'p':
 		_type = Pawn;
@@ -58,4 +52,16 @@ PieceType ChessPiece::getType()
 ChessColor ChessPiece::getColor()
 {
 	return _color;
+}
+
+bool operator==(const ChessPiece& first, const ChessPiece& second)
+{
+	return 
+		first._type == second._type &&
+		first._color == second._color;
+}
+
+bool operator!=(const ChessPiece& first, const ChessPiece& second)
+{
+	return !(first == second);
 }

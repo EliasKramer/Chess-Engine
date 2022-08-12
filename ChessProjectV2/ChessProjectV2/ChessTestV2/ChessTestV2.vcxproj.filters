@@ -57,7 +57,13 @@
     <ClCompile Include="..\ChessProjectV2\ChessPiece.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PieceTypeTest.cpp">
+    <ClCompile Include="ChessPieceTest.cpp">
+      <Filter>Source Files\tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ChessProjectV2\HelpMethods.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HelpMethodstest.cpp">
       <Filter>Source Files\tests</Filter>
     </ClCompile>
   </ItemGroup>
@@ -78,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ChessProjectV2\ChessPiece.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChessProjectV2\HelpMethods.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
