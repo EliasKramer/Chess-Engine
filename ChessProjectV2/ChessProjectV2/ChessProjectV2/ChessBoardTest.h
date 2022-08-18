@@ -6,9 +6,14 @@ class ChessBoardTest : public ChessBoard
 {
 public:
 	//constructors
+	
 	ChessBoardTest();
 	ChessBoardTest(std::string given_fen_code);
+	
+	//setup board directly
+	void setupBoard();
 	//getter for the base class
+
 	BitBoard getAllPieces();
 	BitBoard getAllPiecesOfColor(ChessColor color);
 	BitBoard getAllPiecesOfType(PieceType type);

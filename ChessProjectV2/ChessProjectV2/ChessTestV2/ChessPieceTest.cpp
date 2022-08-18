@@ -93,14 +93,6 @@ namespace PieceTest
 			
 			Assert::IsTrue(ChessPiece(Black, Pawn) == ChessPiece('p'));
 			Assert::IsTrue(ChessPiece(White, Pawn) == ChessPiece('P'));
-			/*
-			try {
-				ChessPiece invalidPiece('a');
-				Assert::Fail();
-			}
-			catch (std::exception e) {
-				Assert::IsTrue(true);
-			}*/
 		}
 	};
 }

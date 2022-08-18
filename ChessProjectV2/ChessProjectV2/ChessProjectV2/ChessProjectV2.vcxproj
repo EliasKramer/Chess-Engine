@@ -134,6 +134,7 @@
     <ClCompile Include="ChessProjectV2.cpp" />
     <ClCompile Include="DataAndTypes.cpp" />
     <ClCompile Include="HelpMethods.cpp" />
+    <ClCompile Include="Move.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitBoard.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="ChessPiece.h" />
     <ClInclude Include="DataAndTypes.h" />
     <ClInclude Include="HelpMethods.h" />
+    <ClInclude Include="Move.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

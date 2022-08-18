@@ -1,0 +1,28 @@
+#include "Move.h"
+
+Move::Move(Square givenStart, Square givenDest):
+	_start(givenStart),
+	_destination(givenDest)
+{}
+
+Square Move::getStart()
+{
+	return _start;
+}
+
+Square Move::getDestination()
+{
+	return _destination;
+}
+
+bool operator==(const Move& first, const Move& second)
+{
+	return 
+		first._destination == second._destination &&
+		first._start == second._start;
+}
+
+bool operator!=(const Move& first, const Move& second)
+{
+	return !(first == second);
+}

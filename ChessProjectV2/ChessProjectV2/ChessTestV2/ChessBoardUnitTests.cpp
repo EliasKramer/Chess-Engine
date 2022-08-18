@@ -12,7 +12,7 @@ namespace ChessBoardUnitTest
 	{
 	public:
 
-		TEST_METHOD(setupBoard)
+		TEST_METHOD(setupBoardTest)
 		{
 			ChessBoardTest board;
 
@@ -168,6 +168,10 @@ namespace ChessBoardUnitTest
 			Assert::IsTrue(BB_SQUARE[H7] == board.getAllPiecesOfColor(Black));
 			Assert::IsTrue(BB_SQUARE[D1] == board.getAllPiecesOfType(Bishop));
 			Assert::IsTrue(BB_SQUARE[D1] == board.getAllPiecesOfColor(White));
+		}
+		TEST_METHOD(startingPositionTest)
+		{
+			Assert::IsTrue(STARTING_FEN == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 		}
 	};
 }
