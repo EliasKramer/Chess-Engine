@@ -1,5 +1,8 @@
 #pragma once
 #include "BitBoard.h"
+#include <memory>
+#include <vector>
+
 class Move
 {
 protected:
@@ -17,3 +20,5 @@ public:
 };
 bool operator ==(const Move& first, const Move& second);
 bool operator !=(const Move& first, const Move& second);
+
+typedef std::vector<std::unique_ptr<Move>> UniqueMoveList;

@@ -168,6 +168,7 @@
     <ClCompile Include="ChessTestV2.cpp" />
     <ClCompile Include="DataAndTypesTest.cpp" />
     <ClCompile Include="HelpMethodstest.cpp" />
+    <ClCompile Include="MoveGenerationTests.cpp" />
     <ClCompile Include="MoveTest.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

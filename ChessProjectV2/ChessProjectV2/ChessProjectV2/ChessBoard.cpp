@@ -1,5 +1,19 @@
 #include "ChessBoard.h"
 
+UniqueMoveList ChessBoard::getAllPseudoLegalMoves()
+{
+	UniqueMoveList moveList;
+
+	getKingMoves(moveList);
+
+	return moveList;
+}
+
+void ChessBoard::getKingMoves(UniqueMoveList& moves)
+{
+	
+}
+
 ChessBoard::ChessBoard()
 	:
 	_allPieces(BITBOARD_NONE),
@@ -109,4 +123,9 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 
 	//zugnummer
 	_moveNumber = std::stoi(split_fen_code[5]);
+}
+
+UniqueMoveList ChessBoard::getAllLegalMoves()
+{
+	return UniqueMoveList();
 }

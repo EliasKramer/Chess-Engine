@@ -4,6 +4,7 @@
 #include <string>
 #include "ChessPiece.h"
 #include "HelpMethods.h"
+#include "Move.h"
 
 const std::string STARTING_FEN =
 "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -34,10 +35,32 @@ protected:
 	//the move number. 
 	//increases every time when black makes a move
 	uint16_t _moveNumber;
+
+	/*Move Generation*/
+	
+	//Pseudo legal moves are moves that follow 
+	//the move rules for the types.
+	//They do not check if the king is in check
+	UniqueMoveList getAllPseudoLegalMoves();
+
+	void getKingMoves(UniqueMoveList& moves);
+	void getCastlingMoves(UniqueMoveList& moves);
+
+	void getKnightMoves(UniqueMoveList& moves);
+	
+	void getBishopMoves(UniqueMoveList& moves);
+	
+	void getRookMoves(UniqueMoveList& moves);
+	
+	void getQueenMoves(UniqueMoveList& moves);
+	
+	void getPawnMoves(UniqueMoveList& moves);
+	void getEnPassantMove(UniqueMoveList& moves);
+
 public:
 	ChessBoard();
 	ChessBoard(std::string given_fen_code);
 
-	//get All Moves
-	
+	//returns all moves of the color, whos turn it is
+	UniqueMoveList getAllLegalMoves();
 };
