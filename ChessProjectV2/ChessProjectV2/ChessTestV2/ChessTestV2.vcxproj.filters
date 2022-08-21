@@ -25,6 +25,12 @@
     <Filter Include="Header Files\bitboard">
       <UniqueIdentifier>{8dd9d1b2-6200-4972-932f-0489720aca16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\tests\TestMethods">
+      <UniqueIdentifier>{f898669f-2411-4bc6-8b91-eb69026b680c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\TestMethods">
+      <UniqueIdentifier>{a1fd6d39-0112-4493-8253-710f3af1809d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChessTestV2.cpp">
@@ -75,6 +81,9 @@
     <ClCompile Include="MoveGenerationTests.cpp">
       <Filter>Source Files\tests</Filter>
     </ClCompile>
+    <ClCompile Include="TestMethods.cpp">
+      <Filter>Source Files\tests\TestMethods</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -100,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="..\ChessProjectV2\Move.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TestMethods.h">
+      <Filter>Header Files\TestMethods</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

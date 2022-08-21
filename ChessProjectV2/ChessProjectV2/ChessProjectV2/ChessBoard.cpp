@@ -1,17 +1,113 @@
 #include "ChessBoard.h"
 
+bool ChessBoard::positionIsValid(Square start, Direction dirToAdd)
+{
+	return false;
+}
+
 UniqueMoveList ChessBoard::getAllPseudoLegalMoves()
 {
 	UniqueMoveList moveList;
 
-	getKingMoves(moveList);
+	for (int currSquare = A1; currSquare <= H8; currSquare++)
+	{
+		//is the same color
+		if ((BB_SQUARE[currSquare] & _piecesOfColor[_currentTurnColor]) != 0ULL)
+		{
+			getMovesOfType(moveList, (Square)currSquare);
+		}
+	}
+
+	getCastlingMoves(moveList);
+	getEnPassantMove(moveList);
 
 	return moveList;
 }
 
-void ChessBoard::getKingMoves(UniqueMoveList& moves)
+PieceType ChessBoard::getTypeAtSquare(Square square)
 {
-	
+	for (int currType = 0; currType <= NUMBER_OF_DIFFERENT_PIECE_TYPES; currType++)
+	{
+		if ((BB_SQUARE[square] & _piecesOfType[currType]) != 0ULL)
+		{
+			return (PieceType)currType;
+		}
+	}
+	return NoPieceType;
+}
+
+void ChessBoard::getMovesOfType(UniqueMoveList& moves, Square square)
+{
+	PieceType type = getTypeAtSquare(square);
+
+	if (type == NoPieceType)
+	{
+		return;
+	}
+
+	switch (type)
+	{
+	case Pawn:
+		getPawnMoves(moves, square);
+		break;
+	case Knight:
+		getKnightMoves(moves, square);
+		break;
+	case Bishop:
+		getBishopMoves(moves, square);
+		break;
+	case Rook:
+		getRookMoves(moves, square);
+		break;
+	case Queen:
+		getQueenMoves(moves, square);
+		break;
+	case King:
+		getKingMoves(moves, square);
+		break;
+	default:
+		break;
+	}
+}
+
+void ChessBoard::getPawnMoves(UniqueMoveList& moves, Square square)
+{
+}
+
+void ChessBoard::getKnightMoves(UniqueMoveList& moves, Square square)
+{
+}
+
+void ChessBoard::getBishopMoves(UniqueMoveList& moves, Square square)
+{
+}
+
+void ChessBoard::getRookMoves(UniqueMoveList& moves, Square square)
+{
+}
+
+void ChessBoard::getQueenMoves(UniqueMoveList& moves, Square square)
+{
+}
+
+void ChessBoard::getKingMoves(UniqueMoveList& moves, Square square)
+{
+	moves.push_back(std::make_unique<Move>(square, (Square)(square + NORTH)));
+	moves.push_back(std::make_unique<Move>(square, (Square)(square + NORTH_EAST)));
+	moves.push_back(std::make_unique<Move>(square, (Square)(square + EAST)));
+	moves.push_back(std::make_unique<Move>(square, (Square)(square + SOUTH_EAST)));
+	moves.push_back(std::make_unique<Move>(square, (Square)(square + SOUTH)));
+	moves.push_back(std::make_unique<Move>(square, (Square)(square + SOUTH_WEST)));
+	moves.push_back(std::make_unique<Move>(square, (Square)(square + WEST)));
+	moves.push_back(std::make_unique<Move>(square, (Square)(square + NORTH_WEST)));
+}
+
+void ChessBoard::getCastlingMoves(UniqueMoveList& moves)
+{
+}
+
+void ChessBoard::getEnPassantMove(UniqueMoveList& moves)
+{
 }
 
 ChessBoard::ChessBoard()
@@ -34,7 +130,7 @@ ChessBoard::ChessBoard()
 		{false, false} },
 
 		_currentTurnColor(White),
-		
+
 		_enPassantSquare(SQUARE_NONE),
 
 		_halfMoveClock(0),
@@ -116,7 +212,7 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 
 	//en passant field
 	_enPassantSquare = getSquareFromString(split_fen_code[3]);
-	
+
 	//anzahl 50 züge remis regel - 
 	//halbzüge seit letzem bauernzug oder schlagen einer figur
 	_halfMoveClock = std::stoi(split_fen_code[4]);

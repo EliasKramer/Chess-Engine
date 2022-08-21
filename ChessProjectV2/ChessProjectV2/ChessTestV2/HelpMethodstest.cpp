@@ -72,5 +72,13 @@ namespace HelpMethodsTest
 			Assert::IsTrue('a' == charToLower('A'));
 			Assert::IsTrue('z' == charToLower('Z'));
 		}
+		TEST_METHOD(directionTesting)
+		{
+			Assert::IsTrue(NORTH == getForwardForColor(White));
+			Assert::IsTrue(SOUTH == getForwardForColor(Black));
+
+			Assert::IsTrue(SOUTH == getBackwardForColor(White));
+			Assert::IsTrue(NORTH == getBackwardForColor(Black));
+		}
 	};
 }

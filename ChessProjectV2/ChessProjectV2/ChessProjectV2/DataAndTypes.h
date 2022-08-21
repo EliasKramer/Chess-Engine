@@ -1,7 +1,5 @@
 #pragma once
 #include <string>
-#include "HelpMethods.h"
-#include "BitBoard.h"
 const int DIFFERENT_CHESS_COLORS = 2;
 
 enum ChessColor : uint8_t {
@@ -17,7 +15,9 @@ enum PieceType : uint8_t {
 	Knight,
 	Bishop,
 	Queen,
-	King
+	King,
+
+	NoPieceType
 };
 
 const int DIFFERENT_CASTLING_TYPES = 2;
@@ -26,15 +26,3 @@ enum CastlingType : uint8_t {
 	CastleShort,
 	CastleLong
 };
-
-ChessColor getColorOfFenChar(
-	char c,
-	std::string errorMsgPrefix = "ERROR");
-
-CastlingType getCastlingTypeOfFenChar(
-	char c,
-	std::string errorMsgPrefix = "ERROR");
-
-Square getSquareFromString(
-	std::string str,
-	std::string errorMsgPrefix = "ERROR");

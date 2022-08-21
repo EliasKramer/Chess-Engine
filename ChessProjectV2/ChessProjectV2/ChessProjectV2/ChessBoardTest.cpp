@@ -55,6 +55,11 @@ BitBoard ChessBoardTest::getAllPiecesOfType(PieceType type)
     return _piecesOfType[type];
 }
 
+UniqueMoveList ChessBoardTest::getPseudoLegalMoves()
+{
+	return ChessBoard::getAllPseudoLegalMoves();
+}
+
 bool ChessBoardTest::casltingAllowed(ChessColor color, CastlingType option)
 {
 	return _canCastle[color][option];

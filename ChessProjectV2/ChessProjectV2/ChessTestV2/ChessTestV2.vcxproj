@@ -177,6 +177,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ChessPieceTest.cpp" />
+    <ClCompile Include="TestMethods.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ChessProjectV2\BitBoard.h" />
@@ -187,6 +188,7 @@
     <ClInclude Include="..\ChessProjectV2\HelpMethods.h" />
     <ClInclude Include="..\ChessProjectV2\Move.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="TestMethods.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
