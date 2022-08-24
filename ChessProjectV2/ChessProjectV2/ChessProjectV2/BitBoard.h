@@ -1,6 +1,7 @@
 #pragma once
 #include <cstdint>
 #include <array>
+#include <map>
 
 typedef uint64_t BitBoard;
 
@@ -49,6 +50,8 @@ const std::array<BitBoard, 64> BB_SQUARE = []()->std::array<BitBoard, 64> {
 	return retVal;
 }();
 
+const int NUMBER_OF_DIRECTIONS = 16;
+
 enum Direction : int8_t {
 	NORTH = 8, // bitshift 8 left
 	EAST = 1, // bitshift 1 left
@@ -58,5 +61,40 @@ enum Direction : int8_t {
 	NORTH_EAST = NORTH + EAST, // bitshift 9 left
 	SOUTH_EAST = SOUTH + EAST, // bitshift 1 left
 	SOUTH_WEST = SOUTH + WEST, // bitshift 7 left
-	NORTH_WEST = NORTH + WEST // bitshift 7 right
+	NORTH_WEST = NORTH + WEST, // bitshift 7 right
+
+	NORTH_NORTH_EAST = NORTH + NORTH_EAST,
+	EAST_NORTH_EAST = EAST + NORTH_EAST,
+	EAST_SOUTH_EAST = EAST + SOUTH_EAST,
+	SOUTH_SOUTH_EAST = SOUTH + SOUTH_EAST,
+
+	SOUTH_SOUTH_WEST = SOUTH + SOUTH_WEST,
+	WEST_SOUTH_WEST = WEST + SOUTH_WEST,
+	WEST_NORTH_WEST = WEST + NORTH_WEST,
+	NORTH_NORTH_WEST = NORTH + NORTH_WEST
+};
+
+//if you start at one of the bits in the bitboard and go in the key direction, 
+//then your final position will not be on the board
+const std::map<Direction, BitBoard> INVALID_FIELDS_FOR_DIR
+{
+	{NORTH, RANK_8},
+	{SOUTH, RANK_1},
+	{WEST, FILE_A},
+	{EAST, FILE_H},
+	
+	{NORTH_EAST, FILE_H | RANK_8},
+	{SOUTH_EAST, FILE_H | RANK_1},
+	{SOUTH_WEST, FILE_A | RANK_1},
+	{NORTH_WEST, FILE_A | RANK_8},
+
+	{NORTH_NORTH_EAST, FILE_H | RANK_8 | RANK_7},
+	{EAST_NORTH_EAST, FILE_H | FILE_G | RANK_8},
+	{EAST_SOUTH_EAST, FILE_H | FILE_G | RANK_1},
+	{SOUTH_SOUTH_EAST, FILE_H | RANK_1 | RANK_2},
+
+	{SOUTH_SOUTH_WEST, FILE_A | RANK_1 | RANK_2},
+	{WEST_SOUTH_WEST, FILE_A | FILE_B | RANK_1},
+	{WEST_NORTH_WEST, FILE_A | FILE_B | RANK_8},
+	{NORTH_NORTH_WEST, FILE_A | RANK_8 | RANK_7}
 };

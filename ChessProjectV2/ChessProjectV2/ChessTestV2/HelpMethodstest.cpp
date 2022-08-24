@@ -80,5 +80,10 @@ namespace HelpMethodsTest
 			Assert::IsTrue(SOUTH == getBackwardForColor(White));
 			Assert::IsTrue(NORTH == getBackwardForColor(Black));
 		}
+		TEST_METHOD(oppositeColor)
+		{
+			Assert::IsTrue(Black == getOppositeColor(White));
+			Assert::IsTrue(White == getOppositeColor(Black));
+		}
 	};
 }

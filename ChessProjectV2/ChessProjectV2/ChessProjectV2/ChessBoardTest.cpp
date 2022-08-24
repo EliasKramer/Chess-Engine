@@ -60,6 +60,11 @@ UniqueMoveList ChessBoardTest::getPseudoLegalMoves()
 	return ChessBoard::getAllPseudoLegalMoves();
 }
 
+bool ChessBoardTest::destinationIsOnBoard(Square start, Direction dirToAdd)
+{
+	return ChessBoard::destinationIsOnBoard(start, dirToAdd);
+}
+
 bool ChessBoardTest::casltingAllowed(ChessColor color, CastlingType option)
 {
 	return _canCastle[color][option];

@@ -1,22 +1,35 @@
 #include "ChessBoard.h"
 
-bool ChessBoard::positionIsValid(Square start, Direction dirToAdd)
+bool ChessBoard::destinationIsOnBoard(Square start, Direction direction)
 {
-	return false;
+	//if the invalid board for the direction and
+	//the start square dont overlap then the new pos is valid
+	return (INVALID_FIELDS_FOR_DIR.at(direction) & BB_SQUARE[start]) == 0;
+}
+
+void ChessBoard::addIfDestinationIsValid(UniqueMoveList& moves, Square start, Direction dir)
+{
+	if (destinationIsOnBoard(start, dir))
+	{
+		//there is no same colored piece on the destination
+		Square newPos = (Square)(start + dir);
+		if ((_piecesOfColor[_currentTurnColor] & BB_SQUARE[newPos]) == 0)
+		{
+			moves.push_back(std::make_unique<Move>(start, newPos));
+		}
+	}
 }
 
 UniqueMoveList ChessBoard::getAllPseudoLegalMoves()
 {
 	UniqueMoveList moveList;
 
-	for (int currSquare = A1; currSquare <= H8; currSquare++)
-	{
-		//is the same color
-		if ((BB_SQUARE[currSquare] & _piecesOfColor[_currentTurnColor]) != 0ULL)
-		{
-			getMovesOfType(moveList, (Square)currSquare);
-		}
-	}
+	getPawnMoves(moveList);
+	getKnightMoves(moveList);
+	getBishopMoves(moveList);
+	getRookMoves(moveList);
+	getQueenMoves(moveList);
+	getKingMoves(moveList);
 
 	getCastlingMoves(moveList);
 	getEnPassantMove(moveList);
@@ -24,82 +37,60 @@ UniqueMoveList ChessBoard::getAllPseudoLegalMoves()
 	return moveList;
 }
 
-PieceType ChessBoard::getTypeAtSquare(Square square)
+void ChessBoard::getPawnMoves(UniqueMoveList& moves)
 {
-	for (int currType = 0; currType <= NUMBER_OF_DIFFERENT_PIECE_TYPES; currType++)
+}
+
+void ChessBoard::getKnightMoves(UniqueMoveList& moves)
+{
+	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
 	{
-		if ((BB_SQUARE[square] & _piecesOfType[currType]) != 0ULL)
+		if ((BB_SQUARE[currSquareIdx] &
+			_piecesOfType[Knight] &
+			_piecesOfColor[_currentTurnColor]) != 0ULL)
 		{
-			return (PieceType)currType;
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_NORTH_EAST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, EAST_NORTH_EAST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, EAST_SOUTH_EAST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_SOUTH_EAST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_SOUTH_WEST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, WEST_SOUTH_WEST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, WEST_NORTH_WEST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_NORTH_WEST);
 		}
 	}
-	return NoPieceType;
 }
 
-void ChessBoard::getMovesOfType(UniqueMoveList& moves, Square square)
+void ChessBoard::getBishopMoves(UniqueMoveList& moves)
 {
-	PieceType type = getTypeAtSquare(square);
+}
 
-	if (type == NoPieceType)
+void ChessBoard::getRookMoves(UniqueMoveList& moves)
+{
+}
+
+void ChessBoard::getQueenMoves(UniqueMoveList& moves)
+{
+}
+
+void ChessBoard::getKingMoves(UniqueMoveList& moves)
+{
+	for(uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
 	{
-		return;
+		if((BB_SQUARE[currSquareIdx] &
+			_piecesOfType[King] &
+			_piecesOfColor[_currentTurnColor]) != 0ULL)
+		{
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_EAST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, EAST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_EAST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_WEST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, WEST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_WEST);
+		}
 	}
-
-	switch (type)
-	{
-	case Pawn:
-		getPawnMoves(moves, square);
-		break;
-	case Knight:
-		getKnightMoves(moves, square);
-		break;
-	case Bishop:
-		getBishopMoves(moves, square);
-		break;
-	case Rook:
-		getRookMoves(moves, square);
-		break;
-	case Queen:
-		getQueenMoves(moves, square);
-		break;
-	case King:
-		getKingMoves(moves, square);
-		break;
-	default:
-		break;
-	}
-}
-
-void ChessBoard::getPawnMoves(UniqueMoveList& moves, Square square)
-{
-}
-
-void ChessBoard::getKnightMoves(UniqueMoveList& moves, Square square)
-{
-}
-
-void ChessBoard::getBishopMoves(UniqueMoveList& moves, Square square)
-{
-}
-
-void ChessBoard::getRookMoves(UniqueMoveList& moves, Square square)
-{
-}
-
-void ChessBoard::getQueenMoves(UniqueMoveList& moves, Square square)
-{
-}
-
-void ChessBoard::getKingMoves(UniqueMoveList& moves, Square square)
-{
-	moves.push_back(std::make_unique<Move>(square, (Square)(square + NORTH)));
-	moves.push_back(std::make_unique<Move>(square, (Square)(square + NORTH_EAST)));
-	moves.push_back(std::make_unique<Move>(square, (Square)(square + EAST)));
-	moves.push_back(std::make_unique<Move>(square, (Square)(square + SOUTH_EAST)));
-	moves.push_back(std::make_unique<Move>(square, (Square)(square + SOUTH)));
-	moves.push_back(std::make_unique<Move>(square, (Square)(square + SOUTH_WEST)));
-	moves.push_back(std::make_unique<Move>(square, (Square)(square + WEST)));
-	moves.push_back(std::make_unique<Move>(square, (Square)(square + NORTH_WEST)));
 }
 
 void ChessBoard::getCastlingMoves(UniqueMoveList& moves)

@@ -38,23 +38,20 @@ protected:
 
 	/*Move Generation*/
 	
-	bool positionIsValid(Square start, Direction dirToAdd);
+	bool destinationIsOnBoard(Square start, Direction direction);
+	void addIfDestinationIsValid(UniqueMoveList& moves, Square start, Direction dir);
 
 	//Pseudo legal moves are moves that follow 
 	//the move rules for the types.
 	//They do not check if the king is in check
 	UniqueMoveList getAllPseudoLegalMoves();
 
-	PieceType getTypeAtSquare(Square square);
-
-	void getMovesOfType(UniqueMoveList& moves, Square square);
-
-	void getPawnMoves(UniqueMoveList& moves, Square square);
-	void getKnightMoves(UniqueMoveList& moves, Square square);
-	void getBishopMoves(UniqueMoveList& moves, Square square);
-	void getRookMoves(UniqueMoveList& moves, Square square);
-	void getQueenMoves(UniqueMoveList& moves, Square square);
-	void getKingMoves(UniqueMoveList& moves, Square square);
+	void getPawnMoves(UniqueMoveList& moves);
+	void getKnightMoves(UniqueMoveList& moves);
+	void getBishopMoves(UniqueMoveList& moves);
+	void getRookMoves(UniqueMoveList& moves);
+	void getQueenMoves(UniqueMoveList& moves);
+	void getKingMoves(UniqueMoveList& moves);
 
 	void getCastlingMoves(UniqueMoveList& moves);
 	void getEnPassantMove(UniqueMoveList& moves);

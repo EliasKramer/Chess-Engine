@@ -28,3 +28,5 @@ Square getSquareFromString(
 
 Direction getForwardForColor(ChessColor color);
 Direction getBackwardForColor(ChessColor color);
+
+ChessColor getOppositeColor(ChessColor color);

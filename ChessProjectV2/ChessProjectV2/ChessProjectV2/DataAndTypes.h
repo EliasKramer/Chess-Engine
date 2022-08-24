@@ -15,9 +15,7 @@ enum PieceType : uint8_t {
 	Knight,
 	Bishop,
 	Queen,
-	King,
-
-	NoPieceType
+	King
 };
 
 const int DIFFERENT_CASTLING_TYPES = 2;

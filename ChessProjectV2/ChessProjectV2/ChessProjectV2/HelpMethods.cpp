@@ -90,3 +90,8 @@ Direction getBackwardForColor(ChessColor color)
 {
 	return color == White ? SOUTH : NORTH;
 }
+
+ChessColor getOppositeColor(ChessColor color)
+{
+	return (ChessColor)((color + 1) % 2);
+}

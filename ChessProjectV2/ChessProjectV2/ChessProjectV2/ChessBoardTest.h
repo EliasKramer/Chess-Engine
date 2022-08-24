@@ -23,5 +23,7 @@ public:
 	uint16_t getHalfMoveClock();
 	uint16_t getMoveNumber();
 
+	bool destinationIsOnBoard(Square start, Direction dirToAdd);
+
 	UniqueMoveList getPseudoLegalMoves();
 };
