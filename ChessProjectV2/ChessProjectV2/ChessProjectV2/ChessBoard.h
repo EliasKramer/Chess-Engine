@@ -39,7 +39,17 @@ protected:
 	/*Move Generation*/
 	
 	bool destinationIsOnBoard(Square start, Direction direction);
-	void addIfDestinationIsValid(UniqueMoveList& moves, Square start, Direction dir);
+	bool destinationIsSameColor(Square start, Direction direction, ChessColor color);
+
+	void addIfDestinationIsValid(
+		UniqueMoveList& moves,
+		Square start,
+		Direction dir);
+	void addIfDestinationIsColor(
+		UniqueMoveList& moves,
+		Square start,
+		Direction dir,
+		ChessColor color);
 
 	//Pseudo legal moves are moves that follow 
 	//the move rules for the types.

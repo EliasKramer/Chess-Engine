@@ -7,13 +7,34 @@ bool ChessBoard::destinationIsOnBoard(Square start, Direction direction)
 	return (INVALID_FIELDS_FOR_DIR.at(direction) & BB_SQUARE[start]) == 0;
 }
 
+bool ChessBoard::destinationIsSameColor(Square start, Direction direction, ChessColor color)
+{
+	Square newPos = (Square)(start + direction);
+
+	return (_piecesOfColor[color] & BB_SQUARE[newPos]) != 0;
+}
+
 void ChessBoard::addIfDestinationIsValid(UniqueMoveList& moves, Square start, Direction dir)
 {
 	if (destinationIsOnBoard(start, dir))
 	{
-		//there is no same colored piece on the destination
+		if (!destinationIsSameColor(start, dir, _currentTurnColor))
+		{
+			moves.push_back(std::make_unique<Move>(start, (Square)(start + dir)));
+		}
+	}
+}
+
+void ChessBoard::addIfDestinationIsColor(
+	UniqueMoveList& moves,
+	Square start,
+	Direction dir,
+	ChessColor color)
+{
+	if (destinationIsOnBoard(start, dir))
+	{
 		Square newPos = (Square)(start + dir);
-		if ((_piecesOfColor[_currentTurnColor] & BB_SQUARE[newPos]) == 0)
+		if ((_piecesOfColor[color] & BB_SQUARE[newPos]) != 0)
 		{
 			moves.push_back(std::make_unique<Move>(start, newPos));
 		}
@@ -39,6 +60,49 @@ UniqueMoveList ChessBoard::getAllPseudoLegalMoves()
 
 void ChessBoard::getPawnMoves(UniqueMoveList& moves)
 {
+	Direction forward = getForwardForColor(_currentTurnColor);
+	BitBoard startRank = _currentTurnColor == White ? RANK_2 : RANK_7;
+
+	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
+	{
+		Square currSquare = (Square)currSquareIdx;
+		BitBoard piecePosBB = BB_SQUARE[currSquareIdx];
+
+		if ((piecePosBB &
+			_piecesOfType[Pawn] &
+			_piecesOfColor[_currentTurnColor]) != 0ULL)
+		{
+			Square forwardPos = (Square)(currSquare + forward);
+			BitBoard forwardPosBB = BB_SQUARE[forwardPos];
+			//one move forward
+			if (destinationIsOnBoard(currSquare, forward) &&
+				(forwardPosBB & _allPieces) == 0ULL)
+			{
+				moves.push_back(std::make_unique<Move>(currSquare, forwardPos));
+				//TODO
+				//if move ends on promotion rank it should be a promotion move
+
+				//two moves forward (only possible if one move is possible
+				Square doubleForward = (Square)(forwardPos + forward);
+				if ((piecePosBB & startRank) != 0 &&
+					destinationIsOnBoard(forwardPos, forward) &&
+					(BB_SQUARE[doubleForward] & _allPieces) == 0ULL)
+				{
+					moves.push_back(std::make_unique<Move>(currSquare, doubleForward));
+				}
+			}
+
+			//taking diagonal checks
+			//this loop checks one time left and one time right
+			Direction leftAndRight[2] = { WEST, EAST };
+			for (int i = 0; i < 2; i++)
+			{
+				Direction direction = (Direction)(leftAndRight[i] + forward);
+				ChessColor opponentColor = getOppositeColor(_currentTurnColor);
+				addIfDestinationIsColor(moves, currSquare, direction, opponentColor);
+			}
+		}
+	}
 }
 
 void ChessBoard::getKnightMoves(UniqueMoveList& moves)
@@ -63,21 +127,27 @@ void ChessBoard::getKnightMoves(UniqueMoveList& moves)
 
 void ChessBoard::getBishopMoves(UniqueMoveList& moves)
 {
+	Direction directions[4] = {NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST};
 }
 
 void ChessBoard::getRookMoves(UniqueMoveList& moves)
 {
+	Direction directions[4] = {NORTH, EAST, SOUTH, WEST};
 }
 
 void ChessBoard::getQueenMoves(UniqueMoveList& moves)
 {
+	Direction directions[8] = {NORTH, EAST, SOUTH, WEST,
+		NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST};
+
+	
 }
 
 void ChessBoard::getKingMoves(UniqueMoveList& moves)
 {
-	for(uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
+	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
 	{
-		if((BB_SQUARE[currSquareIdx] &
+		if ((BB_SQUARE[currSquareIdx] &
 			_piecesOfType[King] &
 			_piecesOfColor[_currentTurnColor]) != 0ULL)
 		{
