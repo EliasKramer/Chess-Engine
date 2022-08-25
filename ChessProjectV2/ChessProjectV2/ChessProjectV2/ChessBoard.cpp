@@ -9,9 +9,19 @@ bool ChessBoard::destinationIsOnBoard(Square start, Direction direction)
 
 bool ChessBoard::destinationIsSameColor(Square start, Direction direction, ChessColor color)
 {
-	Square newPos = (Square)(start + direction);
+	int newPos = (start + direction);
 
-	return (_piecesOfColor[color] & BB_SQUARE[newPos]) != 0;
+	if (newPos < A1 || newPos > H8)
+	{
+		return false;
+	}
+
+	return positionIsSameColor((Square)newPos, color);
+}
+
+bool ChessBoard::positionIsSameColor(Square pos, ChessColor color)
+{
+	return (_piecesOfColor[color] & BB_SQUARE[pos]) != 0;
 }
 
 void ChessBoard::addIfDestinationIsValid(UniqueMoveList& moves, Square start, Direction dir)
@@ -34,7 +44,7 @@ void ChessBoard::addIfDestinationIsColor(
 	if (destinationIsOnBoard(start, dir))
 	{
 		Square newPos = (Square)(start + dir);
-		if ((_piecesOfColor[color] & BB_SQUARE[newPos]) != 0)
+		if (positionIsSameColor(newPos, color))
 		{
 			moves.push_back(std::make_unique<Move>(start, newPos));
 		}
@@ -68,6 +78,7 @@ void ChessBoard::getPawnMoves(UniqueMoveList& moves)
 		Square currSquare = (Square)currSquareIdx;
 		BitBoard piecePosBB = BB_SQUARE[currSquareIdx];
 
+		//if the current square is a pawn and the same color
 		if ((piecePosBB &
 			_piecesOfType[Pawn] &
 			_piecesOfColor[_currentTurnColor]) != 0ULL)
@@ -127,20 +138,54 @@ void ChessBoard::getKnightMoves(UniqueMoveList& moves)
 
 void ChessBoard::getBishopMoves(UniqueMoveList& moves)
 {
-	Direction directions[4] = {NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST};
+	const int numberOfDirections = 4;
+	Direction directions[numberOfDirections] =
+	{ NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST };
+
+	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
+	{
+		if ((BB_SQUARE[currSquareIdx] &
+			_piecesOfType[Bishop] &
+			_piecesOfColor[_currentTurnColor]) != 0ULL)
+		{
+			addRayMoves(moves, (Square)currSquareIdx, directions, numberOfDirections);
+		}
+	}
+
 }
 
 void ChessBoard::getRookMoves(UniqueMoveList& moves)
 {
-	Direction directions[4] = {NORTH, EAST, SOUTH, WEST};
+	const int numberOfDirections = 4;
+	Direction directions[numberOfDirections] =
+	{ NORTH, EAST, SOUTH, WEST };
+
+	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
+	{
+		if ((BB_SQUARE[currSquareIdx] &
+			_piecesOfType[Rook] &
+			_piecesOfColor[_currentTurnColor]) != 0ULL)
+		{
+			addRayMoves(moves, (Square)currSquareIdx, directions, numberOfDirections);
+		}
+	}
 }
 
 void ChessBoard::getQueenMoves(UniqueMoveList& moves)
 {
-	Direction directions[8] = {NORTH, EAST, SOUTH, WEST,
-		NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST};
+	const int numberOfDirections = 8;
+	Direction directions[numberOfDirections] =
+	{ NORTH, EAST, SOUTH, WEST, NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST };
 
-	
+	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
+	{
+		if ((BB_SQUARE[currSquareIdx] &
+			_piecesOfType[Queen] &
+			_piecesOfColor[_currentTurnColor]) != 0ULL)
+		{
+			addRayMoves(moves, (Square)currSquareIdx, directions, numberOfDirections);
+		}
+	}
 }
 
 void ChessBoard::getKingMoves(UniqueMoveList& moves)
@@ -169,6 +214,53 @@ void ChessBoard::getCastlingMoves(UniqueMoveList& moves)
 
 void ChessBoard::getEnPassantMove(UniqueMoveList& moves)
 {
+}
+
+void ChessBoard::addRayMoves(
+	UniqueMoveList& moves,
+	Square start,
+	Direction directions[],
+	int numberOfDirections)
+{
+	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
+
+	for (int i = 0; i < numberOfDirections; i++)
+	{
+		Direction currentDirection = directions[i];
+
+		Square currentSquare = start;
+		while (true)
+		{
+			//if the new position would be on the board
+			if (destinationIsOnBoard(currentSquare, currentDirection))
+			{
+				//set the new position
+				currentSquare = (Square)(currentSquare + currentDirection);
+
+				//if the new position is the same color as the piece to check
+				if (positionIsSameColor(currentSquare, _currentTurnColor))
+				{
+					//you cannot go on a square where a piece of the same color is
+					break;
+				}
+				else if (positionIsSameColor(currentSquare, opponentColor))
+				{
+					//if an opponent is on the new field you can take him,
+					//but cannot continue after that (you cannot jump over opponents)
+					moves.push_back(std::make_unique<Move>(start, currentSquare));
+					break;
+				}
+				else {
+					//if there is no piece at the new position you can move there.
+					moves.push_back(std::make_unique<Move>(start, currentSquare));
+				}
+			}
+			else {
+				//if the new position is not on the board, the search should not continue
+				break;
+			}
+		}
+	}
 }
 
 ChessBoard::ChessBoard()

@@ -40,7 +40,8 @@ protected:
 	
 	bool destinationIsOnBoard(Square start, Direction direction);
 	bool destinationIsSameColor(Square start, Direction direction, ChessColor color);
-
+	bool positionIsSameColor(Square pos, ChessColor color);
+	
 	void addIfDestinationIsValid(
 		UniqueMoveList& moves,
 		Square start,
@@ -65,6 +66,12 @@ protected:
 
 	void getCastlingMoves(UniqueMoveList& moves);
 	void getEnPassantMove(UniqueMoveList& moves);
+	
+	void addRayMoves(
+		UniqueMoveList& moves,
+		Square start,
+		Direction directions[],
+		int numberOfDirections);
 
 public:
 	ChessBoard();
