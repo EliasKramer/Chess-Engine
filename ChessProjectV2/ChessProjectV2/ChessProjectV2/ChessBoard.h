@@ -37,39 +37,42 @@ protected:
 	uint16_t _moveNumber;
 
 	/*Move Generation*/
-	
+
 	bool destinationIsOnBoard(Square start, Direction direction);
 	bool destinationIsSameColor(Square start, Direction direction, ChessColor color);
 	bool positionIsSameColor(Square pos, ChessColor color);
-	
+
 	void addIfDestinationIsValid(
-		UniqueMoveList& moves,
-		Square start,
-		Direction dir);
-	void addIfDestinationIsColor(
-		UniqueMoveList& moves,
+		MoveList& moves,
 		Square start,
 		Direction dir,
-		ChessColor color);
+		PieceType type);
+	void addIfDestinationIsColor(
+		MoveList& moves,
+		Square start,
+		Direction dir,
+		ChessColor color,
+		PieceType type);
 
 	//Pseudo legal moves are moves that follow 
 	//the move rules for the types.
 	//They do not check if the king is in check
-	UniqueMoveList getAllPseudoLegalMoves();
+	MoveList getAllPseudoLegalMoves();
 
-	void getPawnMoves(UniqueMoveList& moves);
-	void getKnightMoves(UniqueMoveList& moves);
-	void getBishopMoves(UniqueMoveList& moves);
-	void getRookMoves(UniqueMoveList& moves);
-	void getQueenMoves(UniqueMoveList& moves);
-	void getKingMoves(UniqueMoveList& moves);
+	void getPawnMoves(MoveList& moves);
+	void getKnightMoves(MoveList& moves);
+	void getBishopMoves(MoveList& moves);
+	void getRookMoves(MoveList& moves);
+	void getQueenMoves(MoveList& moves);
+	void getKingMoves(MoveList& moves);
 
-	void getCastlingMoves(UniqueMoveList& moves);
-	void getEnPassantMove(UniqueMoveList& moves);
-	
+	void getCastlingMoves(MoveList& moves);
+	void getEnPassantMove(MoveList& moves);
+
 	void addRayMoves(
-		UniqueMoveList& moves,
+		MoveList& moves,
 		Square start,
+		PieceType type,
 		Direction directions[],
 		int numberOfDirections);
 
@@ -78,5 +81,5 @@ public:
 	ChessBoard(std::string given_fen_code);
 
 	//returns all moves of the color, whos turn it is
-	UniqueMoveList getAllLegalMoves();
+	MoveList getAllLegalMoves();
 };

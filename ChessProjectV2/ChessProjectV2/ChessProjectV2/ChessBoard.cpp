@@ -24,36 +24,37 @@ bool ChessBoard::positionIsSameColor(Square pos, ChessColor color)
 	return (_piecesOfColor[color] & BB_SQUARE[pos]) != 0;
 }
 
-void ChessBoard::addIfDestinationIsValid(UniqueMoveList& moves, Square start, Direction dir)
+void ChessBoard::addIfDestinationIsValid(MoveList& moves, Square start, Direction dir, PieceType type)
 {
 	if (destinationIsOnBoard(start, dir))
 	{
 		if (!destinationIsSameColor(start, dir, _currentTurnColor))
 		{
-			moves.push_back(std::make_unique<Move>(start, (Square)(start + dir)));
+			moves.push_back(Move(start, (Square)(start + dir), type));
 		}
 	}
 }
 
 void ChessBoard::addIfDestinationIsColor(
-	UniqueMoveList& moves,
+	MoveList& moves,
 	Square start,
 	Direction dir,
-	ChessColor color)
+	ChessColor color,
+	PieceType type)
 {
 	if (destinationIsOnBoard(start, dir))
 	{
 		Square newPos = (Square)(start + dir);
 		if (positionIsSameColor(newPos, color))
 		{
-			moves.push_back(std::make_unique<Move>(start, newPos));
+			moves.push_back(Move(start, newPos, type));
 		}
 	}
 }
 
-UniqueMoveList ChessBoard::getAllPseudoLegalMoves()
+MoveList ChessBoard::getAllPseudoLegalMoves()
 {
-	UniqueMoveList moveList;
+	MoveList moveList;
 
 	getPawnMoves(moveList);
 	getKnightMoves(moveList);
@@ -68,7 +69,7 @@ UniqueMoveList ChessBoard::getAllPseudoLegalMoves()
 	return moveList;
 }
 
-void ChessBoard::getPawnMoves(UniqueMoveList& moves)
+void ChessBoard::getPawnMoves(MoveList& moves)
 {
 	Direction forward = getForwardForColor(_currentTurnColor);
 	BitBoard startRank = _currentTurnColor == White ? RANK_2 : RANK_7;
@@ -89,7 +90,7 @@ void ChessBoard::getPawnMoves(UniqueMoveList& moves)
 			if (destinationIsOnBoard(currSquare, forward) &&
 				(forwardPosBB & _allPieces) == 0ULL)
 			{
-				moves.push_back(std::make_unique<Move>(currSquare, forwardPos));
+				moves.push_back(Move(currSquare, forwardPos, Pawn));
 				//TODO
 				//if move ends on promotion rank it should be a promotion move
 
@@ -99,7 +100,9 @@ void ChessBoard::getPawnMoves(UniqueMoveList& moves)
 					destinationIsOnBoard(forwardPos, forward) &&
 					(BB_SQUARE[doubleForward] & _allPieces) == 0ULL)
 				{
-					moves.push_back(std::make_unique<Move>(currSquare, doubleForward));
+					//TODO
+					//setting the en passant square
+					moves.push_back(Move(currSquare, doubleForward, Pawn));
 				}
 			}
 
@@ -110,13 +113,13 @@ void ChessBoard::getPawnMoves(UniqueMoveList& moves)
 			{
 				Direction direction = (Direction)(leftAndRight[i] + forward);
 				ChessColor opponentColor = getOppositeColor(_currentTurnColor);
-				addIfDestinationIsColor(moves, currSquare, direction, opponentColor);
+				addIfDestinationIsColor(moves, currSquare, direction, opponentColor, Pawn);
 			}
 		}
 	}
 }
 
-void ChessBoard::getKnightMoves(UniqueMoveList& moves)
+void ChessBoard::getKnightMoves(MoveList& moves)
 {
 	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
 	{
@@ -124,19 +127,19 @@ void ChessBoard::getKnightMoves(UniqueMoveList& moves)
 			_piecesOfType[Knight] &
 			_piecesOfColor[_currentTurnColor]) != 0ULL)
 		{
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_NORTH_EAST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, EAST_NORTH_EAST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, EAST_SOUTH_EAST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_SOUTH_EAST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_SOUTH_WEST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, WEST_SOUTH_WEST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, WEST_NORTH_WEST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_NORTH_WEST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_NORTH_EAST, Knight);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, EAST_NORTH_EAST, Knight);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, EAST_SOUTH_EAST, Knight);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_SOUTH_EAST, Knight);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_SOUTH_WEST, Knight);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, WEST_SOUTH_WEST, Knight);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, WEST_NORTH_WEST, Knight);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_NORTH_WEST, Knight);
 		}
 	}
 }
 
-void ChessBoard::getBishopMoves(UniqueMoveList& moves)
+void ChessBoard::getBishopMoves(MoveList& moves)
 {
 	const int numberOfDirections = 4;
 	Direction directions[numberOfDirections] =
@@ -148,13 +151,13 @@ void ChessBoard::getBishopMoves(UniqueMoveList& moves)
 			_piecesOfType[Bishop] &
 			_piecesOfColor[_currentTurnColor]) != 0ULL)
 		{
-			addRayMoves(moves, (Square)currSquareIdx, directions, numberOfDirections);
+			addRayMoves(moves, (Square)currSquareIdx, Bishop, directions, numberOfDirections);
 		}
 	}
 
 }
 
-void ChessBoard::getRookMoves(UniqueMoveList& moves)
+void ChessBoard::getRookMoves(MoveList& moves)
 {
 	const int numberOfDirections = 4;
 	Direction directions[numberOfDirections] =
@@ -166,12 +169,12 @@ void ChessBoard::getRookMoves(UniqueMoveList& moves)
 			_piecesOfType[Rook] &
 			_piecesOfColor[_currentTurnColor]) != 0ULL)
 		{
-			addRayMoves(moves, (Square)currSquareIdx, directions, numberOfDirections);
+			addRayMoves(moves, (Square)currSquareIdx, Rook, directions, numberOfDirections);
 		}
 	}
 }
 
-void ChessBoard::getQueenMoves(UniqueMoveList& moves)
+void ChessBoard::getQueenMoves(MoveList& moves)
 {
 	const int numberOfDirections = 8;
 	Direction directions[numberOfDirections] =
@@ -183,12 +186,12 @@ void ChessBoard::getQueenMoves(UniqueMoveList& moves)
 			_piecesOfType[Queen] &
 			_piecesOfColor[_currentTurnColor]) != 0ULL)
 		{
-			addRayMoves(moves, (Square)currSquareIdx, directions, numberOfDirections);
+			addRayMoves(moves, (Square)currSquareIdx, Queen, directions, numberOfDirections);
 		}
 	}
 }
 
-void ChessBoard::getKingMoves(UniqueMoveList& moves)
+void ChessBoard::getKingMoves(MoveList& moves)
 {
 	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
 	{
@@ -196,29 +199,30 @@ void ChessBoard::getKingMoves(UniqueMoveList& moves)
 			_piecesOfType[King] &
 			_piecesOfColor[_currentTurnColor]) != 0ULL)
 		{
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_EAST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, EAST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_EAST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_WEST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, WEST);
-			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_WEST);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH, King);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_EAST, King);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, EAST, King);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_EAST, King);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH, King);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, SOUTH_WEST, King);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, WEST, King);
+			addIfDestinationIsValid(moves, (Square)currSquareIdx, NORTH_WEST, King);
 		}
 	}
 }
 
-void ChessBoard::getCastlingMoves(UniqueMoveList& moves)
+void ChessBoard::getCastlingMoves(MoveList& moves)
 {
 }
 
-void ChessBoard::getEnPassantMove(UniqueMoveList& moves)
+void ChessBoard::getEnPassantMove(MoveList& moves)
 {
 }
 
 void ChessBoard::addRayMoves(
-	UniqueMoveList& moves,
+	MoveList& moves,
 	Square start,
+	PieceType type,
 	Direction directions[],
 	int numberOfDirections)
 {
@@ -247,12 +251,12 @@ void ChessBoard::addRayMoves(
 				{
 					//if an opponent is on the new field you can take him,
 					//but cannot continue after that (you cannot jump over opponents)
-					moves.push_back(std::make_unique<Move>(start, currentSquare));
+					moves.push_back(Move(start, currentSquare, type));
 					break;
 				}
 				else {
 					//if there is no piece at the new position you can move there.
-					moves.push_back(std::make_unique<Move>(start, currentSquare));
+					moves.push_back(Move(start, currentSquare, type));
 				}
 			}
 			else {
@@ -366,15 +370,14 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 	//en passant field
 	_enPassantSquare = getSquareFromString(split_fen_code[3]);
 
-	//anzahl 50 züge remis regel - 
-	//halbzüge seit letzem bauernzug oder schlagen einer figur
+	//50 move rule
 	_halfMoveClock = std::stoi(split_fen_code[4]);
 
-	//zugnummer
+	//move number
 	_moveNumber = std::stoi(split_fen_code[5]);
 }
 
-UniqueMoveList ChessBoard::getAllLegalMoves()
+MoveList ChessBoard::getAllLegalMoves()
 {
-	return UniqueMoveList();
+	return MoveList();
 }

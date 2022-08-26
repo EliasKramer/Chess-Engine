@@ -25,5 +25,5 @@ public:
 
 	bool destinationIsOnBoard(Square start, Direction dirToAdd);
 
-	UniqueMoveList getPseudoLegalMoves();
+	MoveList getPseudoLegalMoves();
 };

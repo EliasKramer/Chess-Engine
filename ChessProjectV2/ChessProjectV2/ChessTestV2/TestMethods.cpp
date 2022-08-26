@@ -1,10 +1,10 @@
 #include "TestMethods.h"
 
-bool moveListContains(Move m, const UniqueMoveList& moves)
+bool moveListContains(Move m, const MoveList& moves)
 {
-    for (const std::unique_ptr<Move>& currMoveToCheck : moves)
+    for (const Move currMoveToCheck : moves)
     {
-        if (*currMoveToCheck == m)
+        if (currMoveToCheck == m)
         {
             return true;
         }

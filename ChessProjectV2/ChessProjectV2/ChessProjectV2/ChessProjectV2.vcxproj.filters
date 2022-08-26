@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\moves">
+      <UniqueIdentifier>{450756cf-df9c-4d66-b45a-8f22e0691d90}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moves">
+      <UniqueIdentifier>{fdfb4fbb-4713-476f-80b7-8a185d7f763a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChessProjectV2.cpp">
@@ -37,6 +43,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Move.cpp">
+      <Filter>Source Files\moves</Filter>
+    </ClCompile>
+    <ClCompile Include="TypeOnSquare.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,6 +69,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Move.h">
+      <Filter>Header Files\moves</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeOnSquare.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

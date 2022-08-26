@@ -135,6 +135,7 @@
     <ClCompile Include="DataAndTypes.cpp" />
     <ClCompile Include="HelpMethods.cpp" />
     <ClCompile Include="Move.cpp" />
+    <ClCompile Include="TypeOnSquare.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitBoard.h" />
@@ -144,6 +145,7 @@
     <ClInclude Include="DataAndTypes.h" />
     <ClInclude Include="HelpMethods.h" />
     <ClInclude Include="Move.h" />
+    <ClInclude Include="TypeOnSquare.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -55,7 +55,7 @@ BitBoard ChessBoardTest::getAllPiecesOfType(PieceType type)
     return _piecesOfType[type];
 }
 
-UniqueMoveList ChessBoardTest::getPseudoLegalMoves()
+MoveList ChessBoardTest::getPseudoLegalMoves()
 {
 	return ChessBoard::getAllPseudoLegalMoves();
 }
