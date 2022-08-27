@@ -15,8 +15,7 @@ public:
 	Move(Square givenStart, Square givenDest);
 	Square getStart();
 	Square getDestination();
-
-	//new try
+		
 	//void execute();
 };
 bool operator ==(const Move& first, const Move& second);
