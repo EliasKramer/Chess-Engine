@@ -84,6 +84,18 @@
     <ClCompile Include="TestMethods.cpp">
       <Filter>Source Files\tests\TestMethods</Filter>
     </ClCompile>
+    <ClCompile Include="..\ChessProjectV2\MoveCastle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ChessProjectV2\MoveDoublePawn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ChessProjectV2\MoveEnPassant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ChessProjectV2\MovePromote.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -112,6 +124,18 @@
     </ClInclude>
     <ClInclude Include="TestMethods.h">
       <Filter>Header Files\TestMethods</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChessProjectV2\MoveCastle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChessProjectV2\MoveDoublePawn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChessProjectV2\MoveEnPassant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChessProjectV2\MovePromote.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

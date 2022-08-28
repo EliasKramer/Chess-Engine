@@ -152,7 +152,8 @@ void ChessBoard::getPawnMoves(UniqueMoveList& moves)
 			if (destinationIsOnBoard(currSquare, forward) &&
 				(forwardPosBB & _allPieces) == 0ULL)
 			{
-				moves.push_back(std::make_unique<Move>(currSquare, forwardPos));
+				addPawnMove(moves, currSquare, forwardPos);
+				//moves.push_back(std::make_unique<Move>(currSquare, forwardPos));
 				//TODO
 				//if move ends on promotion rank it should be a promotion move
 
@@ -173,7 +174,12 @@ void ChessBoard::getPawnMoves(UniqueMoveList& moves)
 			{
 				Direction direction = (Direction)(leftAndRight[i] + forward);
 				ChessColor opponentColor = getOppositeColor(_currentTurnColor);
-				addIfDestinationIsColor(moves, currSquare, direction, opponentColor);
+
+				if (destinationIsSameColor(currSquare, direction, opponentColor)
+					&& destinationIsOnBoard(currSquare, direction))
+				{
+					addPawnMove(moves, currSquare, (Square)(currSquare + direction));
+				}
 			}
 		}
 	}
@@ -271,12 +277,56 @@ void ChessBoard::getKingMoves(UniqueMoveList& moves)
 	}
 }
 
+void ChessBoard::addPawnMove(UniqueMoveList& moves, Square start, Square dest)
+{
+	BitBoard promotionRank = _currentTurnColor == White ? RANK_8 : RANK_1;
+
+	if ((BB_SQUARE[dest] & promotionRank) != 0ULL)
+	{
+		moves.push_back(std::make_unique<MovePromote>(start, dest, Queen));
+		moves.push_back(std::make_unique<MovePromote>(start, dest, Rook));
+		moves.push_back(std::make_unique<MovePromote>(start, dest, Bishop));
+		moves.push_back(std::make_unique<MovePromote>(start, dest, Knight));
+	}
+	else 
+	{
+		moves.push_back(std::make_unique<Move>(start, dest));
+	}
+}
+
 void ChessBoard::getCastlingMoves(UniqueMoveList& moves)
 {
+	//TODO
 }
 
 void ChessBoard::getEnPassantMove(UniqueMoveList& moves)
 {
+	if (_enPassantSquare == SQUARE_NONE)
+	{
+		return;
+	}
+
+	Direction backwards = getBackwardForColor(_currentTurnColor);
+
+	Direction possiblePawnPositionsThatCanEnPassant[2] =
+	{ (Direction)(backwards + EAST), (Direction)(backwards + WEST) };
+
+	Square possibleEnPassantSquare1 = (Square)(_enPassantSquare + backwards + EAST);
+	Square possibleEnPassantSquare2 = (Square)(_enPassantSquare + backwards + WEST);
+
+	for (int i = 0; i < 2; i++)
+	{
+		if (destinationIsOnBoard(_enPassantSquare, possiblePawnPositionsThatCanEnPassant[i]))
+		{
+			Square enPassantSquare = (Square)(_enPassantSquare + backwards);
+
+			if ((BB_SQUARE[enPassantSquare] & _piecesOfColor[_currentTurnColor] & _piecesOfType[Pawn]) != 0ULL)
+			{
+				moves.push_back(
+					std::make_unique<MoveEnPassant>(possibleEnPassantSquare1, _enPassantSquare, enPassantSquare));
+			}
+		}
+	}
 }
 
 void ChessBoard::addRayMoves(
@@ -329,7 +379,7 @@ void ChessBoard::addRayMoves(
 bool ChessBoard::fieldIsUnderAttack(Square pos)
 {
 	//is only used for king checks and castling, so no en passant implemented
-	
+
 	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
 
 

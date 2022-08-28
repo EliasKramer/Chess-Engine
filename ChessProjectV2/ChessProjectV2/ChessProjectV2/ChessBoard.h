@@ -5,6 +5,10 @@
 #include "ChessPiece.h"
 #include "HelpMethods.h"
 #include "Move.h"
+#include "MoveEnPassant.h"
+#include "MoveCastle.h"
+#include "MovePromote.h"
+#include "MoveDoublePawn.h"
 
 const std::string STARTING_FEN =
 "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -67,6 +71,8 @@ protected:
 	void getQueenMoves(UniqueMoveList& moves);
 	void getKingMoves(UniqueMoveList& moves);
 
+	void addPawnMove(
+		UniqueMoveList& moves, Square start, Square dest);
 	void getCastlingMoves(UniqueMoveList& moves);
 	void getEnPassantMove(UniqueMoveList& moves);
 	

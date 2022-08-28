@@ -14,7 +14,23 @@ Square Move::getDestination()
 {
 	return _destination;
 }
+/*
+void Move::execute(
+	std::function<void(Square, Square)> copySquare,
+	std::function<void(ChessPiece, Square)> setAtPos,
+	std::function<void(Square)> delAtPos,
+	std::function<void(Square)> setEnPassant)
+{
+	copySquare(_start, _destination);
+	delAtPos(_start);
+}
 
+Square* Move::getAtPosWithMoveDone(Square pos)
+{
+	//TODO
+	return nullptr;
+}
+*/
 bool operator==(const Move& first, const Move& second)
 {
 	return 

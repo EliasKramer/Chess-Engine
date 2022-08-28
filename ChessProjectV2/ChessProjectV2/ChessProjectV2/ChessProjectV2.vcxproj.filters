@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\moves">
+      <UniqueIdentifier>{a70ca029-6423-4397-acbe-663fe68605a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\moves">
+      <UniqueIdentifier>{8c39385a-6305-4a19-a29c-589998fabf07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChessProjectV2.cpp">
@@ -36,8 +42,20 @@
     <ClCompile Include="HelpMethods.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MoveEnPassant.cpp">
+      <Filter>Source Files\moves</Filter>
+    </ClCompile>
     <ClCompile Include="Move.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\moves</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveCastle.cpp">
+      <Filter>Source Files\moves</Filter>
+    </ClCompile>
+    <ClCompile Include="MovePromote.cpp">
+      <Filter>Source Files\moves</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveDoublePawn.cpp">
+      <Filter>Source Files\moves</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -59,8 +77,20 @@
     <ClInclude Include="HelpMethods.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MovePromote.h">
+      <Filter>Header Files\moves</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveEnPassant.h">
+      <Filter>Header Files\moves</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveCastle.h">
+      <Filter>Header Files\moves</Filter>
+    </ClInclude>
     <ClInclude Include="Move.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\moves</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveDoublePawn.h">
+      <Filter>Header Files\moves</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

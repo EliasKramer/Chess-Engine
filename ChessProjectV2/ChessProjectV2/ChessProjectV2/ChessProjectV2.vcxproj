@@ -135,6 +135,10 @@
     <ClCompile Include="DataAndTypes.cpp" />
     <ClCompile Include="HelpMethods.cpp" />
     <ClCompile Include="Move.cpp" />
+    <ClCompile Include="MoveCastle.cpp" />
+    <ClCompile Include="MoveDoublePawn.cpp" />
+    <ClCompile Include="MoveEnPassant.cpp" />
+    <ClCompile Include="MovePromote.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitBoard.h" />
@@ -144,6 +148,10 @@
     <ClInclude Include="DataAndTypes.h" />
     <ClInclude Include="HelpMethods.h" />
     <ClInclude Include="Move.h" />
+    <ClInclude Include="MoveCastle.h" />
+    <ClInclude Include="MoveDoublePawn.h" />
+    <ClInclude Include="MoveEnPassant.h" />
+    <ClInclude Include="MovePromote.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
