@@ -1,5 +1,68 @@
 #include "ChessBoard.h"
 
+void ChessBoard::copySquare(Square copyField, Square pasteField)
+{
+	BitBoard copyPos = BB_SQUARE[copyField];
+	BitBoard pastePos = BB_SQUARE[pasteField];
+
+	for (int i = 0; i < DIFFERENT_CHESS_COLORS; i++)
+	{
+		ChessColor currCol = (ChessColor)i;
+
+		if ((_piecesOfColor[currCol] & copyPos) != 0)
+		{
+			_piecesOfColor[currCol] = _piecesOfColor[currCol] | pastePos;
+		}
+	}
+
+	for (int i = 0; i < NUMBER_OF_DIFFERENT_PIECE_TYPES; i++)
+	{
+		PieceType currType = (PieceType)i;
+
+		if ((_piecesOfType[currType] & copyPos) != 0)
+		{
+			_piecesOfType[currType] = _piecesOfType[currType] | pastePos;
+		}
+	}
+
+	if ((_allPieces & copyPos) != 0)
+	{
+		_allPieces = _allPieces | pastePos;
+	}
+}
+
+void ChessBoard::setAtPosition(ChessPiece piece, Square position)
+{
+	BitBoard piecePos = BB_SQUARE[position];
+
+	_allPieces = _allPieces | piecePos;
+
+	ChessColor col = piece.getColor();
+	_piecesOfColor[col] = _piecesOfColor[col] | piecePos;
+
+	PieceType type = piece.getType();
+	_piecesOfType[type] = _piecesOfType[type] | piecePos;
+}
+
+void ChessBoard::delAtPos(Square position)
+{
+	BitBoard keepPiecesMask = ~(BB_SQUARE[position]);
+
+	_allPieces = _allPieces & keepPiecesMask;
+
+	for (int i = 0; i < DIFFERENT_CHESS_COLORS; i++)
+	{
+		ChessColor currCol = (ChessColor)i;
+		_piecesOfColor[currCol] = _piecesOfColor[currCol] & keepPiecesMask;
+	}
+
+	for (int i = 0; i < NUMBER_OF_DIFFERENT_PIECE_TYPES; i++)
+	{
+		PieceType currType = (PieceType)i;
+		_piecesOfType[currType] = _piecesOfType[currType] & keepPiecesMask;
+	}
+}
+
 bool ChessBoard::destinationIsOnBoard(Square start, Direction direction)
 {
 	//if the invalid board for the direction and
@@ -261,6 +324,22 @@ void ChessBoard::addRayMoves(
 			}
 		}
 	}
+}
+
+bool ChessBoard::fieldIsUnderAttack(Square pos)
+{
+	//is only used for king checks and castling, so no en passant implemented
+	
+	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
+
+
+
+	return false;
+}
+
+bool ChessBoard::fieldIsUnderAttackWithMoveDone(Square pos, Move* move)
+{
+	return false;
 }
 
 ChessBoard::ChessBoard()

@@ -48,7 +48,7 @@ std::vector<std::unique_ptr<Move>> RayCastResult::getRayCastMoves()
 		std::make_move_iterator(_rayCastMoves.begin()),
 		std::make_move_iterator(_rayCastMoves.end()));
 
-	return result;//;//_rayCastMoves;
+	return result;
 }
 
 void RayCastResult::combineWithOther(RayCastResult other)

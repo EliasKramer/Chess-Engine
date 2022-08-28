@@ -17,6 +17,7 @@ public:
 	Square getDestination();
 		
 	//void execute();
+	//unknownDataType getBoardWithMoveDone();
 };
 bool operator ==(const Move& first, const Move& second);
 bool operator !=(const Move& first, const Move& second);

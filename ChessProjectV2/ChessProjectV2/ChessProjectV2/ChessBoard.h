@@ -37,6 +37,9 @@ protected:
 	uint16_t _moveNumber;
 
 	/*Move Generation*/
+	void copySquare(Square copyField, Square pasteField);
+	void setAtPosition(ChessPiece piece, Square position);
+	void delAtPos(Square position);
 	
 	bool destinationIsOnBoard(Square start, Direction direction);
 	bool destinationIsSameColor(Square start, Direction direction, ChessColor color);
@@ -72,6 +75,10 @@ protected:
 		Square start,
 		Direction directions[],
 		int numberOfDirections);
+
+	//field is under attack
+	bool fieldIsUnderAttack(Square pos);
+	bool fieldIsUnderAttackWithMoveDone(Square pos, Move* move);
 
 public:
 	ChessBoard();

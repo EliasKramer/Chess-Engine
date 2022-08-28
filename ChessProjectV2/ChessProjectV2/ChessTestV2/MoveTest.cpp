@@ -29,7 +29,6 @@ namespace MoveTest
 			Assert::IsTrue(m != differentStart);
 			Assert::IsTrue(m != differentDestination);
 			Assert::IsTrue(m != differentMove);
-			
 		}
 	};
 }	
