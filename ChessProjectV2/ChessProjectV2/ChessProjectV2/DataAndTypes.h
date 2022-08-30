@@ -11,9 +11,9 @@ const int NUMBER_OF_DIFFERENT_PIECE_TYPES = 6;
 
 enum PieceType : uint8_t {
 	Pawn,
-	Rook,
 	Knight,
 	Bishop,
+	Rook,
 	Queen,
 	King
 };

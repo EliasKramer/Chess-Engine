@@ -30,3 +30,6 @@ Direction getForwardForColor(ChessColor color);
 Direction getBackwardForColor(ChessColor color);
 
 ChessColor getOppositeColor(ChessColor color);
+
+bool isRayType(PieceType type);
+

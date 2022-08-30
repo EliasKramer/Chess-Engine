@@ -96,6 +96,12 @@
     <ClCompile Include="..\ChessProjectV2\MovePromote.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ChessProjectV2\Constants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantsTest.cpp">
+      <Filter>Source Files\tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -135,6 +141,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ChessProjectV2\MovePromote.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChessProjectV2\Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

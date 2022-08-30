@@ -160,6 +160,7 @@
     <ClCompile Include="..\ChessProjectV2\ChessBoard.cpp" />
     <ClCompile Include="..\ChessProjectV2\ChessBoardTest.cpp" />
     <ClCompile Include="..\ChessProjectV2\ChessPiece.cpp" />
+    <ClCompile Include="..\ChessProjectV2\Constants.cpp" />
     <ClCompile Include="..\ChessProjectV2\DataAndTypes.cpp" />
     <ClCompile Include="..\ChessProjectV2\HelpMethods.cpp" />
     <ClCompile Include="..\ChessProjectV2\Move.cpp" />
@@ -170,6 +171,7 @@
     <ClCompile Include="BitBoardTest.cpp" />
     <ClCompile Include="ChessBoardUnitTests.cpp" />
     <ClCompile Include="ChessTestV2.cpp" />
+    <ClCompile Include="ConstantsTest.cpp" />
     <ClCompile Include="DataAndTypesTest.cpp" />
     <ClCompile Include="HelpMethodstest.cpp" />
     <ClCompile Include="MoveGenerationTests.cpp" />
@@ -188,6 +190,7 @@
     <ClInclude Include="..\ChessProjectV2\ChessBoard.h" />
     <ClInclude Include="..\ChessProjectV2\ChessBoardTest.h" />
     <ClInclude Include="..\ChessProjectV2\ChessPiece.h" />
+    <ClInclude Include="..\ChessProjectV2\Constants.h" />
     <ClInclude Include="..\ChessProjectV2\DataAndTypes.h" />
     <ClInclude Include="..\ChessProjectV2\HelpMethods.h" />
     <ClInclude Include="..\ChessProjectV2\Move.h" />

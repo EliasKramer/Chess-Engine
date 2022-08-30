@@ -15,6 +15,9 @@ public:
 	//getter for the base class
 
 	BitBoard getAllPieces();
+
+	bool fieldIsUnderAttack(Square pos);
+
 	BitBoard getAllPiecesOfColor(ChessColor color);
 	BitBoard getAllPiecesOfType(PieceType type);
 	bool casltingAllowed(ChessColor color, CastlingType option);
@@ -23,7 +26,6 @@ public:
 	uint16_t getHalfMoveClock();
 	uint16_t getMoveNumber();
 
-	bool destinationIsOnBoard(Square start, Direction dirToAdd);
-
 	UniqueMoveList getPseudoLegalMoves();
+
 };

@@ -132,6 +132,7 @@
     <ClCompile Include="ChessBoardTest.cpp" />
     <ClCompile Include="ChessPiece.cpp" />
     <ClCompile Include="ChessProjectV2.cpp" />
+    <ClCompile Include="Constants.cpp" />
     <ClCompile Include="DataAndTypes.cpp" />
     <ClCompile Include="HelpMethods.cpp" />
     <ClCompile Include="Move.cpp" />
@@ -145,6 +146,7 @@
     <ClInclude Include="ChessBoard.h" />
     <ClInclude Include="ChessBoardTest.h" />
     <ClInclude Include="ChessPiece.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="DataAndTypes.h" />
     <ClInclude Include="HelpMethods.h" />
     <ClInclude Include="Move.h" />

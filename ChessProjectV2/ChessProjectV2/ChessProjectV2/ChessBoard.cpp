@@ -63,13 +63,6 @@ void ChessBoard::delAtPos(Square position)
 	}
 }
 
-bool ChessBoard::destinationIsOnBoard(Square start, Direction direction)
-{
-	//if the invalid board for the direction and
-	//the start square dont overlap then the new pos is valid
-	return (INVALID_FIELDS_FOR_DIR.at(direction) & BB_SQUARE[start]) == 0;
-}
-
 bool ChessBoard::destinationIsSameColor(Square start, Direction direction, ChessColor color)
 {
 	int newPos = (start + direction);
@@ -129,6 +122,11 @@ UniqueMoveList ChessBoard::getAllPseudoLegalMoves()
 	getEnPassantMove(moveList);
 
 	return moveList;
+}
+
+BitBoard ChessBoard::getKingCheckRayCast()
+{
+	return BitBoard();
 }
 
 void ChessBoard::getPawnMoves(UniqueMoveList& moves)
@@ -288,7 +286,7 @@ void ChessBoard::addPawnMove(UniqueMoveList& moves, Square start, Square dest)
 		moves.push_back(std::make_unique<MovePromote>(start, dest, Bishop));
 		moves.push_back(std::make_unique<MovePromote>(start, dest, Knight));
 	}
-	else 
+	else
 	{
 		moves.push_back(std::make_unique<Move>(start, dest));
 	}
@@ -337,6 +335,14 @@ void ChessBoard::addRayMoves(
 {
 	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
 
+	BitBoard pinnedPieceMovementRestriction = BITBOARD_ALL;
+
+	BitBoard allRayPiecesOfColor = 
+		_piecesOfColor[_currentTurnColor] &
+		(_piecesOfType[Bishop] |
+			_piecesOfType[Rook] |
+			_piecesOfType[Queen]);
+
 	for (int i = 0; i < numberOfDirections; i++)
 	{
 		Direction currentDirection = directions[i];
@@ -382,7 +388,20 @@ bool ChessBoard::fieldIsUnderAttack(Square pos)
 
 	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
 
-
+	//gets attacked by knight
+	if((KNIGHT_ATTACK_BB[pos] &
+		_piecesOfColor[opponentColor] &
+		_piecesOfType[Knight]) != 0ULL)
+	{
+		return true;
+	}
+	//gets attacked by pawn
+	if((PAWN_ATTACK_BB[_currentTurnColor][pos] &
+		_piecesOfColor[opponentColor] &
+		_piecesOfType[Pawn]) != 0ULL)
+	{
+		return true;
+	}
 
 	return false;
 }

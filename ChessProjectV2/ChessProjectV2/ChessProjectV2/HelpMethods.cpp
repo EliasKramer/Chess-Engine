@@ -95,3 +95,8 @@ ChessColor getOppositeColor(ChessColor color)
 {
 	return (ChessColor)((color + 1) % 2);
 }
+
+bool isRayType(PieceType type)
+{
+	return type == Rook || type == Bishop || type == Queen;
+}

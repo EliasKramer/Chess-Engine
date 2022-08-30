@@ -60,11 +60,6 @@ UniqueMoveList ChessBoardTest::getPseudoLegalMoves()
 	return ChessBoard::getAllPseudoLegalMoves();
 }
 
-bool ChessBoardTest::destinationIsOnBoard(Square start, Direction dirToAdd)
-{
-	return ChessBoard::destinationIsOnBoard(start, dirToAdd);
-}
-
 bool ChessBoardTest::casltingAllowed(ChessColor color, CastlingType option)
 {
 	return _canCastle[color][option];
@@ -83,6 +78,11 @@ Square ChessBoardTest::getEnPassantSquare()
 uint16_t ChessBoardTest::getHalfMoveClock()
 {
     return _halfMoveClock;
+}
+
+bool ChessBoardTest::fieldIsUnderAttack(Square pos)
+{
+	return ChessBoard::fieldIsUnderAttack(pos);
 }
 
 uint16_t ChessBoardTest::getMoveNumber()

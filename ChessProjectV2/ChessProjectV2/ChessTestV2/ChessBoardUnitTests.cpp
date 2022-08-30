@@ -173,247 +173,39 @@ namespace ChessBoardUnitTest
 		{
 			Assert::IsTrue(STARTING_FEN == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 		}
-		TEST_METHOD(positionIsValidTest)
+		TEST_METHOD(fieldIsUnderattackByPawn)
 		{
-			ChessBoardTest board;
-
-			//new position is too far left
-			Assert::IsFalse(board.destinationIsOnBoard(A3, WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A3, NORTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A3, SOUTH_WEST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(A3, EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(A3, NORTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(A3, SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(A3, SOUTH));
-			Assert::IsTrue(board.destinationIsOnBoard(A3, NORTH));
-
-			//new position is too far right
-			Assert::IsFalse(board.destinationIsOnBoard(H3, EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H3, NORTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H3, SOUTH_EAST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(H3, WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(H3, NORTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(H3, SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(H3, SOUTH));
-			Assert::IsTrue(board.destinationIsOnBoard(H3, NORTH));
-
-			//new position is too far up
-			Assert::IsFalse(board.destinationIsOnBoard(E8, NORTH));
-			Assert::IsFalse(board.destinationIsOnBoard(E8, NORTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(E8, NORTH_WEST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(E8, SOUTH));
-			Assert::IsTrue(board.destinationIsOnBoard(E8, SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(E8, SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(E8, EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(E8, WEST));
-
-			//new position is too far down
-			Assert::IsFalse(board.destinationIsOnBoard(E1, SOUTH));
-			Assert::IsFalse(board.destinationIsOnBoard(E1, SOUTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(E1, SOUTH_WEST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(E1, NORTH));
-			Assert::IsTrue(board.destinationIsOnBoard(E1, NORTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(E1, NORTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(E1, EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(E1, WEST));
-
-			//knights move is too far left
-			Assert::IsFalse(board.destinationIsOnBoard(B3, WEST_NORTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(B3, WEST_SOUTH_WEST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(B3, SOUTH_SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(B3, NORTH_NORTH_WEST));
-
-			//knights move is too far right
-			Assert::IsFalse(board.destinationIsOnBoard(G3, EAST_NORTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(G3, EAST_SOUTH_EAST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(G3, SOUTH_SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(G3, NORTH_NORTH_EAST));
-
-			//left lower corner
-			Assert::IsTrue(board.destinationIsOnBoard(A1, NORTH));
-			Assert::IsTrue(board.destinationIsOnBoard(A1, NORTH_NORTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(A1, NORTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(A1, EAST_NORTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(A1, EAST));
-
-			Assert::IsFalse(board.destinationIsOnBoard(A1, EAST_SOUTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(A1, SOUTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(A1, SOUTH_SOUTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(A1, SOUTH));
-			Assert::IsFalse(board.destinationIsOnBoard(A1, SOUTH_SOUTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A1, SOUTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A1, WEST_SOUTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A1, WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A1, WEST_NORTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A1, NORTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A1, NORTH_NORTH_WEST));
-
-			//right lower corner
-			Assert::IsTrue(board.destinationIsOnBoard(H1, NORTH));
-
-			Assert::IsFalse(board.destinationIsOnBoard(H1, NORTH_NORTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H1, NORTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H1, EAST_NORTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H1, EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H1, EAST_SOUTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H1, SOUTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H1, SOUTH_SOUTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H1, SOUTH));
-			Assert::IsFalse(board.destinationIsOnBoard(H1, SOUTH_SOUTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(H1, SOUTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(H1, WEST_SOUTH_WEST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(H1, WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(H1, WEST_NORTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(H1, NORTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(H1, NORTH_NORTH_WEST));
-
-			//left upper corner
-			Assert::IsFalse(board.destinationIsOnBoard(A8, NORTH));
-			Assert::IsFalse(board.destinationIsOnBoard(A8, NORTH_NORTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(A8, NORTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(A8, EAST_NORTH_EAST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(A8, EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(A8, EAST_SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(A8, SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(A8, SOUTH_SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(A8, SOUTH));
-
-			Assert::IsFalse(board.destinationIsOnBoard(A8, SOUTH_SOUTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A8, SOUTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A8, WEST_SOUTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A8, WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A8, WEST_NORTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A8, NORTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(A8, NORTH_NORTH_WEST));
-
-			//right upper corner
-			Assert::IsFalse(board.destinationIsOnBoard(H8, NORTH));
-			Assert::IsFalse(board.destinationIsOnBoard(H8, NORTH_NORTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H8, NORTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H8, EAST_NORTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H8, EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H8, EAST_SOUTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H8, SOUTH_EAST));
-			Assert::IsFalse(board.destinationIsOnBoard(H8, SOUTH_SOUTH_EAST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(H8, SOUTH));
-			Assert::IsTrue(board.destinationIsOnBoard(H8, SOUTH_SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(H8, SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(H8, WEST_SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(H8, WEST));
-
-			Assert::IsFalse(board.destinationIsOnBoard(H8, WEST_NORTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(H8, NORTH_WEST));
-			Assert::IsFalse(board.destinationIsOnBoard(H8, NORTH_NORTH_WEST));
-
-			//B2
-			Assert::IsTrue(board.destinationIsOnBoard(B2, NORTH));
-			Assert::IsTrue(board.destinationIsOnBoard(B2, NORTH_NORTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(B2, NORTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(B2, EAST_NORTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(B2, EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(B2, EAST_SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(B2, SOUTH_EAST));
-
-			Assert::IsFalse(board.destinationIsOnBoard(B2, SOUTH_SOUTH_EAST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(B2, SOUTH));
-
-			Assert::IsFalse(board.destinationIsOnBoard(B2, SOUTH_SOUTH_WEST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(B2, SOUTH_WEST));
-
-			Assert::IsFalse(board.destinationIsOnBoard(B2, WEST_SOUTH_WEST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(B2, WEST));
-
-			Assert::IsFalse(board.destinationIsOnBoard(B2, WEST_NORTH_WEST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(B2, NORTH_WEST));
-
-			//G2
-			Assert::IsTrue(board.destinationIsOnBoard(G2, NORTH));
-			Assert::IsTrue(board.destinationIsOnBoard(G2, NORTH_NORTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(G2, NORTH_EAST));
-
-			Assert::IsFalse(board.destinationIsOnBoard(G2, EAST_NORTH_EAST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(G2, EAST));
+			ChessBoardTest board("8/8/8/8/2p5/3K4/8/8 w - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(D3));
 			
-			Assert::IsFalse(board.destinationIsOnBoard(G2, EAST_SOUTH_EAST));
+			board = ChessBoardTest("8/8/8/8/4p3/3K4/8/8 w - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(D3));
+
+			board = ChessBoardTest("8/8/8/8/2p1p3/3K4/8/8 w - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(D3));
+
+			board = ChessBoardTest("8/8/8/8/2K5/3p4/8/8 w - - 0 1");
+			Assert::IsFalse(board.fieldIsUnderAttack(D3));
+
+			board = ChessBoardTest("8/8/8/8/8/3k4/3P4/8 b - - 0 1");
+			Assert::IsFalse(board.fieldIsUnderAttack(D3));
+		}
+		TEST_METHOD(fieldIsUnderattackByKnight)
+		{
+			ChessBoardTest board("8/8/8/3k4/8/4N3/8/8 b - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(D5));
 			
-			Assert::IsTrue(board.destinationIsOnBoard(G2, SOUTH_EAST));
-			
-			Assert::IsFalse(board.destinationIsOnBoard(G2, SOUTH_SOUTH_EAST));
+			board = ChessBoardTest("8/8/5N2/3k4/5N2/4N3/8/8 b - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(D5));
 
-			Assert::IsTrue(board.destinationIsOnBoard(G2, SOUTH));
+			board = ChessBoardTest("8/8/8/8/8/4n3/6K1/8 w - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(G2));
 
-			Assert::IsFalse(board.destinationIsOnBoard(G2, SOUTH_SOUTH_WEST));
+			board = ChessBoardTest("8/8/8/8/8/4n1K1/8/8 w - - 0 1");
+			Assert::IsFalse(board.fieldIsUnderAttack(G3));
 
-			Assert::IsTrue(board.destinationIsOnBoard(G2, SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(G2, WEST_SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(G2, WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(G2, WEST_NORTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(G2, NORTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(G2, NORTH_NORTH_WEST));
-
-			//B7
-			Assert::IsTrue(board.destinationIsOnBoard(B7, NORTH));
-			
-			Assert::IsFalse(board.destinationIsOnBoard(B7, NORTH_NORTH_EAST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(B7, NORTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(B7, EAST_NORTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(B7, EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(B7, EAST_SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(B7, SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(B7, SOUTH_SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(B7, SOUTH));
-			Assert::IsTrue(board.destinationIsOnBoard(B7, SOUTH_SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(B7, SOUTH_WEST));
-			
-			Assert::IsFalse(board.destinationIsOnBoard(B7, WEST_SOUTH_WEST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(B7, WEST));
-
-			Assert::IsFalse(board.destinationIsOnBoard(B7, WEST_NORTH_WEST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(B7, NORTH_WEST));
-			
-			Assert::IsFalse(board.destinationIsOnBoard(B7, NORTH_NORTH_WEST));
-
-			//G7
-			Assert::IsTrue(board.destinationIsOnBoard(G7, NORTH));
-			
-			Assert::IsFalse(board.destinationIsOnBoard(G7, NORTH_NORTH_EAST));
-			
-			Assert::IsTrue(board.destinationIsOnBoard(G7, NORTH_EAST));
-			
-			Assert::IsFalse(board.destinationIsOnBoard(G7, EAST_NORTH_EAST));
-			
-			Assert::IsTrue(board.destinationIsOnBoard(G7, EAST));
-
-			Assert::IsFalse(board.destinationIsOnBoard(G7, EAST_SOUTH_EAST));
-
-			Assert::IsTrue(board.destinationIsOnBoard(G7, SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(G7, SOUTH_SOUTH_EAST));
-			Assert::IsTrue(board.destinationIsOnBoard(G7, SOUTH));
-			Assert::IsTrue(board.destinationIsOnBoard(G7, SOUTH_SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(G7, SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(G7, WEST_SOUTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(G7, WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(G7, WEST_NORTH_WEST));
-			Assert::IsTrue(board.destinationIsOnBoard(G7, NORTH_WEST));
-			
-			Assert::IsFalse(board.destinationIsOnBoard(G7, NORTH_NORTH_WEST));
+			board = ChessBoardTest("8/8/8/8/8/4nK2/8/8 w - - 0 1");
+			Assert::IsFalse(board.fieldIsUnderAttack(F3));
 		}
 	};
 }

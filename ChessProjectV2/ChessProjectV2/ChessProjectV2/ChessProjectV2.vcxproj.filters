@@ -57,6 +57,9 @@
     <ClCompile Include="MoveDoublePawn.cpp">
       <Filter>Source Files\moves</Filter>
     </ClCompile>
+    <ClCompile Include="Constants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitBoard.h">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="MoveDoublePawn.h">
       <Filter>Header Files\moves</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

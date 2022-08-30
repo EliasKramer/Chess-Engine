@@ -1,5 +1,6 @@
 #include "CppUnitTest.h"
 #include "../ChessProjectV2/BitBoard.h"
+#include "../ChessProjectV2/DataAndTypes.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

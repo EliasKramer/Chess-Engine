@@ -9,6 +9,7 @@
 #include "MoveCastle.h"
 #include "MovePromote.h"
 #include "MoveDoublePawn.h"
+#include "Constants.h"
 
 const std::string STARTING_FEN =
 "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -19,6 +20,11 @@ protected:
 	BitBoard _allPieces;
 	BitBoard _piecesOfColor[DIFFERENT_CHESS_COLORS];
 	BitBoard _piecesOfType[NUMBER_OF_DIFFERENT_PIECE_TYPES];
+
+	//not used yet
+	BitBoard _attackedByColor[DIFFERENT_CHESS_COLORS];
+	//not used yet
+	Square _kingPos[DIFFERENT_CHESS_COLORS];
 
 	//the first dimension is color and 
 	//the second is the type. 
@@ -45,7 +51,6 @@ protected:
 	void setAtPosition(ChessPiece piece, Square position);
 	void delAtPos(Square position);
 	
-	bool destinationIsOnBoard(Square start, Direction direction);
 	bool destinationIsSameColor(Square start, Direction direction, ChessColor color);
 	bool positionIsSameColor(Square pos, ChessColor color);
 	
@@ -63,6 +68,8 @@ protected:
 	//the move rules for the types.
 	//They do not check if the king is in check
 	UniqueMoveList getAllPseudoLegalMoves();
+
+	BitBoard getKingCheckRayCast();
 
 	void getPawnMoves(UniqueMoveList& moves);
 	void getKnightMoves(UniqueMoveList& moves);

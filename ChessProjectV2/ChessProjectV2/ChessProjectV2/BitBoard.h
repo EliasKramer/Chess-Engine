@@ -98,3 +98,5 @@ const std::map<Direction, BitBoard> INVALID_FIELDS_FOR_DIR
 	{WEST_NORTH_WEST, FILE_A | FILE_B | RANK_8},
 	{NORTH_NORTH_WEST, FILE_A | RANK_8 | RANK_7}
 };
+
+bool destinationIsOnBoard(Square start, Direction direction);

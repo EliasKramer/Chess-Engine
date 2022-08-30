@@ -25,8 +25,7 @@ public:
 		std::function<void(ChessPiece, Square)> setAtPos,
 		std::function<void(Square)> delAtPos,
 		std::function<void(Square)> setEnPassant);
-	
-	virtual Square* getAtPosWithMoveDone(Square pos);*/
+		*/
 };
 bool operator ==(const Move& first, const Move& second);
 bool operator !=(const Move& first, const Move& second);
