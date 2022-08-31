@@ -93,6 +93,7 @@ protected:
 	bool fieldIsUnderAttack(Square pos);
 	bool fieldIsUnderAttackWithMoveDone(Square pos, Move* move);
 
+	bool fieldGetsAttackedBySlidingPiece(Square pos);
 public:
 	ChessBoard();
 	ChessBoard(std::string given_fen_code);

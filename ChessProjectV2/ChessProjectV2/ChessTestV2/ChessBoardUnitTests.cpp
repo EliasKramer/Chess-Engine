@@ -207,5 +207,49 @@ namespace ChessBoardUnitTest
 			board = ChessBoardTest("8/8/8/8/8/4nK2/8/8 w - - 0 1");
 			Assert::IsFalse(board.fieldIsUnderAttack(F3));
 		}
+		//started to only test legal positions here (with both kings)
+		TEST_METHOD(fieldIsUnderAttackByKing)
+		{
+			ChessBoardTest board("8/1K6/8/8/4k3/5P2/8/8 w  - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(F5));
+
+			board = ChessBoardTest("8/8/8/3k4/4N3/8/8/7K w - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(E5));
+
+			board = ChessBoardTest("8/8/8/3k4/8/2N5/8/7K w - - 0 1");
+			Assert::IsFalse(board.fieldIsUnderAttack(C3));
+
+			board = ChessBoardTest("8/8/6k1/1Kp5/8/8/8/8 b - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(C5));
+
+			board = ChessBoardTest("K7/p7/6k1/8/8/8/8/8 b - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(A7));
+
+			board = ChessBoardTest("K7/8/p5k1/8/8/8/8/8 b - - 0 1");
+			Assert::IsFalse(board.fieldIsUnderAttack(A6));
+		}
+		TEST_METHOD(fieldGetsAttackedBySlidingPiece)
+		{
+			//gets attacked by bishop
+			ChessBoardTest board("7k/8/8/8/3N4/8/8/K5b1 w - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(D4));
+
+			//gets not attacked. bishop blocks bishop
+			board = ChessBoardTest("7k/8/8/8/3N4/8/5B2/K5b1 w - - 0 1");
+			Assert::IsFalse(board.fieldIsUnderAttack(D4));
+
+			//rook attacks rook
+			board = ChessBoardTest("3R3k/8/8/8/3r4/8/8/K7 b - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(D4));
+
+			//gets not attacked. queen blocks
+			board = ChessBoardTest("3R3k/8/3q4/8/3r4/8/8/K7 b - - 0 1");
+			Assert::IsFalse(board.fieldIsUnderAttack(D4));
+
+			//Queen also attacks blocking queen
+			board = ChessBoardTest("1Q1R3k/8/3q4/8/3r4/8/8/K7 b - - 0 1");
+			Assert::IsTrue(board.fieldIsUnderAttack(D6));
+			Assert::IsFalse(board.fieldIsUnderAttack(D4));
+		}
 	};
 }

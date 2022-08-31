@@ -88,3 +88,24 @@ const std::array<std::array<BitBoard, 64>,2> PAWN_ATTACK_BB =
 	
 	return result;
 }();
+
+const std::array<BitBoard, 64> KING_ATTACKS_BB = []()->std::array<BitBoard, 64> {
+	std::array<BitBoard, 64> result = {};
+
+	for (int i = A1; i <= H8; i++)
+	{
+		BitBoard currBitBoard = BITBOARD_NONE;
+
+		Square currSquare = (Square)i;
+		for (int j = 0; j < 8; j++)
+		{
+			Direction dir = ALL_SLIDING_DIRECTIONS[j];
+			if (destinationIsOnBoard(currSquare, dir))
+			{
+				currBitBoard |= BB_SQUARE[i + dir];
+			}
+		}
+		result[i] = currBitBoard;
+	}
+	return result;
+}();

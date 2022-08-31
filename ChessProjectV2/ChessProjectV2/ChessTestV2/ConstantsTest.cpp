@@ -12,6 +12,7 @@ namespace ConstantsTests
 		{
 			//dont worry i didn't write these tests manually.
 			//copilot rules
+			//to see how the result look on a bitboard do so on: https://tearth.dev/bitboard-viewer/
 
 			Assert::AreEqual(KNIGHT_ATTACK_BB[A1], 0x20400ULL);
 			Assert::AreEqual(KNIGHT_ATTACK_BB[B1], 0x50800ULL);
@@ -128,6 +129,97 @@ namespace ConstantsTests
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][F6] == 0x5000000000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][G6] == 0xa000000000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][H6] == 0x4000000000ULL);
+		}
+		TEST_METHOD(testKingAttackFieldBB)
+		{
+			Assert::IsTrue(KING_ATTACKS_BB[A1] == 0x302ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[B1] == 0x705ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[C1] == 0xe0aULL);
+			Assert::IsTrue(KING_ATTACKS_BB[D1] == 0x1c14ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[E1] == 0x3828ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[F1] == 0x7050ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[G1] == 0xe0a0ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[H1] == 0xc040ULL);
+
+			Assert::IsTrue(KING_ATTACKS_BB[A2] == 0x30203ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[B2] == 0x70507ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[C2] == 0xe0a0eULL);
+			Assert::IsTrue(KING_ATTACKS_BB[D2] == 0x1c141cULL);
+			Assert::IsTrue(KING_ATTACKS_BB[E2] == 0x382838ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[F2] == 0x705070ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[G2] == 0xe0a0e0ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[H2] == 0xc040c0ULL);
+
+			Assert::IsTrue(KING_ATTACKS_BB[A3] == 0x3020300ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[B3] == 0x7050700ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[C3] == 0xe0a0e00ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[D3] == 0x1c141c00ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[E3] == 0x38283800ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[F3] == 0x70507000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[G3] == 0xe0a0e000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[H3] == 0xc040c000ULL);
+			
+			Assert::IsTrue(KING_ATTACKS_BB[A4] == 0x302030000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[B4] == 0x705070000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[C4] == 0xe0a0e0000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[D4] == 0x1c141c0000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[E4] == 0x3828380000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[F4] == 0x7050700000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[G4] == 0xe0a0e00000LL);
+			Assert::IsTrue(KING_ATTACKS_BB[H4] == 0xc040c00000ULL);
+
+			Assert::IsTrue(KING_ATTACKS_BB[A5] == 0x30203000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[B5] == 0x70507000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[C5] == 0xe0a0e000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[D5] == 0x1c141c000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[E5] == 0x382838000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[F5] == 0x705070000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[G5] == 0xe0a0e0000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[H5] == 0xc040c0000000ULL);
+
+			Assert::IsTrue(KING_ATTACKS_BB[A6] == 0x3020300000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[B6] == 0x7050700000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[C6] == 0xe0a0e00000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[D6] == 0x1c141c00000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[E6] == 0x38283800000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[F6] == 0x70507000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[G6] == 0xe0a0e000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[H6] == 0xc040c000000000ULL);
+
+			Assert::IsTrue(KING_ATTACKS_BB[A7] == 0x302030000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[B7] == 0x705070000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[C7] == 0xe0a0e0000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[D7] == 0x1c141c0000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[E7] == 0x3828380000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[F7] == 0x7050700000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[G7] == 0xe0a0e00000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[H7] == 0xc040c00000000000ULL);
+
+			//cannot set numbers that are that high
+			/*
+			Assert::IsTrue(KING_ATTACKS_BB[A8] == 0x30203000000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[B8] == 0x70507000000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[C8] == 0xe0a0e000000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[D8] == 0x1c141c000000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[E8] == 0x382838000000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[F8] == 0x705070000000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[G8] == 0xe0a0e0000000000000ULL);
+			Assert::IsTrue(KING_ATTACKS_BB[H8] == 0xc040c0000000000000ULL);*/
+		}
+		TEST_METHOD(testOrderOfSlidingArray)
+		{
+			//only change this order if you implement another
+			//function for finding what sliding pieces attack a square
+
+			Assert::IsTrue(NORTH == ALL_SLIDING_DIRECTIONS[0]);
+			Assert::IsTrue(EAST == ALL_SLIDING_DIRECTIONS[1]);
+			Assert::IsTrue(SOUTH == ALL_SLIDING_DIRECTIONS[2]);
+			Assert::IsTrue(WEST == ALL_SLIDING_DIRECTIONS[3]);
+
+			Assert::IsTrue(NORTH_EAST == ALL_SLIDING_DIRECTIONS[4]);
+			Assert::IsTrue(SOUTH_EAST == ALL_SLIDING_DIRECTIONS[5]);
+			Assert::IsTrue(SOUTH_WEST == ALL_SLIDING_DIRECTIONS[6]);
+			Assert::IsTrue(NORTH_WEST == ALL_SLIDING_DIRECTIONS[7]);
 		}
 	};
 }

@@ -295,6 +295,8 @@ void ChessBoard::addPawnMove(UniqueMoveList& moves, Square start, Square dest)
 void ChessBoard::getCastlingMoves(UniqueMoveList& moves)
 {
 	//TODO
+	//_canCastle[_currentTurnColor][CastleLong] = true;
+	//_canCastle[_currentTurnColor][CastleShort] = true;
 }
 
 void ChessBoard::getEnPassantMove(UniqueMoveList& moves)
@@ -306,22 +308,20 @@ void ChessBoard::getEnPassantMove(UniqueMoveList& moves)
 
 	Direction backwards = getBackwardForColor(_currentTurnColor);
 
-	Direction possiblePawnPositionsThatCanEnPassant[2] =
+	Direction directionsWhereOwnPawnCouldBe[2] =
 	{ (Direction)(backwards + EAST), (Direction)(backwards + WEST) };
-
-	Square possibleEnPassantSquare1 = (Square)(_enPassantSquare + backwards + EAST);
-	Square possibleEnPassantSquare2 = (Square)(_enPassantSquare + backwards + WEST);
 
 	for (int i = 0; i < 2; i++)
 	{
-		if (destinationIsOnBoard(_enPassantSquare, possiblePawnPositionsThatCanEnPassant[i]))
+		if (destinationIsOnBoard(_enPassantSquare, directionsWhereOwnPawnCouldBe[i]))
 		{
-			Square enPassantSquare = (Square)(_enPassantSquare + backwards);
-
-			if ((BB_SQUARE[enPassantSquare] & _piecesOfColor[_currentTurnColor] & _piecesOfType[Pawn]) != 0ULL)
+			Square ownPawnPos = (Square)(_enPassantSquare + directionsWhereOwnPawnCouldBe[i]);
+			if ((BB_SQUARE[ownPawnPos] & _piecesOfColor[_currentTurnColor] & _piecesOfType[Pawn]) != 0ULL)
 			{
-				moves.push_back(
-					std::make_unique<MoveEnPassant>(possibleEnPassantSquare1, _enPassantSquare, enPassantSquare));
+				Square pawnPosToDelete = (Square)(_enPassantSquare + backwards);
+				moves.push_back(std::make_unique<MoveEnPassant>(
+					ownPawnPos, _enPassantSquare,
+					pawnPosToDelete));
 			}
 		}
 	}
@@ -334,14 +334,6 @@ void ChessBoard::addRayMoves(
 	int numberOfDirections)
 {
 	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
-
-	BitBoard pinnedPieceMovementRestriction = BITBOARD_ALL;
-
-	BitBoard allRayPiecesOfColor = 
-		_piecesOfColor[_currentTurnColor] &
-		(_piecesOfType[Bishop] |
-			_piecesOfType[Rook] |
-			_piecesOfType[Queen]);
 
 	for (int i = 0; i < numberOfDirections; i++)
 	{
@@ -389,27 +381,107 @@ bool ChessBoard::fieldIsUnderAttack(Square pos)
 	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
 
 	//gets attacked by knight
-	if((KNIGHT_ATTACK_BB[pos] &
+	if ((KNIGHT_ATTACK_BB[pos] &
 		_piecesOfColor[opponentColor] &
 		_piecesOfType[Knight]) != 0ULL)
 	{
 		return true;
 	}
+
 	//gets attacked by pawn
-	if((PAWN_ATTACK_BB[_currentTurnColor][pos] &
+	//it is handled like the current field is a pawn, 
+	//because if the current field has a pawn on its attacking squares, 
+	//it can also be attacked by the opponent pawn
+	if ((PAWN_ATTACK_BB[_currentTurnColor][pos] &
 		_piecesOfColor[opponentColor] &
 		_piecesOfType[Pawn]) != 0ULL)
 	{
 		return true;
 	}
 
-	return false;
+	//field gets attacked by king
+	if ((KING_ATTACKS_BB[pos] &
+		_piecesOfColor[opponentColor] &
+		_piecesOfType[King]) != 0ULL)
+	{
+		return true;
+	}
+
+	//raycast in every direction and check for queen, rook or bishop attacks
+	return fieldGetsAttackedBySlidingPiece(pos);
 }
 
 bool ChessBoard::fieldIsUnderAttackWithMoveDone(Square pos, Move* move)
 {
 	return false;
 }
+
+bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos)
+{
+	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
+
+	for (int i = 0; i < 8; i++)
+	{
+		Direction currentDirection = ALL_SLIDING_DIRECTIONS[i];
+
+		Square currentSquare = pos;
+		while (true)
+		{
+			//if the new position would be on the board
+			if (destinationIsOnBoard(currentSquare, currentDirection))
+			{
+				//set the new position
+				currentSquare = (Square)(currentSquare + currentDirection);
+
+				//if the new position is the same color as the piece to check
+				if (positionIsSameColor(currentSquare, _currentTurnColor))
+				{
+					//you cannot go on a square where a piece of the same color is
+					break;
+				}
+				else if (positionIsSameColor(currentSquare, opponentColor))
+				{
+					BitBoard currPosBB = BB_SQUARE[currentSquare];
+
+					bool currDirIsDiagonal = i > 3;
+
+					//found piece is a queen -> will attack no matter in which direction you are sliding
+					if ((currPosBB & _piecesOfType[Queen]) != 0ULL)
+					{
+						//is queen
+						return true;
+					}
+					//if found piece is a rook or a bishop, sliding direction matters
+					else if (currDirIsDiagonal)
+					{
+						if ((currPosBB & _piecesOfType[Bishop]) != 0ULL)
+						{
+							//is bishop
+							return true;
+						}
+					}
+					else
+					{
+						if ((currPosBB & _piecesOfType[Rook]) != 0ULL)
+						{
+							//is rook
+							return true;
+						}
+					}
+					//if the found piece is an enemy, but no sliding piece then it does not attack you
+					break;
+				}
+			}
+			else 
+			{
+				//if the new position is not on the board, the search should not continue
+				break;
+			}
+		}
+	}
+	return false;
+}
+
 
 ChessBoard::ChessBoard()
 	:

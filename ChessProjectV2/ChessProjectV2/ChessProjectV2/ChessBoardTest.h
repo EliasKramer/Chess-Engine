@@ -2,6 +2,9 @@
 #include "ChessBoard.h"
 #include "DataAndTypes.h"
 #include <string>
+
+//this is a test class. it is only there to read variables, that are ususally hidden
+//from the user
 class ChessBoardTest : public ChessBoard
 {
 public:

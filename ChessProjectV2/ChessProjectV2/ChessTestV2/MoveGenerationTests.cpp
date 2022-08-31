@@ -284,5 +284,24 @@ namespace MoveGenerationTest
 			Assert::IsTrue(moveListContains(Move(E3, B6), moves));
 			Assert::IsTrue(moveListContains(Move(E3, A7), moves));
 		}
+		//started to only test legal positions here (with both kings)
+		TEST_METHOD(generatingEnPassantMoves)
+		{
+			ChessBoardTest board("7k/8/8/4Pp2/8/8/8/K7 w - f6 0 1");
+			UniqueMoveList moves = board.getPseudoLegalMoves();
+			Assert::IsTrue(moveListContains(Move(E5, F6), moves));
+			
+			board = ChessBoardTest("7k/8/8/4Pp2/8/8/8/K7 w - - 0 1");
+			moves = board.getPseudoLegalMoves();
+			Assert::IsFalse(moveListContains(Move(E5, F6), moves));
+			
+			board = ChessBoardTest("7k/8/8/8/6pP/8/8/K7 b - h3 0 1");
+			moves = board.getPseudoLegalMoves();
+			Assert::IsTrue(moveListContains(Move(G4, H3), moves));
+
+			board = ChessBoardTest("7k/8/8/8/8/2Pp4/8/K7 b - - 0 1");
+			moves = board.getPseudoLegalMoves();
+			Assert::IsFalse(moveListContains(Move(D3, C2), moves));
+		}
 	};
 }
