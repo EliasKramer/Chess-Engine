@@ -295,8 +295,32 @@ void ChessBoard::addPawnMove(UniqueMoveList& moves, Square start, Square dest)
 void ChessBoard::getCastlingMoves(UniqueMoveList& moves)
 {
 	//TODO
-	//_canCastle[_currentTurnColor][CastleLong] = true;
-	//_canCastle[_currentTurnColor][CastleShort] = true;
+	//can improve performance -> 
+	//combine all fields in a bitboard and check for the non-sliding pieces
+	//if the can take at these positions
+
+	if (_canCastle[_currentTurnColor][CastleLong])
+	{
+		bool pathAttacked = false;
+		for (int i = 0; i < 3; i++)
+		{
+			Square squareThatShouldNotBeAttacked =
+				SQUARES_FOR_CASTLING[_currentTurnColor][CastleLong][i];
+		
+			if (fieldIsUnderAttack(squareThatShouldNotBeAttacked))
+			{
+				pathAttacked = true;
+			}
+		}
+		if (!pathAttacked)
+		{
+			moves.push_back(std::make_unique<MoveCastle>())
+		}
+	}
+	if (_canCastle[_currentTurnColor][CastleShort])
+	{
+
+	}
 }
 
 void ChessBoard::getEnPassantMove(UniqueMoveList& moves)
@@ -472,7 +496,7 @@ bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos)
 					break;
 				}
 			}
-			else 
+			else
 			{
 				//if the new position is not on the board, the search should not continue
 				break;

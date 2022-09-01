@@ -102,7 +102,7 @@ namespace ConstantsTests
 			Assert::IsTrue(PAWN_ATTACK_BB[White][F1] == 0x5000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[White][G1] == 0xa000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[White][H1] == 0x4000ULL);
-			
+
 			Assert::IsTrue(PAWN_ATTACK_BB[White][A2] == 0x20000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[White][B2] == 0x50000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[White][C2] == 0xa0000ULL);
@@ -111,7 +111,7 @@ namespace ConstantsTests
 			Assert::IsTrue(PAWN_ATTACK_BB[White][F2] == 0x500000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[White][G2] == 0xa00000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[White][H2] == 0x400000ULL);
-			
+
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][A5] == 0x2000000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][B5] == 0x5000000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][C5] == 0xa000000ULL);
@@ -120,7 +120,7 @@ namespace ConstantsTests
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][F5] == 0x50000000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][G5] == 0xa0000000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][H5] == 0x40000000ULL);
-			
+
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][A6] == 0x200000000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][B6] == 0x500000000ULL);
 			Assert::IsTrue(PAWN_ATTACK_BB[Black][C6] == 0xa00000000ULL);
@@ -158,7 +158,7 @@ namespace ConstantsTests
 			Assert::IsTrue(KING_ATTACKS_BB[F3] == 0x70507000ULL);
 			Assert::IsTrue(KING_ATTACKS_BB[G3] == 0xe0a0e000ULL);
 			Assert::IsTrue(KING_ATTACKS_BB[H3] == 0xc040c000ULL);
-			
+
 			Assert::IsTrue(KING_ATTACKS_BB[A4] == 0x302030000ULL);
 			Assert::IsTrue(KING_ATTACKS_BB[B4] == 0x705070000ULL);
 			Assert::IsTrue(KING_ATTACKS_BB[C4] == 0xe0a0e0000ULL);
@@ -220,6 +220,11 @@ namespace ConstantsTests
 			Assert::IsTrue(SOUTH_EAST == ALL_SLIDING_DIRECTIONS[5]);
 			Assert::IsTrue(SOUTH_WEST == ALL_SLIDING_DIRECTIONS[6]);
 			Assert::IsTrue(NORTH_WEST == ALL_SLIDING_DIRECTIONS[7]);
+		}
+		TEST_METHOD(backrankTest)
+		{
+			Assert::AreEqual(RANK_1, BACK_RANK[White]);
+			Assert::AreEqual(RANK_8, BACK_RANK[Black]);
 		}
 	};
 }

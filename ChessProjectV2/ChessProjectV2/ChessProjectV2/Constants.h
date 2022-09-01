@@ -1,6 +1,8 @@
 #pragma once
 #include "BitBoard.h"
 #include "DataAndTypes.h"
+#include <vector>
+
 const Direction KNIGHT_DIRECTIONS[8] = {
 	NORTH_NORTH_EAST,
 	EAST_NORTH_EAST,
@@ -41,6 +43,34 @@ const Direction PAWN_ATTACK_DIRECTION[2][2]{
 	{NORTH_EAST, NORTH_WEST},
 	{SOUTH_EAST, SOUTH_WEST}
 };
+
+const BitBoard BACK_RANK[2] = { RANK_1, RANK_8 };
+
+//first dimension is color, second is castling type and 
+//third is the list of squares, that have to be not attacked when castling
+const std::array<std::array<std::array<Square, 3>, 2>, 2> SQUARES_FOR_CASTLING =
+[]()->std::array<std::array<std::array<Square, 3>, 2>, 2> {
+
+	std::array<std::array<std::array<Square, 3>, 2>, 2> result = {};
+
+	result[White][CastleShort][0] = E1;
+	result[White][CastleShort][1] = F1;
+	result[White][CastleShort][2] = G1;
+	
+	result[White][CastleLong][0] = E1;
+	result[White][CastleLong][1] = D1;
+	result[White][CastleLong][2] = C1;
+
+	result[Black][CastleShort][0] = E8;
+	result[Black][CastleShort][1] = F8;
+	result[Black][CastleShort][2] = G8;
+	
+	result[Black][CastleLong][0] = E8;
+	result[Black][CastleLong][1] = D8;
+	result[Black][CastleLong][2] = C8;
+	
+	return result;
+}();
 
 const std::array<BitBoard, 64> KNIGHT_ATTACK_BB = []()->std::array<BitBoard, 64> {
 	std::array<BitBoard, 64> result = {};
