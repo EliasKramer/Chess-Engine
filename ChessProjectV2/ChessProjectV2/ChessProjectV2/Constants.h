@@ -48,7 +48,7 @@ const BitBoard BACK_RANK[2] = { RANK_1, RANK_8 };
 
 //first dimension is color, second is castling type and 
 //third is the list of squares, that have to be not attacked when castling
-const std::array<std::array<std::array<Square, 3>, 2>, 2> SQUARES_FOR_CASTLING =
+const std::array<std::array<std::array<Square, 3>, 2>, 2> SQUARES_FOR_KING_CASTLING =
 []()->std::array<std::array<std::array<Square, 3>, 2>, 2> {
 
 	std::array<std::array<std::array<Square, 3>, 2>, 2> result = {};
@@ -68,6 +68,27 @@ const std::array<std::array<std::array<Square, 3>, 2>, 2> SQUARES_FOR_CASTLING =
 	result[Black][CastleLong][0] = E8;
 	result[Black][CastleLong][1] = D8;
 	result[Black][CastleLong][2] = C8;
+	
+	return result;
+}();
+
+//the first dimension is color, second is castling type
+//third on the first idx is start and second idx is destination
+const std::array<std::array<std::array<Square, 2>, 2>, 2> SQUARES_FOR_ROOK_CASTLING =
+[]()->std::array<std::array<std::array<Square, 2>, 2>, 2> {
+	std::array<std::array<std::array<Square, 2>, 2>, 2> result = {};
+
+	result[White][CastleShort][0] = H1;
+	result[White][CastleShort][1] = F1;
+	
+	result[White][CastleLong][0] = A1;
+	result[White][CastleLong][1] = D1;
+
+	result[Black][CastleShort][0] = H8;
+	result[Black][CastleShort][1] = F8;
+
+	result[Black][CastleLong][0] = A8;
+	result[Black][CastleLong][1] = D8;
 	
 	return result;
 }();

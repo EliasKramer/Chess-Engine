@@ -28,7 +28,8 @@ public:
 	Square getEnPassantSquare();
 	uint16_t getHalfMoveClock();
 	uint16_t getMoveNumber();
+	
+	bool fieldIsUnderAttackWithMoveBB(Square pos, BitBoard moveBB);
 
 	UniqueMoveList getPseudoLegalMoves();
-
 };

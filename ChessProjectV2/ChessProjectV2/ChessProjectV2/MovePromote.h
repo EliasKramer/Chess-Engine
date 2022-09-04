@@ -7,4 +7,6 @@ private:
 	PieceType _promotingType;
 public:
 	MovePromote(Square givenStart, Square givenDest, PieceType promotingType);
+
+	//no overriding of getBBWithMoveDone, because it acts the same as the normal move
 };

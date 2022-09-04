@@ -3,6 +3,8 @@
 #include "../ChessProjectV2/ChessBoard.h"
 #include "../ChessProjectV2/DataAndTypes.h"
 #include "../ChessProjectV2/ChessBoardTest.h"
+#include "../ChessProjectV2/Move.h"
+#include "../ChessProjectV2/MoveEnPassant.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -250,6 +252,34 @@ namespace ChessBoardUnitTest
 			board = ChessBoardTest("1Q1R3k/8/3q4/8/3r4/8/8/K7 b - - 0 1");
 			Assert::IsTrue(board.fieldIsUnderAttack(D6));
 			Assert::IsFalse(board.fieldIsUnderAttack(D4));
+		}
+		TEST_METHOD(isUnderAttackAfterMove)
+		{
+			//move knight - king is under attack after that
+			ChessBoardTest board("7k/8/8/8/8/8/8/K1N1r3 w - - 0 1");
+			Move m(C1, B3);
+			Assert::IsTrue(board.fieldIsUnderAttackWithMoveBB(A1, m.getBBWithMoveDone()));
+
+			//pawn takes en passant - king is under attack
+			board = ChessBoardTest("7k/8/8/KPp3q1/8/8/8/8 w - c6 0 1");
+			MoveEnPassant me(B5, C6, C5);
+			Assert::IsTrue(board.fieldIsUnderAttackWithMoveBB(A5, me.getBBWithMoveDone()));
+
+			//pawn takes attacking knight - king is not under attack
+			board = ChessBoardTest("7k/8/2n5/KP6/8/8/8/8 w - - 0 1");
+			Move m2(B5, C6);
+			Assert::IsFalse(board.fieldIsUnderAttackWithMoveBB(A5, m2.getBBWithMoveDone()));
+
+			//rook takes attacking pawn - king is not under attack
+			board = ChessBoardTest("7k/8/1p6/KR6/8/8/8/8 w - - 0 1");
+			Move m3(B5, B6);
+			Assert::IsFalse(board.fieldIsUnderAttackWithMoveBB(A5, m3.getBBWithMoveDone()));
+
+			//black bishop takes attacking queen - king is not under attack
+			board = ChessBoardTest("8/4b3/3Q2k1/K7/8/8/8/8 b - - 0 1");
+			Move m4(E7, D6);
+			Assert::IsFalse(board.fieldIsUnderAttackWithMoveBB(G6, m4.getBBWithMoveDone()));
+			
 		}
 	};
 }

@@ -294,32 +294,45 @@ void ChessBoard::addPawnMove(UniqueMoveList& moves, Square start, Square dest)
 
 void ChessBoard::getCastlingMoves(UniqueMoveList& moves)
 {
-	//TODO
 	//can improve performance -> 
 	//combine all fields in a bitboard and check for the non-sliding pieces
 	//if the can take at these positions
-
-	if (_canCastle[_currentTurnColor][CastleLong])
+	for (int castlingIdx = 0; castlingIdx < 2; castlingIdx++)
 	{
-		bool pathAttacked = false;
-		for (int i = 0; i < 3; i++)
+		CastlingType currCastlingType = (CastlingType)castlingIdx;
+
+		if (_canCastle[_currentTurnColor][currCastlingType])
 		{
-			Square squareThatShouldNotBeAttacked =
-				SQUARES_FOR_CASTLING[_currentTurnColor][CastleLong][i];
-		
-			if (fieldIsUnderAttack(squareThatShouldNotBeAttacked))
+			bool castlingAllowed = true;
+			for (int i = 0; i < 3; i++)
 			{
-				pathAttacked = true;
+				Square currSquareToCheck =
+					SQUARES_FOR_KING_CASTLING[_currentTurnColor][currCastlingType][i];
+
+				//square should not be attacked or should not have any piece there
+				if (fieldIsUnderAttack(currSquareToCheck) ||
+					(i != 0 && (_allPieces & BB_SQUARE[currSquareToCheck]) != 0ULL))
+				{
+					castlingAllowed = false;
+				}
+			}
+			//can be done better, but has to do for now
+			if (currCastlingType == CastleLong)
+			{
+				//square that can be in check, but has to have no piece on it
+				Square passingSquare = _currentTurnColor == White ? B1 : B8;
+				if ((_allPieces & BB_SQUARE[passingSquare]) != 0ULL)
+				{
+					castlingAllowed = false;
+				}
+			}
+
+			if (castlingAllowed)
+			{
+				moves.push_back(
+					std::make_unique<MoveCastle>(_currentTurnColor, currCastlingType));
 			}
 		}
-		if (!pathAttacked)
-		{
-			moves.push_back(std::make_unique<MoveCastle>())
-		}
-	}
-	if (_canCastle[_currentTurnColor][CastleShort])
-	{
-
 	}
 }
 
@@ -398,16 +411,26 @@ void ChessBoard::addRayMoves(
 	}
 }
 
-bool ChessBoard::fieldIsUnderAttack(Square pos)
+bool ChessBoard::fieldIsUnderAttack(Square pos, BitBoard moveBB)
 {
 	//is only used for king checks and castling, so no en passant implemented
 
 	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
 
+	BitBoard newCurrentColorBB = _piecesOfColor[_currentTurnColor] ^ moveBB;
+
+
+	
+	BitBoard opponentColorBB = (_piecesOfColor[opponentColor] & (~moveBB));
+
+	BitBoard knightBB = _piecesOfType[Knight];
+	BitBoard pawnsBB = _piecesOfType[Pawn];
+	BitBoard kingsBB = _piecesOfType[King];
+
 	//gets attacked by knight
 	if ((KNIGHT_ATTACK_BB[pos] &
-		_piecesOfColor[opponentColor] &
-		_piecesOfType[Knight]) != 0ULL)
+		opponentColorBB &
+		knightBB) != 0ULL)
 	{
 		return true;
 	}
@@ -417,32 +440,44 @@ bool ChessBoard::fieldIsUnderAttack(Square pos)
 	//because if the current field has a pawn on its attacking squares, 
 	//it can also be attacked by the opponent pawn
 	if ((PAWN_ATTACK_BB[_currentTurnColor][pos] &
-		_piecesOfColor[opponentColor] &
-		_piecesOfType[Pawn]) != 0ULL)
+		opponentColorBB &
+		pawnsBB) != 0ULL)
 	{
 		return true;
 	}
 
 	//field gets attacked by king
 	if ((KING_ATTACKS_BB[pos] &
-		_piecesOfColor[opponentColor] &
-		_piecesOfType[King]) != 0ULL)
+		opponentColorBB &
+		kingsBB) != 0ULL)
 	{
 		return true;
 	}
 
 	//raycast in every direction and check for queen, rook or bishop attacks
-	return fieldGetsAttackedBySlidingPiece(pos);
+	return fieldGetsAttackedBySlidingPiece(pos, moveBB);
 }
 
-bool ChessBoard::fieldIsUnderAttackWithMoveDone(Square pos, Move* move)
-{
-	return false;
-}
-
-bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos)
+bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB)
 {
 	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
+
+	BitBoard queenBB = _piecesOfType[Queen];
+	BitBoard rookBB = _piecesOfType[Rook];
+	BitBoard bishopBB = _piecesOfType[Bishop];
+
+	BitBoard newCurrentColorBB = _piecesOfColor[_currentTurnColor] ^ moveBB;
+	
+	BitBoard moveBBWithoutStart = moveBB & ~_piecesOfColor[_currentTurnColor];
+
+	//if there are 2 destination fields, it is an en passant move
+	if (((moveBBWithoutStart & _piecesOfColor[opponentColor]) != 0ULL) &&
+		((moveBBWithoutStart & ~_piecesOfColor[opponentColor]) != 0ULL))
+	{
+		newCurrentColorBB &= ~_piecesOfColor[opponentColor];
+	}
+
+	BitBoard opponentColorBB = (_piecesOfColor[opponentColor] & (~moveBB));
 
 	for (int i = 0; i < 8; i++)
 	{
@@ -458,19 +493,19 @@ bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos)
 				currentSquare = (Square)(currentSquare + currentDirection);
 
 				//if the new position is the same color as the piece to check
-				if (positionIsSameColor(currentSquare, _currentTurnColor))
+				if(squareOverlapsWithBB(currentSquare, newCurrentColorBB))
 				{
 					//you cannot go on a square where a piece of the same color is
 					break;
 				}
-				else if (positionIsSameColor(currentSquare, opponentColor))
+				else if (squareOverlapsWithBB(currentSquare, opponentColorBB))
 				{
 					BitBoard currPosBB = BB_SQUARE[currentSquare];
 
 					bool currDirIsDiagonal = i > 3;
 
 					//found piece is a queen -> will attack no matter in which direction you are sliding
-					if ((currPosBB & _piecesOfType[Queen]) != 0ULL)
+					if ((currPosBB & queenBB) != 0ULL)
 					{
 						//is queen
 						return true;
@@ -478,7 +513,7 @@ bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos)
 					//if found piece is a rook or a bishop, sliding direction matters
 					else if (currDirIsDiagonal)
 					{
-						if ((currPosBB & _piecesOfType[Bishop]) != 0ULL)
+						if ((currPosBB & bishopBB) != 0ULL)
 						{
 							//is bishop
 							return true;
@@ -486,7 +521,7 @@ bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos)
 					}
 					else
 					{
-						if ((currPosBB & _piecesOfType[Rook]) != 0ULL)
+						if ((currPosBB & rookBB) != 0ULL)
 						{
 							//is rook
 							return true;
@@ -504,6 +539,13 @@ bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos)
 		}
 	}
 	return false;
+}
+
+bool ChessBoard::moveIsLegal(const std::unique_ptr<Move>& move)
+{
+	//if move is castle -> return true
+	BitBoard BBforNextMove = move.get()->getBBWithMoveDone();
+	return true;
 }
 
 
@@ -532,7 +574,9 @@ ChessBoard::ChessBoard()
 
 		_halfMoveClock(0),
 
-		_moveNumber(1)
+		_moveNumber(1),
+
+		_kingPos{ E1, E8 }
 {}
 
 ChessBoard::ChessBoard(std::string given_fen_code)
@@ -580,6 +624,12 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 			_allPieces |= bbToAdd;
 			_piecesOfColor[piece.getColor()] |= bbToAdd;
 			_piecesOfType[piece.getType()] |= bbToAdd;
+
+			if (piece.getType() == King)
+			{
+				_kingPos[piece.getColor()] = (Square)boardPos;
+			}
+
 			currFile++;
 		}
 	}
@@ -620,5 +670,19 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 
 UniqueMoveList ChessBoard::getAllLegalMoves()
 {
-	return UniqueMoveList();
+	UniqueMoveList list = getAllPseudoLegalMoves();
+	list.erase
+	(
+		std::remove_if
+		(
+			list.begin(),
+			list.end(),
+			[this](const std::unique_ptr<Move>& move)
+			{
+				return !moveIsLegal(move);
+			}
+		),
+		list.end()
+				);
+	return list;
 }

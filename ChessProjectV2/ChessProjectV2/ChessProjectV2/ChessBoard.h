@@ -8,7 +8,6 @@
 #include "MoveEnPassant.h"
 #include "MoveCastle.h"
 #include "MovePromote.h"
-#include "MoveDoublePawn.h"
 #include "Constants.h"
 
 const std::string STARTING_FEN =
@@ -89,11 +88,12 @@ protected:
 		Direction directions[],
 		int numberOfDirections);
 
-	//field is under attack
-	bool fieldIsUnderAttack(Square pos);
-	bool fieldIsUnderAttackWithMoveDone(Square pos, Move* move);
+	//square gets attacke by the opponent
+	bool fieldIsUnderAttack(Square pos, BitBoard moveBB = BITBOARD_NONE);
+	//checks if square gets attacked by sliding pieces
+	bool fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB = BITBOARD_NONE);
 
-	bool fieldGetsAttackedBySlidingPiece(Square pos);
+	bool moveIsLegal(const std::unique_ptr<Move>& move);
 public:
 	ChessBoard();
 	ChessBoard(std::string given_fen_code);

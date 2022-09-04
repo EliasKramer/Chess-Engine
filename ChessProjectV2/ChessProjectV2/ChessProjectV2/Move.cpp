@@ -14,6 +14,11 @@ Square Move::getDestination()
 {
 	return _destination;
 }
+
+BitBoard Move::getBBWithMoveDone()
+{
+	return BB_SQUARE[_start] | BB_SQUARE[_destination];
+}
 /*
 void Move::execute(
 	std::function<void(Square, Square)> copySquare,
@@ -23,12 +28,6 @@ void Move::execute(
 {
 	copySquare(_start, _destination);
 	delAtPos(_start);
-}
-
-Square* Move::getAtPosWithMoveDone(Square pos)
-{
-	//TODO
-	return nullptr;
 }
 */
 bool operator==(const Move& first, const Move& second)

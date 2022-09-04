@@ -5,3 +5,25 @@ MoveCastle::MoveCastle(Square givenStart, Square givenDest, Square rookStart, Sq
 	_rookStart(rookStart),
 	_rookDest(rookDest)
 {}
+
+MoveCastle::MoveCastle(ChessColor color, CastlingType castlingType)
+	:Move(SQUARES_FOR_KING_CASTLING[color][castlingType][0],
+		SQUARES_FOR_KING_CASTLING[color][castlingType][2]),
+	_rookStart(SQUARES_FOR_ROOK_CASTLING[color][castlingType][0]),
+	_rookDest(SQUARES_FOR_ROOK_CASTLING[color][castlingType][1])
+{}
+
+Square MoveCastle::getRookStart()
+{
+	return _rookStart;
+}
+
+Square MoveCastle::getRookDest()
+{
+	return _rookDest;
+}
+
+BitBoard MoveCastle::getBBWithMoveDone()
+{
+	throw "ERROR. A Caslting Move does not produce a Move Bitboard";
+}

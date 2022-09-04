@@ -183,5 +183,16 @@ namespace BitBoardTest
 			Assert::AreEqual(BB_SQUARE[G8], FILE_G & RANK_8);
 			Assert::AreEqual(BB_SQUARE[H8], FILE_H & RANK_8);
 		}
+		TEST_METHOD(overlappingSquareWithBBTest)
+		{
+			Assert::IsTrue(squareOverlapsWithBB(A1, FILE_A));
+			Assert::IsTrue(squareOverlapsWithBB(A1, RANK_1));
+			
+			Assert::IsTrue(squareOverlapsWithBB(D3, FILE_D));
+			Assert::IsTrue(squareOverlapsWithBB(D3, RANK_3));
+
+			Assert::IsFalse(squareOverlapsWithBB(H8, RANK_7));
+			Assert::IsFalse(squareOverlapsWithBB(H8, FILE_G));
+		}
 	};
 }

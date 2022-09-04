@@ -31,28 +31,36 @@ void ChessBoardTest::setupBoard()
 	_halfMoveClock = 0;
 
 	_moveNumber = 1;
+
+	_kingPos[White] = E1;
+	_kingPos[Black] = E8;
 }
 ChessBoardTest::ChessBoardTest()
-    :ChessBoard()
+	:ChessBoard()
 {}
 
 ChessBoardTest::ChessBoardTest(std::string given_fen_code)
-    :ChessBoard(given_fen_code)
+	:ChessBoard(given_fen_code)
 {}
 
 BitBoard ChessBoardTest::getAllPieces()
 {
-    return _allPieces;
+	return _allPieces;
 }
 
 BitBoard ChessBoardTest::getAllPiecesOfColor(ChessColor color)
 {
-    return _piecesOfColor[color];
+	return _piecesOfColor[color];
 }
 
 BitBoard ChessBoardTest::getAllPiecesOfType(PieceType type)
 {
-    return _piecesOfType[type];
+	return _piecesOfType[type];
+}
+
+bool ChessBoardTest::fieldIsUnderAttackWithMoveBB(Square pos, BitBoard moveBB)
+{
+	return ChessBoard::fieldIsUnderAttack(pos, moveBB);
 }
 
 UniqueMoveList ChessBoardTest::getPseudoLegalMoves()
@@ -67,17 +75,17 @@ bool ChessBoardTest::casltingAllowed(ChessColor color, CastlingType option)
 
 ChessColor ChessBoardTest::getTurnColor()
 {
-    return _currentTurnColor;
+	return _currentTurnColor;
 }
 
 Square ChessBoardTest::getEnPassantSquare()
 {
-    return _enPassantSquare;
+	return _enPassantSquare;
 }
 
 uint16_t ChessBoardTest::getHalfMoveClock()
 {
-    return _halfMoveClock;
+	return _halfMoveClock;
 }
 
 bool ChessBoardTest::fieldIsUnderAttack(Square pos)
@@ -87,5 +95,5 @@ bool ChessBoardTest::fieldIsUnderAttack(Square pos)
 
 uint16_t ChessBoardTest::getMoveNumber()
 {
-    return _moveNumber;
+	return _moveNumber;
 }

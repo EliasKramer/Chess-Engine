@@ -18,6 +18,7 @@ namespace DataAndTypesTests
 
 			try {
 				getColorOfFenChar('$');
+				Assert::Fail();
 			}
 			catch (const std::string& errorMsg)
 			{
@@ -26,6 +27,7 @@ namespace DataAndTypesTests
 
 			try {
 				getColorOfFenChar('_', "Test Error Prefix");
+				Assert::Fail();
 			}
 			catch (const std::string& errorMsg)
 			{

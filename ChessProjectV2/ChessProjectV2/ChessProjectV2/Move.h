@@ -28,7 +28,7 @@ public:
 		*/
 
 	//xor this map to get a board for checking if king is in check
-	//BitBoard getBBWithMoveDone();
+	virtual BitBoard getBBWithMoveDone();
 };
 bool operator ==(const Move& first, const Move& second);
 bool operator !=(const Move& first, const Move& second);

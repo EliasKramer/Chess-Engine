@@ -251,10 +251,10 @@ namespace MoveGenerationTest
 		TEST_METHOD(generatingQueenMoves)
 		{
 			ChessBoardTest board("8/8/6p1/6P1/8/1n2Q3/8/8 w - - 0 1");
-			
+
 			UniqueMoveList moves = board.getPseudoLegalMoves();
 			Assert::AreEqual(22, (int)moves.size());
-			
+
 			Assert::IsTrue(moveListContains(Move(E3, E4), moves));
 			Assert::IsTrue(moveListContains(Move(E3, E5), moves));
 			Assert::IsTrue(moveListContains(Move(E3, E6), moves));
@@ -262,7 +262,7 @@ namespace MoveGenerationTest
 			Assert::IsTrue(moveListContains(Move(E3, E8), moves));
 
 			Assert::IsTrue(moveListContains(Move(E3, F4), moves));
-			
+
 			Assert::IsTrue(moveListContains(Move(E3, F3), moves));
 			Assert::IsTrue(moveListContains(Move(E3, G3), moves));
 			Assert::IsTrue(moveListContains(Move(E3, H3), moves));
@@ -272,7 +272,7 @@ namespace MoveGenerationTest
 
 			Assert::IsTrue(moveListContains(Move(E3, E2), moves));
 			Assert::IsTrue(moveListContains(Move(E3, E1), moves));
-			
+
 			Assert::IsTrue(moveListContains(Move(E3, D2), moves));
 			Assert::IsTrue(moveListContains(Move(E3, C1), moves));
 
@@ -290,11 +290,11 @@ namespace MoveGenerationTest
 			ChessBoardTest board("7k/8/8/4Pp2/8/8/8/K7 w - f6 0 1");
 			UniqueMoveList moves = board.getPseudoLegalMoves();
 			Assert::IsTrue(moveListContains(Move(E5, F6), moves));
-			
+
 			board = ChessBoardTest("7k/8/8/4Pp2/8/8/8/K7 w - - 0 1");
 			moves = board.getPseudoLegalMoves();
 			Assert::IsFalse(moveListContains(Move(E5, F6), moves));
-			
+
 			board = ChessBoardTest("7k/8/8/8/6pP/8/8/K7 b - h3 0 1");
 			moves = board.getPseudoLegalMoves();
 			Assert::IsTrue(moveListContains(Move(G4, H3), moves));
@@ -302,6 +302,106 @@ namespace MoveGenerationTest
 			board = ChessBoardTest("7k/8/8/8/8/2Pp4/8/K7 b - - 0 1");
 			moves = board.getPseudoLegalMoves();
 			Assert::IsFalse(moveListContains(Move(D3, C2), moves));
+		}
+		TEST_METHOD(generatingCastlingMoves)
+		{
+			//nothing blocked. every caslte move possible
+			//white
+			ChessBoardTest board("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1");
+			UniqueMoveList moves = board.getPseudoLegalMoves();
+
+			Assert::IsTrue(moveListContains(Move(E1, G1), moves));
+			Assert::IsTrue(moveListContains(Move(E1, C1), moves));
+
+			//black
+			board = ChessBoardTest("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1");
+			moves = board.getPseudoLegalMoves();
+
+			Assert::IsTrue(moveListContains(Move(E8, G8), moves));
+			Assert::IsTrue(moveListContains(Move(E8, C8), moves));
+
+			//caslting is not allowed.(fen string)
+			//white
+			board = ChessBoardTest("r3k2r/8/8/8/8/8/8/R3K2R w kq - 0 1");
+			moves = board.getPseudoLegalMoves();
+
+			Assert::IsFalse(moveListContains(Move(E1, G1), moves));
+			Assert::IsFalse(moveListContains(Move(E1, C1), moves));
+
+			//black
+			board = ChessBoardTest("r3k2r/8/8/8/8/8/8/R3K2R b KQ - 0 1");
+			moves = board.getPseudoLegalMoves();
+
+			Assert::IsFalse(moveListContains(Move(E8, G8), moves));
+			Assert::IsFalse(moveListContains(Move(E8, C8), moves));
+
+			//cant castle left and right (path blocked)
+			//white
+			board = ChessBoardTest("4k3/8/8/8/3r1r2/8/8/R3K2R w KQ - 0 1");
+			moves = board.getPseudoLegalMoves();
+
+			Assert::IsFalse(moveListContains(Move(E1, G1), moves));
+			Assert::IsFalse(moveListContains(Move(E1, C1), moves));
+
+			board = ChessBoardTest("4k3/8/8/8/2r3r1/8/8/R3K2R w KQ - 0 1");
+			moves = board.getPseudoLegalMoves();
+
+			Assert::IsFalse(moveListContains(Move(E1, G1), moves));
+			Assert::IsFalse(moveListContains(Move(E1, C1), moves));
+
+			board = ChessBoardTest("4k3/8/8/8/4r3/8/8/R3K2R w KQ - 0 1");
+			moves = board.getPseudoLegalMoves();
+
+			Assert::IsFalse(moveListContains(Move(E1, G1), moves));
+			Assert::IsFalse(moveListContains(Move(E1, C1), moves));
+
+			board = ChessBoardTest("4k3/8/8/7r/rr6/8/8/R3K2R w KQ - 0 1");
+			moves = board.getPseudoLegalMoves();
+
+			Assert::IsTrue(moveListContains(Move(E1, G1), moves));
+			Assert::IsTrue(moveListContains(Move(E1, C1), moves));
+
+			//black
+			board = ChessBoardTest("r3k2r/8/8/3R1R2/8/8/8/4K3 b kq - 1 1");
+			moves = board.getPseudoLegalMoves();
+
+			Assert::IsFalse(moveListContains(Move(E8, G8), moves));
+			Assert::IsFalse(moveListContains(Move(E8, C8), moves));
+
+			board = ChessBoardTest("r3k2r/8/8/2R3R1/8/8/8/4K3 b kq - 1 1");
+			moves = board.getPseudoLegalMoves();
+
+			Assert::IsFalse(moveListContains(Move(E8, G8), moves));
+			Assert::IsFalse(moveListContains(Move(E8, C8), moves));
+
+			board = ChessBoardTest("r3k2r/8/8/4R3/8/8/8/4K3 b kq - 1 1");
+			moves = board.getPseudoLegalMoves();
+
+			Assert::IsFalse(moveListContains(Move(E8, G8), moves));
+			Assert::IsFalse(moveListContains(Move(E8, C8), moves));
+
+			board = ChessBoardTest("r3k2r/8/8/RR5R/8/8/8/4K3 b kq - 1 1");
+			moves = board.getPseudoLegalMoves();
+
+			Assert::IsTrue(moveListContains(Move(E8, G8), moves));
+			Assert::IsTrue(moveListContains(Move(E8, C8), moves));
+		}
+		TEST_METHOD(generatePseudoLegalMovesAtDepthOne)
+		{
+			ChessBoardTest board("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
+			UniqueMoveList moves = board.getPseudoLegalMoves();
+			Assert::IsTrue(moves.size() == 48);
+
+			board = ChessBoardTest("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1");
+			moves = board.getPseudoLegalMoves();
+			Assert::IsTrue(moves.size() == 16);
+		}
+		TEST_METHOD(generateLegalMoves)
+		{
+			ChessBoardTest board;
+			board.setupBoard();
+			UniqueMoveList moves = board.getAllLegalMoves();
+			Assert::AreEqual(20, (int)moves.size());
 		}
 	};
 }
