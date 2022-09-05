@@ -19,13 +19,11 @@ public:
 	
 	Square getStart();
 	Square getDestination();
-	/*
+	
 	virtual void execute(
 		std::function<void(Square, Square)> copySquare,
 		std::function<void(ChessPiece, Square)> setAtPos,
-		std::function<void(Square)> delAtPos,
-		std::function<void(Square)> setEnPassant);
-		*/
+		std::function<void(Square)> delAtPos);
 
 	//xor this map to get a board for checking if king is in check
 	virtual BitBoard getBBWithMoveDone();

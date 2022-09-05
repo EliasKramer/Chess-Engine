@@ -13,6 +13,11 @@ public:
 	Square getRookStart();
 	Square getRookDest();
 
+	void execute(
+		std::function<void(Square, Square)> copySquare,
+		std::function<void(ChessPiece, Square)> setAtPos,
+		std::function<void(Square)> delAtPos) override;
+
 	//castling does not produce a a bitboard, that you can use
 	//it will just throw an error
 	BitBoard getBBWithMoveDone() override;

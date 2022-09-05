@@ -70,7 +70,7 @@ namespace MoveTest
 			Assert::AreEqual(0x10000800ULL, m.getBBWithMoveDone());
 			Assert::AreEqual((BB_SQUARE[D2] | BB_SQUARE[E4]), m.getBBWithMoveDone());
 
-			MovePromote mp(A7, A8, Queen);
+			MovePromote mp(A7, A8, ChessPiece(White, Queen));
 			m = Move(A7, A8);
 			Assert::AreEqual(m.getBBWithMoveDone(), mp.getBBWithMoveDone());
 			Assert::AreEqual(0x101000000000000ULL, mp.getBBWithMoveDone());

@@ -278,8 +278,80 @@ namespace ChessBoardUnitTest
 			//black bishop takes attacking queen - king is not under attack
 			board = ChessBoardTest("8/4b3/3Q2k1/K7/8/8/8/8 b - - 0 1");
 			Move m4(E7, D6);
-			Assert::IsFalse(board.fieldIsUnderAttackWithMoveBB(G6, m4.getBBWithMoveDone()));
+			Assert::IsFalse(board.fieldIsUnderAttackWithMoveBB(G6, m4.getBBWithMoveDone()));	
+		}
+		TEST_METHOD(legalMovesCheck)
+		{
+			//not matter what castle move, it will be always legal,
+			//because it has been checked for legality before
+			ChessBoardTest board;
+			Assert::IsTrue(board.isLegal(std::make_unique<MoveCastle>(White, CastleLong)));
+		}
+		TEST_METHOD(equalCheck)
+		{
+			ChessBoardTest board1("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+			ChessBoardTest board2(STARTING_FEN);
+			Assert::IsTrue(board1 == board2);
+			Assert::IsFalse(board1 != board2);
+
+			//castling not the same
+			board1 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+			board2 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w Qkq - 0 1");
+
+			Assert::IsFalse(board1 == board2);
+			Assert::IsTrue(board1 != board2);
+
+			//move color not the same
+			board1 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+			board2 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1");
+
+			Assert::IsFalse(board1 == board2);
+			Assert::IsTrue(board1 != board2);
 			
+			//en passant not the same
+			board1 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+			board2 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e4 0 1");
+
+			Assert::IsFalse(board1 == board2);
+			Assert::IsTrue(board1 != board2);
+			
+			//half move clock not the same
+			board1 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+			board2 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1 1");
+
+			Assert::IsFalse(board1 == board2);
+			Assert::IsTrue(board1 != board2);
+			
+			//moves not the same
+			board1 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+			board2 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 2");
+
+			Assert::IsFalse(board1 == board2);
+			Assert::IsTrue(board1 != board2);
+
+			//color of piece not the same
+			board1 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+			board2 = ChessBoardTest("Rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+
+			Assert::IsFalse(board1 == board2);
+			Assert::IsTrue(board1 != board2);
+
+			//no piece at all at one pos
+			board1 = ChessBoardTest("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+			board2 = ChessBoardTest("1nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+
+			Assert::IsFalse(board1 == board2);
+			Assert::IsTrue(board1 != board2);
+		}
+		TEST_METHOD(copyBoardTest)
+		{
+			ChessBoard board1(STARTING_FEN);
+			ChessBoard board2 = board1.getCopyByValue();
+			Assert::IsTrue(board1 == board2);
+
+			board1 = ChessBoard("r2q1rk1/pP1p2pp/Q4n2/bbp1p3/Np6/1B3NBn/pPPP1PPP/R3K2R b KQ - 0 1");
+			board2 = board1.getCopyByValue();
+			Assert::IsTrue(board1 == board2);
 		}
 	};
 }

@@ -144,24 +144,27 @@ void ChessBoard::getPawnMoves(UniqueMoveList& moves)
 			_piecesOfType[Pawn] &
 			_piecesOfColor[_currentTurnColor]) != 0ULL)
 		{
-			Square forwardPos = (Square)(currSquare + forward);
-			BitBoard forwardPosBB = BB_SQUARE[forwardPos];
 			//one move forward
-			if (destinationIsOnBoard(currSquare, forward) &&
-				(forwardPosBB & _allPieces) == 0ULL)
+			if (destinationIsOnBoard(currSquare, forward))
 			{
-				addPawnMove(moves, currSquare, forwardPos);
-				//moves.push_back(std::make_unique<Move>(currSquare, forwardPos));
-				//TODO
-				//if move ends on promotion rank it should be a promotion move
+				Square forwardPos = (Square)(currSquare + forward);
+				BitBoard forwardPosBB = BB_SQUARE[forwardPos];
 
-				//two moves forward (only possible if one move is possible
-				Square doubleForward = (Square)(forwardPos + forward);
-				if ((piecePosBB & startRank) != 0 &&
-					destinationIsOnBoard(forwardPos, forward) &&
-					(BB_SQUARE[doubleForward] & _allPieces) == 0ULL)
+				if ((forwardPosBB & _allPieces) == 0ULL)
 				{
-					moves.push_back(std::make_unique<Move>(currSquare, doubleForward));
+					addPawnMove(moves, currSquare, forwardPos);
+					//moves.push_back(std::make_unique<Move>(currSquare, forwardPos));
+					//TODO
+					//if move ends on promotion rank it should be a promotion move
+
+					//two moves forward (only possible if one move is possible
+					Square doubleForward = (Square)(forwardPos + forward);
+					if ((piecePosBB & startRank) != 0 &&
+						destinationIsOnBoard(forwardPos, forward) &&
+						(BB_SQUARE[doubleForward] & _allPieces) == 0ULL)
+					{
+						moves.push_back(std::make_unique<Move>(currSquare, doubleForward));
+					}
 				}
 			}
 
@@ -281,10 +284,10 @@ void ChessBoard::addPawnMove(UniqueMoveList& moves, Square start, Square dest)
 
 	if ((BB_SQUARE[dest] & promotionRank) != 0ULL)
 	{
-		moves.push_back(std::make_unique<MovePromote>(start, dest, Queen));
-		moves.push_back(std::make_unique<MovePromote>(start, dest, Rook));
-		moves.push_back(std::make_unique<MovePromote>(start, dest, Bishop));
-		moves.push_back(std::make_unique<MovePromote>(start, dest, Knight));
+		moves.push_back(std::make_unique<MovePromote>(start, dest, ChessPiece(_currentTurnColor, Queen)));
+		moves.push_back(std::make_unique<MovePromote>(start, dest, ChessPiece(_currentTurnColor, Rook)));
+		moves.push_back(std::make_unique<MovePromote>(start, dest, ChessPiece(_currentTurnColor, Bishop)));
+		moves.push_back(std::make_unique<MovePromote>(start, dest, ChessPiece(_currentTurnColor, Knight)));
 	}
 	else
 	{
@@ -420,7 +423,7 @@ bool ChessBoard::fieldIsUnderAttack(Square pos, BitBoard moveBB)
 	BitBoard newCurrentColorBB = _piecesOfColor[_currentTurnColor] ^ moveBB;
 
 
-	
+
 	BitBoard opponentColorBB = (_piecesOfColor[opponentColor] & (~moveBB));
 
 	BitBoard knightBB = _piecesOfType[Knight];
@@ -467,7 +470,7 @@ bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB)
 	BitBoard bishopBB = _piecesOfType[Bishop];
 
 	BitBoard newCurrentColorBB = _piecesOfColor[_currentTurnColor] ^ moveBB;
-	
+
 	BitBoard moveBBWithoutStart = moveBB & ~_piecesOfColor[_currentTurnColor];
 
 	//if there are 2 destination fields, it is an en passant move
@@ -493,7 +496,7 @@ bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB)
 				currentSquare = (Square)(currentSquare + currentDirection);
 
 				//if the new position is the same color as the piece to check
-				if(squareOverlapsWithBB(currentSquare, newCurrentColorBB))
+				if (squareOverlapsWithBB(currentSquare, newCurrentColorBB))
 				{
 					//you cannot go on a square where a piece of the same color is
 					break;
@@ -544,8 +547,22 @@ bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB)
 bool ChessBoard::moveIsLegal(const std::unique_ptr<Move>& move)
 {
 	//if move is castle -> return true
+	if (dynamic_cast<MoveCastle*>(move.get()))
+	{
+		//because a castling move has been checked to be legal before
+		return true;
+	}
+
+	Square start = move.get()->getStart();
+	Square dest = move.get()->getDestination();
+
 	BitBoard BBforNextMove = move.get()->getBBWithMoveDone();
-	return true;
+
+	Square kingPos = _kingPos[_currentTurnColor];
+
+	return start == kingPos ?
+		!fieldIsUnderAttack(dest, BBforNextMove) :
+		!fieldGetsAttackedBySlidingPiece(kingPos, BBforNextMove);
 }
 
 
@@ -685,4 +702,94 @@ UniqueMoveList ChessBoard::getAllLegalMoves()
 		list.end()
 				);
 	return list;
+}
+
+void ChessBoard::makeMove(Move* move)
+{
+	std::function<void(Square, Square)> copy =
+		[this](Square start, Square dest) { return copySquare(start, dest); };
+
+	std::function<void(ChessPiece, Square)> set =
+		[this](ChessPiece piece, Square dest) { return setAtPosition(piece, dest); };
+
+	std::function<void(Square)> remove =
+		[this](Square pos) { return delAtPos(pos); };
+
+	move->execute(copy, set, remove);
+
+	_currentTurnColor = getOppositeColor(_currentTurnColor);
+}
+
+ChessBoard ChessBoard::getCopyByValue()
+{
+	ChessBoard board;
+
+	board._allPieces = _allPieces;
+
+	board._piecesOfColor[White] = _piecesOfColor[White];
+	board._piecesOfColor[Black] = _piecesOfColor[Black];
+
+	for (int i = 0; i < NUMBER_OF_DIFFERENT_PIECE_TYPES; i++)
+	{
+		board._piecesOfType[i] = _piecesOfType[i];
+	}
+
+	board._kingPos[White] = _kingPos[White];
+	board._kingPos[Black] = _kingPos[Black];
+
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			board._canCastle[i][j] = _canCastle[i][j];
+		}
+	}
+
+	board._currentTurnColor = _currentTurnColor;
+
+	board._enPassantSquare = _enPassantSquare;
+
+	board._halfMoveClock = _halfMoveClock;
+
+	board._moveNumber = _moveNumber;
+
+	return board;
+}
+
+bool operator==(const ChessBoard& first, const ChessBoard& second)
+{
+	bool retVal = first._allPieces == second._allPieces
+		&& (first._piecesOfColor[White] == second._piecesOfColor[White])
+		&& (first._piecesOfColor[Black] == second._piecesOfColor[Black]);
+
+	for (int i = 0; i < NUMBER_OF_DIFFERENT_PIECE_TYPES; i++)
+	{
+		retVal = retVal && (first._piecesOfType[i] == second._piecesOfType[i]);
+	}
+
+	retVal = retVal && (first._kingPos[White] == second._kingPos[White]);
+	retVal = retVal && (first._kingPos[Black] == second._kingPos[Black]);
+
+	for (int i = 0; i < 2; i++)
+	{
+		for (int j = 0; j < 2; j++)
+		{
+			retVal = retVal && (first._canCastle[i][j] == second._canCastle[i][j]);
+		}
+	}
+
+	retVal = retVal && (first._currentTurnColor == second._currentTurnColor);
+
+	retVal = retVal && (first._enPassantSquare == second._enPassantSquare);
+
+	retVal = retVal && (first._halfMoveClock == second._halfMoveClock);
+
+	retVal = retVal && (first._moveNumber == second._moveNumber);
+
+	return retVal;
+}
+
+bool operator!=(const ChessBoard& first, const ChessBoard& second)
+{
+	return !(first == second);
 }

@@ -30,6 +30,8 @@ public:
 	uint16_t getMoveNumber();
 	
 	bool fieldIsUnderAttackWithMoveBB(Square pos, BitBoard moveBB);
+	bool isLegal(const std::unique_ptr<Move>& move);
 
 	UniqueMoveList getPseudoLegalMoves();
+
 };

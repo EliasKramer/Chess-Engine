@@ -1,6 +1,6 @@
 #include "Move.h"
 
-Move::Move(Square givenStart, Square givenDest):
+Move::Move(Square givenStart, Square givenDest) :
 	_start(givenStart),
 	_destination(givenDest)
 {}
@@ -15,24 +15,23 @@ Square Move::getDestination()
 	return _destination;
 }
 
-BitBoard Move::getBBWithMoveDone()
-{
-	return BB_SQUARE[_start] | BB_SQUARE[_destination];
-}
-/*
 void Move::execute(
 	std::function<void(Square, Square)> copySquare,
 	std::function<void(ChessPiece, Square)> setAtPos,
-	std::function<void(Square)> delAtPos,
-	std::function<void(Square)> setEnPassant)
+	std::function<void(Square)> delAtPos)
 {
 	copySquare(_start, _destination);
 	delAtPos(_start);
 }
-*/
+
+BitBoard Move::getBBWithMoveDone()
+{
+	return BB_SQUARE[_start] | BB_SQUARE[_destination];
+}
+
 bool operator==(const Move& first, const Move& second)
 {
-	return 
+	return
 		first._destination == second._destination &&
 		first._start == second._start;
 }

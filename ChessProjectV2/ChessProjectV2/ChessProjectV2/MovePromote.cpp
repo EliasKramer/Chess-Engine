@@ -1,6 +1,14 @@
 #include "MovePromote.h"
 
-MovePromote::MovePromote(Square givenStart, Square givenDest, PieceType promotingType)
+MovePromote::MovePromote(Square givenStart, Square givenDest, ChessPiece promotingPiece)
 	:Move(givenStart, givenDest),
-	_promotingType(promotingType)
+	_promotingPiece(promotingPiece)
 {}
+
+void MovePromote::execute(std::function<void(Square, Square)> copySquare,
+	std::function<void(ChessPiece, Square)> setAtPos,
+	std::function<void(Square)> delAtPos)
+{
+	delAtPos(_start);
+	setAtPos(_promotingPiece, _destination);
+}

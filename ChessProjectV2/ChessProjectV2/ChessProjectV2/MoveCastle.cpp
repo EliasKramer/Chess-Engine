@@ -23,6 +23,16 @@ Square MoveCastle::getRookDest()
 	return _rookDest;
 }
 
+void MoveCastle::execute(
+	std::function<void(Square, Square)> copySquare,
+	std::function<void(ChessPiece, Square)> setAtPos,
+	std::function<void(Square)> delAtPos)
+{
+	Move::execute(copySquare, setAtPos, delAtPos);
+	copySquare(_rookStart, _rookDest);
+	delAtPos(_rookStart);
+}
+
 BitBoard MoveCastle::getBBWithMoveDone()
 {
 	throw "ERROR. A Caslting Move does not produce a Move Bitboard";

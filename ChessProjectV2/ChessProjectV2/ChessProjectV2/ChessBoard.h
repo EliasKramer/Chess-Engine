@@ -21,7 +21,7 @@ protected:
 	BitBoard _piecesOfType[NUMBER_OF_DIFFERENT_PIECE_TYPES];
 
 	//not used yet
-	BitBoard _attackedByColor[DIFFERENT_CHESS_COLORS];
+	//BitBoard _attackedByColor[DIFFERENT_CHESS_COLORS];
 	//not used yet
 	Square _kingPos[DIFFERENT_CHESS_COLORS];
 
@@ -94,10 +94,22 @@ protected:
 	bool fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB = BITBOARD_NONE);
 
 	bool moveIsLegal(const std::unique_ptr<Move>& move);
+
+	friend bool operator ==(const ChessBoard& first, const ChessBoard& second);
+	friend bool operator !=(const ChessBoard& first, const ChessBoard& second);
 public:
 	ChessBoard();
 	ChessBoard(std::string given_fen_code);
 
 	//returns all moves of the color, whos turn it is
 	UniqueMoveList getAllLegalMoves();
+
+	//execute move
+	void makeMove(Move* move);
+
+	//copy board by value
+	ChessBoard getCopyByValue();
 };
+
+bool operator ==(const ChessBoard& first, const ChessBoard& second);
+bool operator !=(const ChessBoard& first, const ChessBoard& second);
