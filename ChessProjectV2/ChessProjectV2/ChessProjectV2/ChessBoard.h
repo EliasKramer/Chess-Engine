@@ -50,50 +50,52 @@ protected:
 	void setAtPosition(ChessPiece piece, Square position);
 	void delAtPos(Square position);
 	
-	bool destinationIsSameColor(Square start, Direction direction, ChessColor color);
-	bool positionIsSameColor(Square pos, ChessColor color);
+	bool destinationIsSameColor(Square start, Direction direction, ChessColor color) const;
+	bool positionIsSameColor(Square pos, ChessColor color) const;
 	
 	void addIfDestinationIsValid(
 		UniqueMoveList& moves,
 		Square start,
-		Direction dir);
+		Direction dir) const;
 	void addIfDestinationIsColor(
 		UniqueMoveList& moves,
 		Square start,
 		Direction dir,
-		ChessColor color);
+		ChessColor color) const;
 
 	//Pseudo legal moves are moves that follow 
 	//the move rules for the types.
 	//They do not check if the king is in check
-	UniqueMoveList getAllPseudoLegalMoves();
+	UniqueMoveList getAllPseudoLegalMoves() const;
 
-	BitBoard getKingCheckRayCast();
-
-	void getPawnMoves(UniqueMoveList& moves);
-	void getKnightMoves(UniqueMoveList& moves);
-	void getBishopMoves(UniqueMoveList& moves);
-	void getRookMoves(UniqueMoveList& moves);
-	void getQueenMoves(UniqueMoveList& moves);
-	void getKingMoves(UniqueMoveList& moves);
+	void getPawnMoves(UniqueMoveList& moves) const;
+	void getKnightMoves(UniqueMoveList& moves) const;
+	void getBishopMoves(UniqueMoveList& moves) const;
+	void getRookMoves(UniqueMoveList& moves) const;
+	void getQueenMoves(UniqueMoveList& moves) const;
+	void getKingMoves(UniqueMoveList& moves) const;
 
 	void addPawnMove(
-		UniqueMoveList& moves, Square start, Square dest);
-	void getCastlingMoves(UniqueMoveList& moves);
-	void getEnPassantMove(UniqueMoveList& moves);
+		UniqueMoveList& moves, Square start, Square dest) const;
+	void getCastlingMoves(UniqueMoveList& moves) const;
+	void getEnPassantMove(UniqueMoveList& moves) const;
 	
 	void addRayMoves(
 		UniqueMoveList& moves,
 		Square start,
 		Direction directions[],
-		int numberOfDirections);
+		int numberOfDirections) const;
 
 	//square gets attacke by the opponent
-	bool fieldIsUnderAttack(Square pos, BitBoard moveBB = BITBOARD_NONE);
+	bool fieldIsUnderAttack(Square pos, BitBoard moveBB = BITBOARD_NONE) const;
 	//checks if square gets attacked by sliding pieces
-	bool fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB = BITBOARD_NONE);
+	bool fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB = BITBOARD_NONE) const;
 
-	bool moveIsLegal(const std::unique_ptr<Move>& move);
+	bool moveIsLegal(const std::unique_ptr<Move>& move) const;
+
+	void udpateCastlingRightsAfterMove(Move* m);
+	
+	void updateEnPassantRightsAfterMove(Move* m);
 
 	friend bool operator ==(const ChessBoard& first, const ChessBoard& second);
 	friend bool operator !=(const ChessBoard& first, const ChessBoard& second);
@@ -102,13 +104,13 @@ public:
 	ChessBoard(std::string given_fen_code);
 
 	//returns all moves of the color, whos turn it is
-	UniqueMoveList getAllLegalMoves();
+	UniqueMoveList getAllLegalMoves() const;
 
 	//execute move
 	void makeMove(Move* move);
 
 	//copy board by value
-	ChessBoard getCopyByValue();
+	ChessBoard getCopyByValue() const;
 };
 
 bool operator ==(const ChessBoard& first, const ChessBoard& second);

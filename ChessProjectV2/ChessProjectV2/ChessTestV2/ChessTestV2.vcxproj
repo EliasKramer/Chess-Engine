@@ -183,6 +183,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ChessPieceTest.cpp" />
+    <ClCompile Include="PerformanceTests.cpp" />
     <ClCompile Include="TestMethods.cpp" />
   </ItemGroup>
   <ItemGroup>

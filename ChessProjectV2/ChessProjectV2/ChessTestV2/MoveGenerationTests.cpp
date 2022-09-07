@@ -431,13 +431,5 @@ namespace MoveGenerationTest
 			moves = board.getAllLegalMoves();
 			Assert::AreEqual(0, (int)moves.size());
 		}
-		TEST_METHOD(testMovesAfterDepth)
-		{
-			ChessBoard board(STARTING_FEN);
-			//Assert::AreEqual(20, (int)numberOfMovesAfterDepth(board, 1));
-			//Assert::AreEqual(400, (int)numberOfMovesAfterDepth(board, 2));
-			Assert::AreEqual(8902, (int)numberOfMovesAfterDepth(board, 3));
-			//Assert::AreEqual(197281, (int)numberOfMovesAfterDepth(board, 4));
-		}
 	};
 }

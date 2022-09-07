@@ -5,4 +5,4 @@
 
 bool moveListContains(Move m, const UniqueMoveList& moves);
 
-int numberOfMovesAfterDepth(ChessBoard& board, int depth);
+int numberOfMovesAfterDepth(const ChessBoard& board, int depth);

@@ -12,7 +12,7 @@ bool moveListContains(Move m, const UniqueMoveList& moves)
 	return false;
 }
 
-int numberOfMovesAfterDepth(ChessBoard& board, int depth)
+int numberOfMovesAfterDepth(const ChessBoard& board, int depth)
 {
 	UniqueMoveList listOfMoves = board.getAllLegalMoves();
 	if (depth == 1)
