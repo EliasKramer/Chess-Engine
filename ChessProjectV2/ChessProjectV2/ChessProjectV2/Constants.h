@@ -56,7 +56,7 @@ const std::array<std::array<std::array<Square, 3>, 2>, 2> SQUARES_FOR_KING_CASTL
 	result[White][CastleShort][0] = E1;
 	result[White][CastleShort][1] = F1;
 	result[White][CastleShort][2] = G1;
-	
+
 	result[White][CastleLong][0] = E1;
 	result[White][CastleLong][1] = D1;
 	result[White][CastleLong][2] = C1;
@@ -64,11 +64,11 @@ const std::array<std::array<std::array<Square, 3>, 2>, 2> SQUARES_FOR_KING_CASTL
 	result[Black][CastleShort][0] = E8;
 	result[Black][CastleShort][1] = F8;
 	result[Black][CastleShort][2] = G8;
-	
+
 	result[Black][CastleLong][0] = E8;
 	result[Black][CastleLong][1] = D8;
 	result[Black][CastleLong][2] = C8;
-	
+
 	return result;
 }();
 
@@ -80,7 +80,7 @@ const std::array<std::array<std::array<Square, 2>, 2>, 2> SQUARES_FOR_ROOK_CASTL
 
 	result[White][CastleShort][0] = H1;
 	result[White][CastleShort][1] = F1;
-	
+
 	result[White][CastleLong][0] = A1;
 	result[White][CastleLong][1] = D1;
 
@@ -89,7 +89,7 @@ const std::array<std::array<std::array<Square, 2>, 2>, 2> SQUARES_FOR_ROOK_CASTL
 
 	result[Black][CastleLong][0] = A8;
 	result[Black][CastleLong][1] = D8;
-	
+
 	return result;
 }();
 
@@ -116,11 +116,11 @@ const std::array<BitBoard, 64> KNIGHT_ATTACK_BB = []()->std::array<BitBoard, 64>
 	return result;
 }();
 
-const std::array<std::array<BitBoard, 64>,2> PAWN_ATTACK_BB = 
+const std::array<std::array<BitBoard, 64>, 2> PAWN_ATTACK_BB =
 []()->std::array<std::array<BitBoard, 64>, 2> {
-	
+
 	std::array<std::array<BitBoard, 64>, 2> result = {};
-	
+
 	for (int colorIdx = White; colorIdx <= Black; colorIdx++)
 	{
 		for (int i = A1; i <= H8; i++)
@@ -136,7 +136,7 @@ const std::array<std::array<BitBoard, 64>,2> PAWN_ATTACK_BB =
 			}
 		}
 	}
-	
+
 	return result;
 }();
 
@@ -160,3 +160,10 @@ const std::array<BitBoard, 64> KING_ATTACKS_BB = []()->std::array<BitBoard, 64> 
 	}
 	return result;
 }();
+
+const BitBoard BACKRANK[2] = { RANK_1, RANK_8 };
+const BitBoard CASTLINGSIDE[2] = { FILE_H, FILE_A };
+const BitBoard KINGFILE = FILE_E;
+const BitBoard SQUARES_EFFECTED_BY_CASTLING_BB =
+	BB_SQUARE[A1] | BB_SQUARE[E1] | BB_SQUARE[H1] |
+	BB_SQUARE[A8] | BB_SQUARE[E8] | BB_SQUARE[H8];

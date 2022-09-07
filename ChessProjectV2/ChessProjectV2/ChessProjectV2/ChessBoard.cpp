@@ -425,8 +425,6 @@ bool ChessBoard::fieldIsUnderAttack(Square pos, BitBoard moveBB) const
 
 	BitBoard newCurrentColorBB = _piecesOfColor[_currentTurnColor] ^ moveBB;
 
-
-
 	BitBoard opponentColorBB = (_piecesOfColor[opponentColor] & (~moveBB));
 
 	BitBoard knightBB = _piecesOfType[Knight];
@@ -565,11 +563,38 @@ bool ChessBoard::moveIsLegal(const std::unique_ptr<Move>& move) const
 
 	return start == kingPos ?
 		!fieldIsUnderAttack(dest, BBforNextMove) :
-		!fieldGetsAttackedBySlidingPiece(kingPos, BBforNextMove);
+		!fieldIsUnderAttack(kingPos, BBforNextMove);
 }
 
 void ChessBoard::udpateCastlingRightsAfterMove(Move* m)
 {
+	BitBoard start = BB_SQUARE[m->getStart()];
+	BitBoard dest = BB_SQUARE[m->getDestination()];
+	if (bitboardsOverlap(start, SQUARES_EFFECTED_BY_CASTLING_BB) ||
+		bitboardsOverlap(dest, SQUARES_EFFECTED_BY_CASTLING_BB))
+	{
+
+		if ((KINGFILE & BACKRANK[_currentTurnColor] & start) != 0)
+		{
+			_canCastle[_currentTurnColor][CastleLong] = false;
+			_canCastle[_currentTurnColor][CastleShort] = false;
+		}
+
+		for (int i = 0; i < 2; i++)
+		{
+			ChessColor currCol = (ChessColor)i;
+			for (int j = 0; j < 2; j++)
+			{
+				CastlingType currCastleType = (CastlingType)j;
+				BitBoard fieldToCheck = BACKRANK[currCol] & CASTLINGSIDE[currCastleType];
+				if (bitboardsOverlap(start, fieldToCheck) ||
+					bitboardsOverlap(dest, fieldToCheck))
+				{
+					_canCastle[currCol][currCastleType] = false;
+				}
+			}
+		}
+	}
 }
 
 void ChessBoard::updateEnPassantRightsAfterMove(Move* m)
@@ -581,7 +606,7 @@ void ChessBoard::updateEnPassantRightsAfterMove(Move* m)
 		Square dest = m->getDestination();
 		BitBoard startRankForDoubleMove = _currentTurnColor == White ? RANK_2 : RANK_7;
 		BitBoard destRankForDoubleMove = _currentTurnColor == White ? RANK_4 : RANK_5;
-		
+
 		if (squareOverlapsWithBB(start, startRankForDoubleMove) &&
 			squareOverlapsWithBB(dest, destRankForDoubleMove))
 		{

@@ -9,5 +9,10 @@ bool destinationIsOnBoard(Square start, Direction direction)
 
 bool squareOverlapsWithBB(Square pos, BitBoard bb)
 {
-	return (BB_SQUARE[pos] & bb) != 0;
+	return (BB_SQUARE[pos] & bb) != 0ULL;
+}
+
+bool bitboardsOverlap(BitBoard first, BitBoard second)
+{
+	return (first & second) != 0ULL;
 }

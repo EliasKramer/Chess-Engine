@@ -101,3 +101,4 @@ const std::map<Direction, BitBoard> INVALID_FIELDS_FOR_DIR
 
 bool destinationIsOnBoard(Square start, Direction direction);
 bool squareOverlapsWithBB(Square pos, BitBoard bb);
+bool bitboardsOverlap(BitBoard first, BitBoard second);
