@@ -121,5 +121,23 @@ namespace PerformanceTest
 			Assert::AreEqual(0, getNumberOfCastlingMoves(movesAtDepth3));
 			Assert::AreEqual(7795, getNumberOfCastlingMoves(movesAtDepth4));
 		}
+		TEST_METHOD(TestPos5)
+		{
+			ChessBoard board("rnbq1k1r/pp1Pbppp/2p5/8/2B5/8/PPP1NnPP/RNBQK2R w KQ - 1 8");
+			Assert::AreEqual(44, (int)numberOfMovesAfterDepth(board, 1));
+			Assert::AreEqual(1486, (int)numberOfMovesAfterDepth(board, 2));
+			Assert::AreEqual(62379, (int)numberOfMovesAfterDepth(board, 3));
+			//Assert::AreEqual(2103487, (int)numberOfMovesAfterDepth(board, 4));
+			//Assert::AreEqual(89941194, (int)numberOfMovesAfterDepth(board, 5));
+		}
+		TEST_METHOD(TestPos6)
+		{
+			ChessBoard board("r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10");
+			Assert::AreEqual(46, (int)numberOfMovesAfterDepth(board, 1));
+			Assert::AreEqual(2079, (int)numberOfMovesAfterDepth(board, 2));
+			Assert::AreEqual(89890, (int)numberOfMovesAfterDepth(board, 3));
+			//Assert::AreEqual(3894594, (int)numberOfMovesAfterDepth(board, 4));
+			//Assert::AreEqual(164075551, (int)numberOfMovesAfterDepth(board, 5));
+		}
 	};
 }
