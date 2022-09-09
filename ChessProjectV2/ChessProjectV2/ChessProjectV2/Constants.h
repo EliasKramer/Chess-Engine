@@ -161,9 +161,24 @@ const std::array<BitBoard, 64> KING_ATTACKS_BB = []()->std::array<BitBoard, 64> 
 	return result;
 }();
 
+const std::array<std::string, 64> SQUARE_STRING = []()->std::array<std::string, 64> {
+	std::array<std::string, 64> result = {};
+
+	for (int i = A1; i <= H8; i++)
+	{
+		Square currSquare = (Square)i;
+		char file = 'a' + (i % 8);
+		char rank = '1' + (i / 8);
+		result[i] = file;
+		result[i] += rank;
+	}
+
+	return result;
+}();
+
 const BitBoard BACKRANK[2] = { RANK_1, RANK_8 };
 const BitBoard CASTLINGSIDE[2] = { FILE_H, FILE_A };
 const BitBoard KINGFILE = FILE_E;
 const BitBoard SQUARES_EFFECTED_BY_CASTLING_BB =
-	BB_SQUARE[A1] | BB_SQUARE[E1] | BB_SQUARE[H1] |
-	BB_SQUARE[A8] | BB_SQUARE[E8] | BB_SQUARE[H8];
+BB_SQUARE[A1] | BB_SQUARE[E1] | BB_SQUARE[H1] |
+BB_SQUARE[A8] | BB_SQUARE[E8] | BB_SQUARE[H8];

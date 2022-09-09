@@ -10,5 +10,6 @@ void MovePromote::execute(std::function<void(Square, Square)> copySquare,
 	std::function<void(Square)> delAtPos)
 {
 	delAtPos(_start);
+	delAtPos(_destination);
 	setAtPos(_promotingPiece, _destination);
 }

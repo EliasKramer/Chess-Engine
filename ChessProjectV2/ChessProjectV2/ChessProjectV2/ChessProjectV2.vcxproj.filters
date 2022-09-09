@@ -19,11 +19,11 @@
     <Filter Include="Source Files\moves">
       <UniqueIdentifier>{8c39385a-6305-4a19-a29c-589998fabf07}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\main program">
+      <UniqueIdentifier>{26124c89-3ab3-42a1-ba88-f7540ff38de2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ChessProjectV2.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BitBoard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -59,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="MoveDoublePawn.cpp">
       <Filter>Source Files\moves</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessProjectV2.cpp">
+      <Filter>Source Files\main program</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

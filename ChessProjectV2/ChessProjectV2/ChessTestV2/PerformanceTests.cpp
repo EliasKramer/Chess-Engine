@@ -3,6 +3,9 @@
 #include "../ChessProjectV2/BitBoard.h"
 #include "../ChessTestV2/TestMethods.h"
 #include "../ChessProjectV2/ChessBoardTest.h"
+#include <vector>
+#include <string>
+#include <utility>
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -81,7 +84,7 @@ namespace PerformanceTest
 			Assert::AreEqual(191, (int)numberOfMovesAfterDepth(board, 2));
 			Assert::AreEqual(2812, (int)numberOfMovesAfterDepth(board, 3));
 			Assert::AreEqual(43238, (int)numberOfMovesAfterDepth(board, 4));
-			
+
 			//uncomment more tests - commented for more testing speed
 			//Assert::AreEqual(674624, (int)numberOfMovesAfterDepth(board, 5));
 			//Assert::AreEqual(11030083, (int)numberOfMovesAfterDepth(board, 6));
@@ -91,31 +94,32 @@ namespace PerformanceTest
 			ChessBoard board("r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq - 0 1");
 			Assert::AreEqual(6, (int)numberOfMovesAfterDepth(board, 1));
 			Assert::AreEqual(264, (int)numberOfMovesAfterDepth(board, 2));
-			//Assert::AreEqual(9467, (int)numberOfMovesAfterDepth(board, 3));
-			//Assert::AreEqual(422333, (int)numberOfMovesAfterDepth(board, 4));
+			Assert::AreEqual(9467, (int)numberOfMovesAfterDepth(board, 3));
+			Assert::AreEqual(422333, (int)numberOfMovesAfterDepth(board, 4));
+			//Assert::AreEqual(15833292, (int)numberOfMovesAfterDepth(board, 5));
 
 			UniqueMoveList movesAtDepth1 = getAllMovesAtDepth(board, 1);
 			UniqueMoveList movesAtDepth2 = getAllMovesAtDepth(board, 2);
 			UniqueMoveList movesAtDepth3 = getAllMovesAtDepth(board, 3);
-			//UniqueMoveList movesAtDepth4 = getAllMovesAtDepth(board, 4);
+			UniqueMoveList movesAtDepth4 = getAllMovesAtDepth(board, 4);
 			// 
 			//check en passant moves
 			Assert::AreEqual(0, getNumberOfEnPassantMoves(movesAtDepth1));
 			Assert::AreEqual(0, getNumberOfEnPassantMoves(movesAtDepth2));
 			Assert::AreEqual(4, getNumberOfEnPassantMoves(movesAtDepth3));
-			//Assert::AreEqual(0, getNumberOfEnPassantMoves(movesAtDepth4));
+			Assert::AreEqual(0, getNumberOfEnPassantMoves(movesAtDepth4));
 
 			//check promotion moves
 			Assert::AreEqual(0, getNumberOfPromotionMoves(movesAtDepth1));
 			Assert::AreEqual(48, getNumberOfPromotionMoves(movesAtDepth2));
 			Assert::AreEqual(120, getNumberOfPromotionMoves(movesAtDepth3));
-			//Assert::AreEqual(60032, getNumberOfPromotionMoves(movesAtDepth4));
+			Assert::AreEqual(60032, getNumberOfPromotionMoves(movesAtDepth4));
 
 			//check castle moves
 			Assert::AreEqual(0, getNumberOfCastlingMoves(movesAtDepth1));
 			Assert::AreEqual(6, getNumberOfCastlingMoves(movesAtDepth2));
 			Assert::AreEqual(0, getNumberOfCastlingMoves(movesAtDepth3));
-			//Assert::AreEqual(7795, getNumberOfCastlingMoves(movesAtDepth4));
+			Assert::AreEqual(7795, getNumberOfCastlingMoves(movesAtDepth4));
 		}
 	};
 }

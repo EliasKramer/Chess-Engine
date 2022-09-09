@@ -100,3 +100,69 @@ int getNumberOfCastlingMoves(const UniqueMoveList& moves)
 	}
 	return retVal;
 }
+
+std::vector<std::string> getAllMoveStringsAtDepth(
+	const ChessBoard& board, std::string currStr, int depth)
+{
+	UniqueMoveList listOfMoves = board.getAllLegalMoves();
+	if (depth == 1)
+	{
+		std::vector<std::string> listOfStringMoves = {};
+		for (std::unique_ptr<Move>& currMoveToAdd : listOfMoves)
+		{
+			std::string stringToAdd =
+				currStr
+				+ SQUARE_STRING[currMoveToAdd->getStart()] + "->"
+				+ SQUARE_STRING[currMoveToAdd->getDestination()] + ", ";
+
+			listOfStringMoves.push_back(stringToAdd);
+		}
+		return listOfStringMoves;
+	}
+	else
+	{
+		std::vector<std::string> listOfStringMoves = {};
+		for (const std::unique_ptr<Move>& curr : listOfMoves)
+		{
+			ChessBoard copyBoard = board.getCopyByValue();
+			copyBoard.makeMove(curr.get());
+
+			std::string currMoveString = currStr
+				+ SQUARE_STRING[curr->getStart()] + "->"
+				+ SQUARE_STRING[curr->getDestination()] + ", ";
+
+			std::vector<std::string> recursion =
+				getAllMoveStringsAtDepth(copyBoard, currMoveString, depth - 1);
+
+			listOfStringMoves.insert(
+				listOfStringMoves.end(),
+				recursion.begin(),
+				recursion.end()
+			);
+		}
+		return listOfStringMoves;
+	}
+}
+
+std::vector<std::pair<std::string, int>> getNumberOfMovesAfterFirstMove(const ChessBoard& board, int depth)
+{
+	std::vector<std::pair<std::string, int>> result;
+
+	UniqueMoveList listOfMoves = board.getAllLegalMoves();
+
+	for (const std::unique_ptr<Move>& curr : listOfMoves)
+	{
+		ChessBoard copyBoard = board.getCopyByValue();
+		copyBoard.makeMove(curr.get());
+
+		std::string currMoveString =
+			SQUARE_STRING[curr->getStart()]
+			+ SQUARE_STRING[curr->getDestination()];
+
+		std::pair<std::string, int> currItem =
+			std::make_pair(currMoveString, numberOfMovesAfterDepth(copyBoard, depth - 1));
+
+		result.push_back(currItem);
+	}
+	return result;
+}
