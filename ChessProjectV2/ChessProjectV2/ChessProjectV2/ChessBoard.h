@@ -97,6 +97,8 @@ protected:
 	
 	void updateEnPassantRightsAfterMove(Move* m);
 
+	void update50MoveRule(Move* m);
+
 	char getPieceCharAt(Square pos) const;
 
 	friend bool operator ==(const ChessBoard& first, const ChessBoard& second);
@@ -107,6 +109,9 @@ public:
 
 	std::string getString();
 
+	ChessColor getCurrentTurnColor() const;
+	int getNumberOfMovesPlayed() const;
+	
 	//returns all moves of the color, whos turn it is
 	UniqueMoveList getAllLegalMoves() const;
 
@@ -115,6 +120,8 @@ public:
 
 	//copy board by value
 	ChessBoard getCopyByValue() const;
+
+	GameState getGameState() const;
 };
 
 bool operator ==(const ChessBoard& first, const ChessBoard& second);

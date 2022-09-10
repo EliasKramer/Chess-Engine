@@ -24,3 +24,11 @@ enum CastlingType : uint8_t {
 	CastleShort,
 	CastleLong
 };
+
+enum GameState : uint8_t {
+	WhiteWon,
+	BlackWon,
+	Stalemate,
+	Draw,
+	Ongoing
+};

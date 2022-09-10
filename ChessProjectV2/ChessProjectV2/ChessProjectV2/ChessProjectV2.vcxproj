@@ -143,6 +143,7 @@
     <ClCompile Include="MoveEnPassant.cpp" />
     <ClCompile Include="MovePromote.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="RandomPlayer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitBoard.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="MoveEnPassant.h" />
     <ClInclude Include="MovePromote.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="RandomPlayer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

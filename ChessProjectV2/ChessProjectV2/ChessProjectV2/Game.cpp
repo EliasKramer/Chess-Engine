@@ -10,20 +10,39 @@ void Game::start()
 {
 	while (true)
 	{
+		ChessColor currentTurnColor = _board.getCurrentTurnColor();
+		Player* currPlayer = currentTurnColor == White ? _player1.get() : _player2.get();
+
+		int currentTurnNumber = _board.getNumberOfMovesPlayed();
+
+		std::cout << "\n\n" << COLOR_STRING[currentTurnColor] << "s turn " << currentTurnNumber;
 		std::cout << _board.getString();
 		UniqueMoveList legalMoves = _board.getAllLegalMoves();
-		int choosenMoveIdx = _player1.get()->getMove(_board, legalMoves);
+		int choosenMoveIdx = currPlayer->getMove(_board, legalMoves);
+		if (choosenMoveIdx < 0 || choosenMoveIdx >= legalMoves.size())
+		{
+			throw "move cannot be executed. returned index is invalid!";
+		}
 		Move* moveToMake = legalMoves.at(choosenMoveIdx).get();
 	
-		//TODO check if movelist inclues move
 		_board.makeMove(moveToMake);
-		
-		std::cout << _board.getString();
-		legalMoves = _board.getAllLegalMoves();
-		choosenMoveIdx = _player1.get()->getMove(_board, legalMoves);
-		moveToMake = legalMoves.at(choosenMoveIdx).get();
 
-		//TODO check if movelist inclues move
-		_board.makeMove(moveToMake);
+		GameState currGameState = _board.getGameState();
+		if(currGameState == WhiteWon || currGameState == BlackWon)
+		{
+			std::cout << _board.getString();
+			std::cout << "Checkmate! " << COLOR_STRING[currentTurnColor] << " wins!" << std::endl;
+			break;
+		}
+		else if(currGameState == Draw)
+		{
+			std::cout << "Draw!" << std::endl;
+			break;
+		}
+		else if(currGameState == Stalemate)
+		{
+			std::cout << "Stalemate!" << std::endl;
+			break;
+		}
 	}
 }

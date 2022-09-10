@@ -615,6 +615,23 @@ void ChessBoard::updateEnPassantRightsAfterMove(Move* m)
 	}
 }
 
+void ChessBoard::update50MoveRule(Move* m)
+{
+	BitBoard startBB = BB_SQUARE[m->getStart()];
+	BitBoard destBB = BB_SQUARE[m->getDestination()];
+	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
+
+	if (bitboardsOverlap(startBB, _piecesOfType[Pawn]) ||
+		bitboardsOverlap(destBB, _piecesOfColor[opponentColor]))
+	{
+		_halfMoveClock = 0;
+	}
+	else
+	{
+		_halfMoveClock++;
+	}
+}
+
 char ChessBoard::getPieceCharAt(Square pos) const
 {
 	BitBoard posBB = BB_SQUARE[pos];
@@ -792,6 +809,16 @@ std::string ChessBoard::getString()
 	return result;
 }
 
+ChessColor ChessBoard::getCurrentTurnColor() const
+{
+	return _currentTurnColor;
+}
+
+int ChessBoard::getNumberOfMovesPlayed() const
+{
+	return _moveNumber;
+}
+
 UniqueMoveList ChessBoard::getAllLegalMoves() const
 {
 	UniqueMoveList list = getAllPseudoLegalMoves();
@@ -818,6 +845,7 @@ void ChessBoard::makeMove(Move* move)
 
 	udpateCastlingRightsAfterMove(move);
 	updateEnPassantRightsAfterMove(move);
+	update50MoveRule(move);
 
 	std::function<void(Square, Square)> copy =
 		[this](Square start, Square dest) { return copySquare(start, dest); };
@@ -834,8 +862,6 @@ void ChessBoard::makeMove(Move* move)
 	{
 		_kingPos[_currentTurnColor] = moveDest;
 	}
-
-	_halfMoveClock++;
 
 	if (_currentTurnColor == Black)
 	{
@@ -879,6 +905,26 @@ ChessBoard ChessBoard::getCopyByValue() const
 	board._moveNumber = _moveNumber;
 
 	return board;
+}
+
+GameState ChessBoard::getGameState() const
+{
+	if (getAllLegalMoves().size() == 0)
+	{
+		if(fieldIsUnderAttack(_kingPos[_currentTurnColor]))
+		{
+			return _currentTurnColor == White ? BlackWon : WhiteWon;
+		}
+		else
+		{
+			return Stalemate;
+		}
+	}
+	if (_halfMoveClock == 50)
+	{
+		return Draw;
+	}
+	return Ongoing;
 }
 
 bool operator==(const ChessBoard& first, const ChessBoard& second)
