@@ -13,3 +13,11 @@ void MovePromote::execute(std::function<void(Square, Square)> copySquare,
 	delAtPos(_destination);
 	setAtPos(_promotingPiece, _destination);
 }
+
+std::string MovePromote::getString()
+{
+	std::string moveStr = Move::getString();
+	moveStr += charToLower(PIECETYPE_CHAR[_promotingPiece.getType()]);
+
+	return moveStr;
+}

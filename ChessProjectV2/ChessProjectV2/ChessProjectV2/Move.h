@@ -5,7 +5,8 @@
 #include <memory>
 #include <vector>
 #include <functional>
-
+#include <string>
+#include "Constants.h"
 class Move
 {
 protected:
@@ -27,6 +28,8 @@ public:
 
 	//xor this map to get a board for checking if king is in check
 	virtual BitBoard getBBWithMoveDone();
+
+	virtual std::string getString();
 };
 bool operator ==(const Move& first, const Move& second);
 bool operator !=(const Move& first, const Move& second);

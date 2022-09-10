@@ -97,11 +97,15 @@ protected:
 	
 	void updateEnPassantRightsAfterMove(Move* m);
 
+	char getPieceCharAt(Square pos) const;
+
 	friend bool operator ==(const ChessBoard& first, const ChessBoard& second);
 	friend bool operator !=(const ChessBoard& first, const ChessBoard& second);
 public:
 	ChessBoard();
 	ChessBoard(std::string given_fen_code);
+
+	std::string getString();
 
 	//returns all moves of the color, whos turn it is
 	UniqueMoveList getAllLegalMoves() const;

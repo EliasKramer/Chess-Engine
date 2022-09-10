@@ -155,6 +155,7 @@ std::vector<std::pair<std::string, int>> getNumberOfMovesAfterFirstMove(const Ch
 		ChessBoard copyBoard = board.getCopyByValue();
 		copyBoard.makeMove(curr.get());
 
+		//TODO replace with getString
 		std::string currMoveString =
 			SQUARE_STRING[curr->getStart()]
 			+ SQUARE_STRING[curr->getDestination()];

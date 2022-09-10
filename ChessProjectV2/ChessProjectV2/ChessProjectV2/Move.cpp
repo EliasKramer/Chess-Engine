@@ -29,6 +29,11 @@ BitBoard Move::getBBWithMoveDone()
 	return BB_SQUARE[_start] | BB_SQUARE[_destination];
 }
 
+std::string Move::getString()
+{
+	return SQUARE_STRING[_start] + SQUARE_STRING[_destination];
+}
+
 bool operator==(const Move& first, const Move& second)
 {
 	return

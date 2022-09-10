@@ -18,7 +18,7 @@ namespace MoveTest
 			Move m(A1, B3);
 			Assert::IsTrue(A1 == m.getStart());
 			Assert::IsTrue(B3 == m.getDestination());
-			
+
 			Move sameMove(A1, B3);
 			Move differentStart(A2, B3);
 			Move differentDestination(A1, B4);
@@ -65,7 +65,7 @@ namespace MoveTest
 			Move m(A1, A2);
 			Assert::AreEqual(0x101ULL, m.getBBWithMoveDone());
 			Assert::AreEqual((BB_SQUARE[A1] | BB_SQUARE[A2]), m.getBBWithMoveDone());
-			
+
 			m = Move(D2, E4);
 			Assert::AreEqual(0x10000800ULL, m.getBBWithMoveDone());
 			Assert::AreEqual((BB_SQUARE[D2] | BB_SQUARE[E4]), m.getBBWithMoveDone());
@@ -75,7 +75,7 @@ namespace MoveTest
 			Assert::AreEqual(m.getBBWithMoveDone(), mp.getBBWithMoveDone());
 			Assert::AreEqual(0x101000000000000ULL, mp.getBBWithMoveDone());
 			Assert::AreEqual((BB_SQUARE[A7] | BB_SQUARE[A8]), mp.getBBWithMoveDone());
-			
+
 			MoveEnPassant me(D5, E6, E5);
 			m = Move(D5, E6);
 			Assert::AreNotEqual(m.getBBWithMoveDone(), me.getBBWithMoveDone());
@@ -87,13 +87,27 @@ namespace MoveTest
 			{
 				MoveCastle mc(White, CastleLong);
 				mc.getBBWithMoveDone();
-				
+
 				Assert::Fail();
 			}
 			catch (const char* errorMsg)
 			{
 				Assert::IsTrue(errorMsg == "ERROR. A Caslting Move does not produce a Move Bitboard");
 			}
+		}
+		TEST_METHOD(testMoveString)
+		{
+			Move m(A1, A2);
+			Assert::IsTrue(m.getString() == "a1a2");
+
+			MovePromote mp(D2, D1, ChessPiece(White, Queen));
+			Assert::IsTrue(mp.getString() == "d2d1q");
+			mp = MovePromote(D2, D1, ChessPiece(White, Rook));
+			Assert::IsTrue(mp.getString() == "d2d1r");
+			mp = MovePromote(D2, D1, ChessPiece(White, Bishop));
+			Assert::IsTrue(mp.getString() == "d2d1b");
+			mp = MovePromote(D2, D1, ChessPiece(White, Knight));
+			Assert::IsTrue(mp.getString() == "d2d1n");
 		}
 	};
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "Move.h"
 #include "ChessPiece.h"
+#include "Constants.h"
 class MovePromote : public Move
 {
 private:
@@ -13,5 +14,6 @@ public:
 		std::function<void(ChessPiece, Square)> setAtPos,
 		std::function<void(Square)> delAtPos) override;
 
+	std::string getString() override;
 	//no overriding of getBBWithMoveDone, because it acts the same as the normal move
 };

@@ -615,6 +615,40 @@ void ChessBoard::updateEnPassantRightsAfterMove(Move* m)
 	}
 }
 
+char ChessBoard::getPieceCharAt(Square pos) const
+{
+	BitBoard posBB = BB_SQUARE[pos];
+
+	if (bitboardsOverlap(posBB, ~_allPieces))
+	{
+		return ' ';
+	}
+
+	char pieceChar = '~';
+
+	for (int i = 0; i < NUMBER_OF_DIFFERENT_PIECE_TYPES; i++)
+	{
+		PieceType currType = (PieceType)i;
+
+		if (bitboardsOverlap(_piecesOfType[currType], posBB))
+		{
+			pieceChar = PIECETYPE_CHAR[currType];
+		}
+	}
+
+	if (pieceChar == '~')
+	{
+		throw "Could not find PieceType in the Chessboard configuration";
+	}
+
+	if (bitboardsOverlap(_piecesOfColor[Black], posBB))
+	{
+		pieceChar = charToLower(pieceChar);
+	}
+
+	return pieceChar;
+}
+
 ChessBoard::ChessBoard()
 	:
 	_allPieces(BITBOARD_NONE),
@@ -732,6 +766,30 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 
 	//zugnummer
 	_moveNumber = std::stoi(split_fen_code[5]);
+}
+
+std::string ChessBoard::getString()
+{
+	std::string result = "";
+	std::string rowSeperatorString = "\n+---+---+---+---+---+---+---+---+\n";
+	result += rowSeperatorString;
+
+	for (int rank = 7; rank >= 0; rank--)
+	{
+		for (int file = 0; file < 8; file++)
+		{
+			Square pos = (Square)(rank * 8 + file);
+			result += "| ";
+			result += getPieceCharAt(pos);
+			result += " ";
+
+		}
+		result += "|" + std::to_string(rank + 1);
+		result += rowSeperatorString;
+	}
+	result += "  a   b   c   d   e   f   g   h\n";
+
+	return result;
 }
 
 UniqueMoveList ChessBoard::getAllLegalMoves() const

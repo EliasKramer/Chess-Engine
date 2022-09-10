@@ -226,5 +226,14 @@ namespace ConstantsTests
 			Assert::AreEqual(RANK_1, BACK_RANK[White]);
 			Assert::AreEqual(RANK_8, BACK_RANK[Black]);
 		}
+		TEST_METHOD(pieceTypeCharTest)
+		{
+			Assert::AreEqual('P', PIECETYPE_CHAR[Pawn]);
+			Assert::AreEqual('N', PIECETYPE_CHAR[Knight]);
+			Assert::AreEqual('B', PIECETYPE_CHAR[Bishop]);
+			Assert::AreEqual('R', PIECETYPE_CHAR[Rook]);
+			Assert::AreEqual('Q', PIECETYPE_CHAR[Queen]);
+			Assert::AreEqual('K', PIECETYPE_CHAR[King]);
+		}
 	};
 }
