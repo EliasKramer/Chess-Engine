@@ -157,6 +157,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\ChessProjectV2\BitBoard.cpp" />
+    <ClCompile Include="..\ChessProjectV2\BoardRepresentation.cpp" />
     <ClCompile Include="..\ChessProjectV2\ChessBoard.cpp" />
     <ClCompile Include="..\ChessProjectV2\ChessBoardTest.cpp" />
     <ClCompile Include="..\ChessProjectV2\ChessPiece.cpp" />
@@ -188,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\ChessProjectV2\BitBoard.h" />
+    <ClInclude Include="..\ChessProjectV2\BoardRepresentation.h" />
     <ClInclude Include="..\ChessProjectV2\ChessBoard.h" />
     <ClInclude Include="..\ChessProjectV2\ChessBoardTest.h" />
     <ClInclude Include="..\ChessProjectV2\ChessPiece.h" />

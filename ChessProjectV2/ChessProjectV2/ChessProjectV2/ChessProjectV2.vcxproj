@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BitBoard.cpp" />
+    <ClCompile Include="BoardRepresentation.cpp" />
     <ClCompile Include="ChessBoard.cpp" />
     <ClCompile Include="ChessBoardTest.cpp" />
     <ClCompile Include="ChessPiece.cpp" />
@@ -147,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitBoard.h" />
+    <ClInclude Include="BoardRepresentation.h" />
     <ClInclude Include="ChessBoard.h" />
     <ClInclude Include="ChessBoardTest.h" />
     <ClInclude Include="ChessPiece.h" />

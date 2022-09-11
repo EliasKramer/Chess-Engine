@@ -7,6 +7,7 @@
 #include <functional>
 #include <string>
 #include "Constants.h"
+#include "BoardRepresentation.h"
 class Move
 {
 protected:
@@ -21,10 +22,7 @@ public:
 	Square getStart();
 	Square getDestination();
 	
-	virtual void execute(
-		std::function<void(Square, Square)> copySquare,
-		std::function<void(ChessPiece, Square)> setAtPos,
-		std::function<void(Square)> delAtPos);
+	virtual void execute(BoardRepresentation& board);
 
 	//xor this map to get a board for checking if king is in check
 	virtual BitBoard getBBWithMoveDone();

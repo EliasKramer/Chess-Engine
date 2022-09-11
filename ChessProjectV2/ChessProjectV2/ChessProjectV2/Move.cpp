@@ -15,13 +15,10 @@ Square Move::getDestination()
 	return _destination;
 }
 
-void Move::execute(
-	std::function<void(Square, Square)> copySquare,
-	std::function<void(ChessPiece, Square)> setAtPos,
-	std::function<void(Square)> delAtPos)
+void Move::execute(BoardRepresentation& board)
 {
-	copySquare(_start, _destination);
-	delAtPos(_start);
+	board.copySquareToPos(_start, _destination);
+	board.delAtPos(_start);
 }
 
 BitBoard Move::getBBWithMoveDone()

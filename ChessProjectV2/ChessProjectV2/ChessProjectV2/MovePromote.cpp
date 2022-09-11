@@ -5,13 +5,11 @@ MovePromote::MovePromote(Square givenStart, Square givenDest, ChessPiece promoti
 	_promotingPiece(promotingPiece)
 {}
 
-void MovePromote::execute(std::function<void(Square, Square)> copySquare,
-	std::function<void(ChessPiece, Square)> setAtPos,
-	std::function<void(Square)> delAtPos)
+void MovePromote::execute(BoardRepresentation& board)
 {
-	delAtPos(_start);
-	delAtPos(_destination);
-	setAtPos(_promotingPiece, _destination);
+	board.delAtPos(_start);
+	board.delAtPos(_destination);
+	board.setAtPosition(_promotingPiece, _destination);
 }
 
 std::string MovePromote::getString()

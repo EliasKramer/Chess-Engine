@@ -5,13 +5,10 @@ MoveEnPassant::MoveEnPassant(Square givenStart, Square givenDest, Square posToDe
 	_posToDel(posToDel)
 {}
 
-void MoveEnPassant::execute(
-	std::function<void(Square, Square)> copySquare,
-	std::function<void(ChessPiece, Square)> setAtPos,
-	std::function<void(Square)> delAtPos)
+void MoveEnPassant::execute(BoardRepresentation & board)
 {
-	Move::execute(copySquare, setAtPos, delAtPos);
-	delAtPos(_posToDel);
+	Move::execute(board);
+	board.delAtPos(_posToDel);
 }
 
 BitBoard MoveEnPassant::getBBWithMoveDone()

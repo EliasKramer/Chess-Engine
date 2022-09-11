@@ -23,14 +23,11 @@ Square MoveCastle::getRookDest()
 	return _rookDest;
 }
 
-void MoveCastle::execute(
-	std::function<void(Square, Square)> copySquare,
-	std::function<void(ChessPiece, Square)> setAtPos,
-	std::function<void(Square)> delAtPos)
+void MoveCastle::execute(BoardRepresentation& board)
 {
-	Move::execute(copySquare, setAtPos, delAtPos);
-	copySquare(_rookStart, _rookDest);
-	delAtPos(_rookStart);
+	Move::execute(board);
+	board.copySquareToPos(_rookStart, _rookDest);
+	board.delAtPos(_rookStart);
 }
 
 BitBoard MoveCastle::getBBWithMoveDone()

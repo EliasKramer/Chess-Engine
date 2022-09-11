@@ -421,8 +421,7 @@ namespace MoveGenerationTest
 		}
 		TEST_METHOD(testCoverage)
 		{
-			ChessBoardTest board;
-			board.setupBoard();
+			ChessBoardTest board(STARTING_FEN);
 			UniqueMoveList moves = board.getAllLegalMoves();
 			Assert::AreEqual(20, (int)moves.size());
 

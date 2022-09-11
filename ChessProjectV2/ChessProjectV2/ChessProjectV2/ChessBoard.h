@@ -9,6 +9,7 @@
 #include "MoveCastle.h"
 #include "MovePromote.h"
 #include "Constants.h"
+#include "BoardRepresentation.h"
 
 const std::string STARTING_FEN =
 "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
@@ -16,14 +17,7 @@ const std::string STARTING_FEN =
 class ChessBoard
 {
 protected:
-	BitBoard _allPieces;
-	BitBoard _piecesOfColor[DIFFERENT_CHESS_COLORS];
-	BitBoard _piecesOfType[NUMBER_OF_DIFFERENT_PIECE_TYPES];
-
-	//not used yet
-	//BitBoard _attackedByColor[DIFFERENT_CHESS_COLORS];
-	//not used yet
-	Square _kingPos[DIFFERENT_CHESS_COLORS];
+	BoardRepresentation _board;
 
 	//the first dimension is color and 
 	//the second is the type. 
@@ -46,10 +40,6 @@ protected:
 	uint16_t _moveNumber;
 
 	/*Move Generation*/
-	void copySquare(Square copyField, Square pasteField);
-	void setAtPosition(ChessPiece piece, Square position);
-	void delAtPos(Square position);
-	
 	bool destinationIsSameColor(Square start, Direction direction, ChessColor color) const;
 	bool positionIsSameColor(Square pos, ChessColor color) const;
 	

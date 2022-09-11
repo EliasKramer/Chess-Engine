@@ -13,8 +13,6 @@ public:
 	ChessBoardTest();
 	ChessBoardTest(std::string given_fen_code);
 	
-	//setup board directly
-	void setupBoard();
 	//getter for the base class
 
 	BitBoard getAllPieces();
