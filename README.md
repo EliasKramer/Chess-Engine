@@ -7,11 +7,11 @@ This is my first project in c++.
 I would call it "the normal approach". You start with a 8x8 array of pieces and work from there. <br>
 The Problem with this solution is, that it is really slow.
 
-I learned alot in this first try, but it has alot of issues. <br>
+I learned a lot in this first try, but it has some issues. <br>
 So i made a minimum viable product (MVP) and started again.
 
 It has no concept of checkmating, but that can be implemented easily in the future. <br>
-(Just count the moves the opposite color can do after one move and see if it is in check)
+(Now implemented in V2)
 
 ## Version 2:
 I did a lot of research on the chess programming wiki and looked into some chess repos. <br>
@@ -33,6 +33,9 @@ A Fen String represents a board, so you can set up a testing position with only 
 Description: https://www.chess.com/terms/fen-chess <br>
 Set up a board: https://www.chess.com/analysis <br>
 
+### V2 has 2 possible Players right now:
+- HumanPlayer (A Player that plays with console input)
+- RandomPlayer (A Player that picks its moves randomly)
+
 ## Future:
-Finishing move generation with V2. <br>
-Adding an algorithm, that can play chess.
+Adding an algorithm, that can actually win chess. <br>
