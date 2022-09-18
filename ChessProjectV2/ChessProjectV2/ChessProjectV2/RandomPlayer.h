@@ -5,6 +5,6 @@
 class RandomPlayer : public Player
 {
 public:
-	int getMove(ChessBoard& board, UniqueMoveList& moves) override;
+	int getMove(const ChessBoard& board, const UniqueMoveList& moves) override;
 };
 

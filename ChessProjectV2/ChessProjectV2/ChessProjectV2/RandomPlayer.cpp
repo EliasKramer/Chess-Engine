@@ -1,6 +1,6 @@
 #include "RandomPlayer.h"
 
-int RandomPlayer::getMove(ChessBoard& board, UniqueMoveList& moves)
+int RandomPlayer::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 {
     //credit to stackoverflow ^^
     //https://stackoverflow.com/questions/7560114/random-number-c-in-some-range

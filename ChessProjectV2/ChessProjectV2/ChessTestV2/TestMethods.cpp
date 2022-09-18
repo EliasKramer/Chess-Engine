@@ -29,7 +29,7 @@ int numberOfMovesAfterDepth(const ChessBoard& board, int depth)
 		for (const std::unique_ptr<Move>& curr : listOfMoves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(curr.get());
+			copyBoard.makeMove(*curr.get());
 
 			allMovesCount += numberOfMovesAfterDepth(copyBoard, depth - 1);
 		}
@@ -50,7 +50,7 @@ UniqueMoveList getAllMovesAtDepth(const ChessBoard& board, int depth)
 		for (const std::unique_ptr<Move>& curr : listOfMoves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(curr.get());
+			copyBoard.makeMove(*curr.get());
 
 			for (std::unique_ptr<Move>& currMoveToAdd :
 				getAllMovesAtDepth(copyBoard, depth - 1))
@@ -125,7 +125,7 @@ std::vector<std::string> getAllMoveStringsAtDepth(
 		for (const std::unique_ptr<Move>& curr : listOfMoves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(curr.get());
+			copyBoard.makeMove(*curr.get());
 
 			std::string currMoveString = currStr
 				+ SQUARE_STRING[curr->getStart()] + "->"
@@ -153,7 +153,7 @@ std::vector<std::pair<std::string, int>> getNumberOfMovesAfterFirstMove(const Ch
 	for (const std::unique_ptr<Move>& curr : listOfMoves)
 	{
 		ChessBoard copyBoard = board.getCopyByValue();
-		copyBoard.makeMove(curr.get());
+		copyBoard.makeMove(*curr.get());
 
 		//TODO replace with getString
 		std::string currMoveString =

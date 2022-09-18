@@ -497,10 +497,10 @@ bool ChessBoard::moveIsLegal(const std::unique_ptr<Move>& move) const
 		!fieldIsUnderAttack(kingPos, BBforNextMove);
 }
 
-void ChessBoard::udpateCastlingRightsAfterMove(Move* m)
+void ChessBoard::udpateCastlingRightsAfterMove(Move& m)
 {
-	BitBoard start = BB_SQUARE[m->getStart()];
-	BitBoard dest = BB_SQUARE[m->getDestination()];
+	BitBoard start = BB_SQUARE[m.getStart()];
+	BitBoard dest = BB_SQUARE[m.getDestination()];
 	if (bitboardsOverlap(start, SQUARES_EFFECTED_BY_CASTLING_BB) ||
 		bitboardsOverlap(dest, SQUARES_EFFECTED_BY_CASTLING_BB))
 	{
@@ -528,13 +528,13 @@ void ChessBoard::udpateCastlingRightsAfterMove(Move* m)
 	}
 }
 
-void ChessBoard::updateEnPassantRightsAfterMove(Move* m)
+void ChessBoard::updateEnPassantRightsAfterMove(Move& m)
 {
 	_enPassantSquare = SQUARE_NONE;
-	Square start = m->getStart();
+	Square start = m.getStart();
 	if (squareOverlapsWithBB(start, _board._piecesOfType[Pawn]))
 	{
-		Square dest = m->getDestination();
+		Square dest = m.getDestination();
 		BitBoard startRankForDoubleMove = _currentTurnColor == White ? RANK_2 : RANK_7;
 		BitBoard destRankForDoubleMove = _currentTurnColor == White ? RANK_4 : RANK_5;
 
@@ -546,10 +546,10 @@ void ChessBoard::updateEnPassantRightsAfterMove(Move* m)
 	}
 }
 
-void ChessBoard::update50MoveRule(Move* m)
+void ChessBoard::update50MoveRule(Move& m)
 {
-	BitBoard startBB = BB_SQUARE[m->getStart()];
-	BitBoard destBB = BB_SQUARE[m->getDestination()];
+	BitBoard startBB = BB_SQUARE[m.getStart()];
+	BitBoard destBB = BB_SQUARE[m.getDestination()];
 	ChessColor opponentColor = getOppositeColor(_currentTurnColor);
 
 	if (bitboardsOverlap(startBB, _board._piecesOfType[Pawn]) ||
@@ -561,6 +561,16 @@ void ChessBoard::update50MoveRule(Move* m)
 	{
 		_halfMoveClock++;
 	}
+}
+
+bool ChessBoard::insufficientMaterialCheck() const
+{
+	//TODO
+	//if only king and bishop are vs other king 
+	//or if only king and knight are vs other king
+	//or only kings on the board
+	//true
+	return false;
 }
 
 char ChessBoard::getPieceCharAt(Square pos) const
@@ -754,16 +764,16 @@ UniqueMoveList ChessBoard::getAllLegalMoves() const
 	return list;
 }
 
-void ChessBoard::makeMove(Move* move)
+void ChessBoard::makeMove(Move& move)
 {
-	Square moveStart = move->getStart();
-	Square moveDest = move->getDestination();
+	Square moveStart = move.getStart();
+	Square moveDest = move.getDestination();
 
 	udpateCastlingRightsAfterMove(move);
 	updateEnPassantRightsAfterMove(move);
 	update50MoveRule(move);
 
-	move->execute(_board);
+	move.execute(_board);
 
 	if (moveStart == _board._kingPos[_currentTurnColor])
 	{
@@ -826,11 +836,17 @@ GameState ChessBoard::getGameState() const
 			return Stalemate;
 		}
 	}
-	if (_halfMoveClock == 50)
+	if (_halfMoveClock == 50 ||
+		insufficientMaterialCheck())
 	{
 		return Draw;
 	}
 	return Ongoing;
+}
+
+BoardRepresentation ChessBoard::getBoardRepresentation()
+{
+	return _board;
 }
 
 bool operator==(const ChessBoard& first, const ChessBoard& second)

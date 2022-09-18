@@ -1,6 +1,6 @@
 #include "HumanPlayer.h"
 
-int HumanPlayer::getMove(ChessBoard& board, UniqueMoveList& moves)
+int HumanPlayer::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 {
 	while (true)
 	{

@@ -83,12 +83,15 @@ protected:
 
 	bool moveIsLegal(const std::unique_ptr<Move>& move) const;
 
-	void udpateCastlingRightsAfterMove(Move* m);
+	void udpateCastlingRightsAfterMove(Move& m);
 	
-	void updateEnPassantRightsAfterMove(Move* m);
+	void updateEnPassantRightsAfterMove(Move& m);
 
-	void update50MoveRule(Move* m);
+	void update50MoveRule(Move& m);
 
+	//checks if any side has enough material/pieces to win the game
+	bool insufficientMaterialCheck() const;
+	
 	char getPieceCharAt(Square pos) const;
 
 	friend bool operator ==(const ChessBoard& first, const ChessBoard& second);
@@ -106,12 +109,14 @@ public:
 	UniqueMoveList getAllLegalMoves() const;
 
 	//execute move
-	void makeMove(Move* move);
+	void makeMove(Move& move);
 
 	//copy board by value
 	ChessBoard getCopyByValue() const;
 
 	GameState getGameState() const;
+
+	BoardRepresentation getBoardRepresentation();
 };
 
 bool operator ==(const ChessBoard& first, const ChessBoard& second);
