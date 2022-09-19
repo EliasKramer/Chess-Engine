@@ -844,7 +844,7 @@ GameState ChessBoard::getGameState() const
 	return Ongoing;
 }
 
-BoardRepresentation ChessBoard::getBoardRepresentation()
+BoardRepresentation ChessBoard::getBoardRepresentation() const
 {
 	return _board;
 }

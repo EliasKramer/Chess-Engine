@@ -28,6 +28,12 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{aa65d497-e44a-47f7-a52f-cd4d4567833a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\Bots">
+      <UniqueIdentifier>{99630b4e-e4ce-4dc0-afd2-d28d17177e4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Bots">
+      <UniqueIdentifier>{afe4803d-aa5f-4f13-b45a-2c856fe9e53e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BitBoard.cpp">
@@ -84,6 +90,9 @@
     <ClCompile Include="BoardRepresentation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Medicrius.cpp">
+      <Filter>Source Files\Game\Bots</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitBoard.h">
@@ -136,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="BoardRepresentation.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Medicrius.h">
+      <Filter>Header Files\Game\Bots</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -116,7 +116,7 @@ public:
 
 	GameState getGameState() const;
 
-	BoardRepresentation getBoardRepresentation();
+	BoardRepresentation getBoardRepresentation() const;
 };
 
 bool operator ==(const ChessBoard& first, const ChessBoard& second);
