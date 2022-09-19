@@ -667,7 +667,8 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 			currFile = -1;
 			currFile++;
 		}
-		else {
+		else 
+		{
 			BitBoard bbToAdd = BB_SQUARE[boardPos];
 
 			ChessPiece piece(currChar);

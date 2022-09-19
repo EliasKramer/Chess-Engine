@@ -15,7 +15,11 @@ BoardRepresentation::BoardRepresentation()
 	BITBOARD_NONE,
 	BITBOARD_NONE },
 	
-	_kingPos{E1, E8}
+	_kingPos{E1, E8},
+	
+	_pieceCount{ 
+		{0, 0, 0, 0 ,0, 0},
+		{0, 0, 0, 0, 0, 0}}
 {}
 
 void BoardRepresentation::copySquareToPos(Square copyField, Square pasteField)

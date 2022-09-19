@@ -13,6 +13,7 @@ public:
 
 	Square _kingPos[DIFFERENT_CHESS_COLORS];
 
+	//TODO implement this
 	uint8_t _pieceCount[DIFFERENT_CHESS_COLORS][NUMBER_OF_DIFFERENT_PIECE_TYPES];
 	
 	BoardRepresentation();
