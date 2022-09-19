@@ -565,11 +565,23 @@ void ChessBoard::update50MoveRule(Move& m)
 
 bool ChessBoard::insufficientMaterialCheck() const
 {
+	//if any of these pieces are on the board, the game can be won
+	if(_board._piecesOfType[Queen] != 0 ||
+		_board._piecesOfType[Rook] != 0 ||
+		_board._piecesOfType[Pawn] != 0)
+	{
+		return false;
+	}
+
+	if(_board._piecesOfType[Bishop] == 0 &&
+		_board._piecesOfType[Knight] == 0)
+	{
+		return true;
+	}
+
 	//TODO
-	//if only king and bishop are vs other king 
-	//or if only king and knight are vs other king
-	//or only kings on the board
-	//true
+	//if only one bishop or one knight is on the board, the game cant be won
+	
 	return false;
 }
 

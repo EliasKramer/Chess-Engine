@@ -2,6 +2,7 @@
 #include "BitBoard.h"
 #include "DataAndTypes.h"
 #include <vector>
+#include <map>
 
 const Direction KNIGHT_DIRECTIONS[8] = {
 	NORTH_NORTH_EAST,
@@ -186,3 +187,11 @@ BB_SQUARE[A8] | BB_SQUARE[E8] | BB_SQUARE[H8];
 const char PIECETYPE_CHAR[NUMBER_OF_DIFFERENT_PIECE_TYPES] = {'P', 'N', 'B', 'R', 'Q', 'K'};
 
 const std::string COLOR_STRING[2] = { "White", "Black" };
+
+const std::map<PieceType, int> PIECETYPE_VALUE = {
+	{Pawn, 100},
+	{Knight, 300},
+	{Bishop, 300},
+	{Rook, 500},
+	{Queen, 900},
+};

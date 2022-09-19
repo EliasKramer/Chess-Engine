@@ -24,6 +24,8 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 
 	int score = -1;
 
+	//TODO count material	
+
 	return score;
 }
 
