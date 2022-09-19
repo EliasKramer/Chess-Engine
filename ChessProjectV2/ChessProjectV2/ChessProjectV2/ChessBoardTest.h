@@ -10,7 +10,6 @@ class ChessBoardTest : public ChessBoard
 public:
 	//constructors
 	
-	ChessBoardTest();
 	ChessBoardTest(std::string given_fen_code);
 	
 	//getter for the base class

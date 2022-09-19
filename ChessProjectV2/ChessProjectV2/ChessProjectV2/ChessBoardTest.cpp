@@ -1,9 +1,5 @@
 #include "ChessBoardTest.h"
 
-ChessBoardTest::ChessBoardTest()
-	:ChessBoard()
-{}
-
 ChessBoardTest::ChessBoardTest(std::string given_fen_code)
 	:ChessBoard(given_fen_code)
 {}

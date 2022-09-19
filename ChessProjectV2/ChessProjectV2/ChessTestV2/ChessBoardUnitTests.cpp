@@ -190,7 +190,7 @@ namespace ChessBoardUnitTest
 		{
 			//not matter what castle move, it will be always legal,
 			//because it has been checked for legality before
-			ChessBoardTest board;
+			ChessBoardTest board(EMPTY_FEN);
 			Assert::IsTrue(board.isLegal(std::make_unique<MoveCastle>(White, CastleLong)));
 		}
 		TEST_METHOD(equalCheck)

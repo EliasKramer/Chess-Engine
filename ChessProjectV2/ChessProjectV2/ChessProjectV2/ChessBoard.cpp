@@ -619,24 +619,20 @@ char ChessBoard::getPieceCharAt(Square pos) const
 	return pieceChar;
 }
 
-ChessBoard::ChessBoard()
-	:
-	_canCastle{
-		{false, false},
-		{false, false} },
-
-		_currentTurnColor(White),
-
-		_enPassantSquare(SQUARE_NONE),
-
-		_halfMoveClock(0),
-
-		_moveNumber(1)
-{}
 
 ChessBoard::ChessBoard(std::string given_fen_code)
-	:ChessBoard()
 {
+	//set all castling rights to false at the beginning
+	for(int i = 0; i < 2; i++)
+	{
+		ChessColor currColor = (ChessColor)i;
+		for(int j = 0; j < 2; j++)
+		{
+			CastlingType currCastleType = (CastlingType)j;
+			_canCastle[currColor][currCastleType] = false;
+		}
+	}
+
 	std::string prefixForErrors = "ERROR The given FEN Code is invalid. ";
 
 	std::vector<std::string> split_fen_code = splitString(given_fen_code, ' ');
@@ -802,7 +798,7 @@ void ChessBoard::makeMove(Move& move)
 
 ChessBoard ChessBoard::getCopyByValue() const
 {
-	ChessBoard board;
+	ChessBoard board(EMPTY_FEN);
 	board._board._allPieces = _board._allPieces;
 
 	board._board._piecesOfColor[White] = _board._piecesOfColor[White];

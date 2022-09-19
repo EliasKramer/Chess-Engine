@@ -14,6 +14,9 @@
 const std::string STARTING_FEN =
 "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
+const std::string EMPTY_FEN =
+"8/8/8/8/8/8/8/8 w - - 0 1";
+
 class ChessBoard
 {
 protected:
@@ -97,7 +100,6 @@ protected:
 	friend bool operator ==(const ChessBoard& first, const ChessBoard& second);
 	friend bool operator !=(const ChessBoard& first, const ChessBoard& second);
 public:
-	ChessBoard();
 	ChessBoard(std::string given_fen_code);
 
 	std::string getString();
