@@ -18,45 +18,6 @@ BoardRepresentation::BoardRepresentation()
 	_kingPos{E1, E8}
 {}
 
-BitBoard BoardRepresentation::getAllPieces() const
-{
-	return _allPieces;
-}
-
-BitBoard BoardRepresentation::getPiecesOfColor(ChessColor color) const
-{
-	return _piecesOfColor[color];
-}
-
-BitBoard BoardRepresentation::getPiecesOfType(PieceType type) const
-{
-	return _piecesOfType[type];
-}
-
-Square BoardRepresentation::getKingPos(ChessColor color) const
-{
-	return _kingPos[color];
-}
-
-void BoardRepresentation::setAllPieces(BitBoard allPieces)
-{
-	_allPieces = allPieces;
-}
-
-void BoardRepresentation::setPiecesOfColor(ChessColor color, BitBoard pieces)
-{
-	_piecesOfColor[color] = pieces;
-}
-
-void BoardRepresentation::setPiecesOfType(PieceType type, BitBoard pieces)
-{
-	_piecesOfType[type] = pieces;
-}
-
-void BoardRepresentation::setKingPos(ChessColor color, Square kingPos)
-{
-	_kingPos[color] = kingPos;
-}
 
 void BoardRepresentation::copySquareToPos(Square copyField, Square pasteField)
 {

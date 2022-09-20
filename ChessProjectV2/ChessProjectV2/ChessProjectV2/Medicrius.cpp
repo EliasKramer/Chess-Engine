@@ -40,13 +40,12 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 		for (int typeIdx = 0; typeIdx <= Queen; typeIdx++)
 		{
 			//if current square overlaps with the current piece type
-			PieceType currType = (PieceType)typeIdx;
-			if (bitboardsOverlap(idxBB, boardRep.getPiecesOfType(currType)))
+			if (bitboardsOverlap(idxBB, boardRep._piecesOfType[typeIdx]))
 			{
 				//get the material value of the piece type
 				int materialValue = PIECETYPE_VALUE[typeIdx];
 				//if pieces are black, negate the value
-				if (bitboardsOverlap(idxBB, boardRep.getPiecesOfColor(Black)))
+				if (bitboardsOverlap(idxBB, boardRep._piecesOfColor[Black]))
 				{
 					materialValue *= -1;
 				}
