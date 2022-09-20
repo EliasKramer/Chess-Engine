@@ -188,10 +188,16 @@ const char PIECETYPE_CHAR[NUMBER_OF_DIFFERENT_PIECE_TYPES] = {'P', 'N', 'B', 'R'
 
 const std::string COLOR_STRING[2] = { "White", "Black" };
 
-const std::map<PieceType, int> PIECETYPE_VALUE = {
-	{Pawn, 100},
-	{Knight, 300},
-	{Bishop, 300},
-	{Rook, 500},
-	{Queen, 900},
+const int PAWN_VALUE = 100;
+const int KNIGHT_VALUE = 320;
+const int BISHOP_VALUE = 330;
+const int ROOK_VALUE = 500;
+const int QUEEN_VALUE = 900;
+
+const int PIECETYPE_VALUE[5] = {
+	PAWN_VALUE,
+	KNIGHT_VALUE,
+	BISHOP_VALUE,
+	ROOK_VALUE,
+	QUEEN_VALUE
 };

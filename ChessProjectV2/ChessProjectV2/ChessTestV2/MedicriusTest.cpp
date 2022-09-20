@@ -39,6 +39,10 @@ namespace MedicriusTest
 			//50 move rule
 			board = ChessBoard("4n3/6k1/8/8/7n/1KRB4/8/8 w - - 50 1");
 			Assert::AreEqual(0, medicrius.evaluateBoard(board));
+
+			//starting pos is equal
+			board = ChessBoard(STARTING_FEN);
+			Assert::AreEqual(0, medicrius.evaluateBoard(board));
 		}
 	};
 }

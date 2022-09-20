@@ -7,8 +7,15 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 
 int Medicrius::evaluateBoard(const ChessBoard& board)
 {
+	//regulates how much the material (the pieces on the board) is worth
+	const int materialWeight = 100;
+	const int positionWeight = 50;
+	
 	BoardRepresentation boardRep = board.getBoardRepresentation();
 
+	//get the obvious out the way 
+	// - if white wins return highest possible number
+	// - if black wins return lowest possible number
 	GameState gameState = board.getGameState();
 	switch (gameState)
 	{
@@ -22,9 +29,31 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 		return 0;
 	}
 
-	int score = -1;
+	//now calculate the score
+	int score = 0;
 
-	//TODO count material	
+	for (int i = A1; i <= H8; i++)
+	{
+		BitBoard idxBB = BB_SQUARE[i];
+
+		//iterate over every type except king
+		for (int typeIdx = 0; typeIdx <= Queen; typeIdx++)
+		{
+			//if current square overlaps with the current piece type
+			if (bitboardsOverlap(idxBB, boardRep._piecesOfType[typeIdx]))
+			{
+				//get the material value of the piece type
+				int materialValue = PIECETYPE_VALUE[typeIdx];
+				//if pieces are black, negate the value
+				if (bitboardsOverlap(idxBB, boardRep._piecesOfColor[Black]))
+				{
+					materialValue *= -1;
+				}
+				//add the value to the total score multiplied by material weight
+				score += (materialValue * materialWeight);
+			}
+		}
+	}
 
 	return score;
 }
