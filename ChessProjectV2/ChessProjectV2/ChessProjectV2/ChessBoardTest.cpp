@@ -6,17 +6,17 @@ ChessBoardTest::ChessBoardTest(std::string given_fen_code)
 
 BitBoard ChessBoardTest::getAllPieces()
 {
-	return _board._allPieces;
+	return _board.getAllPieces();
 }
 
 BitBoard ChessBoardTest::getAllPiecesOfColor(ChessColor color)
 {
-	return _board._piecesOfColor[color];
+	return _board.getPiecesOfColor(color);
 }
 
 BitBoard ChessBoardTest::getAllPiecesOfType(PieceType type)
 {
-	return _board._piecesOfType[type];
+	return _board.getPiecesOfType(type);
 }
 
 bool ChessBoardTest::fieldIsUnderAttackWithMoveBB(Square pos, BitBoard moveBB)
