@@ -2,12 +2,12 @@
 
 BoardRepresentation::BoardRepresentation()
 	:
-	_allPieces(BITBOARD_NONE),
-	_piecesOfColor{
+	AllPieces(BITBOARD_NONE),
+	PiecesOfColor{
 	BITBOARD_NONE,
 	BITBOARD_NONE },
 
-	_piecesOfType{
+	PiecesOfType{
 	BITBOARD_NONE,
 	BITBOARD_NONE,
 	BITBOARD_NONE,
@@ -15,7 +15,7 @@ BoardRepresentation::BoardRepresentation()
 	BITBOARD_NONE,
 	BITBOARD_NONE },
 	
-	_kingPos{E1, E8}
+	KingPos{E1, E8}
 {}
 
 
@@ -28,13 +28,13 @@ void BoardRepresentation::copySquareToPos(Square copyField, Square pasteField)
 	{
 		ChessColor currCol = (ChessColor)i;
 
-		if ((_piecesOfColor[currCol] & copyPos) != 0)
+		if ((PiecesOfColor[currCol] & copyPos) != 0)
 		{
-			_piecesOfColor[currCol] = _piecesOfColor[currCol] | pastePos;
+			PiecesOfColor[currCol] = PiecesOfColor[currCol] | pastePos;
 		}
 		else
 		{
-			_piecesOfColor[currCol] = _piecesOfColor[currCol] & (~pastePos);
+			PiecesOfColor[currCol] = PiecesOfColor[currCol] & (~pastePos);
 		}
 	}
 
@@ -42,19 +42,19 @@ void BoardRepresentation::copySquareToPos(Square copyField, Square pasteField)
 	{
 		PieceType currType = (PieceType)i;
 
-		if ((_piecesOfType[currType] & copyPos) != 0)
+		if ((PiecesOfType[currType] & copyPos) != 0)
 		{
-			_piecesOfType[currType] = _piecesOfType[currType] | pastePos;
+			PiecesOfType[currType] = PiecesOfType[currType] | pastePos;
 		}
 		else
 		{
-			_piecesOfType[currType] = _piecesOfType[currType] & (~pastePos);
+			PiecesOfType[currType] = PiecesOfType[currType] & (~pastePos);
 		}
 	}
 
-	if ((_allPieces & copyPos) != 0)
+	if ((AllPieces & copyPos) != 0)
 	{
-		_allPieces = _allPieces | pastePos;
+		AllPieces = AllPieces | pastePos;
 	}
 }
 
@@ -62,47 +62,52 @@ void BoardRepresentation::setAtPosition(ChessPiece piece, Square position)
 {
 	BitBoard piecePos = BB_SQUARE[position];
 
-	_allPieces = _allPieces | piecePos;
+	setPieceBitBoard(piece, piecePos);
+}
+
+void BoardRepresentation::setPieceBitBoard(ChessPiece piece, BitBoard bitboard)
+{
+	AllPieces = AllPieces | bitboard;
 
 	ChessColor col = piece.getColor();
-	_piecesOfColor[col] = _piecesOfColor[col] | piecePos;
+	PiecesOfColor[col] = PiecesOfColor[col] | bitboard;
 
 	PieceType type = piece.getType();
-	_piecesOfType[type] = _piecesOfType[type] | piecePos;
+	PiecesOfType[type] = PiecesOfType[type] | bitboard;
 }
 
 void BoardRepresentation::delAtPos(Square position)
 {
 	BitBoard keepPiecesMask = ~(BB_SQUARE[position]);
 
-	_allPieces = _allPieces & keepPiecesMask;
+	AllPieces = AllPieces & keepPiecesMask;
 
 	for (int i = 0; i < DIFFERENT_CHESS_COLORS; i++)
 	{
 		ChessColor currCol = (ChessColor)i;
-		_piecesOfColor[currCol] = _piecesOfColor[currCol] & keepPiecesMask;
+		PiecesOfColor[currCol] = PiecesOfColor[currCol] & keepPiecesMask;
 	}
 
 	for (int i = 0; i < NUMBER_OF_DIFFERENT_PIECE_TYPES; i++)
 	{
 		PieceType currType = (PieceType)i;
-		_piecesOfType[currType] = _piecesOfType[currType] & keepPiecesMask;
+		PiecesOfType[currType] = PiecesOfType[currType] & keepPiecesMask;
 	}
 }
 
 bool operator==(const BoardRepresentation& first, const BoardRepresentation& second)
 {
-	bool retVal = first._allPieces == second._allPieces
-		&& (first._piecesOfColor[White] == second._piecesOfColor[White])
-		&& (first._piecesOfColor[Black] == second._piecesOfColor[Black]);
+	bool retVal = first.AllPieces == second.AllPieces
+		&& (first.PiecesOfColor[White] == second.PiecesOfColor[White])
+		&& (first.PiecesOfColor[Black] == second.PiecesOfColor[Black]);
 
 	for (int i = 0; i < NUMBER_OF_DIFFERENT_PIECE_TYPES; i++)
 	{
-		retVal = retVal && (first._piecesOfType[i] == second._piecesOfType[i]);
+		retVal = retVal && (first.PiecesOfType[i] == second.PiecesOfType[i]);
 	}
 
-	retVal = retVal && (first._kingPos[White] == second._kingPos[White]);
-	retVal = retVal && (first._kingPos[Black] == second._kingPos[Black]);
+	retVal = retVal && (first.KingPos[White] == second.KingPos[White]);
+	retVal = retVal && (first.KingPos[Black] == second.KingPos[Black]);
 
 	return retVal;
 }

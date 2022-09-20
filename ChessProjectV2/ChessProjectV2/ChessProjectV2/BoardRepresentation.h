@@ -7,16 +7,20 @@
 class BoardRepresentation
 {
 public:
-	BitBoard _allPieces;
-	BitBoard _piecesOfColor[DIFFERENT_CHESS_COLORS];
-	BitBoard _piecesOfType[NUMBER_OF_DIFFERENT_PIECE_TYPES];
+	BitBoard AllPieces;
+	BitBoard PiecesOfColor[DIFFERENT_CHESS_COLORS];
+	BitBoard PiecesOfType[NUMBER_OF_DIFFERENT_PIECE_TYPES];
 
-	Square _kingPos[DIFFERENT_CHESS_COLORS];
+	Square KingPos[DIFFERENT_CHESS_COLORS];
 
 	BoardRepresentation();
 
 	void copySquareToPos(Square copyField, Square pasteField);
+	//be aware, that this does not overwrite the square, it only adds it
 	void setAtPosition(ChessPiece piece, Square position);
+	//be aware, that this does not overwrite the Bitboard, it only adds it
+	void setPieceBitBoard(ChessPiece piece, BitBoard bitboard);
+
 	void delAtPos(Square position);
 };
 bool operator==(const BoardRepresentation& first, const BoardRepresentation& second);
