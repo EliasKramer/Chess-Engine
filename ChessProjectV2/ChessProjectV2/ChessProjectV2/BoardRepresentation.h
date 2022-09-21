@@ -3,6 +3,7 @@
 #include "DataAndTypes.h"
 #include "Constants.h"
 #include "ChessPiece.h"
+#include <vector>
 
 class BoardRepresentation
 {
@@ -12,6 +13,9 @@ public:
 	BitBoard PiecesOfType[NUMBER_OF_DIFFERENT_PIECE_TYPES];
 
 	Square KingPos[DIFFERENT_CHESS_COLORS];
+
+	//maybe save the positions in a list
+	std::vector<Square> PiecePositions[DIFFERENT_CHESS_COLORS][NUMBER_OF_DIFFERENT_PIECE_TYPES];
 
 	BoardRepresentation();
 

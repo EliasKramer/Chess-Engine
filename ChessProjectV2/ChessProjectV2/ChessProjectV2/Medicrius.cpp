@@ -8,8 +8,6 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 int Medicrius::evaluateBoard(const ChessBoard& board)
 {
 	//regulates how much the material (the pieces on the board) is worth
-	const int materialWeight = 100;
-	const int positionWeight = 50;
 	
 	BoardRepresentation boardRep = board.getBoardRepresentation();
 
@@ -44,13 +42,19 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 			{
 				//get the material value of the piece type
 				int materialValue = PIECETYPE_VALUE[typeIdx];
+
+				bool currPieceIsBlack = bitboardsOverlap(idxBB, boardRep.PiecesOfColor[Black]);
+				ChessColor currPieceColor = currPieceIsBlack ? Black : White;
+
+				materialValue += POSITION_VALUE[currPieceColor][typeIdx][i];
+
 				//if pieces are black, negate the value
-				if (bitboardsOverlap(idxBB, boardRep.PiecesOfColor[Black]))
+				if (currPieceIsBlack)
 				{
 					materialValue *= -1;
 				}
 				//add the value to the total score multiplied by material weight
-				score += (materialValue * materialWeight);
+				score += materialValue;
 			}
 		}
 	}
