@@ -59,6 +59,8 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 		}
 	}
 
+	//add king values TODO
+
 	return score;
 }
 

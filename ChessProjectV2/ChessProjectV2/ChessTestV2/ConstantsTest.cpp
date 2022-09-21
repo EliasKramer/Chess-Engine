@@ -235,5 +235,26 @@ namespace ConstantsTests
 			Assert::AreEqual('Q', PIECETYPE_CHAR[Queen]);
 			Assert::AreEqual('K', PIECETYPE_CHAR[King]);
 		}
+		TEST_METHOD(positionAdditionValueForPieces)
+		{
+			//TODO - NEEDS TO BE TESTED MORE
+			Assert::AreEqual(0, POSITION_VALUE[White][Pawn][A1]);
+			Assert::AreEqual(5, POSITION_VALUE[White][Pawn][A2]);
+			Assert::AreEqual(5, POSITION_VALUE[White][Pawn][A3]);
+			Assert::AreEqual(0, POSITION_VALUE[White][Pawn][A4]);
+			Assert::AreEqual(5, POSITION_VALUE[White][Pawn][A5]);
+			Assert::AreEqual(10, POSITION_VALUE[White][Pawn][A6]);
+			Assert::AreEqual(50, POSITION_VALUE[White][Pawn][A7]);
+			Assert::AreEqual(0, POSITION_VALUE[White][Pawn][A8]);
+			
+			Assert::AreEqual(0, POSITION_VALUE[Black][Pawn][E8]);
+			Assert::AreEqual(-20, POSITION_VALUE[Black][Pawn][E7]);
+			Assert::AreEqual(0, POSITION_VALUE[Black][Pawn][E6]);
+			Assert::AreEqual(20, POSITION_VALUE[Black][Pawn][E5]);
+			Assert::AreEqual(25, POSITION_VALUE[Black][Pawn][E4]);
+			Assert::AreEqual(30, POSITION_VALUE[Black][Pawn][E3]);
+			Assert::AreEqual(50, POSITION_VALUE[Black][Pawn][E2]);
+			Assert::AreEqual(0, POSITION_VALUE[Black][Pawn][E1]);
+		}
 	};
 }

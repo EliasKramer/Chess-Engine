@@ -10,6 +10,7 @@ namespace MedicriusTest
 	public:
 		TEST_METHOD(testEvaluation)
 		{
+			//https://www.chess.com/analysis
 			Medicrius medicrius;
 
 			//insufficient material
@@ -43,6 +44,10 @@ namespace MedicriusTest
 			//starting pos is equal
 			board = ChessBoard(STARTING_FEN);
 			Assert::AreEqual(0, medicrius.evaluateBoard(board));
+
+			//test position difference
+			board = ChessBoard("krn5/8/8/8/4N3/8/8/6RK w - - 0 1");
+			Assert::IsTrue(0 < medicrius.evaluateBoard(board));
 		}
 	};
 }
