@@ -430,5 +430,23 @@ namespace MoveGenerationTest
 			moves = board.getAllLegalMoves();
 			Assert::AreEqual(0, (int)moves.size());
 		}
+		TEST_METHOD(testGettingOnlyCaptureMoves)
+		{
+			//starting fen
+			ChessBoardTest board(STARTING_FEN);
+			UniqueMoveList moves = board.getAllLegalMoves();
+			UniqueMoveList captureMoves = board.getAllLegalCaptureMoves();
+
+			Assert::AreEqual(20, (int)moves.size());
+			Assert::AreEqual(0, (int)captureMoves.size());
+
+			//custom fen
+			board = ChessBoardTest("4k3/6B1/5r2/1pPN2P1/3Q4/5R2/8/4K3 w - b6 0 1");
+			moves = board.getAllLegalMoves();
+			captureMoves = board.getAllLegalCaptureMoves();
+			
+			Assert::AreEqual(51, (int)moves.size());
+			Assert::AreEqual(6, (int)captureMoves.size());
+		}
 	};
 }

@@ -85,7 +85,8 @@ protected:
 	bool fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB = BITBOARD_NONE) const;
 
 	bool moveIsLegal(const std::unique_ptr<Move>& move) const;
-
+	bool isCaptureMove(const std::unique_ptr<Move>& move) const;
+	
 	void udpateCastlingRightsAfterMove(Move& m);
 	
 	void updateEnPassantRightsAfterMove(Move& m);
@@ -110,6 +111,7 @@ public:
 	
 	//returns all moves of the color, whos turn it is
 	UniqueMoveList getAllLegalMoves() const;
+	UniqueMoveList getAllLegalCaptureMoves() const;
 
 	//execute move
 	void makeMove(Move& move);

@@ -497,6 +497,24 @@ bool ChessBoard::moveIsLegal(const std::unique_ptr<Move>& move) const
 		!fieldIsUnderAttack(kingPos, BBforNextMove);
 }
 
+bool ChessBoard::isCaptureMove(const std::unique_ptr<Move>& move) const
+{
+	if (dynamic_cast<MoveEnPassant*>(move.get()))
+	{
+		return true;
+	}
+
+	if (dynamic_cast<MoveCastle*>(move.get()))
+	{
+		return false;
+	}
+
+	BitBoard oppositeColorBB = _board.PiecesOfColor[getOppositeColor(_currentTurnColor)];
+	BitBoard potentialCaptureField = BB_SQUARE[move.get()->getDestination()];
+
+	return bitboardsOverlap(oppositeColorBB, potentialCaptureField);
+}
+
 void ChessBoard::udpateCastlingRightsAfterMove(Move& m)
 {
 	BitBoard start = BB_SQUARE[m.getStart()];
@@ -566,14 +584,14 @@ void ChessBoard::update50MoveRule(Move& m)
 bool ChessBoard::insufficientMaterialCheck() const
 {
 	//if any of these pieces are on the board, the game can be won
-	if(_board.PiecesOfType[Queen] != 0 ||
+	if (_board.PiecesOfType[Queen] != 0 ||
 		_board.PiecesOfType[Rook] != 0 ||
 		_board.PiecesOfType[Pawn] != 0)
 	{
 		return false;
 	}
 
-	if(_board.PiecesOfType[Bishop] == 0 &&
+	if (_board.PiecesOfType[Bishop] == 0 &&
 		_board.PiecesOfType[Knight] == 0)
 	{
 		return true;
@@ -581,7 +599,7 @@ bool ChessBoard::insufficientMaterialCheck() const
 
 	//TODO
 	//if only one bishop or one knight is on the board, the game cant be won
-	
+
 	return false;
 }
 
@@ -623,10 +641,10 @@ char ChessBoard::getPieceCharAt(Square pos) const
 ChessBoard::ChessBoard(std::string given_fen_code)
 {
 	//set all castling rights to false at the beginning
-	for(int i = 0; i < 2; i++)
+	for (int i = 0; i < 2; i++)
 	{
 		ChessColor currColor = (ChessColor)i;
-		for(int j = 0; j < 2; j++)
+		for (int j = 0; j < 2; j++)
 		{
 			CastlingType currCastleType = (CastlingType)j;
 			_canCastle[currColor][currCastleType] = false;
@@ -667,7 +685,7 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 			currFile = -1;
 			currFile++;
 		}
-		else 
+		else
 		{
 			BitBoard bbToAdd = BB_SQUARE[boardPos];
 
@@ -747,7 +765,7 @@ std::string ChessBoard::getFen()
 	std::string result = "";
 
 	//written with copilot. can be improved i think
-	
+
 	for (int rank = 7; rank >= 0; rank--)
 	{
 		int emptyFields = 0;
@@ -824,7 +842,7 @@ std::string ChessBoard::getFen()
 	result += " ";
 
 	result += std::to_string(_moveNumber);
-	
+
 	return result;
 }
 
@@ -854,6 +872,28 @@ UniqueMoveList ChessBoard::getAllLegalMoves() const
 		),
 		list.end()
 				);
+
+	return list;
+}
+
+UniqueMoveList ChessBoard::getAllLegalCaptureMoves() const
+{
+	UniqueMoveList list = getAllLegalMoves();
+
+	list.erase
+	(
+		std::remove_if
+		(
+			list.begin(),
+			list.end(),
+			[this](const std::unique_ptr<Move>& move)
+			{
+				return !isCaptureMove(move);
+			}
+		),
+		list.end()
+				);
+
 	return list;
 }
 
@@ -932,41 +972,44 @@ GameDurationState ChessBoard::getGameDurationState() const
 	// 
 	// 
 	//description at the end of: https://www.chessprogramming.org/Simplified_Evaluation_Function
-	
+
 	//definiton on the site of when the endgame begins:
 	//- Both sides have no queens or
 	//- Every side which has a queen has additionally no other pieces or one minorpiece maximum.
-	
+
+	//there are different game states for different colors
+	//for example: if one color got lots of pieces, but the other almost none, 
+	//it is useful to bring the king into the game
+	ChessColor col = _currentTurnColor;
+	BitBoard colorBB = _board.PiecesOfColor[col];
+
 	if (((_board.PiecesOfType[Queen] == 0ULL) &&
 		//a queen can be exchanged very early on. So we need to check if the game has already progressed a bit
 		_moveNumber > 10))
 	{
-		return EndGame;
+		//gets activated often at the start of games, 
+		//which is not exactly an "endgame" state
+		//return EndGame;
 	}
 
-	//iterates over both colors
-	for (int i = White; i <= Black; i++)
+
+	if ((_board.PiecesOfType[Queen] & colorBB) != 0ULL)
 	{
-		ChessColor col = (ChessColor)i;
-		BitBoard colorBB = _board.PiecesOfColor[col];
-	
-		if ((_board.PiecesOfType[Queen] & colorBB) != 0ULL)
+		BitBoard colorBBWithoutKingOrQueen =
+			colorBB &
+			~_board.PiecesOfType[King] &
+			~_board.PiecesOfType[Queen];
+
+		if ((colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Bishop]) == 0ULL ||
+			(colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Knight]) == 0ULL ||
+			(colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Pawn]) == 0ULL ||
+			(colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Rook]) == 0ULL)
 		{
-			BitBoard colorBBWithoutKingOrQueen =
-				colorBB &
-				~_board.PiecesOfType[King] &
-				~_board.PiecesOfType[Queen];
-			
-			if((colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Bishop]) == 0ULL ||
-				(colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Knight]) == 0ULL ||
-				(colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Pawn]) == 0ULL ||
-				(colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Rook]) == 0ULL)
-			{
-				return EndGame;
-			}
+			return EndGame;
 		}
 	}
-	
+
+
 	return MidGame;
 }
 
