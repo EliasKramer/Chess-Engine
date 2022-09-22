@@ -742,6 +742,92 @@ std::string ChessBoard::getString()
 	return result;
 }
 
+std::string ChessBoard::getFen()
+{
+	std::string result = "";
+
+	//written with copilot. can be improved i think
+	
+	for (int rank = 7; rank >= 0; rank--)
+	{
+		int emptyFields = 0;
+		for (int file = 0; file < 8; file++)
+		{
+			Square pos = (Square)(rank * 8 + file);
+			char pieceChar = getPieceCharAt(pos);
+
+			if (pieceChar == ' ')
+			{
+				emptyFields++;
+			}
+			else
+			{
+				if (emptyFields > 0)
+				{
+					result += std::to_string(emptyFields);
+					emptyFields = 0;
+				}
+				result += pieceChar;
+			}
+		}
+		if (emptyFields > 0)
+		{
+			result += std::to_string(emptyFields);
+		}
+		if (rank > 0)
+		{
+			result += "/";
+		}
+	}
+
+	result += " ";
+
+	result += _currentTurnColor == White ? "w" : "b";
+
+	result += " ";
+
+	if (_canCastle[White][CastleShort] ||
+		_canCastle[White][CastleLong] ||
+		_canCastle[Black][CastleShort] ||
+		_canCastle[Black][CastleLong])
+	{
+		if (_canCastle[White][CastleShort])
+		{
+			result += "K";
+		}
+		if (_canCastle[White][CastleLong])
+		{
+			result += "Q";
+		}
+		if (_canCastle[Black][CastleShort])
+		{
+			result += "k";
+		}
+		if (_canCastle[Black][CastleLong])
+		{
+			result += "q";
+		}
+	}
+	else
+	{
+		result += "-";
+	}
+
+	result += " ";
+
+	result += SQUARE_STRING[_enPassantSquare];
+
+	result += " ";
+
+	result += std::to_string(_halfMoveClock);
+
+	result += " ";
+
+	result += std::to_string(_moveNumber);
+	
+	return result;
+}
+
 ChessColor ChessBoard::getCurrentTurnColor() const
 {
 	return _currentTurnColor;
@@ -838,6 +924,50 @@ GameState ChessBoard::getGameState() const
 		return Draw;
 	}
 	return Ongoing;
+}
+
+GameDurationState ChessBoard::getGameDurationState() const
+{
+	//HAS TO BE IMPROVED ALOT
+	// 
+	// 
+	//description at the end of: https://www.chessprogramming.org/Simplified_Evaluation_Function
+	
+	//definiton on the site of when the endgame begins:
+	//- Both sides have no queens or
+	//- Every side which has a queen has additionally no other pieces or one minorpiece maximum.
+	
+	if (((_board.PiecesOfType[Queen] == 0ULL) &&
+		//a queen can be exchanged very early on. So we need to check if the game has already progressed a bit
+		_moveNumber > 10))
+	{
+		return EndGame;
+	}
+
+	//iterates over both colors
+	for (int i = White; i <= Black; i++)
+	{
+		ChessColor col = (ChessColor)i;
+		BitBoard colorBB = _board.PiecesOfColor[col];
+	
+		if ((_board.PiecesOfType[Queen] & colorBB) != 0ULL)
+		{
+			BitBoard colorBBWithoutKingOrQueen =
+				colorBB &
+				~_board.PiecesOfType[King] &
+				~_board.PiecesOfType[Queen];
+			
+			if((colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Bishop]) == 0ULL ||
+				(colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Knight]) == 0ULL ||
+				(colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Pawn]) == 0ULL ||
+				(colorBBWithoutKingOrQueen & ~_board.PiecesOfType[Rook]) == 0ULL)
+			{
+				return EndGame;
+			}
+		}
+	}
+	
+	return MidGame;
 }
 
 BoardRepresentation ChessBoard::getBoardRepresentation() const

@@ -16,20 +16,23 @@ void Game::start()
 	while (true)
 	{
 		ChessColor currentTurnColor = _board.getCurrentTurnColor();
-		Player* currPlayer = currentTurnColor == White ? _player1.get() : _player2.get();
+		Player& currPlayer = currentTurnColor == White ? *_player1.get() : *_player2.get();
+		
 
 		//this number increases every time black makes a move
 		int currentTurnNumber = _board.getNumberOfMovesPlayed();
 		
 		//print board and the move number
 		std::cout << "\n\n" << COLOR_STRING[currentTurnColor] << "s turn " << currentTurnNumber;
+		std::cout << "\n" << (_board.getGameDurationState() == MidGame ? "Mid Game" : "End Game");
+		std::cout << "\n" << _board.getFen();
 		std::cout << _board.getString();
 		
 		//get the move from the current player
 		UniqueMoveList legalMoves = _board.getAllLegalMoves();
 		//to make sure the move the player wants to play is legal, 
 		//the return value is an index of the list of all legal moves
-		int choosenMoveIdx = currPlayer->getMove(_board, legalMoves);
+		int choosenMoveIdx = currPlayer.getMove(_board, legalMoves);
 		//throws an error if the returned value is not a valid index
 		if (choosenMoveIdx < 0 || choosenMoveIdx >= legalMoves.size())
 		{

@@ -59,8 +59,13 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 		}
 	}
 
-	//add king values TODO
-
+	//Evaluating the king position
+	//usually the king is worth 20k and the position value is added to that.
+	//this is not done here, since these values cancel out. - could be done for clarity
+	score += 
+		(POSITION_VALUE_KING[White][board.getGameDurationState()][boardRep.KingPos[White]] - 
+		POSITION_VALUE_KING[Black][board.getGameDurationState()][boardRep.KingPos[Black]]);
+	
 	return score;
 }
 

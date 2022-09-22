@@ -103,6 +103,7 @@ public:
 	ChessBoard(std::string given_fen_code);
 
 	std::string getString();
+	std::string getFen();
 
 	ChessColor getCurrentTurnColor() const;
 	int getNumberOfMovesPlayed() const;
@@ -117,6 +118,7 @@ public:
 	ChessBoard getCopyByValue() const;
 
 	GameState getGameState() const;
+	GameDurationState getGameDurationState() const;
 
 	BoardRepresentation getBoardRepresentation() const;
 };
