@@ -2,7 +2,10 @@
 
 int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 {
-	return 0;
+	int notesSearched = 0;
+	int retVal = getMoveRecursively(board, 2, notesSearched);
+	std::cout << "Medicrius searched " << notesSearched << " notes." << std::endl;
+	return retVal;
 }
 
 int Medicrius::evaluateBoard(const ChessBoard& board)
@@ -66,10 +69,27 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 		(POSITION_VALUE_KING[White][board.getGameDurationState()][boardRep.KingPos[White]] - 
 		POSITION_VALUE_KING[Black][board.getGameDurationState()][boardRep.KingPos[Black]]);
 	
+	//TODO
+	//to encourage pawns for more structure, it would be useful to look if they get protected
+	//by another pawn. and increase the value if it is that way
+
 	return score;
 }
 
-int Medicrius::getMoveRecursively(ChessBoard board, int depth)
+int Medicrius::getMoveRecursively(ChessBoard board, int depth, int& notesSearched)
 {
+	if (depth == 0)
+	{
+		notesSearched++;
+		return evaluateBoard(board);
+	}
+	else 
+	{
+		UniqueMoveList moves = board.getAllLegalMoves();
+		int currentEvaluation = INT_MIN;
+
+		//TODO
+	}
+
 	return 0;
 }

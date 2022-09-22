@@ -1,6 +1,7 @@
 #pragma once
 #include "Move.h"
 #include "ChessBoard.h"
+#include <iostream>
 class Player
 {
 public:

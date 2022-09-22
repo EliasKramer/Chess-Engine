@@ -12,5 +12,5 @@ public:
 	int evaluateBoard(const ChessBoard& board);
 	
 private:
-	int getMoveRecursively(ChessBoard board, int depth);
+	int getMoveRecursively(ChessBoard board, int depth, int& notesSearched);
 };
