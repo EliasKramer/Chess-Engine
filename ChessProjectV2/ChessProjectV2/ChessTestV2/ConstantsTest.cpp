@@ -256,5 +256,14 @@ namespace ConstantsTests
 			Assert::AreEqual(50, POSITION_VALUE[Black][Pawn][E2]);
 			Assert::AreEqual(0, POSITION_VALUE[Black][Pawn][E1]);
 		}
+		TEST_METHOD(evaluateGameState)
+		{
+			Assert::AreEqual(INT_MAX, GAME_STATE_EVALUATION[WhiteWon]);
+			Assert::AreEqual(INT_MIN, GAME_STATE_EVALUATION[BlackWon]);
+			Assert::AreEqual(0, GAME_STATE_EVALUATION[Stalemate]);
+			Assert::AreEqual(0, GAME_STATE_EVALUATION[Draw]);
+			Assert::AreEqual(-1, GAME_STATE_EVALUATION[Ongoing]);
+			
+		}
 	};
 }

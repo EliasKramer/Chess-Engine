@@ -376,3 +376,11 @@ const int POSITION_VALUE_KING[DIFFERENT_CHESS_COLORS][DIFFERENT_GAME_DURATION_ST
 		-50,-30,-30,-30,-30,-30,-30,-50}
 	}
 };
+
+const int GAME_STATE_EVALUATION[5] = {
+	INT_MAX, //white won
+	INT_MIN, //black won
+	0, //stalemate
+	0, //draw
+	-1 //ongoing
+};

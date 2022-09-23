@@ -2,6 +2,8 @@
 
 int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 {
+	//multithreading would also be useful here
+
 	int notesSearched = 0;
 	int retVal = getMoveRecursively(board, 2, notesSearched);
 	std::cout << "Medicrius searched " << notesSearched << " notes." << std::endl;
@@ -17,17 +19,13 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 	//get the obvious out the way 
 	// - if white wins return highest possible number
 	// - if black wins return lowest possible number
-	GameState gameState = board.getGameState();
-	switch (gameState)
+	// - stalemate and draw is 0
+	int gameStatePoints = GAME_STATE_EVALUATION[board.getGameState()];
+	//if the game is still ongoing the value will be -1 and thus should be continued evaluating
+	if (gameStatePoints != -1)
 	{
-	case WhiteWon:
-		return INT_MAX;
-	case BlackWon:
-		return INT_MIN;
-	case Stalemate:
-		return 0;
-	case Draw:
-		return 0;
+		//if the game is already over return the evaluation
+		return gameStatePoints;
 	}
 
 	//now calculate the score
