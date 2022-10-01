@@ -1,5 +1,13 @@
 #include "HumanPlayer.h"
 
+HumanPlayer::HumanPlayer()
+	:Player("Human Player")
+{}
+
+HumanPlayer::HumanPlayer(std::string name)
+	:Player(name)
+{}
+
 int HumanPlayer::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 {
 	while (true)

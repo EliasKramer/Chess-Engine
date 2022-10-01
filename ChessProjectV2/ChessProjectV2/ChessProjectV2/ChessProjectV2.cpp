@@ -12,8 +12,8 @@
 int main()
 {
 	Game game(
-		std::make_unique<RandomPlayer>(),
-		std::make_unique<Medicrius>()
+		std::make_unique<Medicrius>(),
+		std::make_unique<RandomPlayer>()
 	);
 
 	game.start();

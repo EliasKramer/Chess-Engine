@@ -1,8 +1,8 @@
 #include "Game.h"
 
 Game::Game(std::unique_ptr<Player>&& player1, std::unique_ptr<Player>&& player2)
-	: _player1(std::move(player1)),
-	_player2(std::move(player2)),
+	: _whitePlayer(std::move(player1)),
+	_blackPlayer(std::move(player2)),
 	_board(STARTING_FEN)
 {}
 
@@ -16,14 +16,17 @@ void Game::start()
 	while (true)
 	{
 		ChessColor currentTurnColor = _board.getCurrentTurnColor();
-		Player& currPlayer = currentTurnColor == White ? *_player1.get() : *_player2.get();
+		Player& currPlayer = currentTurnColor == White ? *_whitePlayer.get() : *_blackPlayer.get();
 		
 
 		//this number increases every time black makes a move
 		int currentTurnNumber = _board.getNumberOfMovesPlayed();
 		
 		//print board and the move number
-		std::cout << "\n\n" << COLOR_STRING[currentTurnColor] << "s turn " << currentTurnNumber;
+		std::cout 
+			<< "\n\n" 
+			<< COLOR_STRING[currentTurnColor] << " " << currPlayer.getName() 
+			<< "'s turn " << currentTurnNumber;
 		std::cout << "\n" << (_board.getGameDurationState() == MidGame ? "Mid Game" : "End Game");
 		std::cout << "\n" << _board.getFen();
 		std::cout << _board.getString();

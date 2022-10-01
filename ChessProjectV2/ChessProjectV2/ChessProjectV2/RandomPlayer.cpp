@@ -1,5 +1,13 @@
 #include "RandomPlayer.h"
 
+RandomPlayer::RandomPlayer()
+    :Player("Random Player")
+{}
+
+RandomPlayer::RandomPlayer(std::string name)
+    :Player(name)
+{}
+
 int RandomPlayer::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 {
     //credit to stackoverflow ^^
