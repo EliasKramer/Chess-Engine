@@ -14,6 +14,9 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 
 	auto begin = std::chrono::high_resolution_clock::now();
 
+	//needs to choose the greatest negative numbner if black
+	int colorMult = board.getCurrentTurnColor() == White ? 1 : -1;
+
 	int endPointsEvaluated = 0;
 	int nodesSearched = 0;
 
@@ -28,7 +31,10 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 		ChessBoard boardCopy = board;
 		boardCopy.makeMove(*curr);
 
-		int currScore = getMoveRecursively(boardCopy, depth - 1, nodesSearched, endPointsEvaluated);
+		int moveScore = getMoveScoreRecursively(boardCopy, depth - 1, nodesSearched, endPointsEvaluated);
+		int currScore = colorMult * moveScore;
+		
+		std::cout << "Move: " << curr.get()->getString() << " Score: " << currScore << std::endl;
 
 		if (currScore > bestMoveScore)
 		{
@@ -47,6 +53,10 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 		<< "Medicrius searched " << nodesSearched << " nodes and "
 		<< endPointsEvaluated << " end states are evaluated. "
 		<< "It took " << duration << "ms" << std::endl;
+
+	double nodesPerSecond = ((double)endPointsEvaluated / ((double)duration / 1000));
+
+	std::cout << nodesPerSecond << " nodes/sec" << std::endl;
 
 	return bestMoveIdx;
 }
@@ -115,7 +125,7 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 	return score;
 }
 
-int Medicrius::getMoveRecursively(
+int Medicrius::getMoveScoreRecursively(
 	ChessBoard board,
 	int depth,
 	int& nodesSearched,
@@ -124,6 +134,7 @@ int Medicrius::getMoveRecursively(
 	if (depth == 0)
 	{
 		endStatesSearched++;
+		nodesSearched++;
 		return evaluateBoard(board);
 	}
 	else
@@ -131,25 +142,31 @@ int Medicrius::getMoveRecursively(
 		UniqueMoveList moves = board.getAllLegalMoves();
 		int bestEvaluationFound = INT_MIN;
 
+		//no more moves
+		if (moves.size() == 0)
+		{
+			nodesSearched++;
+			endStatesSearched++;
+			//dont know if this works
+			return board.isKingInCheck() ? 
+				(board.getCurrentTurnColor() == White ? 
+					GAME_STATE_EVALUATION[BlackWon] : 
+					GAME_STATE_EVALUATION[WhiteWon])
+				: 0;
+		}
+		
 		for (std::unique_ptr<Move>& curr : moves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
 			copyBoard.makeMove(*curr);
 			
 			nodesSearched++;
-			int evaluation = -getMoveRecursively(copyBoard, depth - 1, nodesSearched, endStatesSearched);
+			int evaluation = -getMoveScoreRecursively(copyBoard, depth - 1, nodesSearched, endStatesSearched);
 
 			if (evaluation > bestEvaluationFound)
 			{
 				bestEvaluationFound = evaluation;
 			}
-		}
-
-		//no more moves - get eval (can be improve by only checking what king is under attack)
-		if (bestEvaluationFound == INT_MIN)
-		{
-			endStatesSearched++;
-			return evaluateBoard(board);
 		}
 
 		return bestEvaluationFound;

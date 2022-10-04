@@ -856,6 +856,11 @@ int ChessBoard::getNumberOfMovesPlayed() const
 	return _moveNumber;
 }
 
+bool ChessBoard::isKingInCheck() const
+{
+	return fieldIsUnderAttack(_board.KingPos[_currentTurnColor]);
+}
+
 UniqueMoveList ChessBoard::getAllLegalMoves() const
 {
 	UniqueMoveList list = getAllPseudoLegalMoves();

@@ -174,7 +174,7 @@ const std::array<std::string, 65> SQUARE_STRING = []()->std::array<std::string, 
 		result[i] = file;
 		result[i] += rank;
 	}
-	
+
 	//representation for SQUARE_NONE
 	result[64] = "-";
 
@@ -377,9 +377,17 @@ const int POSITION_VALUE_KING[DIFFERENT_CHESS_COLORS][DIFFERENT_GAME_DURATION_ST
 	}
 };
 
+//if you take the exact values of int_max or int_min, the result of 
+//multiplying by -1 will not change the value
+//INT_MIN * -1 = INT_MIN
+//INT_MAX * -1 = INT_MAX
+//i dont know why that is, but adding and subtracting -1 from each value fixes it
+const int WHITE_WIN_EVAL_VALUE = INT_MAX - 1;
+const int BLACK_WIN_EVAL_VALUE = INT_MIN + 1;
+
 const int GAME_STATE_EVALUATION[5] = {
-	INT_MAX, //white won
-	INT_MIN, //black won
+	WHITE_WIN_EVAL_VALUE, //white won 
+	BLACK_WIN_EVAL_VALUE, //black won
 	0, //stalemate
 	0, //draw
 	-1 //ongoing

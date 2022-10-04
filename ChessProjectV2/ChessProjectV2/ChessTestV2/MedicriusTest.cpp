@@ -31,11 +31,11 @@ namespace MedicriusTest
 
 			//white wins
 			board = ChessBoard("8/6k1/8/2K2QRR/8/8/8/8 b - - 0 1");
-			Assert::AreEqual(INT_MAX, medicrius.evaluateBoard(board));
+			Assert::AreEqual(WHITE_WIN_EVAL_VALUE, medicrius.evaluateBoard(board));
 			
 			//black wins
 			board = ChessBoard("8/6k1/4q3/2K1q3/4q3/8/8/8 w - - 0 1");
-			Assert::AreEqual(INT_MIN, medicrius.evaluateBoard(board));
+			Assert::AreEqual(BLACK_WIN_EVAL_VALUE, medicrius.evaluateBoard(board));
 			
 			//50 move rule
 			board = ChessBoard("4n3/6k1/8/8/7n/1KRB4/8/8 w - - 50 1");

@@ -1,9 +1,13 @@
 #include "Game.h"
 
-Game::Game(std::unique_ptr<Player>&& player1, std::unique_ptr<Player>&& player2)
-	: _whitePlayer(std::move(player1)),
+Game::Game(
+	std::unique_ptr<Player>&& player1,
+	std::unique_ptr<Player>&& player2,
+	std::string fen)
+	: 
+	_whitePlayer(std::move(player1)),
 	_blackPlayer(std::move(player2)),
-	_board(STARTING_FEN)
+	_board(fen)
 {}
 
 void Game::start()

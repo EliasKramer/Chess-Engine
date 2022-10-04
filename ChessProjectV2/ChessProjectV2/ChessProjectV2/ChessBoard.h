@@ -109,6 +109,9 @@ public:
 	ChessColor getCurrentTurnColor() const;
 	int getNumberOfMovesPlayed() const;
 	
+	//returns true if the king is in check
+	bool isKingInCheck() const;
+
 	//returns all moves of the color, whos turn it is
 	UniqueMoveList getAllLegalMoves() const;
 	UniqueMoveList getAllLegalCaptureMoves() const;

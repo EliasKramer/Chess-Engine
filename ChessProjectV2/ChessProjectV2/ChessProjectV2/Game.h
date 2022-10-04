@@ -2,7 +2,7 @@
 #include "Player.h"
 #include <memory>
 #include <iostream>
-
+#include <string>
 class Game
 {
 private:
@@ -11,7 +11,10 @@ private:
 
 	ChessBoard _board;
 public:
-	Game(std::unique_ptr<Player>&& player1, std::unique_ptr<Player>&& player2);
-	
+	Game(
+		std::unique_ptr<Player>&& player1,
+		std::unique_ptr<Player>&& player2,
+		std::string fen = STARTING_FEN);
+
 	void start();
 };

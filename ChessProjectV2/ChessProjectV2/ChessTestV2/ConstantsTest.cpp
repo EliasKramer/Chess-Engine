@@ -258,12 +258,11 @@ namespace ConstantsTests
 		}
 		TEST_METHOD(evaluateGameState)
 		{
-			Assert::AreEqual(INT_MAX, GAME_STATE_EVALUATION[WhiteWon]);
-			Assert::AreEqual(INT_MIN, GAME_STATE_EVALUATION[BlackWon]);
+			Assert::AreEqual(WHITE_WIN_EVAL_VALUE, GAME_STATE_EVALUATION[WhiteWon]);
+			Assert::AreEqual(BLACK_WIN_EVAL_VALUE, GAME_STATE_EVALUATION[BlackWon]);
 			Assert::AreEqual(0, GAME_STATE_EVALUATION[Stalemate]);
 			Assert::AreEqual(0, GAME_STATE_EVALUATION[Draw]);
 			Assert::AreEqual(-1, GAME_STATE_EVALUATION[Ongoing]);
-			
 		}
 	};
 }
