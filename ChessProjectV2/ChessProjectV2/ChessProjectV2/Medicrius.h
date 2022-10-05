@@ -17,5 +17,22 @@ public:
 	int evaluateBoard(const ChessBoard& board);
 	
 private:
-	int getMoveScoreRecursively(ChessBoard board, int depth, int& nodesSearched, int& endStatesSearched);
+	int getMoveScoreRecursively(
+		ChessBoard board,
+		int depth,
+		int alpha,
+		int beta,
+		int& nodesSearched,
+		int& endStatesSearched,
+		int& maxCaptureDepthReached
+	);
+	int getAllCaputureMoveScoreRecursively(
+		ChessBoard board,
+		int alpha,
+		int beta,
+		int& nodesSearched,
+		int& endStatesSearched,
+		int& maxDepthReached,
+		int currDepth = 0
+	);
 };

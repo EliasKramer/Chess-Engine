@@ -20,7 +20,7 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 	int endPointsEvaluated = 0;
 	int nodesSearched = 0;
 
-	int depth = 3;
+	int depth = 4;
 
 	int bestMoveScore = INT_MIN;
 	int bestMoveIdx = 0;
@@ -31,10 +31,29 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 		ChessBoard boardCopy = board;
 		boardCopy.makeMove(*curr);
 
-		int moveScore = getMoveScoreRecursively(boardCopy, depth - 1, nodesSearched, endPointsEvaluated);
+		int maxCaptureDepthReached = 0;
+
+		int endstatesBefore = endPointsEvaluated;
+
+		int moveScore =
+			getMoveScoreRecursively(
+				boardCopy,
+				depth - 1,
+				BLACK_WIN_EVAL_VALUE,
+				WHITE_WIN_EVAL_VALUE,
+				nodesSearched,
+				endPointsEvaluated,
+				maxCaptureDepthReached
+			);
+
 		int currScore = colorMult * moveScore;
-		
-		std::cout << "Move: " << curr.get()->getString() << " Score: " << currScore << std::endl;
+
+		std::cout 
+			<< "Move: " << curr.get()->getString() 
+			<< ", Score: " << currScore 
+			<< ", Max Capture Depth: " << maxCaptureDepthReached
+			<< ", Endstates Evaluated: " << endPointsEvaluated - endstatesBefore
+			<< std::endl;
 
 		if (currScore > bestMoveScore)
 		{
@@ -128,19 +147,35 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 int Medicrius::getMoveScoreRecursively(
 	ChessBoard board,
 	int depth,
+	int alpha,
+	int beta,
 	int& nodesSearched,
-	int& endStatesSearched)
+	int& endStatesSearched,
+	int& maxCaptureDepthReached)
 {
 	if (depth == 0)
 	{
 		endStatesSearched++;
 		nodesSearched++;
+		/*
+		int currCaptureMovesDepth = 0;
+		int allCaptureMovesValue = 
+			-getAllCaputureMoveScoreRecursively(
+				board,
+				-alpha,
+				-beta,
+				nodesSearched,
+				endStatesSearched,
+				currCaptureMovesDepth);
+
+		//std::cout << "Max depth: " << currCaptureMovesDepth << std::endl;
+		maxCaptureDepthReached = std::max(maxCaptureDepthReached, currCaptureMovesDepth);
+		return allCaptureMovesValue;*/
 		return evaluateBoard(board);
 	}
 	else
 	{
 		UniqueMoveList moves = board.getAllLegalMoves();
-		int bestEvaluationFound = INT_MIN;
 
 		//no more moves
 		if (moves.size() == 0)
@@ -148,28 +183,91 @@ int Medicrius::getMoveScoreRecursively(
 			nodesSearched++;
 			endStatesSearched++;
 			//dont know if this works
-			return board.isKingInCheck() ? 
-				(board.getCurrentTurnColor() == White ? 
-					GAME_STATE_EVALUATION[BlackWon] : 
-					GAME_STATE_EVALUATION[WhiteWon])
+			return board.isKingInCheck() ?
+				(board.getCurrentTurnColor() == White ?
+					//when the depth is very high, the checkmate can be done earlier
+					//(when you search with depth 4, the function gets called with 3, 2, 1, 0 recursively)
+					//therefore a higher depth in the argument means actually low depth.
+					////finding a checkmate at a low depth is better, because it can be delivered earlier
+					GAME_STATE_EVALUATION[BlackWon] - depth :
+					GAME_STATE_EVALUATION[WhiteWon] + depth)
 				: 0;
 		}
-		
+
 		for (std::unique_ptr<Move>& curr : moves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
 			copyBoard.makeMove(*curr);
-			
-			nodesSearched++;
-			int evaluation = -getMoveScoreRecursively(copyBoard, depth - 1, nodesSearched, endStatesSearched);
 
-			if (evaluation > bestEvaluationFound)
+			nodesSearched++;
+			int evaluation = 
+				-getMoveScoreRecursively(
+					copyBoard, 
+					depth - 1,
+					-alpha,
+					-beta,
+					nodesSearched,
+					endStatesSearched,
+					maxCaptureDepthReached);
+
+			//this is alpha beta pruning
+			if (evaluation >= beta)
 			{
-				bestEvaluationFound = evaluation;
+				// Move was too good. opponent will avoid this position
+				return beta;
+			}
+			if (alpha > evaluation)
+			{
+				// Move was too bad. opponent will try to avoid this position
+				alpha = evaluation;
 			}
 		}
-
-		return bestEvaluationFound;
+		return alpha;
 	}
-	//has to return index
+}
+
+int Medicrius::getAllCaputureMoveScoreRecursively(
+	ChessBoard board,
+	int alpha,
+	int beta,
+	int& nodesSearched,
+	int& endStatesSearched,
+	int& maxDepthReached,
+	int currDepth)
+{
+	UniqueMoveList possibleCaptures = board.getAllLegalCaptureMoves();
+
+	if (possibleCaptures.size() == 0)
+	{
+		nodesSearched++;
+		endStatesSearched++;
+		maxDepthReached = std::max(maxDepthReached, currDepth);
+		return evaluateBoard(board);
+	}
+
+	int bestEvaluationFound = INT_MIN;
+
+	for (std::unique_ptr<Move>& curr : possibleCaptures)
+	{
+		ChessBoard copyBoard = board.getCopyByValue();
+		copyBoard.makeMove(*curr);
+
+		nodesSearched++;
+		int evaluation =
+			-getAllCaputureMoveScoreRecursively(
+				copyBoard,
+				-alpha,
+				-beta,
+				nodesSearched,
+				endStatesSearched,
+				maxDepthReached,
+				currDepth + 1);
+
+		if (evaluation > bestEvaluationFound)
+		{
+			bestEvaluationFound = evaluation;
+		}
+	}
+
+	return bestEvaluationFound;
 }
