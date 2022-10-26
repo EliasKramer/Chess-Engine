@@ -1,5 +1,7 @@
 #pragma once
 #include "Player.h"
+#include "Move.h"
+#include "MoveEnPassant.h"
 #include <string>
 #include <chrono>
 
@@ -13,13 +15,23 @@ public:
 	Medicrius(std::string name);
 
 	int getMove(const ChessBoard& board, const UniqueMoveList& moves) override;
-	
+
 	int evaluateBoard(const ChessBoard& board);
-	
+protected:
+	//TODO: make the selected move const
+	void printSearchStatistics(
+		int nodesSearched,
+		int endStatesEvaluated,
+		int depth,
+		Move& selectedMove,
+		int score,
+		long long timeElapsed);
+
 private:
 	int getMoveScoreRecursively(
 		ChessBoard board,
 		int depth,
+		bool isMaximizingPlayer,
 		int alpha,
 		int beta,
 		int& nodesSearched,
@@ -28,6 +40,7 @@ private:
 	);
 	int getAllCaputureMoveScoreRecursively(
 		ChessBoard board,
+		bool isMaximizingPlayer,
 		int alpha,
 		int beta,
 		int& nodesSearched,

@@ -13,12 +13,12 @@ MoveCastle::MoveCastle(ChessColor color, CastlingType castlingType)
 	_rookDest(SQUARES_FOR_ROOK_CASTLING[color][castlingType][1])
 {}
 
-Square MoveCastle::getRookStart()
+const Square MoveCastle::getRookStart()
 {
 	return _rookStart;
 }
 
-Square MoveCastle::getRookDest()
+const Square MoveCastle::getRookDest()
 {
 	return _rookDest;
 }

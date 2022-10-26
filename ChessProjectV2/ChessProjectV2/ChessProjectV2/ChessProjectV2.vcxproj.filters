@@ -93,6 +93,9 @@
     <ClCompile Include="Medicrius.cpp">
       <Filter>Source Files\Game\Bots</Filter>
     </ClCompile>
+    <ClCompile Include="UnoptimizedMinimax.cpp">
+      <Filter>Source Files\Game\Bots</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitBoard.h">
@@ -147,6 +150,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Medicrius.h">
+      <Filter>Header Files\Game\Bots</Filter>
+    </ClInclude>
+    <ClInclude Include="UnoptimizedMinimax.h">
       <Filter>Header Files\Game\Bots</Filter>
     </ClInclude>
   </ItemGroup>

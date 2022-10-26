@@ -10,8 +10,8 @@ public:
 	MoveCastle(Square givenStart, Square givenDest, Square rookStart, Square rookDest);
 	MoveCastle(ChessColor color, CastlingType castlingType);
 
-	Square getRookStart();
-	Square getRookDest();
+	const Square getRookStart();
+	const Square getRookDest();
 
 	void execute(BoardRepresentation& board) override;
 

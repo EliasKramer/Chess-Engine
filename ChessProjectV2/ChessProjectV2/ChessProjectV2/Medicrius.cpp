@@ -15,7 +15,8 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 	auto begin = std::chrono::high_resolution_clock::now();
 
 	//needs to choose the greatest negative numbner if black
-	int colorMult = board.getCurrentTurnColor() == White ? 1 : -1;
+	bool isWhiteToMove = board.getCurrentTurnColor() == White;
+	int colorMult = isWhiteToMove ? 1 : -1;
 
 	int endPointsEvaluated = 0;
 	int nodesSearched = 0;
@@ -39,6 +40,7 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 			getMoveScoreRecursively(
 				boardCopy,
 				depth - 1,
+				!isWhiteToMove,
 				BLACK_WIN_EVAL_VALUE,
 				WHITE_WIN_EVAL_VALUE,
 				nodesSearched,
@@ -66,16 +68,9 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 
 	auto end = std::chrono::high_resolution_clock::now();
 
-	auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-
-	std::cout
-		<< "Medicrius searched " << nodesSearched << " nodes and "
-		<< endPointsEvaluated << " end states are evaluated. "
-		<< "It took " << duration << "ms" << std::endl;
-
-	double nodesPerSecond = ((double)endPointsEvaluated / ((double)duration / 1000));
-
-	std::cout << nodesPerSecond << " nodes/sec" << std::endl;
+	long long duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+	
+	printSearchStatistics(nodesSearched, endPointsEvaluated, depth, *moves[bestMoveIdx].get(), bestMoveScore, duration);
 
 	return bestMoveIdx;
 }
@@ -144,9 +139,33 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 	return score;
 }
 
+void Medicrius::printSearchStatistics(
+	int nodesSearched,
+	int endStatesEvaluated,
+	int depth, 
+	Move& selectedMove, 
+	int score, 
+	long long timeElapsed)
+{
+	double nodesPerSecond = ((double)nodesSearched / ((double)timeElapsed / 1000));
+	double endStatesPerSecond = ((double)endStatesEvaluated / ((double)timeElapsed / 1000));
+
+	std::cout << nodesPerSecond << " nodes/sec" << std::endl;
+
+
+	std::cout
+		<< "Medicrius" << std::endl
+		<< "Searched " << nodesSearched << " nodes in depth " << depth << std::endl
+		<< "Evaluated " << endStatesEvaluated << " end states. " << std::endl
+		<< "Time elapsed: " << timeElapsed << "ms" << std::endl
+		<< "Selected move: " << selectedMove.getString() << std::endl
+		<< "Score: " << score << ". ";
+}
+
 int Medicrius::getMoveScoreRecursively(
 	ChessBoard board,
 	int depth,
+	bool isMaximizingPlayer,
 	int alpha,
 	int beta,
 	int& nodesSearched,
@@ -193,7 +212,7 @@ int Medicrius::getMoveScoreRecursively(
 					GAME_STATE_EVALUATION[WhiteWon] + depth)
 				: 0;
 		}
-
+		int bestEval = isMaximizingPlayer ? INT_MIN : INT_MAX;
 		for (std::unique_ptr<Move>& curr : moves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
@@ -201,33 +220,42 @@ int Medicrius::getMoveScoreRecursively(
 
 			nodesSearched++;
 			int evaluation = 
-				-getMoveScoreRecursively(
+				getMoveScoreRecursively(
 					copyBoard, 
 					depth - 1,
+					!isMaximizingPlayer,
 					-alpha,
 					-beta,
 					nodesSearched,
 					endStatesSearched,
 					maxCaptureDepthReached);
 
-			//this is alpha beta pruning
-			if (evaluation >= beta)
+			if (isMaximizingPlayer)
 			{
-				// Move was too good. opponent will avoid this position
-				return beta;
+				bestEval = std::max(bestEval, evaluation);
+				alpha = std::max(alpha, evaluation);
+				if (beta <= alpha)
+				{
+					break;
+				}
 			}
-			if (alpha > evaluation)
+			else
 			{
-				// Move was too bad. opponent will try to avoid this position
-				alpha = evaluation;
+				bestEval = std::min(bestEval, evaluation);
+				beta = std::min(beta, evaluation);
+				if (beta <= alpha)
+				{
+					break;
+				}
 			}
 		}
-		return alpha;
+		return bestEval;
 	}
 }
 
 int Medicrius::getAllCaputureMoveScoreRecursively(
 	ChessBoard board,
+	bool isMaximizingPlayer,
 	int alpha,
 	int beta,
 	int& nodesSearched,
@@ -256,6 +284,7 @@ int Medicrius::getAllCaputureMoveScoreRecursively(
 		int evaluation =
 			-getAllCaputureMoveScoreRecursively(
 				copyBoard,
+				!isMaximizingPlayer,
 				-alpha,
 				-beta,
 				nodesSearched,

@@ -146,6 +146,7 @@
     <ClCompile Include="MovePromote.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RandomPlayer.cpp" />
+    <ClCompile Include="UnoptimizedMinimax.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitBoard.h" />
@@ -166,6 +167,7 @@
     <ClInclude Include="MovePromote.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RandomPlayer.h" />
+    <ClInclude Include="UnoptimizedMinimax.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

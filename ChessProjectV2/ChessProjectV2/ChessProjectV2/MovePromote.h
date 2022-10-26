@@ -11,6 +11,6 @@ public:
 
 	void execute(BoardRepresentation& board) override;
 
-	std::string getString() override;
+	const std::string getString() override;
 	//no overriding of getBBWithMoveDone, because it acts the same as the normal move
 };

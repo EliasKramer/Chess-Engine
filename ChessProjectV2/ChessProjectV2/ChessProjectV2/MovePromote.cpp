@@ -12,7 +12,7 @@ void MovePromote::execute(BoardRepresentation& board)
 	board.setAtPosition(_promotingPiece, _destination);
 }
 
-std::string MovePromote::getString()
+const std::string MovePromote::getString()
 {
 	std::string moveStr = Move::getString();
 	moveStr += charToLower(PIECETYPE_CHAR[_promotingPiece.getType()]);
