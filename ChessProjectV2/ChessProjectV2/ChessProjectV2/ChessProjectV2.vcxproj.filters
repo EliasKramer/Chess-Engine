@@ -93,7 +93,10 @@
     <ClCompile Include="Medicrius.cpp">
       <Filter>Source Files\Game\Bots</Filter>
     </ClCompile>
-    <ClCompile Include="UnoptimizedMinimax.cpp">
+    <ClCompile Include="UnoptimizedMinimaxBot.cpp">
+      <Filter>Source Files\Game\Bots</Filter>
+    </ClCompile>
+    <ClCompile Include="AlphaBetaPruningBot.cpp">
       <Filter>Source Files\Game\Bots</Filter>
     </ClCompile>
   </ItemGroup>
@@ -152,7 +155,10 @@
     <ClInclude Include="Medicrius.h">
       <Filter>Header Files\Game\Bots</Filter>
     </ClInclude>
-    <ClInclude Include="UnoptimizedMinimax.h">
+    <ClInclude Include="UnoptimizedMinimaxBot.h">
+      <Filter>Header Files\Game\Bots</Filter>
+    </ClInclude>
+    <ClInclude Include="AlphaBetaPruningBot.h">
       <Filter>Header Files\Game\Bots</Filter>
     </ClInclude>
   </ItemGroup>

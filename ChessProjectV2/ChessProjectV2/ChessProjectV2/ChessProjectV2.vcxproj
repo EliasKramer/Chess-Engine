@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AlphaBetaPruningBot.cpp" />
     <ClCompile Include="BitBoard.cpp" />
     <ClCompile Include="BoardRepresentation.cpp" />
     <ClCompile Include="ChessBoard.cpp" />
@@ -146,9 +147,10 @@
     <ClCompile Include="MovePromote.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RandomPlayer.cpp" />
-    <ClCompile Include="UnoptimizedMinimax.cpp" />
+    <ClCompile Include="UnoptimizedMinimaxBot.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AlphaBetaPruningBot.h" />
     <ClInclude Include="BitBoard.h" />
     <ClInclude Include="BoardRepresentation.h" />
     <ClInclude Include="ChessBoard.h" />
@@ -167,7 +169,7 @@
     <ClInclude Include="MovePromote.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RandomPlayer.h" />
-    <ClInclude Include="UnoptimizedMinimax.h" />
+    <ClInclude Include="UnoptimizedMinimaxBot.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

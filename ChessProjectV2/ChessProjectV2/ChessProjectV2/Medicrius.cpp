@@ -50,9 +50,9 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 
 		int currScore = colorMult * moveScore;
 
-		std::cout 
-			<< "Move: " << curr.get()->getString() 
-			<< ", Score: " << currScore 
+		std::cout
+			<< "Move: " << curr.get()->getString()
+			<< ", Score: " << currScore
 			<< ", Max Capture Depth: " << maxCaptureDepthReached
 			<< ", Endstates Evaluated: " << endPointsEvaluated - endstatesBefore
 			<< std::endl;
@@ -69,8 +69,8 @@ int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
 	auto end = std::chrono::high_resolution_clock::now();
 
 	long long duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-	
-	printSearchStatistics(nodesSearched, endPointsEvaluated, depth, *moves[bestMoveIdx].get(), bestMoveScore, duration);
+
+	printSearchStatistics("Minimax with alpha beta pruning", nodesSearched, endPointsEvaluated, depth, *moves[bestMoveIdx].get(), bestMoveScore, duration);
 
 	return bestMoveIdx;
 }
@@ -140,26 +140,26 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 }
 
 void Medicrius::printSearchStatistics(
+	std::string methodUsed,
 	int nodesSearched,
 	int endStatesEvaluated,
-	int depth, 
-	Move& selectedMove, 
-	int score, 
+	int depth,
+	Move selectedMove,
+	int score,
 	long long timeElapsed)
 {
 	double nodesPerSecond = ((double)nodesSearched / ((double)timeElapsed / 1000));
 	double endStatesPerSecond = ((double)endStatesEvaluated / ((double)timeElapsed / 1000));
-
-	std::cout << nodesPerSecond << " nodes/sec" << std::endl;
-
-
 	std::cout
-		<< "Medicrius" << std::endl
+		<< "---------------------------------------" << std::endl
+		<< "Medicrius searched with Method: " << methodUsed << std::endl
 		<< "Searched " << nodesSearched << " nodes in depth " << depth << std::endl
 		<< "Evaluated " << endStatesEvaluated << " end states. " << std::endl
 		<< "Time elapsed: " << timeElapsed << "ms" << std::endl
 		<< "Selected move: " << selectedMove.getString() << std::endl
-		<< "Score: " << score << ". ";
+		<< "Score: " << score << ". " << std::endl
+		<< "---------------------------------------" << std::endl;
+
 }
 
 int Medicrius::getMoveScoreRecursively(
@@ -178,7 +178,7 @@ int Medicrius::getMoveScoreRecursively(
 		nodesSearched++;
 		/*
 		int currCaptureMovesDepth = 0;
-		int allCaptureMovesValue = 
+		int allCaptureMovesValue =
 			-getAllCaputureMoveScoreRecursively(
 				board,
 				-alpha,
@@ -219,9 +219,9 @@ int Medicrius::getMoveScoreRecursively(
 			copyBoard.makeMove(*curr);
 
 			nodesSearched++;
-			int evaluation = 
+			int evaluation =
 				getMoveScoreRecursively(
-					copyBoard, 
+					copyBoard,
 					depth - 1,
 					!isMaximizingPlayer,
 					-alpha,

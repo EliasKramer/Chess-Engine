@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #include "Medicrius.h"
 #include <string>
 #include <chrono>
