@@ -18,6 +18,46 @@ BoardRepresentation::BoardRepresentation()
 	KingPos{E1, E8}
 {}
 
+ChessPiece BoardRepresentation::getPieceAt(Square square) const
+{
+	BitBoard squareBB = BB_SQUARE[square];
+	//can be improved by adding null types
+	ChessColor colFound = White;
+	PieceType typeFound = Rook;
+
+	bool foundColor = false;
+	bool foundType = false;
+	for (int i = 0; i < DIFFERENT_CHESS_COLORS; i++)
+	{
+		ChessColor currCol = (ChessColor)i;
+
+		if (bitboardsOverlap(PiecesOfColor[currCol], squareBB))
+		{
+			colFound = currCol;
+			foundColor = true;
+			break;
+		}
+	}
+	for (int i = 0; i < NUMBER_OF_DIFFERENT_PIECE_TYPES; i++)
+	{
+		PieceType currType = (PieceType)i;
+
+		if (bitboardsOverlap(PiecesOfType[currType], squareBB))
+		{
+			typeFound = currType;
+			foundType = true;
+			break;
+		}
+	}
+
+	if (!foundColor || !foundType)
+	{
+		throw "There was no piece found at the given square";
+	}
+
+	return ChessPiece(colFound, typeFound);
+}
+
 
 void BoardRepresentation::copySquareToPos(Square copyField, Square pasteField)
 {

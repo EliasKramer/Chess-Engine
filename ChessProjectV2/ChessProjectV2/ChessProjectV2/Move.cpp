@@ -5,12 +5,12 @@ Move::Move(Square givenStart, Square givenDest) :
 	_destination(givenDest)
 {}
 
-const Square Move::getStart()
+Square Move::getStart() const
 {
 	return _start;
 }
 
-const Square Move::getDestination()
+Square Move::getDestination() const
 {
 	return _destination;
 }
@@ -26,7 +26,7 @@ BitBoard Move::getBBWithMoveDone()
 	return BB_SQUARE[_start] | BB_SQUARE[_destination];
 }
 
-const std::string Move::getString()
+std::string Move::getString() const
 {
 	return SQUARE_STRING[_start] + SQUARE_STRING[_destination];
 }

@@ -18,13 +18,12 @@ public:
 
 	int evaluateBoard(const ChessBoard& board);
 protected:
-	//TODO: make the selected move const
 	void printSearchStatistics(
 		std::string methodUsed,
 		int nodesSearched,
 		int endStatesEvaluated,
 		int depth,
-		Move selectedMove,
+		const Move& selectedMove,
 		int score,
 		long long timeElapsed,
 		std::string additionalInfo = ""

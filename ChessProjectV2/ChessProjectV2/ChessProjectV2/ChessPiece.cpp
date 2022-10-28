@@ -44,12 +44,12 @@ ChessPiece::ChessPiece(char fenChar)
 	}
 }
 
-PieceType ChessPiece::getType()
+PieceType ChessPiece::getType() const
 {
 	return _type;
 }
 
-ChessColor ChessPiece::getColor()
+ChessColor ChessPiece::getColor() const
 {
 	return _color;
 }

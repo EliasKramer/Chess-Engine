@@ -99,6 +99,9 @@
     <ClCompile Include="AlphaBetaPruningBot.cpp">
       <Filter>Source Files\Game\Bots</Filter>
     </ClCompile>
+    <ClCompile Include="SortedAlphaBetaPruningBot.cpp">
+      <Filter>Source Files\Game\Bots</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BitBoard.h">
@@ -159,6 +162,9 @@
       <Filter>Header Files\Game\Bots</Filter>
     </ClInclude>
     <ClInclude Include="AlphaBetaPruningBot.h">
+      <Filter>Header Files\Game\Bots</Filter>
+    </ClInclude>
+    <ClInclude Include="SortedAlphaBetaPruningBot.h">
       <Filter>Header Files\Game\Bots</Filter>
     </ClInclude>
   </ItemGroup>

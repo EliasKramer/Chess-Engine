@@ -19,15 +19,15 @@ protected:
 public:
 	Move(Square givenStart, Square givenDest);
 	
-	const Square getStart();
-	const Square getDestination();
+	Square getStart() const;
+	Square getDestination() const;
 	
 	virtual void execute(BoardRepresentation& board);
 
 	//xor this map to get a board for checking if king is in check
 	virtual BitBoard getBBWithMoveDone();
 
-	const virtual std::string getString();
+	virtual std::string getString() const;
 };
 bool operator ==(const Move& first, const Move& second);
 bool operator !=(const Move& first, const Move& second);

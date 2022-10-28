@@ -144,7 +144,7 @@ void Medicrius::printSearchStatistics(
 	int nodesSearched,
 	int endStatesEvaluated,
 	int depth,
-	Move selectedMove,
+	const Move& selectedMove,
 	int score,
 	long long timeElapsed,
 	std::string additionalInfo

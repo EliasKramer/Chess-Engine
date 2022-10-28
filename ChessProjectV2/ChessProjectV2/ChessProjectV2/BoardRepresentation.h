@@ -19,6 +19,8 @@ public:
 
 	BoardRepresentation();
 
+	ChessPiece getPieceAt(Square square) const;
+
 	void copySquareToPos(Square copyField, Square pasteField);
 	//be aware, that this does not overwrite the square, it only adds it
 	void setAtPosition(ChessPiece piece, Square position);
