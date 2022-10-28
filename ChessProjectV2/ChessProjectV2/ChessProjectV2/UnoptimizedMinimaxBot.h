@@ -1,8 +1,5 @@
 #pragma once
-//this works for some reason
 #include "Medicrius.h"
-#include <string>
-#include <chrono>
 
 class UnoptimizedMinimaxBot : public Medicrius
 {

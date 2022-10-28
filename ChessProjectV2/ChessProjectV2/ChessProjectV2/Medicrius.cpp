@@ -146,16 +146,21 @@ void Medicrius::printSearchStatistics(
 	int depth,
 	Move selectedMove,
 	int score,
-	long long timeElapsed)
+	long long timeElapsed,
+	std::string additionalInfo
+)
 {
 	double nodesPerSecond = ((double)nodesSearched / ((double)timeElapsed / 1000));
 	double endStatesPerSecond = ((double)endStatesEvaluated / ((double)timeElapsed / 1000));
 	std::cout
 		<< "---------------------------------------" << std::endl
-		<< "Medicrius searched with Method: " << methodUsed << std::endl
+		<< "Medicrius searched with Method: " << methodUsed << std::endl << std::endl
 		<< "Searched " << nodesSearched << " nodes in depth " << depth << std::endl
 		<< "Evaluated " << endStatesEvaluated << " end states. " << std::endl
 		<< "Time elapsed: " << timeElapsed << "ms" << std::endl
+		<< additionalInfo << std::endl
+		<< "Nodes per second: " << nodesPerSecond << std::endl
+		<< "End states per second: " << endStatesPerSecond << std::endl
 		<< "Selected move: " << selectedMove.getString() << std::endl
 		<< "Score: " << score << ". " << std::endl
 		<< "---------------------------------------" << std::endl;

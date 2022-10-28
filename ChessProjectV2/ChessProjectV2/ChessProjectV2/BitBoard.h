@@ -17,7 +17,7 @@ const BitBoard FILE_F = FILE_A << 5;
 const BitBoard FILE_G = FILE_A << 6;
 const BitBoard FILE_H = FILE_A << 7;
 
-const BitBoard RANK_1 = 0xFF;
+constexpr BitBoard RANK_1 = 0xFF;
 const BitBoard RANK_2 = RANK_1 << (8 * 1);
 const BitBoard RANK_3 = RANK_1 << (8 * 2);
 const BitBoard RANK_4 = RANK_1 << (8 * 3);
@@ -42,16 +42,7 @@ enum Square : uint8_t {
 	SQUARE_NONE
 };
 
-const std::array<BitBoard, 64> BB_SQUARE = []()->std::array<BitBoard, 64> {
-	std::array<BitBoard, 64> retVal = {};
-
-	for (int i = A1; i <= H8; i++)
-	{
-		retVal[i] = 1ULL << i;
-	}
-
-	return retVal;
-}();
+extern const std::array<BitBoard, 64> BB_SQUARE;
 
 const int NUMBER_OF_DIRECTIONS = 16;
 

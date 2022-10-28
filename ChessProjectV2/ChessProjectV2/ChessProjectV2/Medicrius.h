@@ -26,7 +26,9 @@ protected:
 		int depth,
 		Move selectedMove,
 		int score,
-		long long timeElapsed);
+		long long timeElapsed,
+		std::string additionalInfo = ""
+	);
 
 private:
 	int getMoveScoreRecursively(

@@ -1,9 +1,19 @@
 #pragma once
-//if i comment the next line nothing will crash
-//#include "BitBoard.h"
-//#include "Medicrius.h"
+#include "Medicrius.h"
 
-/*class AlphaBetaPruningBot
+class AlphaBetaPruningBot : public Medicrius
 {
-
-};*/
+public:
+	int getMove(const ChessBoard& board, const UniqueMoveList& moves) override;
+private:
+	int getMoveScoreRecursively(
+		ChessBoard board,
+		int depth,
+		bool isMaximizingPlayer,
+		int alpha,
+		int beta,
+		int& nodesSearched,
+		int& endStatesSearched,
+		int& prunedBranches
+	);
+};

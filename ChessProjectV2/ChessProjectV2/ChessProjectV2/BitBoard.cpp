@@ -1,5 +1,16 @@
 #include "BitBoard.h"
 
+const std::array<BitBoard, 64> BB_SQUARE = []()->std::array<BitBoard, 64> {
+	std::array<BitBoard, 64> retVal = {};
+
+	for (int i = A1; i <= H8; i++)
+	{
+		retVal[i] = 1ULL << i;
+	}
+
+	return retVal;
+}();
+
 bool destinationIsOnBoard(Square start, Direction direction)
 {
 	//if the invalid board for the direction and
