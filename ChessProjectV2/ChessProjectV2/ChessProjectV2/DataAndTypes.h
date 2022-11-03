@@ -32,3 +32,13 @@ enum GameState : uint8_t {
 	Draw,
 	Ongoing
 };
+
+enum MoveFlag : uint8_t {
+	Normal,
+	Castle,
+	EnPassant,
+	PromoteQueen,
+	PromoteRook,
+	PromoteKnight,
+	PromoteBishop
+};

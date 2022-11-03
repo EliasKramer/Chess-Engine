@@ -164,10 +164,6 @@
     <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="Medicrius.h" />
     <ClInclude Include="Move.h" />
-    <ClInclude Include="MoveCastle.h" />
-    <ClInclude Include="MoveDoublePawn.h" />
-    <ClInclude Include="MoveEnPassant.h" />
-    <ClInclude Include="MovePromote.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="RandomPlayer.h" />
     <ClInclude Include="SortedAlphaBetaPruningBot.h" />

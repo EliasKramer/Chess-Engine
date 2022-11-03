@@ -1,8 +1,9 @@
 #include "Move.h"
 
-Move::Move(Square givenStart, Square givenDest) :
+Move::Move(Square givenStart, Square givenDest, MoveFlag flag) :
 	_start(givenStart),
-	_destination(givenDest)
+	_destination(givenDest),
+	_flag(flag)
 {}
 
 Square Move::getStart() const
@@ -21,11 +22,6 @@ void Move::execute(BoardRepresentation& board)
 	board.delAtPos(_start);
 }
 
-BitBoard Move::getBBWithMoveDone()
-{
-	return BB_SQUARE[_start] | BB_SQUARE[_destination];
-}
-
 std::string Move::getString() const
 {
 	return SQUARE_STRING[_start] + SQUARE_STRING[_destination];
@@ -35,7 +31,8 @@ bool operator==(const Move& first, const Move& second)
 {
 	return
 		first._destination == second._destination &&
-		first._start == second._start;
+		first._start == second._start && 
+		first._flag == second._flag;
 }
 
 bool operator!=(const Move& first, const Move& second)
