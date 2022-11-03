@@ -4,7 +4,8 @@ const int DIFFERENT_CHESS_COLORS = 2;
 
 enum ChessColor : uint8_t {
 	White,
-	Black
+	Black,
+	None
 };
 
 const int NUMBER_OF_DIFFERENT_PIECE_TYPES = 6;
@@ -15,7 +16,8 @@ enum PieceType : uint8_t {
 	Bishop,
 	Rook,
 	Queen,
-	King
+	King,
+	None
 };
 
 const int DIFFERENT_CASTLING_TYPES = 2;

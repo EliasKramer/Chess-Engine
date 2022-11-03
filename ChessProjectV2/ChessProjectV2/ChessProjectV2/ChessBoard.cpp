@@ -17,19 +17,19 @@ bool ChessBoard::positionIsSameColor(Square pos, ChessColor color) const
 	return (_board.PiecesOfColor[color] & BB_SQUARE[pos]) != 0;
 }
 
-void ChessBoard::addIfDestinationIsValid(UniqueMoveList& moves, Square start, Direction dir) const
+void ChessBoard::addIfDestinationIsValid(MoveList& moves, Square start, Direction dir) const
 {
 	if (destinationIsOnBoard(start, dir))
 	{
 		if (!destinationIsSameColor(start, dir, _currentTurnColor))
 		{
-			moves.push_back(std::make_unique<Move>(start, (Square)(start + dir)));
+			moves.push_back(Move(start, (Square)(start + dir)));
 		}
 	}
 }
 
 void ChessBoard::addIfDestinationIsColor(
-	UniqueMoveList& moves,
+	MoveList& moves,
 	Square start,
 	Direction dir,
 	ChessColor color) const
@@ -39,14 +39,14 @@ void ChessBoard::addIfDestinationIsColor(
 		Square newPos = (Square)(start + dir);
 		if (positionIsSameColor(newPos, color))
 		{
-			moves.push_back(std::make_unique<Move>(start, newPos));
+			moves.push_back(Move(start, newPos));
 		}
 	}
 }
 
-UniqueMoveList ChessBoard::getAllPseudoLegalMoves() const
+MoveList ChessBoard::getAllPseudoLegalMoves() const
 {
-	UniqueMoveList moveList;
+	MoveList moveList;
 
 	getPawnMoves(moveList);
 	getKnightMoves(moveList);
@@ -61,7 +61,7 @@ UniqueMoveList ChessBoard::getAllPseudoLegalMoves() const
 	return moveList;
 }
 
-void ChessBoard::getPawnMoves(UniqueMoveList& moves) const
+void ChessBoard::getPawnMoves(MoveList& moves) const
 {
 	Direction forward = getForwardForColor(_currentTurnColor);
 	BitBoard startRank = _currentTurnColor == White ? RANK_2 : RANK_7;
@@ -85,7 +85,7 @@ void ChessBoard::getPawnMoves(UniqueMoveList& moves) const
 				if ((forwardPosBB & _board.AllPieces) == 0ULL)
 				{
 					addPawnMove(moves, currSquare, forwardPos);
-					//moves.push_back(std::make_unique<Move>(currSquare, forwardPos));
+					//moves.push_back(Move(currSquare, forwardPos));
 					//TODO
 					//if move ends on promotion rank it should be a promotion move
 
@@ -95,7 +95,7 @@ void ChessBoard::getPawnMoves(UniqueMoveList& moves) const
 						destinationIsOnBoard(forwardPos, forward) &&
 						(BB_SQUARE[doubleForward] & _board.AllPieces) == 0ULL)
 					{
-						moves.push_back(std::make_unique<Move>(currSquare, doubleForward));
+						moves.push_back(Move(currSquare, doubleForward));
 					}
 				}
 			}
@@ -118,7 +118,7 @@ void ChessBoard::getPawnMoves(UniqueMoveList& moves) const
 	}
 }
 
-void ChessBoard::getKnightMoves(UniqueMoveList& moves) const
+void ChessBoard::getKnightMoves(MoveList& moves) const
 {
 	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
 	{
@@ -138,7 +138,7 @@ void ChessBoard::getKnightMoves(UniqueMoveList& moves) const
 	}
 }
 
-void ChessBoard::getBishopMoves(UniqueMoveList& moves) const
+void ChessBoard::getBishopMoves(MoveList& moves) const
 {
 	const int numberOfDirections = 4;
 	Direction directions[numberOfDirections] =
@@ -156,7 +156,7 @@ void ChessBoard::getBishopMoves(UniqueMoveList& moves) const
 
 }
 
-void ChessBoard::getRookMoves(UniqueMoveList& moves) const
+void ChessBoard::getRookMoves(MoveList& moves) const
 {
 	const int numberOfDirections = 4;
 	Direction directions[numberOfDirections] =
@@ -173,7 +173,7 @@ void ChessBoard::getRookMoves(UniqueMoveList& moves) const
 	}
 }
 
-void ChessBoard::getQueenMoves(UniqueMoveList& moves) const
+void ChessBoard::getQueenMoves(MoveList& moves) const
 {
 	const int numberOfDirections = 8;
 	Direction directions[numberOfDirections] =
@@ -190,7 +190,7 @@ void ChessBoard::getQueenMoves(UniqueMoveList& moves) const
 	}
 }
 
-void ChessBoard::getKingMoves(UniqueMoveList& moves) const
+void ChessBoard::getKingMoves(MoveList& moves) const
 {
 	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
 	{
@@ -210,24 +210,24 @@ void ChessBoard::getKingMoves(UniqueMoveList& moves) const
 	}
 }
 
-void ChessBoard::addPawnMove(UniqueMoveList& moves, Square start, Square dest) const
+void ChessBoard::addPawnMove(MoveList& moves, Square start, Square dest) const
 {
 	BitBoard promotionRank = _currentTurnColor == White ? RANK_8 : RANK_1;
 
 	if ((BB_SQUARE[dest] & promotionRank) != 0ULL)
 	{
-		moves.push_back(std::make_unique<MovePromote>(start, dest, ChessPiece(_currentTurnColor, Queen)));
-		moves.push_back(std::make_unique<MovePromote>(start, dest, ChessPiece(_currentTurnColor, Rook)));
-		moves.push_back(std::make_unique<MovePromote>(start, dest, ChessPiece(_currentTurnColor, Bishop)));
-		moves.push_back(std::make_unique<MovePromote>(start, dest, ChessPiece(_currentTurnColor, Knight)));
+		moves.push_back(Move(start, dest, MoveFlag::PromoteQueen));
+		moves.push_back(Move(start, dest, MoveFlag::PromoteRook));
+		moves.push_back(Move(start, dest, MoveFlag::PromoteBishop));
+		moves.push_back(Move(start, dest, MoveFlag::PromoteKnight));
 	}
 	else
 	{
-		moves.push_back(std::make_unique<Move>(start, dest));
+		moves.push_back(Move(start, dest));
 	}
 }
 
-void ChessBoard::getCastlingMoves(UniqueMoveList& moves) const
+void ChessBoard::getCastlingMoves(MoveList& moves) const
 {
 	//can improve performance -> 
 	//combine all fields in a bitboard and check for the non-sliding pieces
@@ -271,7 +271,7 @@ void ChessBoard::getCastlingMoves(UniqueMoveList& moves) const
 	}
 }
 
-void ChessBoard::getEnPassantMove(UniqueMoveList& moves) const
+void ChessBoard::getEnPassantMove(MoveList& moves) const
 {
 	if (_enPassantSquare == SQUARE_NONE)
 	{
@@ -302,7 +302,7 @@ void ChessBoard::getEnPassantMove(UniqueMoveList& moves) const
 }
 
 void ChessBoard::addRayMoves(
-	UniqueMoveList& moves,
+	MoveList& moves,
 	Square start,
 	Direction directions[],
 	int numberOfDirections) const
@@ -332,12 +332,12 @@ void ChessBoard::addRayMoves(
 				{
 					//if an opponent is on the new field you can take him,
 					//but cannot continue after that (you cannot jump over opponents)
-					moves.push_back(std::make_unique<Move>(start, currentSquare));
+					moves.push_back(Move(start, currentSquare));
 					break;
 				}
 				else {
 					//if there is no piece at the new position you can move there.
-					moves.push_back(std::make_unique<Move>(start, currentSquare));
+					moves.push_back(Move(start, currentSquare));
 				}
 			}
 			else {
@@ -861,9 +861,9 @@ bool ChessBoard::isKingInCheck() const
 	return fieldIsUnderAttack(_board.KingPos[_currentTurnColor]);
 }
 
-UniqueMoveList ChessBoard::getAllLegalMoves() const
+MoveList ChessBoard::getAllLegalMoves() const
 {
-	UniqueMoveList list = getAllPseudoLegalMoves();
+	MoveList list = getAllPseudoLegalMoves();
 	list.erase
 	(
 		std::remove_if
@@ -881,9 +881,9 @@ UniqueMoveList ChessBoard::getAllLegalMoves() const
 	return list;
 }
 
-UniqueMoveList ChessBoard::getAllLegalCaptureMoves() const
+MoveList ChessBoard::getAllLegalCaptureMoves() const
 {
-	UniqueMoveList list = getAllLegalMoves();
+	MoveList list = getAllLegalMoves();
 
 	list.erase
 	(

@@ -3,8 +3,49 @@
 Move::Move(Square givenStart, Square givenDest, MoveFlag flag) :
 	_start(givenStart),
 	_destination(givenDest),
-	_flag(flag)
-{}
+	_flag(flag),
+	_colorOfPiece(ChessColor::None)
+{
+	if ((flag == Normal ||
+		flag == EnPassant) == false)
+	{
+		throw std::invalid_argument("Invalid flag for move (False constructor called)");
+	}
+}
+
+Move::Move(
+	Square givenStart,
+	Square givenDest,
+	ChessColor color,
+	MoveFlag flag) :
+	_start(givenStart),
+	_destination(givenDest),
+	_flag(flag),
+	_colorOfPiece(color)
+{
+	if ((flag == MoveFlag::PromoteQueen ||
+		flag == MoveFlag::PromoteRook ||
+		flag == MoveFlag::PromoteBishop ||
+		flag == MoveFlag::PromoteKnight) == false)
+	{
+		throw std::invalid_argument("Invalid flag for move (False constructor called)");
+	}
+}
+
+Move::Move(ChessColor col, CastlingType castleType) :
+	_start(SQUARE_NONE),
+	_destination(SQUARE_NONE),
+	_flag(Castle),
+	_colorOfPiece(col)
+{
+	if (_flag != Castle)
+	{
+		throw std::invalid_argument("Invalid flag for move (False constructor called)");
+	}
+
+	_start = START_SQUARE_KING_CASTLING[col];
+	_destination = DESTINATION_SQUARE_KING_CASTLING[col][castleType];
+}
 
 Square Move::getStart() const
 {
@@ -18,6 +59,7 @@ Square Move::getDestination() const
 
 void Move::execute(BoardRepresentation& board)
 {
+	//TODO Implement getting castling squares
 	board.copySquareToPos(_start, _destination);
 	board.delAtPos(_start);
 }

@@ -5,9 +5,6 @@
 #include "ChessPiece.h"
 #include "HelpMethods.h"
 #include "Move.h"
-#include "MoveEnPassant.h"
-#include "MoveCastle.h"
-#include "MovePromote.h"
 #include "Constants.h"
 #include "BoardRepresentation.h"
 
@@ -47,11 +44,11 @@ protected:
 	bool positionIsSameColor(Square pos, ChessColor color) const;
 	
 	void addIfDestinationIsValid(
-		UniqueMoveList& moves,
+		MoveList& moves,
 		Square start,
 		Direction dir) const;
 	void addIfDestinationIsColor(
-		UniqueMoveList& moves,
+		MoveList& moves,
 		Square start,
 		Direction dir,
 		ChessColor color) const;
@@ -59,22 +56,22 @@ protected:
 	//Pseudo legal moves are moves that follow 
 	//the move rules for the types.
 	//They do not check if the king is in check
-	UniqueMoveList getAllPseudoLegalMoves() const;
+	MoveList getAllPseudoLegalMoves() const;
 
-	void getPawnMoves(UniqueMoveList& moves) const;
-	void getKnightMoves(UniqueMoveList& moves) const;
-	void getBishopMoves(UniqueMoveList& moves) const;
-	void getRookMoves(UniqueMoveList& moves) const;
-	void getQueenMoves(UniqueMoveList& moves) const;
-	void getKingMoves(UniqueMoveList& moves) const;
+	void getPawnMoves(MoveList& moves) const;
+	void getKnightMoves(MoveList& moves) const;
+	void getBishopMoves(MoveList& moves) const;
+	void getRookMoves(MoveList& moves) const;
+	void getQueenMoves(MoveList& moves) const;
+	void getKingMoves(MoveList& moves) const;
 
 	void addPawnMove(
-		UniqueMoveList& moves, Square start, Square dest) const;
-	void getCastlingMoves(UniqueMoveList& moves) const;
-	void getEnPassantMove(UniqueMoveList& moves) const;
+		MoveList& moves, Square start, Square dest) const;
+	void getCastlingMoves(MoveList& moves) const;
+	void getEnPassantMove(MoveList& moves) const;
 	
 	void addRayMoves(
-		UniqueMoveList& moves,
+		MoveList& moves,
 		Square start,
 		Direction directions[],
 		int numberOfDirections) const;
@@ -113,8 +110,8 @@ public:
 	bool isKingInCheck() const;
 
 	//returns all moves of the color, whos turn it is
-	UniqueMoveList getAllLegalMoves() const;
-	UniqueMoveList getAllLegalCaptureMoves() const;
+	MoveList getAllLegalMoves() const;
+	MoveList getAllLegalCaptureMoves() const;
 
 	//execute move
 	void makeMove(Move& move);
