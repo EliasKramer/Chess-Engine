@@ -9,5 +9,5 @@ public:
 	HumanPlayer(std::string name);
 	
 
-	int getMove(const ChessBoard& board, const UniqueMoveList& moves) override;
+	int getMove(const ChessBoard& board, const MoveList& moves) override;
 };

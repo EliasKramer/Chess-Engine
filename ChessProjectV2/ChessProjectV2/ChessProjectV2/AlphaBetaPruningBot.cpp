@@ -1,6 +1,6 @@
 #include "AlphaBetaPruningBot.h"
 
-int AlphaBetaPruningBot::getMove(const ChessBoard& board, const UniqueMoveList& moves)
+int AlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& moves)
 {
 	auto begin = std::chrono::high_resolution_clock::now();
 
@@ -92,7 +92,7 @@ int AlphaBetaPruningBot::getMoveScoreRecursively(
 	}
 	else
 	{
-		UniqueMoveList moves = board.getAllLegalMoves();
+		MoveList moves = board.getAllLegalMoves();
 
 		//no more moves
 		if (moves.size() == 0)

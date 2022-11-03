@@ -29,7 +29,7 @@ bool ChessBoardTest::isLegal(const std::unique_ptr<Move>& move)
 	return ChessBoard::moveIsLegal(move);
 }
 
-UniqueMoveList ChessBoardTest::getPseudoLegalMoves()
+MoveList ChessBoardTest::getPseudoLegalMoves()
 {
 	return ChessBoard::getAllPseudoLegalMoves();
 }

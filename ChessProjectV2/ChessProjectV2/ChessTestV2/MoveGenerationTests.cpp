@@ -17,7 +17,7 @@ namespace MoveGenerationTest
 			//can move everywhere
 			ChessBoardTest board("8/8/8/8/4K3/8/8/8 w -- - 0 1");
 
-			UniqueMoveList moves = board.getPseudoLegalMoves();
+			MoveList moves = board.getPseudoLegalMoves();
 			Assert::AreEqual(8, (int)moves.size());
 
 			Assert::IsTrue(moveListContains(Move(E4, D5), moves));
@@ -41,7 +41,7 @@ namespace MoveGenerationTest
 		{
 			ChessBoardTest board("8/8/8/8/4N3/8/8/8 w -- - 0 1");
 
-			UniqueMoveList moves = board.getPseudoLegalMoves();
+			MoveList moves = board.getPseudoLegalMoves();
 			Assert::AreEqual(8, (int)moves.size());
 
 			Assert::IsTrue(moveListContains(Move(E4, F6), moves));
@@ -81,7 +81,7 @@ namespace MoveGenerationTest
 			//white to move
 			ChessBoardTest board("8/4p3/6p1/2p5/8/7P/4P3/8 w -- - 0 1");
 
-			UniqueMoveList moves = board.getPseudoLegalMoves();
+			MoveList moves = board.getPseudoLegalMoves();
 			Assert::AreEqual(3, (int)moves.size());
 			Assert::IsTrue(moveListContains(Move(E2, E3), moves));
 			Assert::IsTrue(moveListContains(Move(E2, E4), moves));
@@ -133,7 +133,7 @@ namespace MoveGenerationTest
 			//black rook on a8
 			//black rook on h8
 			ChessBoardTest board("r6r/8/8/8/8/8/8/R6R w - - 0 1");
-			UniqueMoveList moves = board.getPseudoLegalMoves();
+			MoveList moves = board.getPseudoLegalMoves();
 			Assert::AreEqual(26, (int)moves.size());
 
 			//first rook
@@ -226,7 +226,7 @@ namespace MoveGenerationTest
 		TEST_METHOD(generatingBishopMoves)
 		{
 			ChessBoardTest board("8/8/1p6/8/3B4/8/8/B7 w - - 0 1");
-			UniqueMoveList moves = board.getPseudoLegalMoves();
+			MoveList moves = board.getPseudoLegalMoves();
 			Assert::AreEqual(13, (int)moves.size());
 
 			//first bishop
@@ -253,7 +253,7 @@ namespace MoveGenerationTest
 		{
 			ChessBoardTest board("8/8/6p1/6P1/8/1n2Q3/8/8 w - - 0 1");
 
-			UniqueMoveList moves = board.getPseudoLegalMoves();
+			MoveList moves = board.getPseudoLegalMoves();
 			Assert::AreEqual(22, (int)moves.size());
 
 			Assert::IsTrue(moveListContains(Move(E3, E4), moves));
@@ -289,7 +289,7 @@ namespace MoveGenerationTest
 		TEST_METHOD(generatingEnPassantMoves)
 		{
 			ChessBoardTest board("7k/8/8/4Pp2/8/8/8/K7 w - f6 0 1");
-			UniqueMoveList moves = board.getPseudoLegalMoves();
+			MoveList moves = board.getPseudoLegalMoves();
 			Assert::IsTrue(moveListContains(Move(E5, F6), moves));
 
 			board = ChessBoardTest("7k/8/8/4Pp2/8/8/8/K7 w - - 0 1");
@@ -309,7 +309,7 @@ namespace MoveGenerationTest
 			//nothing blocked. every caslte move possible
 			//white
 			ChessBoardTest board("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1");
-			UniqueMoveList moves = board.getPseudoLegalMoves();
+			MoveList moves = board.getPseudoLegalMoves();
 
 			Assert::IsTrue(moveListContains(Move(E1, G1), moves));
 			Assert::IsTrue(moveListContains(Move(E1, C1), moves));
@@ -390,7 +390,7 @@ namespace MoveGenerationTest
 		TEST_METHOD(generatePseudoLegalMovesAtDepthOne)
 		{
 			ChessBoardTest board("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
-			UniqueMoveList moves = board.getPseudoLegalMoves();
+			MoveList moves = board.getPseudoLegalMoves();
 			Assert::AreEqual(48, (int)moves.size());
 
 			board = ChessBoardTest("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1");
@@ -400,7 +400,7 @@ namespace MoveGenerationTest
 		TEST_METHOD(generateLegalMovesAtDepthOne)
 		{
 			ChessBoardTest board("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
-			UniqueMoveList moves = board.getAllLegalMoves();
+			MoveList moves = board.getAllLegalMoves();
 			Assert::AreEqual(48, (int)moves.size());
 
 			board = ChessBoardTest("8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - 0 1");
@@ -422,7 +422,7 @@ namespace MoveGenerationTest
 		TEST_METHOD(testCoverage)
 		{
 			ChessBoardTest board(STARTING_FEN);
-			UniqueMoveList moves = board.getAllLegalMoves();
+			MoveList moves = board.getAllLegalMoves();
 			Assert::AreEqual(20, (int)moves.size());
 
 			//test to see if every attack gets considered when calculating the legal moves
@@ -434,8 +434,8 @@ namespace MoveGenerationTest
 		{
 			//starting fen
 			ChessBoardTest board(STARTING_FEN);
-			UniqueMoveList moves = board.getAllLegalMoves();
-			UniqueMoveList captureMoves = board.getAllLegalCaptureMoves();
+			MoveList moves = board.getAllLegalMoves();
+			MoveList captureMoves = board.getAllLegalCaptureMoves();
 
 			Assert::AreEqual(20, (int)moves.size());
 			Assert::AreEqual(0, (int)captureMoves.size());

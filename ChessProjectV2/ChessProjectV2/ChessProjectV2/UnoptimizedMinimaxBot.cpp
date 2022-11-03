@@ -1,6 +1,6 @@
 #include "UnoptimizedMinimaxBot.h"
 
-int UnoptimizedMinimaxBot::getMove(const ChessBoard& board, const UniqueMoveList& moves)
+int UnoptimizedMinimaxBot::getMove(const ChessBoard& board, const MoveList& moves)
 {
 	//multithreading would also be useful here
 
@@ -82,7 +82,7 @@ int UnoptimizedMinimaxBot::minimax(ChessBoard board, int depth, int& nodesSearch
 	}
 	else
 	{
-		UniqueMoveList moves = board.getAllLegalMoves();
+		MoveList moves = board.getAllLegalMoves();
 
 		//no more moves
 		if (moves.size() == 0)

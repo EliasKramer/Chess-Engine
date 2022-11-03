@@ -58,9 +58,9 @@ namespace PerformanceTest
 			//uncomment for depth 4, but it will take around 18s longer
 			//Assert::AreEqual(4085603, (int)numberOfMovesAfterDepth(board, 4));
 
-			UniqueMoveList movesAtDepth1 = getAllMovesAtDepth(board, 1);
-			UniqueMoveList movesAtDepth2 = getAllMovesAtDepth(board, 2);
-			UniqueMoveList movesAtDepth3 = getAllMovesAtDepth(board, 3);
+			MoveList movesAtDepth1 = getAllMovesAtDepth(board, 1);
+			MoveList movesAtDepth2 = getAllMovesAtDepth(board, 2);
+			MoveList movesAtDepth3 = getAllMovesAtDepth(board, 3);
 			//check en passant moves
 			Assert::AreEqual(1, getNumberOfEnPassantMoves(movesAtDepth2));
 			Assert::AreEqual(45, getNumberOfEnPassantMoves(movesAtDepth3));
@@ -98,10 +98,10 @@ namespace PerformanceTest
 			Assert::AreEqual(422333, (int)numberOfMovesAfterDepth(board, 4));
 			//Assert::AreEqual(15833292, (int)numberOfMovesAfterDepth(board, 5));
 
-			UniqueMoveList movesAtDepth1 = getAllMovesAtDepth(board, 1);
-			UniqueMoveList movesAtDepth2 = getAllMovesAtDepth(board, 2);
-			UniqueMoveList movesAtDepth3 = getAllMovesAtDepth(board, 3);
-			UniqueMoveList movesAtDepth4 = getAllMovesAtDepth(board, 4);
+			MoveList movesAtDepth1 = getAllMovesAtDepth(board, 1);
+			MoveList movesAtDepth2 = getAllMovesAtDepth(board, 2);
+			MoveList movesAtDepth3 = getAllMovesAtDepth(board, 3);
+			MoveList movesAtDepth4 = getAllMovesAtDepth(board, 4);
 			// 
 			//check en passant moves
 			Assert::AreEqual(0, getNumberOfEnPassantMoves(movesAtDepth1));

@@ -1,6 +1,6 @@
 #include "TestMethods.h"
 
-bool moveListContains(Move m, const UniqueMoveList& moves)
+bool moveListContains(Move m, const MoveList& moves)
 {
 	for (const std::unique_ptr<Move>& currMoveToCheck : moves)
 	{
@@ -14,7 +14,7 @@ bool moveListContains(Move m, const UniqueMoveList& moves)
 
 int numberOfMovesAfterDepth(const ChessBoard& board, int depth)
 {
-	UniqueMoveList listOfMoves = board.getAllLegalMoves();
+	MoveList listOfMoves = board.getAllLegalMoves();
 	if (depth == 1)
 	{
 		return listOfMoves.size();
@@ -37,16 +37,16 @@ int numberOfMovesAfterDepth(const ChessBoard& board, int depth)
 	}
 }
 
-UniqueMoveList getAllMovesAtDepth(const ChessBoard& board, int depth)
+MoveList getAllMovesAtDepth(const ChessBoard& board, int depth)
 {
-	UniqueMoveList listOfMoves = board.getAllLegalMoves();
+	MoveList listOfMoves = board.getAllLegalMoves();
 	if (depth == 1)
 	{
 		return listOfMoves;
 	}
 	else
 	{
-		UniqueMoveList moves;
+		MoveList moves;
 		for (const std::unique_ptr<Move>& curr : listOfMoves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
@@ -62,7 +62,7 @@ UniqueMoveList getAllMovesAtDepth(const ChessBoard& board, int depth)
 	}
 }
 
-int getNumberOfEnPassantMoves(const UniqueMoveList& moves)
+int getNumberOfEnPassantMoves(const MoveList& moves)
 {
 	int retVal = 0;
 	for (const std::unique_ptr<Move>& curr : moves)
@@ -75,7 +75,7 @@ int getNumberOfEnPassantMoves(const UniqueMoveList& moves)
 	return retVal;
 }
 
-int getNumberOfPromotionMoves(const UniqueMoveList& moves)
+int getNumberOfPromotionMoves(const MoveList& moves)
 {
 	int retVal = 0;
 	for (const std::unique_ptr<Move>& curr : moves)
@@ -88,7 +88,7 @@ int getNumberOfPromotionMoves(const UniqueMoveList& moves)
 	return retVal;
 }
 
-int getNumberOfCastlingMoves(const UniqueMoveList& moves)
+int getNumberOfCastlingMoves(const MoveList& moves)
 {
 	int retVal = 0;
 	for (const std::unique_ptr<Move>& curr : moves)
@@ -104,7 +104,7 @@ int getNumberOfCastlingMoves(const UniqueMoveList& moves)
 std::vector<std::string> getAllMoveStringsAtDepth(
 	const ChessBoard& board, std::string currStr, int depth)
 {
-	UniqueMoveList listOfMoves = board.getAllLegalMoves();
+	MoveList listOfMoves = board.getAllLegalMoves();
 	if (depth == 1)
 	{
 		std::vector<std::string> listOfStringMoves = {};
@@ -148,7 +148,7 @@ std::vector<std::pair<std::string, int>> getNumberOfMovesAfterFirstMove(const Ch
 {
 	std::vector<std::pair<std::string, int>> result;
 
-	UniqueMoveList listOfMoves = board.getAllLegalMoves();
+	MoveList listOfMoves = board.getAllLegalMoves();
 
 	for (const std::unique_ptr<Move>& curr : listOfMoves)
 	{

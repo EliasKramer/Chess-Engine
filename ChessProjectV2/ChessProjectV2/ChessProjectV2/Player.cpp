@@ -9,7 +9,7 @@ std::string Player::getName()
     return _name;
 }
 
-int Player::getMove(const ChessBoard& board, const UniqueMoveList& moves)
+int Player::getMove(const ChessBoard& board, const MoveList& moves)
 {
     throw "Cannot call Player Base method";
 }

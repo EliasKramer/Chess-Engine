@@ -8,7 +8,7 @@ Medicrius::Medicrius(std::string name)
 	:Player(name)
 {}
 
-int Medicrius::getMove(const ChessBoard& board, const UniqueMoveList& moves)
+int Medicrius::getMove(const ChessBoard& board, const MoveList& moves)
 {
 	//multithreading would also be useful here
 
@@ -199,7 +199,7 @@ int Medicrius::getMoveScoreRecursively(
 	}
 	else
 	{
-		UniqueMoveList moves = board.getAllLegalMoves();
+		MoveList moves = board.getAllLegalMoves();
 
 		//no more moves
 		if (moves.size() == 0)
@@ -268,7 +268,7 @@ int Medicrius::getAllCaputureMoveScoreRecursively(
 	int& maxDepthReached,
 	int currDepth)
 {
-	UniqueMoveList possibleCaptures = board.getAllLegalCaptureMoves();
+	MoveList possibleCaptures = board.getAllLegalCaptureMoves();
 
 	if (possibleCaptures.size() == 0)
 	{

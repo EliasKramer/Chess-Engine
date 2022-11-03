@@ -1,6 +1,6 @@
 #include "SortedAlphaBetaPruningBot.h"
 
-int SortedAlphaBetaPruningBot::getMove(const ChessBoard& board, const UniqueMoveList& moves)
+int SortedAlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& moves)
 {
 	auto begin = std::chrono::high_resolution_clock::now();
 
@@ -107,7 +107,7 @@ int SortedAlphaBetaPruningBot::getValueOfMoveForSorting(const Move& givenMove, c
 	return PIECETYPE_VALUE[destinationPiece] - PIECETYPE_VALUE[startPiece];
 }
 
-void SortedAlphaBetaPruningBot::partialInsertionSort(UniqueMoveList& list, const ChessBoard& board)
+void SortedAlphaBetaPruningBot::partialInsertionSort(MoveList& list, const ChessBoard& board)
 {
 	std::vector<int> evaluatenValues = std::vector<int>();
 	for (const std::unique_ptr<Move>& move : list)
@@ -143,7 +143,7 @@ int SortedAlphaBetaPruningBot::getMoveScoreRecursively(ChessBoard board, int dep
 	}
 	else
 	{
-		UniqueMoveList moves = board.getAllLegalMoves();
+		MoveList moves = board.getAllLegalMoves();
 
 		//no more moves
 		if (moves.size() == 0)

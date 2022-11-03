@@ -1,7 +1,6 @@
 #pragma once
 #include "Player.h"
 #include "Move.h"
-#include "MoveEnPassant.h"
 #include <string>
 #include <chrono>
 
@@ -14,7 +13,7 @@ public:
 	Medicrius();
 	Medicrius(std::string name);
 
-	int getMove(const ChessBoard& board, const UniqueMoveList& moves) override;
+	int getMove(const ChessBoard& board, const MoveList& moves) override;
 
 	int evaluateBoard(const ChessBoard& board);
 protected:

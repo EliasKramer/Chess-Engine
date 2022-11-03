@@ -14,5 +14,5 @@ public:
 	std::string getName();
 
 	//returns the index of the move in the list
-	virtual int getMove(const ChessBoard& board, const UniqueMoveList& moves);
+	virtual int getMove(const ChessBoard& board, const MoveList& moves);
 };

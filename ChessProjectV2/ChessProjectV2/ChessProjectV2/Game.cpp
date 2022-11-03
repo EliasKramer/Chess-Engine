@@ -36,7 +36,7 @@ void Game::start()
 		std::cout << _board.getString();
 		
 		//get the move from the current player
-		UniqueMoveList legalMoves = _board.getAllLegalMoves();
+		MoveList legalMoves = _board.getAllLegalMoves();
 		//to make sure the move the player wants to play is legal, 
 		//the return value is an index of the list of all legal moves
 		int choosenMoveIdx = currPlayer.getMove(_board, legalMoves);
