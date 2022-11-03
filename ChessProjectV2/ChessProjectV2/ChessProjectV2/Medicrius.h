@@ -14,7 +14,7 @@ public:
 	Medicrius();
 	Medicrius(std::string name);
 
-	int getMove(const ChessBoard& board, const UniqueMoveList& moves) override;
+	//int getMove(const ChessBoard& board, const UniqueMoveList& moves) override;
 
 	int evaluateBoard(const ChessBoard& board);
 protected:
@@ -27,27 +27,5 @@ protected:
 		int score,
 		long long timeElapsed,
 		std::string additionalInfo = ""
-	);
-
-private:
-	int getMoveScoreRecursively(
-		ChessBoard board,
-		int depth,
-		bool isMaximizingPlayer,
-		int alpha,
-		int beta,
-		int& nodesSearched,
-		int& endStatesSearched,
-		int& maxCaptureDepthReached
-	);
-	int getAllCaputureMoveScoreRecursively(
-		ChessBoard board,
-		bool isMaximizingPlayer,
-		int alpha,
-		int beta,
-		int& nodesSearched,
-		int& endStatesSearched,
-		int& maxDepthReached,
-		int currDepth = 0
 	);
 };

@@ -74,12 +74,6 @@ int SortedAlphaBetaPruningBot::getMove(const ChessBoard& board, const UniqueMove
 	return bestMoveIdx;
 }
 
-bool SortedAlphaBetaPruningBot::isCaptureMove(const Move& move, const ChessBoard& board) const
-{
-	//this doesnt include en passant captures
-	return bitboardsOverlap(board.getBoardRepresentation().AllPieces, BB_SQUARE[move.getDestination()]);
-}
-
 int SortedAlphaBetaPruningBot::getValueOfMoveForSorting(const Move& givenMove, const ChessBoard& board)
 {
 	//if there is no piece at start the move is not valid
@@ -107,30 +101,9 @@ int SortedAlphaBetaPruningBot::getValueOfMoveForSorting(const Move& givenMove, c
 	return PIECETYPE_VALUE[destinationPiece] - PIECETYPE_VALUE[startPiece];
 }
 
-void SortedAlphaBetaPruningBot::partialInsertionSort(UniqueMoveList& list, const ChessBoard& board)
+bool SortedAlphaBetaPruningBot::compareMoves(const Move m1, const Move m2)
 {
-	std::vector<int> evaluatenValues = std::vector<int>();
-	for (const std::unique_ptr<Move>& move : list)
-	{
-		evaluatenValues.insert(evaluatenValues.begin(), getValueOfMoveForSorting(*move.get(), board));
-	}
-
-	for (int i = 1; i < list.size(); i++)
-	{
-		if (!isCaptureMove(*list[i].get(), board))
-		{
-			continue;
-		}
-		//is no capture move - cannot be given a value
-
-		int j = i;
-		while (j > 0 && evaluatenValues[j] > evaluatenValues[j-1])
-		{
-			std::swap(list[j], list[j - 1]);
-			std::swap(evaluatenValues[j], evaluatenValues[j - 1]);
-			j--;
-		}
-	}
+	return false;
 }
 
 int SortedAlphaBetaPruningBot::getMoveScoreRecursively(ChessBoard board, int depth, bool isMaximizingPlayer, int alpha, int beta, int& nodesSearched, int& endStatesSearched, int& prunedBranches)
@@ -162,8 +135,9 @@ int SortedAlphaBetaPruningBot::getMoveScoreRecursively(ChessBoard board, int dep
 				: 0;
 		}
 		int bestEval = isMaximizingPlayer ? INT_MIN : INT_MAX;
-
-		partialInsertionSort(moves, board);
+		
+		std::vector<int> testList = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+		std::sort(testList.begin(), testList.end(), compareMoves);
 
 		for (std::unique_ptr<Move>& curr : moves)
 		{
