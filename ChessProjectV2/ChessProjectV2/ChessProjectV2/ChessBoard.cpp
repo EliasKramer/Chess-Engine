@@ -216,10 +216,10 @@ void ChessBoard::addPawnMove(MoveList& moves, Square start, Square dest) const
 
 	if ((BB_SQUARE[dest] & promotionRank) != 0ULL)
 	{
-		moves.push_back(Move(start, dest, MoveFlag::PromoteQueen));
-		moves.push_back(Move(start, dest, MoveFlag::PromoteRook));
-		moves.push_back(Move(start, dest, MoveFlag::PromoteBishop));
-		moves.push_back(Move(start, dest, MoveFlag::PromoteKnight));
+		moves.push_back(Move(start, dest, _currentTurnColor, MoveFlag::PromoteQueen));
+		moves.push_back(Move(start, dest, _currentTurnColor, MoveFlag::PromoteRook));
+		moves.push_back(Move(start, dest, _currentTurnColor, MoveFlag::PromoteBishop));
+		moves.push_back(Move(start, dest, _currentTurnColor, MoveFlag::PromoteKnight));
 	}
 	else
 	{
@@ -264,8 +264,7 @@ void ChessBoard::getCastlingMoves(MoveList& moves) const
 
 			if (castlingAllowed)
 			{
-				moves.push_back(
-					std::make_unique<MoveCastle>(_currentTurnColor, currCastlingType));
+				moves.push_back(Move(_currentTurnColor, currCastlingType));
 			}
 		}
 	}
@@ -293,9 +292,7 @@ void ChessBoard::getEnPassantMove(MoveList& moves) const
 				_board.PiecesOfType[Pawn]) != 0ULL)
 			{
 				Square pawnPosToDelete = (Square)(_enPassantSquare + backwards);
-				moves.push_back(std::make_unique<MoveEnPassant>(
-					ownPawnPos, _enPassantSquare,
-					pawnPosToDelete));
+				moves.push_back(Move(ownPawnPos, _enPassantSquare));
 			}
 		}
 	}
@@ -476,46 +473,48 @@ bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB) co
 	return false;
 }
 
-bool ChessBoard::moveIsLegal(const std::unique_ptr<Move>& move) const
+bool ChessBoard::moveIsLegal(const Move move) const
 {
 	//if move is castle -> return true
-	if (dynamic_cast<MoveCastle*>(move.get()))
+	if (move.getFlag() == Castle)
 	{
 		//because a castling move has been checked to be legal before
 		return true;
 	}
 
-	Square start = move.get()->getStart();
-	Square dest = move.get()->getDestination();
+	Square start = move.getStart();
+	Square dest = move.getDestination();
 
-	BitBoard BBforNextMove = move.get()->getBBWithMoveDone();
+	//TODO
+	return true;
+	/*BitBoard BBforNextMove = move.getBBWithMoveDone();
 
 	Square kingPos = _board.KingPos[_currentTurnColor];
 
 	return start == kingPos ?
 		!fieldIsUnderAttack(dest, BBforNextMove) :
-		!fieldIsUnderAttack(kingPos, BBforNextMove);
+		!fieldIsUnderAttack(kingPos, BBforNextMove);*/
 }
 
-bool ChessBoard::isCaptureMove(const std::unique_ptr<Move>& move) const
+bool ChessBoard::isCaptureMove(const Move move) const
 {
-	if (dynamic_cast<MoveEnPassant*>(move.get()))
+	MoveFlag flag = move.getFlag();
+	if (flag == Castle)
+	{
+		return false;
+	}
+	else if(flag == EnPassant)
 	{
 		return true;
 	}
 
-	if (dynamic_cast<MoveCastle*>(move.get()))
-	{
-		return false;
-	}
-
 	BitBoard oppositeColorBB = _board.PiecesOfColor[getOppositeColor(_currentTurnColor)];
-	BitBoard potentialCaptureField = BB_SQUARE[move.get()->getDestination()];
+	BitBoard potentialCaptureField = BB_SQUARE[move.getDestination()];
 
 	return bitboardsOverlap(oppositeColorBB, potentialCaptureField);
 }
 
-void ChessBoard::udpateCastlingRightsAfterMove(Move& m)
+void ChessBoard::udpateCastlingRightsAfterMove(const Move& m)
 {
 	BitBoard start = BB_SQUARE[m.getStart()];
 	BitBoard dest = BB_SQUARE[m.getDestination()];
@@ -546,7 +545,7 @@ void ChessBoard::udpateCastlingRightsAfterMove(Move& m)
 	}
 }
 
-void ChessBoard::updateEnPassantRightsAfterMove(Move& m)
+void ChessBoard::updateEnPassantRightsAfterMove(const Move& m)
 {
 	_enPassantSquare = SQUARE_NONE;
 	Square start = m.getStart();
@@ -564,7 +563,7 @@ void ChessBoard::updateEnPassantRightsAfterMove(Move& m)
 	}
 }
 
-void ChessBoard::update50MoveRule(Move& m)
+void ChessBoard::update50MoveRule(const Move& m)
 {
 	BitBoard startBB = BB_SQUARE[m.getStart()];
 	BitBoard destBB = BB_SQUARE[m.getDestination()];
@@ -870,7 +869,7 @@ MoveList ChessBoard::getAllLegalMoves() const
 		(
 			list.begin(),
 			list.end(),
-			[this](const std::unique_ptr<Move>& move)
+			[this](const Move move)
 			{
 				return !moveIsLegal(move);
 			}
@@ -891,7 +890,7 @@ MoveList ChessBoard::getAllLegalCaptureMoves() const
 		(
 			list.begin(),
 			list.end(),
-			[this](const std::unique_ptr<Move>& move)
+			[this](const Move move)
 			{
 				return !isCaptureMove(move);
 			}
@@ -902,7 +901,7 @@ MoveList ChessBoard::getAllLegalCaptureMoves() const
 	return list;
 }
 
-void ChessBoard::makeMove(Move& move)
+void ChessBoard::makeMove(const Move& move)
 {
 	Square moveStart = move.getStart();
 	Square moveDest = move.getDestination();

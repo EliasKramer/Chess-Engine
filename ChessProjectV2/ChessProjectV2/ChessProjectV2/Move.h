@@ -31,8 +31,9 @@ public:
 
 	Square getStart() const;
 	Square getDestination() const;
+	MoveFlag getFlag() const;
 	
-	void execute(BoardRepresentation& board);
+	void execute(BoardRepresentation& board) const;
 
 	virtual std::string getString() const;
 };

@@ -2,9 +2,9 @@
 
 bool moveListContains(Move m, const MoveList& moves)
 {
-	for (const std::unique_ptr<Move>& currMoveToCheck : moves)
+	for (const Move& currMoveToCheck : moves)
 	{
-		if (*currMoveToCheck == m)
+		if (currMoveToCheck == m)
 		{
 			return true;
 		}
@@ -26,10 +26,10 @@ int numberOfMovesAfterDepth(const ChessBoard& board, int depth)
 	else
 	{
 		int allMovesCount = 0;
-		for (const std::unique_ptr<Move>& curr : listOfMoves)
+		for (const Move& curr : listOfMoves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(*curr.get());
+			copyBoard.makeMove(curr);
 
 			allMovesCount += numberOfMovesAfterDepth(copyBoard, depth - 1);
 		}
@@ -47,12 +47,12 @@ MoveList getAllMovesAtDepth(const ChessBoard& board, int depth)
 	else
 	{
 		MoveList moves;
-		for (const std::unique_ptr<Move>& curr : listOfMoves)
+		for (const Move& curr : listOfMoves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(*curr.get());
+			copyBoard.makeMove(curr);
 
-			for (std::unique_ptr<Move>& currMoveToAdd :
+			for (Move& currMoveToAdd :
 				getAllMovesAtDepth(copyBoard, depth - 1))
 			{
 				moves.push_back(std::move(currMoveToAdd));
@@ -65,9 +65,9 @@ MoveList getAllMovesAtDepth(const ChessBoard& board, int depth)
 int getNumberOfEnPassantMoves(const MoveList& moves)
 {
 	int retVal = 0;
-	for (const std::unique_ptr<Move>& curr : moves)
+	for (const Move& curr : moves)
 	{
-		if (dynamic_cast<MoveEnPassant*>(curr.get()))
+		if (curr.getFlag() == EnPassant)
 		{
 			retVal++;
 		}
@@ -78,9 +78,12 @@ int getNumberOfEnPassantMoves(const MoveList& moves)
 int getNumberOfPromotionMoves(const MoveList& moves)
 {
 	int retVal = 0;
-	for (const std::unique_ptr<Move>& curr : moves)
+	for (const Move& curr : moves)
 	{
-		if (dynamic_cast<MovePromote*>(curr.get()))
+		if (curr.getFlag() == PromoteQueen ||
+			curr.getFlag() == PromoteRook ||
+			curr.getFlag() == PromoteBishop ||
+			curr.getFlag() == PromoteKnight)
 		{
 			retVal++;
 		}
@@ -91,9 +94,9 @@ int getNumberOfPromotionMoves(const MoveList& moves)
 int getNumberOfCastlingMoves(const MoveList& moves)
 {
 	int retVal = 0;
-	for (const std::unique_ptr<Move>& curr : moves)
+	for (const Move& curr : moves)
 	{
-		if (dynamic_cast<MoveCastle*>(curr.get()))
+		if (curr.getFlag() == Castle)
 		{
 			retVal++;
 		}
@@ -108,12 +111,12 @@ std::vector<std::string> getAllMoveStringsAtDepth(
 	if (depth == 1)
 	{
 		std::vector<std::string> listOfStringMoves = {};
-		for (std::unique_ptr<Move>& currMoveToAdd : listOfMoves)
+		for (Move& currMoveToAdd : listOfMoves)
 		{
 			std::string stringToAdd =
 				currStr
-				+ SQUARE_STRING[currMoveToAdd->getStart()] + "->"
-				+ SQUARE_STRING[currMoveToAdd->getDestination()] + ", ";
+				+ SQUARE_STRING[currMoveToAdd.getStart()] + "->"
+				+ SQUARE_STRING[currMoveToAdd.getDestination()] + ", ";
 
 			listOfStringMoves.push_back(stringToAdd);
 		}
@@ -122,14 +125,14 @@ std::vector<std::string> getAllMoveStringsAtDepth(
 	else
 	{
 		std::vector<std::string> listOfStringMoves = {};
-		for (const std::unique_ptr<Move>& curr : listOfMoves)
+		for (const Move& curr : listOfMoves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(*curr.get());
+			copyBoard.makeMove(curr);
 
 			std::string currMoveString = currStr
-				+ SQUARE_STRING[curr->getStart()] + "->"
-				+ SQUARE_STRING[curr->getDestination()] + ", ";
+				+ SQUARE_STRING[curr.getStart()] + "->"
+				+ SQUARE_STRING[curr.getDestination()] + ", ";
 
 			std::vector<std::string> recursion =
 				getAllMoveStringsAtDepth(copyBoard, currMoveString, depth - 1);
@@ -150,15 +153,15 @@ std::vector<std::pair<std::string, int>> getNumberOfMovesAfterFirstMove(const Ch
 
 	MoveList listOfMoves = board.getAllLegalMoves();
 
-	for (const std::unique_ptr<Move>& curr : listOfMoves)
+	for (const Move& curr : listOfMoves)
 	{
 		ChessBoard copyBoard = board.getCopyByValue();
-		copyBoard.makeMove(*curr.get());
+		copyBoard.makeMove(curr);
 
 		//TODO replace with getString
 		std::string currMoveString =
-			SQUARE_STRING[curr->getStart()]
-			+ SQUARE_STRING[curr->getDestination()];
+			SQUARE_STRING[curr.getStart()]
+			+ SQUARE_STRING[curr.getDestination()];
 
 		std::pair<std::string, int> currItem =
 			std::make_pair(currMoveString, numberOfMovesAfterDepth(copyBoard, depth - 1));

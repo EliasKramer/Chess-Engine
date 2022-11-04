@@ -24,7 +24,7 @@ bool ChessBoardTest::fieldIsUnderAttackWithMoveBB(Square pos, BitBoard moveBB)
 	return ChessBoard::fieldIsUnderAttack(pos, moveBB);
 }
 
-bool ChessBoardTest::isLegal(const std::unique_ptr<Move>& move)
+bool ChessBoardTest::isLegal(const Move move)
 {
 	return ChessBoard::moveIsLegal(move);
 }

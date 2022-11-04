@@ -17,9 +17,9 @@ int HumanPlayer::getMove(const ChessBoard& board, const MoveList& moves)
 		std::cin >> input;
 
 		int i = 0;
-		for (const std::unique_ptr<Move>& curr : moves)
+		for (const Move curr : moves)
 		{
-			if (input == curr.get()->getString())
+			if (input == curr.getString())
 			{
 				return i;
 			}

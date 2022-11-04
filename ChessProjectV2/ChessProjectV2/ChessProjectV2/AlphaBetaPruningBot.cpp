@@ -17,10 +17,10 @@ int AlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& moves)
 	int bestMoveIdx = 0;
 
 	int moveIdx = 0;
-	for (const std::unique_ptr<Move>& curr : moves)
+	for (const Move& curr : moves)
 	{
 		ChessBoard boardCopy = board;
-		boardCopy.makeMove(*curr);
+		boardCopy.makeMove(curr);
 
 		int endstatesBefore = endPointsEvaluated;
 
@@ -40,7 +40,7 @@ int AlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& moves)
 
 		
 		std::cout
-			<< "Move: " << curr.get()->getString()
+			<< "Move: " << curr.getString()
 			<< ", Score: " << currScore
 			<< ", Endstates Evaluated: " << endPointsEvaluated - endstatesBefore
 			<< std::endl;
@@ -66,7 +66,7 @@ int AlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& moves)
 		nodesSearched,
 		endPointsEvaluated,
 		depth,
-		*moves[bestMoveIdx].get(),
+		moves[bestMoveIdx],
 		bestMoveScore,
 		duration,
 		additionalInfo);
@@ -111,10 +111,10 @@ int AlphaBetaPruningBot::getMoveScoreRecursively(
 				: 0;
 		}
 		int bestEval = isMaximizingPlayer ? INT_MIN : INT_MAX;
-		for (std::unique_ptr<Move>& curr : moves)
+		for (Move curr : moves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(*curr);
+			copyBoard.makeMove(curr);
 
 			nodesSearched++;
 			int evaluation =

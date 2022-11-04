@@ -47,7 +47,7 @@ void Game::start()
 		}
 
 		//get the move from the list
-		Move& moveToMake = *legalMoves.at(choosenMoveIdx).get();
+		Move& moveToMake = legalMoves.at(choosenMoveIdx);
 		
 		//store the current move and print it
 		std::string currMoveStr = moveToMake.getString();

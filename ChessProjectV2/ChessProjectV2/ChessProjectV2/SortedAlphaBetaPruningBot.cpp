@@ -17,10 +17,10 @@ int SortedAlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& 
 	int bestMoveIdx = 0;
 
 	int moveIdx = 0;
-	for (const std::unique_ptr<Move>& curr : moves)
+	for (const Move& curr : moves)
 	{
 		ChessBoard boardCopy = board;
-		boardCopy.makeMove(*curr);
+		boardCopy.makeMove(curr);
 
 		int endstatesBefore = endPointsEvaluated;
 
@@ -40,7 +40,7 @@ int SortedAlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& 
 
 		
 		std::cout
-			<< "Move: " << curr.get()->getString()
+			<< "Move: " << curr.getString()
 			<< ", Score: " << currScore
 			<< ", Endstates Evaluated: " << endPointsEvaluated - endstatesBefore
 			<< std::endl;
@@ -66,7 +66,7 @@ int SortedAlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& 
 		nodesSearched,
 		endPointsEvaluated,
 		depth,
-		*moves[bestMoveIdx].get(),
+		moves[bestMoveIdx],
 		bestMoveScore,
 		duration,
 		additionalInfo);
@@ -110,14 +110,14 @@ int SortedAlphaBetaPruningBot::getValueOfMoveForSorting(const Move& givenMove, c
 void SortedAlphaBetaPruningBot::partialInsertionSort(MoveList& list, const ChessBoard& board)
 {
 	std::vector<int> evaluatenValues = std::vector<int>();
-	for (const std::unique_ptr<Move>& move : list)
+	for (const Move& move : list)
 	{
-		evaluatenValues.insert(evaluatenValues.begin(), getValueOfMoveForSorting(*move.get(), board));
+		evaluatenValues.insert(evaluatenValues.begin(), getValueOfMoveForSorting(move, board));
 	}
 
 	for (int i = 1; i < list.size(); i++)
 	{
-		if (!isCaptureMove(*list[i].get(), board))
+		if (!isCaptureMove(list[i], board))
 		{
 			continue;
 		}
@@ -165,10 +165,10 @@ int SortedAlphaBetaPruningBot::getMoveScoreRecursively(ChessBoard board, int dep
 
 		partialInsertionSort(moves, board);
 
-		for (std::unique_ptr<Move>& curr : moves)
+		for (const Move& curr : moves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(*curr);
+			copyBoard.makeMove(curr);
 
 			nodesSearched++;
 			int evaluation =

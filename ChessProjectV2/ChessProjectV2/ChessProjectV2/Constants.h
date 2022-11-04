@@ -72,12 +72,12 @@ BB_SQUARE[A1] | BB_SQUARE[E1] | BB_SQUARE[H1] |
 BB_SQUARE[A8] | BB_SQUARE[E8] | BB_SQUARE[H8];
 
 //No matter the castling type, all castling moves start from E1 or E8
-extern const Square START_SQUARE_KING_CASTLING[2] =
+const Square START_SQUARE_KING_CASTLING[2] =
 {
 	E1, E8
 };
 //first dimension is color, second is castling type
-extern const Square DESTINATION_SQUARE_KING_CASTLING[2][2] =
+const Square DESTINATION_SQUARE_KING_CASTLING[2][2] =
 {
 	//White
 	{G1, G8},

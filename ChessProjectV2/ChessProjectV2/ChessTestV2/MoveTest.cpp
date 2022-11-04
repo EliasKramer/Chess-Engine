@@ -1,9 +1,6 @@
 #include "CppUnitTest.h"
 #include <string>
 #include "../ChessProjectV2/Move.h"
-#include "../ChessProjectV2/MoveCastle.h"
-#include "../ChessProjectV2/MoveEnPassant.h"
-#include "../ChessProjectV2/MovePromote.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -36,32 +33,26 @@ namespace MoveTest
 		}
 		TEST_METHOD(testCastlingConstructor)
 		{
-			MoveCastle m(White, CastleShort);
+			Move m(White, CastleShort);
 			Assert::IsTrue(m.getStart() == E1);
 			Assert::IsTrue(m.getDestination() == G1);
-			Assert::IsTrue(m.getRookStart() == H1);
-			Assert::IsTrue(m.getRookDest() == F1);
 
-			m = MoveCastle(White, CastleLong);
+			m = Move(White, CastleLong);
 			Assert::IsTrue(m.getStart() == E1);
 			Assert::IsTrue(m.getDestination() == C1);
-			Assert::IsTrue(m.getRookStart() == A1);
-			Assert::IsTrue(m.getRookDest() == D1);
 
-			m = MoveCastle(Black, CastleShort);
+			m = Move(Black, CastleShort);
 			Assert::IsTrue(m.getStart() == E8);
 			Assert::IsTrue(m.getDestination() == G8);
-			Assert::IsTrue(m.getRookStart() == H8);
-			Assert::IsTrue(m.getRookDest() == F8);
 
-			m = MoveCastle(Black, CastleLong);
+			m = Move(Black, CastleLong);
 			Assert::IsTrue(m.getStart() == E8);
 			Assert::IsTrue(m.getDestination() == C8);
-			Assert::IsTrue(m.getRookStart() == A8);
-			Assert::IsTrue(m.getRookDest() == D8);
 		}
 		TEST_METHOD(testBitBoardGenerationOfMove)
 		{
+			//TODO
+			/*
 			Move m(A1, A2);
 			Assert::AreEqual(0x101ULL, m.getBBWithMoveDone());
 			Assert::AreEqual((BB_SQUARE[A1] | BB_SQUARE[A2]), m.getBBWithMoveDone());
@@ -94,19 +85,20 @@ namespace MoveTest
 			{
 				Assert::IsTrue(errorMsg == "ERROR. A Caslting Move does not produce a Move Bitboard");
 			}
+			*/
 		}
 		TEST_METHOD(testMoveString)
 		{
 			Move m(A1, A2);
 			Assert::IsTrue(m.getString() == "a1a2");
 
-			MovePromote mp(D2, D1, ChessPiece(White, Queen));
+			Move mp(D2, D1, White, PromoteQueen);
 			Assert::IsTrue(mp.getString() == "d2d1q");
-			mp = MovePromote(D2, D1, ChessPiece(White, Rook));
+			mp = Move(D2, D1, White, PromoteRook);
 			Assert::IsTrue(mp.getString() == "d2d1r");
-			mp = MovePromote(D2, D1, ChessPiece(White, Bishop));
+			mp = Move(D2, D1, White, PromoteBishop);
 			Assert::IsTrue(mp.getString() == "d2d1b");
-			mp = MovePromote(D2, D1, ChessPiece(White, Knight));
+			mp = Move(D2, D1, White, PromoteKnight);
 			Assert::IsTrue(mp.getString() == "d2d1n");
 		}
 	};

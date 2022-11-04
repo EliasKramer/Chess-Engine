@@ -13,9 +13,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\moves">
-      <UniqueIdentifier>{8c39385a-6305-4a19-a29c-589998fabf07}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\main program">
       <UniqueIdentifier>{26124c89-3ab3-42a1-ba88-f7540ff38de2}</UniqueIdentifier>
     </Filter>
@@ -51,23 +48,8 @@
     <ClCompile Include="HelpMethods.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MoveEnPassant.cpp">
-      <Filter>Source Files\moves</Filter>
-    </ClCompile>
-    <ClCompile Include="Move.cpp">
-      <Filter>Source Files\moves</Filter>
-    </ClCompile>
-    <ClCompile Include="MoveCastle.cpp">
-      <Filter>Source Files\moves</Filter>
-    </ClCompile>
-    <ClCompile Include="MovePromote.cpp">
-      <Filter>Source Files\moves</Filter>
-    </ClCompile>
     <ClCompile Include="Constants.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MoveDoublePawn.cpp">
-      <Filter>Source Files\moves</Filter>
     </ClCompile>
     <ClCompile Include="ChessProjectV2.cpp">
       <Filter>Source Files\main program</Filter>
@@ -98,6 +80,9 @@
     </ClCompile>
     <ClCompile Include="SortedAlphaBetaPruningBot.cpp">
       <Filter>Source Files\Game\Bots</Filter>
+    </ClCompile>
+    <ClCompile Include="Move.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

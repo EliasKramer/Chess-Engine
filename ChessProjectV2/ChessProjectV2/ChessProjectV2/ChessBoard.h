@@ -81,14 +81,14 @@ protected:
 	//checks if square gets attacked by sliding pieces
 	bool fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB = BITBOARD_NONE) const;
 
-	bool moveIsLegal(const std::unique_ptr<Move>& move) const;
-	bool isCaptureMove(const std::unique_ptr<Move>& move) const;
+	bool moveIsLegal(const Move move) const;
+	bool isCaptureMove(const Move move) const;
 	
-	void udpateCastlingRightsAfterMove(Move& m);
+	void udpateCastlingRightsAfterMove(const Move& m);
 	
-	void updateEnPassantRightsAfterMove(Move& m);
+	void updateEnPassantRightsAfterMove(const Move& m);
 
-	void update50MoveRule(Move& m);
+	void update50MoveRule(const Move& m);
 
 	//checks if any side has enough material/pieces to win the game
 	bool insufficientMaterialCheck() const;
@@ -114,7 +114,7 @@ public:
 	MoveList getAllLegalCaptureMoves() const;
 
 	//execute move
-	void makeMove(Move& move);
+	void makeMove(const Move& move);
 
 	//copy board by value
 	ChessBoard getCopyByValue() const;

@@ -419,7 +419,7 @@ namespace MoveGenerationTest
 			moves = board.getAllLegalMoves();
 			Assert::AreEqual(46, (int)moves.size());
 		}
-		TEST_METHOD(testCoverage)
+		TEST_METHOD(startingFenMoveGen)
 		{
 			ChessBoardTest board(STARTING_FEN);
 			MoveList moves = board.getAllLegalMoves();

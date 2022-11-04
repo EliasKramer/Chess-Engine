@@ -27,10 +27,10 @@ int Medicrius::getMove(const ChessBoard& board, const MoveList& moves)
 	int bestMoveIdx = 0;
 
 	int moveIdx = 0;
-	for (const std::unique_ptr<Move>& curr : moves)
+	for (const Move curr : moves)
 	{
 		ChessBoard boardCopy = board;
-		boardCopy.makeMove(*curr);
+		boardCopy.makeMove(curr);
 
 		int maxCaptureDepthReached = 0;
 
@@ -51,7 +51,7 @@ int Medicrius::getMove(const ChessBoard& board, const MoveList& moves)
 		int currScore = colorMult * moveScore;
 
 		std::cout
-			<< "Move: " << curr.get()->getString()
+			<< "Move: " << curr.getString()
 			<< ", Score: " << currScore
 			<< ", Max Capture Depth: " << maxCaptureDepthReached
 			<< ", Endstates Evaluated: " << endPointsEvaluated - endstatesBefore
@@ -70,7 +70,7 @@ int Medicrius::getMove(const ChessBoard& board, const MoveList& moves)
 
 	long long duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
 
-	printSearchStatistics("Minimax with alpha beta pruning", nodesSearched, endPointsEvaluated, depth, *moves[bestMoveIdx].get(), bestMoveScore, duration);
+	printSearchStatistics("Minimax with alpha beta pruning", nodesSearched, endPointsEvaluated, depth, moves[bestMoveIdx], bestMoveScore, duration);
 
 	return bestMoveIdx;
 }
@@ -218,10 +218,10 @@ int Medicrius::getMoveScoreRecursively(
 				: 0;
 		}
 		int bestEval = isMaximizingPlayer ? INT_MIN : INT_MAX;
-		for (std::unique_ptr<Move>& curr : moves)
+		for (Move curr : moves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(*curr);
+			copyBoard.makeMove(curr);
 
 			nodesSearched++;
 			int evaluation =
@@ -280,10 +280,10 @@ int Medicrius::getAllCaputureMoveScoreRecursively(
 
 	int bestEvaluationFound = INT_MIN;
 
-	for (std::unique_ptr<Move>& curr : possibleCaptures)
+	for (Move curr : possibleCaptures)
 	{
 		ChessBoard copyBoard = board.getCopyByValue();
-		copyBoard.makeMove(*curr);
+		copyBoard.makeMove(curr);
 
 		nodesSearched++;
 		int evaluation =

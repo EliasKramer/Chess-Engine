@@ -24,10 +24,10 @@ int UnoptimizedMinimaxBot::getMove(const ChessBoard& board, const MoveList& move
 	
 	//current move index
 	int moveIdx = 0;
-	for (const std::unique_ptr<Move>& curr : moves)
+	for (const Move& curr : moves)
 	{
 		ChessBoard boardCopy = board;
-		boardCopy.makeMove(*curr);
+		boardCopy.makeMove(curr);
 
 		const int endstatesBefore = endPointsEvaluated;
 
@@ -65,7 +65,7 @@ int UnoptimizedMinimaxBot::getMove(const ChessBoard& board, const MoveList& move
 		nodesSearched, 
 		endPointsEvaluated,
 		depth,
-		*moves[bestMoveIdx].get(), 
+		moves[bestMoveIdx], 
 		bestMoveScore, 
 		std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count());
 	
@@ -100,10 +100,10 @@ int UnoptimizedMinimaxBot::minimax(ChessBoard board, int depth, int& nodesSearch
 				: 0;
 		}
 		int bestEval = INT_MIN;
-		for (std::unique_ptr<Move>& curr : moves)
+		for (Move& curr : moves)
 		{
 			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(*curr);
+			copyBoard.makeMove(curr);
 
 			nodesSearched++;
 			int evaluation =

@@ -4,7 +4,7 @@ Move::Move(Square givenStart, Square givenDest, MoveFlag flag) :
 	_start(givenStart),
 	_destination(givenDest),
 	_flag(flag),
-	_colorOfPiece(ChessColor::None)
+	_colorOfPiece(ChessColor::NoColor)
 {
 	if ((flag == Normal ||
 		flag == EnPassant) == false)
@@ -57,7 +57,12 @@ Square Move::getDestination() const
 	return _destination;
 }
 
-void Move::execute(BoardRepresentation& board)
+MoveFlag Move::getFlag() const
+{
+	return _flag;
+}
+
+void Move::execute(BoardRepresentation& board) const
 {
 	//TODO Implement getting castling squares
 	board.copySquareToPos(_start, _destination);
@@ -66,6 +71,7 @@ void Move::execute(BoardRepresentation& board)
 
 std::string Move::getString() const
 {
+	//implement special case for castling and promotion
 	return SQUARE_STRING[_start] + SQUARE_STRING[_destination];
 }
 

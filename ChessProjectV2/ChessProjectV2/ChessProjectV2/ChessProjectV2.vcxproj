@@ -141,10 +141,6 @@
     <ClCompile Include="HumanPlayer.cpp" />
     <ClCompile Include="Medicrius.cpp" />
     <ClCompile Include="Move.cpp" />
-    <ClCompile Include="MoveCastle.cpp" />
-    <ClCompile Include="MoveDoublePawn.cpp" />
-    <ClCompile Include="MoveEnPassant.cpp" />
-    <ClCompile Include="MovePromote.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="RandomPlayer.cpp" />
     <ClCompile Include="SortedAlphaBetaPruningBot.cpp" />
