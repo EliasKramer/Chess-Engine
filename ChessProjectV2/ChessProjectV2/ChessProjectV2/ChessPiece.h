@@ -20,6 +20,8 @@ public:
 	
 	PieceType getType() const;
 	ChessColor getColor() const;
+
+	bool isValid() const;
 };
 bool operator ==(
 	const ChessPiece& first,

@@ -19,6 +19,7 @@ ChessPiece::ChessPiece(char fenChar)
 		fenChar = tolower(fenChar);
 	}
 
+	//TODO CHANGE THIS TO ARRAY 
 	switch (fenChar)
 	{
 	case 'p':
@@ -52,6 +53,11 @@ PieceType ChessPiece::getType() const
 ChessColor ChessPiece::getColor() const
 {
 	return _color;
+}
+
+bool ChessPiece::isValid() const
+{
+	return _type != NoType && _color != NoColor;
 }
 
 bool operator==(const ChessPiece& first, const ChessPiece& second)

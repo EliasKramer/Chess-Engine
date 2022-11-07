@@ -14,7 +14,7 @@ public:
 
 	Square KingPos[DIFFERENT_CHESS_COLORS];
 
-	//maybe save the positions in a list
+	//a list of all piece positions. first index is color, second is piece type
 	std::vector<Square> PiecePositions[DIFFERENT_CHESS_COLORS][NUMBER_OF_DIFFERENT_PIECE_TYPES];
 
 	BoardRepresentation();
@@ -24,10 +24,17 @@ public:
 	void copySquareToPos(Square copyField, Square pasteField);
 	//be aware, that this does not overwrite the square, it only adds it
 	void setAtPosition(ChessPiece piece, Square position);
+
+	void delAtPos(Square position);
+
+	void moveFromPosToPos(Square start, Square destination);
+
+private:
 	//be aware, that this does not overwrite the Bitboard, it only adds it
 	void setPieceBitBoard(ChessPiece piece, BitBoard bitboard);
 
-	void delAtPos(Square position);
+	void removeFromPieceList(ChessPiece piece, Square position);
+	void removeAllFromPieceListAt(Square position);
 };
 bool operator==(const BoardRepresentation& first, const BoardRepresentation& second);
 bool operator!=(const BoardRepresentation& first, const BoardRepresentation& second);

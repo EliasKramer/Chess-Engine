@@ -93,7 +93,7 @@ protected:
 	friend bool operator ==(const ChessBoard& first, const ChessBoard& second);
 	friend bool operator !=(const ChessBoard& first, const ChessBoard& second);
 public:
-	ChessBoard(std::string given_fen_code);
+	ChessBoard(std::string given_fen_code = STARTING_FEN);
 
 	std::string getString();
 	std::string getFen();
