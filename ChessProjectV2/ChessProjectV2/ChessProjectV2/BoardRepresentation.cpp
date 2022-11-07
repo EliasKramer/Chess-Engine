@@ -49,28 +49,6 @@ ChessPiece BoardRepresentation::getPieceAt(Square square) const
 	return ChessPiece(colFound, typeFound);
 }
 
-
-void BoardRepresentation::copySquareToPos(Square copyField, Square pasteField)
-{
-	BitBoard copyPos = BB_SQUARE[copyField];
-	BitBoard pastePos = BB_SQUARE[pasteField];
-
-	ChessPiece copyPiece = getPieceAt(copyField);
-	ChessPiece pastePiece = getPieceAt(pasteField);
-
-	if (!copyPiece.isValid())
-	{
-		return;
-	}
-	
-	//add piece to the color bitboard
-	PiecesOfColor[copyPiece.getColor()] = PiecesOfColor[copyPiece.getColor()] | pastePos;
-	//add piece to the type bitboard
-	PiecesOfType[copyPiece.getType()] = PiecesOfType[copyPiece.getType()] | pastePos;
-	//add piece to the all bitbaord
-	AllPieces = AllPieces | pastePos;
-}
-
 void BoardRepresentation::setAtPosition(ChessPiece piece, Square position)
 {
 	if(piece.getType() == King)
@@ -117,6 +95,10 @@ void BoardRepresentation::moveFromPosToPos(Square start, Square destination)
 	{
 		return;
 	}
+	if (destPiece.isValid())
+	{
+		delAtPos(destination);
+	}
 
 	//add piece to the color bitboard
 	PiecesOfColor[startPiece.getColor()] = PiecesOfColor[startPiece.getColor()] | destPosBB;
@@ -124,6 +106,8 @@ void BoardRepresentation::moveFromPosToPos(Square start, Square destination)
 	PiecesOfType[startPiece.getType()] = PiecesOfType[startPiece.getType()] | destPosBB;
 	//add piece to the all bitbaord
 	AllPieces = AllPieces | destPosBB;
+
+	delAtPos(start);
 }
 
 void BoardRepresentation::setPieceBitBoard(ChessPiece piece, BitBoard bitboard)
