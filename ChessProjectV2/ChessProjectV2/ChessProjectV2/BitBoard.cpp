@@ -11,6 +11,11 @@ const std::array<BitBoard, 64> BB_SQUARE = []()->std::array<BitBoard, 64> {
 	return retVal;
 }();
 
+bool operator!=(const Square first, const Square second)
+{
+	return (int)first == (int)second;
+}
+
 bool destinationIsOnBoard(Square start, Direction direction)
 {
 	//if the invalid board for the direction and

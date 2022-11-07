@@ -80,9 +80,26 @@ const Square START_SQUARE_KING_CASTLING[2] =
 const Square DESTINATION_SQUARE_KING_CASTLING[2][2] =
 {
 	//White
-	{G1, G8},
+	{G1, C1},
 	//Black
-	{C1, C8}
+	{G8, C8}
+};
+
+const std::map<MoveFlag, std::string> MOVE_FLAG_STRING = {
+	{MoveFlag::Normal, ""},
+	{MoveFlag::EnPassant, ""},
+	{MoveFlag::Castle, ""},
+	{MoveFlag::PromoteQueen, "q"},
+	{MoveFlag::PromoteRook, "r"},
+	{MoveFlag::PromoteBishop, "b"},
+	{MoveFlag::PromoteKnight, "n"}
+};
+
+const std::map<Square, std::string> CASTLE_STRING_FOR_DESTINATION = {
+	{G1, "O-O"},
+	{C1, "O-O-O"},
+	{G8, "O-O"},
+	{C8, "O-O-O"}
 };
 
 const char PIECETYPE_CHAR[NUMBER_OF_DIFFERENT_PIECE_TYPES] = { 'P', 'N', 'B', 'R', 'Q', 'K' };

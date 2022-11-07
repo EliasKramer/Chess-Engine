@@ -28,7 +28,4 @@ public:
 	
 	bool fieldIsUnderAttackWithMoveBB(Square pos, BitBoard moveBB);
 	bool isLegal(const Move move);
-
-	MoveList getPseudoLegalMoves();
-
 };

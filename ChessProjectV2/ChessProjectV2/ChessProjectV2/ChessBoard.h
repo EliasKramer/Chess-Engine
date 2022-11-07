@@ -53,11 +53,6 @@ protected:
 		Direction dir,
 		ChessColor color) const;
 
-	//Pseudo legal moves are moves that follow 
-	//the move rules for the types.
-	//They do not check if the king is in check
-	MoveList getAllPseudoLegalMoves() const;
-
 	void getPawnMoves(MoveList& moves) const;
 	void getKnightMoves(MoveList& moves) const;
 	void getBishopMoves(MoveList& moves) const;

@@ -44,23 +44,6 @@ void ChessBoard::addIfDestinationIsColor(
 	}
 }
 
-MoveList ChessBoard::getAllPseudoLegalMoves() const
-{
-	MoveList moveList;
-
-	getPawnMoves(moveList);
-	getKnightMoves(moveList);
-	getBishopMoves(moveList);
-	getRookMoves(moveList);
-	getQueenMoves(moveList);
-	getKingMoves(moveList);
-
-	getCastlingMoves(moveList);
-	getEnPassantMove(moveList);
-
-	return moveList;
-}
-
 void ChessBoard::getPawnMoves(MoveList& moves) const
 {
 	Direction forward = getForwardForColor(_currentTurnColor);
@@ -862,22 +845,26 @@ bool ChessBoard::isKingInCheck() const
 
 MoveList ChessBoard::getAllLegalMoves() const
 {
-	MoveList list = getAllPseudoLegalMoves();
-	list.erase
-	(
-		std::remove_if
-		(
-			list.begin(),
-			list.end(),
-			[this](const Move move)
-			{
-				return !moveIsLegal(move);
-			}
-		),
-		list.end()
-				);
+	MoveList moveList;
 
-	return list;
+	BitBoard squaresUnderAttack = BITBOARD_NONE;
+	
+	//get all squares that are under attack
+	//_board.
+
+
+
+	getPawnMoves(moveList);
+	getKnightMoves(moveList);
+	getBishopMoves(moveList);
+	getRookMoves(moveList);
+	getQueenMoves(moveList);
+	getKingMoves(moveList);
+
+	getCastlingMoves(moveList);
+	getEnPassantMove(moveList);
+
+	return moveList;
 }
 
 MoveList ChessBoard::getAllLegalCaptureMoves() const

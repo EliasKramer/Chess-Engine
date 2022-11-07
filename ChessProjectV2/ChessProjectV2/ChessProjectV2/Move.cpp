@@ -70,9 +70,15 @@ void Move::execute(BoardRepresentation& board) const
 }
 
 std::string Move::getString() const
-{
-	//implement special case for castling and promotion
-	return SQUARE_STRING[_start] + SQUARE_STRING[_destination];
+{	
+	if (_flag == Castle)
+	{
+		return CASTLE_STRING_FOR_DESTINATION.at(_destination);
+	}
+
+	return SQUARE_STRING[_start] + 
+		SQUARE_STRING[_destination] + 
+		MOVE_FLAG_STRING.at(_flag);
 }
 
 bool operator==(const Move& first, const Move& second)

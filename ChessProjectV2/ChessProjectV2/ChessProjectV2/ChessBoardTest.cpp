@@ -19,19 +19,9 @@ BitBoard ChessBoardTest::getAllPiecesOfType(PieceType type)
 	return _board.PiecesOfType[type];
 }
 
-bool ChessBoardTest::fieldIsUnderAttackWithMoveBB(Square pos, BitBoard moveBB)
-{
-	return ChessBoard::fieldIsUnderAttack(pos, moveBB);
-}
-
 bool ChessBoardTest::isLegal(const Move move)
 {
 	return ChessBoard::moveIsLegal(move);
-}
-
-MoveList ChessBoardTest::getPseudoLegalMoves()
-{
-	return ChessBoard::getAllPseudoLegalMoves();
 }
 
 bool ChessBoardTest::casltingAllowed(ChessColor color, CastlingType option)
