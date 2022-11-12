@@ -3,6 +3,7 @@
 #include <array>
 #include <map>
 
+//can be used to represent a true and false value for each board position
 typedef uint64_t BitBoard;
 
 const BitBoard BITBOARD_ALL = 0xFFFFFFFFFFFFFFFF;
@@ -93,6 +94,25 @@ const std::map<Direction, BitBoard> INVALID_FIELDS_FOR_DIR
 	{NORTH_NORTH_WEST, FILE_A | RANK_8 | RANK_7}
 };
 
+//if you have two squares on a board, 
+//there can be a maximum of 6 squares between them
+const int MAX_SQUARES_BETWEEN = 6;
+
 bool destinationIsOnBoard(Square start, Direction direction);
 bool squareOverlapsWithBB(Square pos, BitBoard bb);
 bool bitboardsOverlap(BitBoard first, BitBoard second);
+
+//this is 0 based (a1 for example returns 0)
+int getRankOfSquare(Square square);
+//this is 0 based (a1 for example returns 0)
+int getFileOfSquare(Square square);
+
+bool squaresAreOnTheSameFile(Square first, Square second);
+bool squaresAreOnTheSameRank(Square first, Square second);
+bool squaresAreOnTheSameDiagonal(Square first, Square second);
+
+//gets all squares between two squares, excluding the start and end square
+//this only works on straight and diagonal paths
+std::array<Square, MAX_SQUARES_BETWEEN> getSquaresBetween(
+	Square start,
+	Square end);

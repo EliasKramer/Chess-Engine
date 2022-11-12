@@ -140,7 +140,7 @@ void BoardRepresentation::removeAllFromPieceListAt(Square position)
 	for (int i = 0; i < DIFFERENT_CHESS_COLORS; i++)
 	{
 		ChessColor currCol = (ChessColor)i;
-
+		
 		for (int j = 0; j < NUMBER_OF_DIFFERENT_PIECE_TYPES; j++)
 		{
 			PieceType currType = (PieceType)j;

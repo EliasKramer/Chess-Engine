@@ -12,6 +12,18 @@ bool moveListContains(Move m, const MoveList& moves)
 	return false;
 }
 
+bool squaresBetweenAreSame(std::array<Square, MAX_SQUARES_BETWEEN> first, std::array<Square, MAX_SQUARES_BETWEEN> second)
+{
+	for(int i = 0; i < MAX_SQUARES_BETWEEN; i++)
+	{
+		if(first[i] != second[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 int numberOfMovesAfterDepth(const ChessBoard& board, int depth)
 {
 	MoveList listOfMoves = board.getAllLegalMoves();

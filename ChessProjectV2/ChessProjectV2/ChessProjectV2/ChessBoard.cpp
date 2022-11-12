@@ -296,7 +296,7 @@ void ChessBoard::addRayMoves(
 		Square currentSquare = start;
 		while (true)
 		{
-			//if the new position would be on the board
+			//if the new position is on the board
 			if (destinationIsOnBoard(currentSquare, currentDirection))
 			{
 				//set the new position
@@ -669,16 +669,9 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 		}
 		else
 		{
-			BitBoard bbToAdd = BB_SQUARE[boardPos];
-
 			ChessPiece piece(currChar);
 
-			_board.setPieceBitBoard(piece, bbToAdd);
-
-			if (piece.getType() == King)
-			{
-				_board.KingPos[piece.getColor()] = (Square)boardPos;
-			}
+			_board.setAtPosition(piece, (Square)boardPos);
 
 			currFile++;
 		}
@@ -851,8 +844,10 @@ MoveList ChessBoard::getAllLegalMoves() const
 	
 	//get all squares that are under attack
 	//_board.
-
-
+	Square kingPos = _board.KingPos[_currentTurnColor];
+	
+	
+	
 
 	getPawnMoves(moveList);
 	getKnightMoves(moveList);

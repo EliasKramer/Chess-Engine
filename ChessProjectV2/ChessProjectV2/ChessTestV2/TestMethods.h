@@ -7,6 +7,9 @@
 #include <utility>
 
 bool moveListContains(Move m, const MoveList& moves);
+bool squaresBetweenAreSame(
+	std::array<Square, MAX_SQUARES_BETWEEN> first,
+	std::array<Square, MAX_SQUARES_BETWEEN> second);
 
 int numberOfMovesAfterDepth(const ChessBoard& board, int depth);
 

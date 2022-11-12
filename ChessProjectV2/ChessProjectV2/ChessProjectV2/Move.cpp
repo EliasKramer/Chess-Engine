@@ -65,8 +65,8 @@ MoveFlag Move::getFlag() const
 void Move::execute(BoardRepresentation& board) const
 {
 	//TODO Implement getting castling squares
-	board.copySquareToPos(_start, _destination);
-	board.delAtPos(_start);
+	//board.copySquareToPos(_start, _destination);
+	//board.delAtPos(_start);
 }
 
 std::string Move::getString() const
