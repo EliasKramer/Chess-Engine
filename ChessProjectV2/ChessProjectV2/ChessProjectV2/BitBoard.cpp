@@ -72,6 +72,9 @@ std::array<Square, MAX_SQUARES_BETWEEN> getSquaresBetween(
 	{
 		return result;
 	}
+	//check could be implemented wether 
+	//the squares are on the same file, rank or diagonal
+
 	int startFile = getFileOfSquare(start);
 	int startRank = getRankOfSquare(start);
 	int endFile = getFileOfSquare(end);

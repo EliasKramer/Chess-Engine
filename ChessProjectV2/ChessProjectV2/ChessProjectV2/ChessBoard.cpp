@@ -843,7 +843,6 @@ MoveList ChessBoard::getAllLegalMoves() const
 	BitBoard squaresUnderAttack = BITBOARD_NONE;
 	
 	//get all squares that are under attack
-	//_board.
 	Square kingPos = _board.KingPos[_currentTurnColor];
 	
 	
