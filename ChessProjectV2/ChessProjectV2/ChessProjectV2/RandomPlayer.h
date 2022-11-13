@@ -8,5 +8,5 @@ public:
 	RandomPlayer();
 	RandomPlayer(std::string name);
 
-	int getMove(const ChessBoard& board, const MoveList& moves) override;
+	int get_move(const ChessBoard& board, const MoveList& moves) override;
 };

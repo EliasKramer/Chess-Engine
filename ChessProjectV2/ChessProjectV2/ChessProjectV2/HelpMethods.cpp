@@ -1,6 +1,6 @@
 #include "HelpMethods.h"
 
-std::vector<std::string> splitString(
+std::vector<std::string> split_string(
 	std::string inputString,
 	char charToSplit)
 {
@@ -25,40 +25,40 @@ std::vector<std::string> splitString(
 	return splittedString;
 }
 
-bool isUpperCase(char c)
+bool is_upper_case(char c)
 {
 	return c >= 'A' && c <= 'Z';
 }
 
-bool isLowerCase(char c)
+bool is_lower_case(char c)
 {
 	return c >= 'a' && c <= 'z';
 }
 
-char charToLower(char c)
+char char_to_lower(char c)
 {
 	return (c + ('a' - 'A'));
 }
 
-ChessColor getColorOfFenChar(char c, std::string errorMsgPrefix)
+ChessColor get_color_of_fen_char(char c, std::string errorMsgPrefix)
 {
-	return isUpperCase(c) ? White :
-		isLowerCase(c) ? Black :
+	return is_upper_case(c) ? white :
+		is_lower_case(c) ? black :
 		throw errorMsgPrefix + " Could not convert Char to Color";
 }
 
-CastlingType getCastlingTypeOfFenChar(char c, std::string errorMsgPrefix)
+CastlingType get_castling_type_of_fen_char(char c, std::string errorMsgPrefix)
 {
-	if (isUpperCase(c))
+	if (is_upper_case(c))
 	{
-		c = charToLower(c);
+		c = char_to_lower(c);
 	}
-	return c == 'q' ? CastleLong :
-		c == 'k' ? CastleShort :
+	return c == 'q' ? castle_long :
+		c == 'k' ? castle_short :
 		throw errorMsgPrefix + " Could not convert Char to CastlingType";
 }
 
-Square getSquareFromString(
+Square get_square_from_string(
 	std::string str,
 	std::string errorMsgPrefix)
 {
@@ -81,22 +81,22 @@ Square getSquareFromString(
 	throw errorMsgPrefix + " Could not convert String to Square";
 }
 
-Direction getForwardForColor(ChessColor color)
+Direction get_forward_for_color(ChessColor color)
 {
-	return color == White ? NORTH : SOUTH;
+	return color == white ? NORTH : SOUTH;
 }
 
-Direction getBackwardForColor(ChessColor color)
+Direction get_backward_for_color(ChessColor color)
 {
-	return color == White ? SOUTH : NORTH;
+	return color == white ? SOUTH : NORTH;
 }
 
-ChessColor getOppositeColor(ChessColor color)
+ChessColor get_opposite_color(ChessColor color)
 {
 	return (ChessColor)((color + 1) % 2);
 }
 
-bool isRayType(PieceType type)
+bool is_ray_type(PieceType type)
 {
-	return type == Rook || type == Bishop || type == Queen;
+	return type == rook || type == bishop || type == queen;
 }

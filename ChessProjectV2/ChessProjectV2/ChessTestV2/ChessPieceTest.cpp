@@ -15,84 +15,84 @@ namespace PieceTest
 
 		TEST_METHOD(constructorTest)
 		{
-			ChessPiece whitePawn(White, Pawn);
-			ChessPiece blackPawn(Black, Pawn);
-			ChessPiece whiteKnight(White, Knight);
-			ChessPiece blackKnight(Black, Knight);
-			ChessPiece whiteBishop(White, Bishop);
-			ChessPiece blackBishop(Black, Bishop);
-			ChessPiece whiteRook(White, Rook);
-			ChessPiece blackRook(Black, Rook);
-			ChessPiece whiteQueen(White, Queen);
-			ChessPiece blackQueen(Black, Queen);
-			ChessPiece whiteKing(White, King);
-			ChessPiece blackKing(Black, King);
+			ChessPiece whitePawn(white, pawn);
+			ChessPiece blackPawn(black, pawn);
+			ChessPiece whiteKnight(white, knight);
+			ChessPiece blackKnight(black, knight);
+			ChessPiece whiteBishop(white, bishop);
+			ChessPiece blackBishop(black, bishop);
+			ChessPiece whiteRook(white, rook);
+			ChessPiece blackRook(black, rook);
+			ChessPiece whiteQueen(white, queen);
+			ChessPiece blackQueen(black, queen);
+			ChessPiece whiteKing(white, king);
+			ChessPiece blackKing(black, king);
 			
-			Assert::IsTrue(White == whitePawn.getColor());
-			Assert::IsTrue(Pawn == whitePawn.getType());
-			Assert::IsTrue(Black == blackPawn.getColor());
-			Assert::IsTrue(Pawn == blackPawn.getType());
+			Assert::IsTrue(white == whitePawn.get_color());
+			Assert::IsTrue(pawn == whitePawn.get_type());
+			Assert::IsTrue(black == blackPawn.get_color());
+			Assert::IsTrue(pawn == blackPawn.get_type());
 			
-			Assert::IsTrue(White == whiteKnight.getColor());
-			Assert::IsTrue(Knight == whiteKnight.getType());
-			Assert::IsTrue(Black == blackKnight.getColor());
-			Assert::IsTrue(Knight == blackKnight.getType());
+			Assert::IsTrue(white == whiteKnight.get_color());
+			Assert::IsTrue(knight == whiteKnight.get_type());
+			Assert::IsTrue(black == blackKnight.get_color());
+			Assert::IsTrue(knight == blackKnight.get_type());
 			
-			Assert::IsTrue(White == whiteBishop.getColor());
-			Assert::IsTrue(Bishop == whiteBishop.getType());
-			Assert::IsTrue(Black == blackBishop.getColor());
-			Assert::IsTrue(Bishop == blackBishop.getType());
+			Assert::IsTrue(white == whiteBishop.get_color());
+			Assert::IsTrue(bishop == whiteBishop.get_type());
+			Assert::IsTrue(black == blackBishop.get_color());
+			Assert::IsTrue(bishop == blackBishop.get_type());
 			
-			Assert::IsTrue(White == whiteRook.getColor());
-			Assert::IsTrue(Rook == whiteRook.getType());
-			Assert::IsTrue(Black == blackRook.getColor());
-			Assert::IsTrue(Rook == blackRook.getType());
+			Assert::IsTrue(white == whiteRook.get_color());
+			Assert::IsTrue(rook == whiteRook.get_type());
+			Assert::IsTrue(black == blackRook.get_color());
+			Assert::IsTrue(rook == blackRook.get_type());
 			
-			Assert::IsTrue(White == whiteQueen.getColor());
-			Assert::IsTrue(Queen == whiteQueen.getType());
-			Assert::IsTrue(Black == blackQueen.getColor());
-			Assert::IsTrue(Queen == blackQueen.getType());
+			Assert::IsTrue(white == whiteQueen.get_color());
+			Assert::IsTrue(queen == whiteQueen.get_type());
+			Assert::IsTrue(black == blackQueen.get_color());
+			Assert::IsTrue(queen == blackQueen.get_type());
 			
-			Assert::IsTrue(White == whiteKing.getColor());
-			Assert::IsTrue(King == whiteKing.getType());
-			Assert::IsTrue(Black == blackKing.getColor());
-			Assert::IsTrue(King == blackKing.getType());		
+			Assert::IsTrue(white == whiteKing.get_color());
+			Assert::IsTrue(king == whiteKing.get_type());
+			Assert::IsTrue(black == blackKing.get_color());
+			Assert::IsTrue(king == blackKing.get_type());		
 		}
 		TEST_METHOD(equalTest)
 		{
-			ChessPiece whitePawn(White, Pawn);
+			ChessPiece whitePawn(white, pawn);
 			
-			Assert::IsTrue(whitePawn == ChessPiece(White, Pawn));
-			Assert::IsTrue(ChessPiece(White, Pawn) == whitePawn);
+			Assert::IsTrue(whitePawn == ChessPiece(white, pawn));
+			Assert::IsTrue(ChessPiece(white, pawn) == whitePawn);
 			
-			Assert::IsFalse(ChessPiece(Black, Pawn) == whitePawn);
-			Assert::IsFalse(ChessPiece(White, Rook) == whitePawn);
+			Assert::IsFalse(ChessPiece(black, pawn) == whitePawn);
+			Assert::IsFalse(ChessPiece(white, rook) == whitePawn);
 			
-			Assert::IsFalse(whitePawn != ChessPiece(White, Pawn));
-			Assert::IsFalse(ChessPiece(White, Pawn) != whitePawn);
+			Assert::IsFalse(whitePawn != ChessPiece(white, pawn));
+			Assert::IsFalse(ChessPiece(white, pawn) != whitePawn);
 
-			Assert::IsTrue(ChessPiece(Black, Pawn) != whitePawn);
-			Assert::IsTrue(ChessPiece(White, Rook) != whitePawn);
+			Assert::IsTrue(ChessPiece(black, pawn) != whitePawn);
+			Assert::IsTrue(ChessPiece(white, rook) != whitePawn);
 		}
 		TEST_METHOD(fenCreation)
 		{
-			Assert::IsTrue(ChessPiece(Black, Queen) == ChessPiece('q'));
-			Assert::IsTrue(ChessPiece(White, Queen) == ChessPiece('Q'));
+			Assert::IsTrue(ChessPiece(black, queen) == ChessPiece('q'));
+			Assert::IsTrue(ChessPiece(white, queen) == ChessPiece('Q'));
 
-			Assert::IsTrue(ChessPiece(Black, King) == ChessPiece('k'));
-			Assert::IsTrue(ChessPiece(White, King) == ChessPiece('K'));
+			Assert::IsTrue(ChessPiece(black, king) == ChessPiece('k'));
+			Assert::IsTrue(ChessPiece(white, king) == ChessPiece('K'));
 			
-			Assert::IsTrue(ChessPiece(Black, Rook) == ChessPiece('r'));
-			Assert::IsTrue(ChessPiece(White, Rook) == ChessPiece('R'));
+			Assert::IsTrue(ChessPiece(black, rook) == ChessPiece('r'));
+			Assert::IsTrue(ChessPiece(white, rook) == ChessPiece('R'));
 
-			Assert::IsTrue(ChessPiece(Black, Bishop) == ChessPiece('b'));
-			Assert::IsTrue(ChessPiece(White, Bishop) == ChessPiece('B'));
+			Assert::IsTrue(ChessPiece(black, bishop) == ChessPiece('b'));
+			Assert::IsTrue(ChessPiece(white, bishop) == ChessPiece('B'));
 
-			Assert::IsTrue(ChessPiece(Black, Knight) == ChessPiece('n'));
-			Assert::IsTrue(ChessPiece(White, Knight) == ChessPiece('N'));
+			Assert::IsTrue(ChessPiece(black, knight) == ChessPiece('n'));
+			Assert::IsTrue(ChessPiece(white, knight) == ChessPiece('N'));
 			
-			Assert::IsTrue(ChessPiece(Black, Pawn) == ChessPiece('p'));
-			Assert::IsTrue(ChessPiece(White, Pawn) == ChessPiece('P'));
+			Assert::IsTrue(ChessPiece(black, pawn) == ChessPiece('p'));
+			Assert::IsTrue(ChessPiece(white, pawn) == ChessPiece('P'));
 		}
 	};
 }

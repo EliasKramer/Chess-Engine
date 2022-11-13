@@ -22,102 +22,102 @@ protected:
 	//the first dimension is color and 
 	//the second is the type. 
 	//aka long or short castling
-	bool _canCastle[2][2];
+	bool _can_castle[2][2];
 
 	//the players color, whose turn it is
-	ChessColor _currentTurnColor;
+	ChessColor _current_turn_color;
 
 	//if an en passant move is possible, 
 	//the square, where the opponent has to go to
 	//will be stored here
-	Square _enPassantSquare;
+	Square _en_passant_square;
 
 	//keeps track of the 50 moves rule
-	uint16_t _halfMoveClock;
+	uint16_t _half_move_clock;
 
 	//the move number. 
 	//increases every time when black makes a move
-	uint16_t _moveNumber;
+	uint16_t _move_number;
 
 	/*Move Generation*/
-	bool destinationIsSameColor(Square start, Direction direction, ChessColor color) const;
-	bool positionIsSameColor(Square pos, ChessColor color) const;
+	bool destination_is_same_color(Square start, Direction direction, ChessColor color) const;
+	bool position_is_same_color(Square pos, ChessColor color) const;
 	
-	void addIfDestinationIsValid(
+	void add_if_destination_is_valid(
 		MoveList& moves,
 		Square start,
 		Direction dir) const;
-	void addIfDestinationIsColor(
+	void add_if_destination_is_color(
 		MoveList& moves,
 		Square start,
 		Direction dir,
 		ChessColor color) const;
 
-	void getPawnMoves(MoveList& moves) const;
-	void getKnightMoves(MoveList& moves) const;
-	void getBishopMoves(MoveList& moves) const;
-	void getRookMoves(MoveList& moves) const;
-	void getQueenMoves(MoveList& moves) const;
-	void getKingMoves(MoveList& moves) const;
+	void get_pawn_moves(MoveList& moves) const;
+	void get_knight_moves(MoveList& moves) const;
+	void get_bishop_moves(MoveList& moves) const;
+	void get_rook_moves(MoveList& moves) const;
+	void get_queen_moves(MoveList& moves) const;
+	void get_king_moves(MoveList& moves) const;
 
-	void addPawnMove(
+	void add_pawn_move(
 		MoveList& moves, Square start, Square dest) const;
-	void getCastlingMoves(MoveList& moves) const;
-	void getEnPassantMove(MoveList& moves) const;
+	void get_castling_moves(MoveList& moves) const;
+	void get_en_passant_move(MoveList& moves) const;
 	
-	void addRayMoves(
+	void add_ray_moves(
 		MoveList& moves,
 		Square start,
 		Direction directions[],
 		int numberOfDirections) const;
 
 	//square gets attacke by the opponent
-	bool fieldIsUnderAttack(Square pos, BitBoard moveBB = BITBOARD_NONE) const;
+	bool field_is_under_attack(Square pos, BitBoard moveBB = BITBOARD_NONE) const;
 	//checks if square gets attacked by sliding pieces
-	bool fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB = BITBOARD_NONE) const;
+	bool field_gets_attacked_by_sliding_piece(Square pos, BitBoard moveBB = BITBOARD_NONE) const;
 
-	bool moveIsLegal(const Move move) const;
-	bool isCaptureMove(const Move move) const;
+	bool move_is_legal(const Move move) const;
+	bool is_capture_move(const Move move) const;
 	
-	void udpateCastlingRightsAfterMove(const Move& m);
+	void update_castling_rights_after_move(const Move& m);
 	
-	void updateEnPassantRightsAfterMove(const Move& m);
+	void update_en_passant_rights_after_move(const Move& m);
 
-	void update50MoveRule(const Move& m);
+	void update_50_move_rule(const Move& m);
 
 	//checks if any side has enough material/pieces to win the game
-	bool insufficientMaterialCheck() const;
+	bool insufficient_material_check() const;
 	
-	char getPieceCharAt(Square pos) const;
+	char get_piece_at(Square pos) const;
 
 	friend bool operator ==(const ChessBoard& first, const ChessBoard& second);
 	friend bool operator !=(const ChessBoard& first, const ChessBoard& second);
 public:
 	ChessBoard(std::string given_fen_code = STARTING_FEN);
+	
+	std::string get_string();
+	std::string get_fen();
 
-	std::string getString();
-	std::string getFen();
-
-	ChessColor getCurrentTurnColor() const;
-	int getNumberOfMovesPlayed() const;
+	ChessColor get_current_turn_color() const;
+	int get_number_of_moves_played() const;
 	
 	//returns true if the king is in check
-	bool isKingInCheck() const;
+	bool is_king_in_check() const;
 
 	//returns all moves of the color, whos turn it is
-	MoveList getAllLegalMoves() const;
-	MoveList getAllLegalCaptureMoves() const;
+	MoveList get_all_legal_moves() const;
+	MoveList get_all_legal_capture_moves() const;
 
 	//execute move
-	void makeMove(const Move& move);
+	void make_move(const Move& move);
 
 	//copy board by value
-	ChessBoard getCopyByValue() const;
+	ChessBoard get_copy_by_value() const;
 
-	GameState getGameState() const;
-	GameDurationState getGameDurationState() const;
+	GameState get_game_state() const;
+	GameDurationState get_game_duration_state() const;
 
-	BoardRepresentation getBoardRepresentation() const;
+	BoardRepresentation get_board_representation() const;
 };
 
 bool operator ==(const ChessBoard& first, const ChessBoard& second);

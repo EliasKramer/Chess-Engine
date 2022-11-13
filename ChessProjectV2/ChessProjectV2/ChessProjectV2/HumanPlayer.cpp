@@ -8,7 +8,7 @@ HumanPlayer::HumanPlayer(std::string name)
 	:Player(name)
 {}
 
-int HumanPlayer::getMove(const ChessBoard& board, const MoveList& moves)
+int HumanPlayer::get_move(const ChessBoard& board, const MoveList& moves)
 {
 	while (true)
 	{
@@ -19,7 +19,7 @@ int HumanPlayer::getMove(const ChessBoard& board, const MoveList& moves)
 		int i = 0;
 		for (const Move curr : moves)
 		{
-			if (input == curr.getString())
+			if (input == curr.get_string())
 			{
 				return i;
 			}

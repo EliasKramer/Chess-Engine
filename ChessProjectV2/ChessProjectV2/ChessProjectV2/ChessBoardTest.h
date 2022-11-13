@@ -14,18 +14,17 @@ public:
 	
 	//getter for the base class
 
-	BitBoard getAllPieces();
+	BitBoard get_all_pieces();
 
-	bool fieldIsUnderAttack(Square pos);
+	bool field_is_under_attack(Square pos);
 
-	BitBoard getAllPiecesOfColor(ChessColor color);
-	BitBoard getAllPiecesOfType(PieceType type);
-	bool casltingAllowed(ChessColor color, CastlingType option);
-	ChessColor getTurnColor();
-	Square getEnPassantSquare();
-	uint16_t getHalfMoveClock();
-	uint16_t getMoveNumber();
+	BitBoard get_all_pieces_of_color(ChessColor color);
+	BitBoard get_all_pieces_of_type(PieceType type);
+	bool is_castling_allowed(ChessColor color, CastlingType option);
+	ChessColor get_turn_color();
+	Square get_en_passant_square();
+	uint16_t get_half_move_clock();
+	uint16_t get_move_number();
 	
-	bool fieldIsUnderAttackWithMoveBB(Square pos, BitBoard moveBB);
-	bool isLegal(const Move move);
+	bool move_is_legal(const Move move);
 };

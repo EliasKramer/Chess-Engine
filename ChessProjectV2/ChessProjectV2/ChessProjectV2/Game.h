@@ -6,8 +6,8 @@
 class Game
 {
 private:
-	std::unique_ptr<Player> _whitePlayer;
-	std::unique_ptr<Player> _blackPlayer;
+	std::unique_ptr<Player> _white_player;
+	std::unique_ptr<Player> _black_player;
 
 	ChessBoard _board;
 public:

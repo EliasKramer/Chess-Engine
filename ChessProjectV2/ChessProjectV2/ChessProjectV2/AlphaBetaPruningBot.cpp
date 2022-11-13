@@ -1,10 +1,10 @@
 #include "AlphaBetaPruningBot.h"
 
-int AlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& moves)
+int AlphaBetaPruningBot::get_move(const ChessBoard& board, const MoveList& moves)
 {
 	auto begin = std::chrono::high_resolution_clock::now();
 
-	bool isWhiteToMove = board.getCurrentTurnColor() == White;
+	bool isWhiteToMove = board.get_current_turn_color() == white;
 	int colorMult = isWhiteToMove ? 1 : -1;
 
 	int endPointsEvaluated = 0;
@@ -20,12 +20,12 @@ int AlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& moves)
 	for (const Move& curr : moves)
 	{
 		ChessBoard boardCopy = board;
-		boardCopy.makeMove(curr);
+		boardCopy.make_move(curr);
 
 		int endstatesBefore = endPointsEvaluated;
 
 		int moveScore =
-			getMoveScoreRecursively(
+			get_move_score_recursively(
 				boardCopy,
 				depth - 1,
 				!isWhiteToMove,
@@ -40,7 +40,7 @@ int AlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& moves)
 
 		
 		std::cout
-			<< "Move: " << curr.getString()
+			<< "Move: " << curr.get_string()
 			<< ", Score: " << currScore
 			<< ", Endstates Evaluated: " << endPointsEvaluated - endstatesBefore
 			<< std::endl;
@@ -61,7 +61,7 @@ int AlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& moves)
 
 	std::string additionalInfo = "Pruned Branches: " + std::to_string(branchesPruned);
 	
-	printSearchStatistics(
+	print_search_statistics(
 		"Minimax with Alpha Beta Pruning",
 		nodesSearched,
 		endPointsEvaluated,
@@ -74,7 +74,7 @@ int AlphaBetaPruningBot::getMove(const ChessBoard& board, const MoveList& moves)
 	return bestMoveIdx;
 }
 
-int AlphaBetaPruningBot::getMoveScoreRecursively(
+int AlphaBetaPruningBot::get_move_score_recursively(
 	ChessBoard board,
 	int depth,
 	bool isMaximizingPlayer,
@@ -88,11 +88,11 @@ int AlphaBetaPruningBot::getMoveScoreRecursively(
 	{
 		endStatesSearched++;
 		nodesSearched++;
-		return evaluateBoard(board);
+		return evaluate_board(board);
 	}
 	else
 	{
-		MoveList moves = board.getAllLegalMoves();
+		MoveList moves = board.get_all_legal_moves();
 
 		//no more moves
 		if (moves.size() == 0)
@@ -100,25 +100,25 @@ int AlphaBetaPruningBot::getMoveScoreRecursively(
 			nodesSearched++;
 			endStatesSearched++;
 			//dont know if this works
-			return board.isKingInCheck() ?
-				(board.getCurrentTurnColor() == White ?
+			return board.is_king_in_check() ?
+				(board.get_current_turn_color() == white ?
 					//when the depth is very high, the checkmate can be done earlier
 					//(when you search with depth 4, the function gets called with 3, 2, 1, 0 recursively)
 					//therefore a higher depth in the argument means actually low depth.
 					////finding a checkmate at a low depth is better, because it can be delivered earlier
-					GAME_STATE_EVALUATION[BlackWon] - depth :
-					GAME_STATE_EVALUATION[WhiteWon] + depth)
+					GAME_STATE_EVALUATION[black_won] - depth :
+					GAME_STATE_EVALUATION[white_won] + depth)
 				: 0;
 		}
 		int bestEval = isMaximizingPlayer ? INT_MIN : INT_MAX;
 		for (Move curr : moves)
 		{
-			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(curr);
+			ChessBoard copyBoard = board.get_copy_by_value();
+			copyBoard.make_move(curr);
 
 			nodesSearched++;
 			int evaluation =
-				getMoveScoreRecursively(
+				get_move_score_recursively(
 					copyBoard,
 					depth - 1,
 					!isMaximizingPlayer,

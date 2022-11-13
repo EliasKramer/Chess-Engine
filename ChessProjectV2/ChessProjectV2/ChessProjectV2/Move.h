@@ -23,9 +23,9 @@ private:
 	friend bool operator !=(const Move& first, const Move& second);
 public:
 	//for normal and en passant moves
-	Move(Square givenStart, Square givenDest, MoveFlag flag = MoveFlag::Normal);
+	Move(Square givenStart, Square givenDest, MoveFlag flag = MoveFlag::normal);
 	//for promoting moves
-	Move(Square givenStart, Square givenDest, ChessColor color ,MoveFlag flag = MoveFlag::Normal);
+	Move(Square givenStart, Square givenDest, ChessColor color ,MoveFlag flag = MoveFlag::normal);
 	//for castling moves
 	Move(ChessColor col, CastlingType castleType);
 
@@ -35,7 +35,7 @@ public:
 	
 	void execute(BoardRepresentation& board) const;
 
-	virtual std::string getString() const;
+	virtual std::string get_string() const;
 };
 bool operator ==(const Move& first, const Move& second);
 bool operator !=(const Move& first, const Move& second);

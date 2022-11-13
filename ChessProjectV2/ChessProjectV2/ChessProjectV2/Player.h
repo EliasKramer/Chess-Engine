@@ -11,8 +11,8 @@ protected:
 public:
 	Player(std::string name);
 
-	std::string getName();
+	std::string get_name();
 
 	//returns the index of the move in the list
-	virtual int getMove(const ChessBoard& board, const MoveList& moves);
+	virtual int get_move(const ChessBoard& board, const MoveList& moves);
 };

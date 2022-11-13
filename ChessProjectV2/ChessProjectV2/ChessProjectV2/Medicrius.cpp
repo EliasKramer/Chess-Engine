@@ -8,14 +8,14 @@ Medicrius::Medicrius(std::string name)
 	:Player(name)
 {}
 
-int Medicrius::getMove(const ChessBoard& board, const MoveList& moves)
+int Medicrius::get_move(const ChessBoard& board, const MoveList& moves)
 {
 	//multithreading would also be useful here
 
 	auto begin = std::chrono::high_resolution_clock::now();
 
 	//needs to choose the greatest negative numbner if black
-	bool isWhiteToMove = board.getCurrentTurnColor() == White;
+	bool isWhiteToMove = board.get_current_turn_color() == white;
 	int colorMult = isWhiteToMove ? 1 : -1;
 
 	int endPointsEvaluated = 0;
@@ -30,14 +30,14 @@ int Medicrius::getMove(const ChessBoard& board, const MoveList& moves)
 	for (const Move curr : moves)
 	{
 		ChessBoard boardCopy = board;
-		boardCopy.makeMove(curr);
+		boardCopy.make_move(curr);
 
 		int maxCaptureDepthReached = 0;
 
 		int endstatesBefore = endPointsEvaluated;
 
 		int moveScore =
-			getMoveScoreRecursively(
+			get_move_score_recursively(
 				boardCopy,
 				depth - 1,
 				!isWhiteToMove,
@@ -51,7 +51,7 @@ int Medicrius::getMove(const ChessBoard& board, const MoveList& moves)
 		int currScore = colorMult * moveScore;
 
 		std::cout
-			<< "Move: " << curr.getString()
+			<< "Move: " << curr.get_string()
 			<< ", Score: " << currScore
 			<< ", Max Capture Depth: " << maxCaptureDepthReached
 			<< ", Endstates Evaluated: " << endPointsEvaluated - endstatesBefore
@@ -70,22 +70,22 @@ int Medicrius::getMove(const ChessBoard& board, const MoveList& moves)
 
 	long long duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
 
-	printSearchStatistics("Minimax with alpha beta pruning", nodesSearched, endPointsEvaluated, depth, moves[bestMoveIdx], bestMoveScore, duration);
+	print_search_statistics("Minimax with alpha beta pruning", nodesSearched, endPointsEvaluated, depth, moves[bestMoveIdx], bestMoveScore, duration);
 
 	return bestMoveIdx;
 }
 
-int Medicrius::evaluateBoard(const ChessBoard& board)
+int Medicrius::evaluate_board(const ChessBoard& board)
 {
 	//regulates how much the material (the pieces on the board) is worth
 
-	BoardRepresentation boardRep = board.getBoardRepresentation();
+	BoardRepresentation boardRep = board.get_board_representation();
 
 	//get the obvious out the way 
 	// - if white wins return highest possible number
 	// - if black wins return lowest possible number
 	// - stalemate and draw is 0
-	int gameStatePoints = GAME_STATE_EVALUATION[board.getGameState()];
+	int gameStatePoints = GAME_STATE_EVALUATION[board.get_game_state()];
 	//if the game is still ongoing the value will be -1 and thus should be continued evaluating
 	if (gameStatePoints != -1)
 	{
@@ -101,16 +101,16 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 		BitBoard idxBB = BB_SQUARE[i];
 
 		//iterate over every type except king
-		for (int typeIdx = 0; typeIdx <= Queen; typeIdx++)
+		for (int typeIdx = 0; typeIdx <= queen; typeIdx++)
 		{
 			//if current square overlaps with the current piece type
-			if (bitboardsOverlap(idxBB, boardRep.PiecesOfType[typeIdx]))
+			if (bitboards_overlap(idxBB, boardRep.pieces_of_type[typeIdx]))
 			{
 				//get the material value of the piece type
 				int materialValue = PIECETYPE_VALUE[typeIdx];
 
-				bool currPieceIsBlack = bitboardsOverlap(idxBB, boardRep.PiecesOfColor[Black]);
-				ChessColor currPieceColor = currPieceIsBlack ? Black : White;
+				bool currPieceIsBlack = bitboards_overlap(idxBB, boardRep.pieces_of_color[black]);
+				ChessColor currPieceColor = currPieceIsBlack ? black : white;
 
 				materialValue += POSITION_VALUE[currPieceColor][typeIdx][i];
 
@@ -129,8 +129,8 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 	//usually the king is worth 20k and the position value is added to that.
 	//this is not done here, since these values cancel out. - could be done for clarity
 	score +=
-		(POSITION_VALUE_KING[White][board.getGameDurationState()][boardRep.KingPos[White]] -
-			POSITION_VALUE_KING[Black][board.getGameDurationState()][boardRep.KingPos[Black]]);
+		(POSITION_VALUE_KING[white][board.get_game_duration_state()][boardRep.king_pos[white]] -
+			POSITION_VALUE_KING[black][board.get_game_duration_state()][boardRep.king_pos[black]]);
 
 	//TODO
 	//to encourage pawns for more structure, it would be useful to look if they get protected
@@ -139,7 +139,7 @@ int Medicrius::evaluateBoard(const ChessBoard& board)
 	return score;
 }
 
-void Medicrius::printSearchStatistics(
+void Medicrius::print_search_statistics(
 	std::string methodUsed,
 	int nodesSearched,
 	int endStatesEvaluated,
@@ -161,13 +161,13 @@ void Medicrius::printSearchStatistics(
 		<< additionalInfo << std::endl
 		<< "Nodes per second: " << nodesPerSecond << std::endl
 		<< "End states per second: " << endStatesPerSecond << std::endl
-		<< "Selected move: " << selectedMove.getString() << std::endl
+		<< "Selected move: " << selectedMove.get_string() << std::endl
 		<< "Score: " << score << ". " << std::endl
 		<< "---------------------------------------" << std::endl;
 
 }
 
-int Medicrius::getMoveScoreRecursively(
+int Medicrius::get_move_score_recursively(
 	ChessBoard board,
 	int depth,
 	bool isMaximizingPlayer,
@@ -184,7 +184,7 @@ int Medicrius::getMoveScoreRecursively(
 		/*
 		int currCaptureMovesDepth = 0;
 		int allCaptureMovesValue =
-			-getAllCaputureMoveScoreRecursively(
+			-get_all_capture_moves_score_recursively(
 				board,
 				-alpha,
 				-beta,
@@ -195,11 +195,11 @@ int Medicrius::getMoveScoreRecursively(
 		//std::cout << "Max depth: " << currCaptureMovesDepth << std::endl;
 		maxCaptureDepthReached = std::max(maxCaptureDepthReached, currCaptureMovesDepth);
 		return allCaptureMovesValue;*/
-		return evaluateBoard(board);
+		return evaluate_board(board);
 	}
 	else
 	{
-		MoveList moves = board.getAllLegalMoves();
+		MoveList moves = board.get_all_legal_moves();
 
 		//no more moves
 		if (moves.size() == 0)
@@ -207,25 +207,25 @@ int Medicrius::getMoveScoreRecursively(
 			nodesSearched++;
 			endStatesSearched++;
 			//dont know if this works
-			return board.isKingInCheck() ?
-				(board.getCurrentTurnColor() == White ?
+			return board.is_king_in_check() ?
+				(board.get_current_turn_color() == white ?
 					//when the depth is very high, the checkmate can be done earlier
 					//(when you search with depth 4, the function gets called with 3, 2, 1, 0 recursively)
 					//therefore a higher depth in the argument means actually low depth.
 					////finding a checkmate at a low depth is better, because it can be delivered earlier
-					GAME_STATE_EVALUATION[BlackWon] - depth :
-					GAME_STATE_EVALUATION[WhiteWon] + depth)
+					GAME_STATE_EVALUATION[black_won] - depth :
+					GAME_STATE_EVALUATION[white_won] + depth)
 				: 0;
 		}
 		int bestEval = isMaximizingPlayer ? INT_MIN : INT_MAX;
 		for (Move curr : moves)
 		{
-			ChessBoard copyBoard = board.getCopyByValue();
-			copyBoard.makeMove(curr);
+			ChessBoard copyBoard = board.get_copy_by_value();
+			copyBoard.make_move(curr);
 
 			nodesSearched++;
 			int evaluation =
-				getMoveScoreRecursively(
+				get_move_score_recursively(
 					copyBoard,
 					depth - 1,
 					!isMaximizingPlayer,
@@ -258,7 +258,7 @@ int Medicrius::getMoveScoreRecursively(
 	}
 }
 
-int Medicrius::getAllCaputureMoveScoreRecursively(
+int Medicrius::get_all_capture_moves_score_recursively(
 	ChessBoard board,
 	bool isMaximizingPlayer,
 	int alpha,
@@ -268,26 +268,26 @@ int Medicrius::getAllCaputureMoveScoreRecursively(
 	int& maxDepthReached,
 	int currDepth)
 {
-	MoveList possibleCaptures = board.getAllLegalCaptureMoves();
+	MoveList possibleCaptures = board.get_all_legal_capture_moves();
 
 	if (possibleCaptures.size() == 0)
 	{
 		nodesSearched++;
 		endStatesSearched++;
 		maxDepthReached = std::max(maxDepthReached, currDepth);
-		return evaluateBoard(board);
+		return evaluate_board(board);
 	}
 
 	int bestEvaluationFound = INT_MIN;
 
 	for (Move curr : possibleCaptures)
 	{
-		ChessBoard copyBoard = board.getCopyByValue();
-		copyBoard.makeMove(curr);
+		ChessBoard copyBoard = board.get_copy_by_value();
+		copyBoard.make_move(curr);
 
 		nodesSearched++;
 		int evaluation =
-			-getAllCaputureMoveScoreRecursively(
+			-get_all_capture_moves_score_recursively(
 				copyBoard,
 				!isMaximizingPlayer,
 				-alpha,

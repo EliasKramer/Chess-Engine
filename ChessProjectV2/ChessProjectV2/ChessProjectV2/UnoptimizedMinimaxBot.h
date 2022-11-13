@@ -4,7 +4,7 @@
 class UnoptimizedMinimaxBot : public Medicrius
 {
 public:
-	int getMove(const ChessBoard& board, const MoveList& moves) override;
+	int get_move(const ChessBoard& board, const MoveList& moves) override;
 private:
 	int minimax(
 		ChessBoard board,

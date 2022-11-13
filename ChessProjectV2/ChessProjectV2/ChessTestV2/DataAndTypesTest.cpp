@@ -13,11 +13,11 @@ namespace DataAndTypesTests
 	public:
 		TEST_METHOD(fenCharToColor)
 		{
-			Assert::IsTrue(White == getColorOfFenChar('D'));
-			Assert::IsTrue(Black == getColorOfFenChar('d'));
+			Assert::IsTrue(white == get_color_of_fen_char('D'));
+			Assert::IsTrue(black == get_color_of_fen_char('d'));
 
 			try {
-				getColorOfFenChar('$');
+				get_color_of_fen_char('$');
 				Assert::Fail();
 			}
 			catch (const std::string& errorMsg)
@@ -26,7 +26,7 @@ namespace DataAndTypesTests
 			}
 
 			try {
-				getColorOfFenChar('_', "Test Error Prefix");
+				get_color_of_fen_char('_', "Test Error Prefix");
 				Assert::Fail();
 			}
 			catch (const std::string& errorMsg)
@@ -36,13 +36,13 @@ namespace DataAndTypesTests
 		}
 		TEST_METHOD(fenCharToCastlingType)
 		{
-			Assert::IsTrue(CastleShort == getCastlingTypeOfFenChar('K'));
-			Assert::IsTrue(CastleLong == getCastlingTypeOfFenChar('Q'));
-			Assert::IsTrue(CastleShort == getCastlingTypeOfFenChar('k'));
-			Assert::IsTrue(CastleLong == getCastlingTypeOfFenChar('q'));
+			Assert::IsTrue(castle_short == get_castling_type_of_fen_char('K'));
+			Assert::IsTrue(castle_long == get_castling_type_of_fen_char('Q'));
+			Assert::IsTrue(castle_short == get_castling_type_of_fen_char('k'));
+			Assert::IsTrue(castle_long == get_castling_type_of_fen_char('q'));
 			
 			try {
-				getColorOfFenChar('D');
+				get_color_of_fen_char('D');
 			}
 			catch (const std::string& errorMsg)
 			{
@@ -50,7 +50,7 @@ namespace DataAndTypesTests
 			}
 
 			try {
-				getColorOfFenChar('E', "Error Msg Prefix");
+				get_color_of_fen_char('E', "Error Msg Prefix");
 			}
 			catch (const std::string& errorMsg)
 			{
@@ -59,17 +59,17 @@ namespace DataAndTypesTests
 		}
 		TEST_METHOD(stringToSquare)
 		{
-			Assert::IsTrue(SQUARE_NONE == getSquareFromString("-"));
-			Assert::IsTrue(A1 == getSquareFromString("a1"));
-			Assert::IsTrue(H8 == getSquareFromString("h8"));
-			Assert::IsTrue(E4 == getSquareFromString("e4"));
-			Assert::IsTrue(D5 == getSquareFromString("d5"));
-			Assert::IsTrue(D6 == getSquareFromString("d6"));
-			Assert::IsTrue(D7 == getSquareFromString("d7"));
-			Assert::IsTrue(D8 == getSquareFromString("d8"));
+			Assert::IsTrue(SQUARE_NONE == get_square_from_string("-"));
+			Assert::IsTrue(A1 == get_square_from_string("a1"));
+			Assert::IsTrue(H8 == get_square_from_string("h8"));
+			Assert::IsTrue(E4 == get_square_from_string("e4"));
+			Assert::IsTrue(D5 == get_square_from_string("d5"));
+			Assert::IsTrue(D6 == get_square_from_string("d6"));
+			Assert::IsTrue(D7 == get_square_from_string("d7"));
+			Assert::IsTrue(D8 == get_square_from_string("d8"));
 
 			try {
-				getSquareFromString("a");
+				get_square_from_string("a");
 			}
 			catch (const std::string& errorMsg)
 			{
@@ -77,7 +77,7 @@ namespace DataAndTypesTests
 			}
 
 			try {
-				getSquareFromString("a1", "Error Msg Prefix");
+				get_square_from_string("a1", "Error Msg Prefix");
 			}
 			catch (const std::string& errorMsg)
 			{
@@ -85,7 +85,7 @@ namespace DataAndTypesTests
 			}
 
 			try {
-				getSquareFromString("h9", "Error Msg Prefix");
+				get_square_from_string("h9", "Error Msg Prefix");
 			}
 			catch (const std::string& errorMsg)
 			{
@@ -93,7 +93,7 @@ namespace DataAndTypesTests
 			}
 
 			try {
-				getSquareFromString("i1", "Error Msg Prefix");
+				get_square_from_string("i1", "Error Msg Prefix");
 			}
 			catch (const std::string& errorMsg)
 			{
@@ -101,7 +101,7 @@ namespace DataAndTypesTests
 			}
 
 			try {
-				getSquareFromString("a0", "Error Msg Prefix");
+				get_square_from_string("a0", "Error Msg Prefix");
 			}
 			catch (const std::string& errorMsg)
 			{

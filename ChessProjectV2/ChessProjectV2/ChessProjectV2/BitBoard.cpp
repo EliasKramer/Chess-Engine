@@ -16,52 +16,52 @@ bool operator!=(const Square first, const Square second)
 	return (int)first == (int)second;
 }
 
-int getRankOfSquare(Square square)
+int get_rank_of_square(Square square)
 {
 	return square / 8;
 }
 
-int getFileOfSquare(Square square)
+int get_file_of_square(Square square)
 {
 	return square % 8;
 }
 
-bool squaresAreOnTheSameFile(Square first, Square second)
+bool squares_are_same_file(Square first, Square second)
 {
 	return
-		getFileOfSquare(first) == getFileOfSquare(second);
+		get_file_of_square(first) == get_file_of_square(second);
 }
 
-bool squaresAreOnTheSameRank(Square first, Square second)
+bool squares_are_on_the_same_rank(Square first, Square second)
 {
-	return getRankOfSquare(first) == getRankOfSquare(second);
+	return get_rank_of_square(first) == get_rank_of_square(second);
 }
 
-bool squaresAreOnTheSameDiagonal(Square first, Square second)
+bool squares_are_on_the_same_diagonal(Square first, Square second)
 {
 	return
 		((first-second) % 7 == 0) || 
 		((first-second) % 9 == 0);
 }
 
-bool destinationIsOnBoard(Square start, Direction direction)
+bool destination_is_on_board(Square start, Direction direction)
 {
 	//if the invalid board for the direction and
 	//the start square dont overlap then the new pos is valid
 	return (INVALID_FIELDS_FOR_DIR.at(direction) & BB_SQUARE[start]) == 0;
 }
 
-bool squareOverlapsWithBB(Square pos, BitBoard bb)
+bool square_overlaps_with_BB(Square pos, BitBoard bb)
 {
 	return (BB_SQUARE[pos] & bb) != 0ULL;
 }
 
-bool bitboardsOverlap(BitBoard first, BitBoard second)
+bool bitboards_overlap(BitBoard first, BitBoard second)
 {
 	return (first & second) != 0ULL;
 }
 
-std::array<Square, MAX_SQUARES_BETWEEN> getSquaresBetween(
+std::array<Square, MAX_SQUARES_BETWEEN> get_squares_between(
 	Square start,
 	Square end)
 {
@@ -75,10 +75,10 @@ std::array<Square, MAX_SQUARES_BETWEEN> getSquaresBetween(
 	//check could be implemented wether 
 	//the squares are on the same file, rank or diagonal
 
-	int startFile = getFileOfSquare(start);
-	int startRank = getRankOfSquare(start);
-	int endFile = getFileOfSquare(end);
-	int endRank = getRankOfSquare(end);
+	int startFile = get_file_of_square(start);
+	int startRank = get_rank_of_square(start);
+	int endFile = get_file_of_square(end);
+	int endRank = get_rank_of_square(end);
 	
 	int fileDiff = endFile - startFile;
 	int rankDiff = endRank - startRank;

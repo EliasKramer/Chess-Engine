@@ -2,12 +2,12 @@
 
 BoardRepresentation::BoardRepresentation()
 	:
-	AllPieces(BITBOARD_NONE),
-	PiecesOfColor{
+	all_pieces(BITBOARD_NONE),
+	pieces_of_color{
 	BITBOARD_NONE,
 	BITBOARD_NONE },
 
-	PiecesOfType{
+	pieces_of_type{
 	BITBOARD_NONE,
 	BITBOARD_NONE,
 	BITBOARD_NONE,
@@ -15,21 +15,21 @@ BoardRepresentation::BoardRepresentation()
 	BITBOARD_NONE,
 	BITBOARD_NONE },
 	
-	KingPos{E1, E8}
+	king_pos{E1, E8}
 {}
 
-ChessPiece BoardRepresentation::getPieceAt(Square square) const
+ChessPiece BoardRepresentation::get_piece_at(Square square) const
 {
 	BitBoard squareBB = BB_SQUARE[square];
 	//can be improved by adding null types
-	ChessColor colFound = NoColor;
-	PieceType typeFound = NoType;
+	ChessColor colFound = no_color;
+	PieceType typeFound = no_type;
 
 	for (int i = 0; i < DIFFERENT_CHESS_COLORS; i++)
 	{
 		ChessColor currCol = (ChessColor)i;
 
-		if (bitboardsOverlap(PiecesOfColor[currCol], squareBB))
+		if (bitboards_overlap(pieces_of_color[currCol], squareBB))
 		{
 			colFound = currCol;
 			break;
@@ -39,7 +39,7 @@ ChessPiece BoardRepresentation::getPieceAt(Square square) const
 	{
 		PieceType currType = (PieceType)i;
 
-		if (bitboardsOverlap(PiecesOfType[currType], squareBB))
+		if (bitboards_overlap(pieces_of_type[currType], squareBB))
 		{
 			typeFound = currType;
 			break;
@@ -49,81 +49,81 @@ ChessPiece BoardRepresentation::getPieceAt(Square square) const
 	return ChessPiece(colFound, typeFound);
 }
 
-void BoardRepresentation::setAtPosition(ChessPiece piece, Square position)
+void BoardRepresentation::set_at_position(ChessPiece piece, Square position)
 {
-	if(piece.getType() == King)
+	if(piece.get_type() == king)
 	{
-		KingPos[piece.getColor()] = position;
+		king_pos[piece.get_color()] = position;
 	}
 
-	PiecePositions[piece.getColor()][piece.getType()].push_back(position);
+	piece_positions[piece.get_color()][piece.get_type()].push_back(position);
 
-	setPieceBitBoard(piece, BB_SQUARE[position]);
+	set_piece_bitboard(piece, BB_SQUARE[position]);
 }
 
-void BoardRepresentation::delAtPos(Square position)
+void BoardRepresentation::del_at_pos(Square position)
 {
 	BitBoard keepPiecesMask = ~(BB_SQUARE[position]);
 
-	AllPieces = AllPieces & keepPiecesMask;
+	all_pieces = all_pieces & keepPiecesMask;
 
 	for (int i = 0; i < DIFFERENT_CHESS_COLORS; i++)
 	{
 		ChessColor currCol = (ChessColor)i;
-		PiecesOfColor[currCol] = PiecesOfColor[currCol] & keepPiecesMask;
+		pieces_of_color[currCol] = pieces_of_color[currCol] & keepPiecesMask;
 	}
 
 	for (int i = 0; i < NUMBER_OF_DIFFERENT_PIECE_TYPES; i++)
 	{
 		PieceType currType = (PieceType)i;
-		PiecesOfType[currType] = PiecesOfType[currType] & keepPiecesMask;
+		pieces_of_type[currType] = pieces_of_type[currType] & keepPiecesMask;
 	}
 
-	removeAllFromPieceListAt(position);
+	remove_all_from_piece_list_at(position);
 }
 
-void BoardRepresentation::moveFromPosToPos(Square start, Square destination)
+void BoardRepresentation::move_from_pos_to_pos(Square start, Square destination)
 {
 	BitBoard startPosBB = BB_SQUARE[start];
 	BitBoard destPosBB = BB_SQUARE[destination];
 
-	ChessPiece startPiece = getPieceAt(start);
-	ChessPiece destPiece = getPieceAt(destination);
+	ChessPiece startPiece = get_piece_at(start);
+	ChessPiece destPiece = get_piece_at(destination);
 
 	//if there is not piece to move return
-	if (!startPiece.isValid())
+	if (!startPiece.is_valid())
 	{
 		return;
 	}
-	if (destPiece.isValid())
+	if (destPiece.is_valid())
 	{
-		delAtPos(destination);
+		del_at_pos(destination);
 	}
 
 	//add piece to the color bitboard
-	PiecesOfColor[startPiece.getColor()] = PiecesOfColor[startPiece.getColor()] | destPosBB;
+	pieces_of_color[startPiece.get_color()] = pieces_of_color[startPiece.get_color()] | destPosBB;
 	//add piece to the type bitboard
-	PiecesOfType[startPiece.getType()] = PiecesOfType[startPiece.getType()] | destPosBB;
+	pieces_of_type[startPiece.get_type()] = pieces_of_type[startPiece.get_type()] | destPosBB;
 	//add piece to the all bitbaord
-	AllPieces = AllPieces | destPosBB;
+	all_pieces = all_pieces | destPosBB;
 
-	delAtPos(start);
+	del_at_pos(start);
 }
 
-void BoardRepresentation::setPieceBitBoard(ChessPiece piece, BitBoard bitboard)
+void BoardRepresentation::set_piece_bitboard(ChessPiece piece, BitBoard bitboard)
 {
-	AllPieces = AllPieces | bitboard;
+	all_pieces = all_pieces | bitboard;
 
-	ChessColor col = piece.getColor();
-	PiecesOfColor[col] = PiecesOfColor[col] | bitboard;
+	ChessColor col = piece.get_color();
+	pieces_of_color[col] = pieces_of_color[col] | bitboard;
 
-	PieceType type = piece.getType();
-	PiecesOfType[type] = PiecesOfType[type] | bitboard;
+	PieceType type = piece.get_type();
+	pieces_of_type[type] = pieces_of_type[type] | bitboard;
 }
 
-void BoardRepresentation::removeFromPieceList(ChessPiece piece, Square position)
+void BoardRepresentation::remove_from_piece_list(ChessPiece piece, Square position)
 {
-	std::vector<Square>& pieceList = PiecePositions[piece.getColor()][piece.getType()];
+	std::vector<Square>& pieceList = piece_positions[piece.get_color()][piece.get_type()];
 
 	for (int i = 0; i < pieceList.size(); i++)
 	{
@@ -135,7 +135,7 @@ void BoardRepresentation::removeFromPieceList(ChessPiece piece, Square position)
 	}
 }
 
-void BoardRepresentation::removeAllFromPieceListAt(Square position)
+void BoardRepresentation::remove_all_from_piece_list_at(Square position)
 {
 	for (int i = 0; i < DIFFERENT_CHESS_COLORS; i++)
 	{
@@ -145,7 +145,7 @@ void BoardRepresentation::removeAllFromPieceListAt(Square position)
 		{
 			PieceType currType = (PieceType)j;
 
-			removeFromPieceList(ChessPiece(currCol, currType), position);
+			remove_from_piece_list(ChessPiece(currCol, currType), position);
 		}
 	}
 }
@@ -154,17 +154,17 @@ void BoardRepresentation::removeAllFromPieceListAt(Square position)
 
 bool operator==(const BoardRepresentation& first, const BoardRepresentation& second)
 {
-	bool retVal = first.AllPieces == second.AllPieces
-		&& (first.PiecesOfColor[White] == second.PiecesOfColor[White])
-		&& (first.PiecesOfColor[Black] == second.PiecesOfColor[Black]);
+	bool retVal = first.all_pieces == second.all_pieces
+		&& (first.pieces_of_color[white] == second.pieces_of_color[white])
+		&& (first.pieces_of_color[black] == second.pieces_of_color[black]);
 
 	for (int i = 0; i < NUMBER_OF_DIFFERENT_PIECE_TYPES; i++)
 	{
-		retVal = retVal && (first.PiecesOfType[i] == second.PiecesOfType[i]);
+		retVal = retVal && (first.pieces_of_type[i] == second.pieces_of_type[i]);
 	}
 
-	retVal = retVal && (first.KingPos[White] == second.KingPos[White]);
-	retVal = retVal && (first.KingPos[Black] == second.KingPos[Black]);
+	retVal = retVal && (first.king_pos[white] == second.king_pos[white]);
+	retVal = retVal && (first.king_pos[black] == second.king_pos[black]);
 
 	return retVal;
 }

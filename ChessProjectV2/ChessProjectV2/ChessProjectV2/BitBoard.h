@@ -98,21 +98,21 @@ const std::map<Direction, BitBoard> INVALID_FIELDS_FOR_DIR
 //there can be a maximum of 6 squares between them
 const int MAX_SQUARES_BETWEEN = 6;
 
-bool destinationIsOnBoard(Square start, Direction direction);
-bool squareOverlapsWithBB(Square pos, BitBoard bb);
-bool bitboardsOverlap(BitBoard first, BitBoard second);
+bool destination_is_on_board(Square start, Direction direction);
+bool square_overlaps_with_BB(Square pos, BitBoard bb);
+bool bitboards_overlap(BitBoard first, BitBoard second);
 
 //this is 0 based (a1 for example returns 0)
-int getRankOfSquare(Square square);
+int get_rank_of_square(Square square);
 //this is 0 based (a1 for example returns 0)
-int getFileOfSquare(Square square);
+int get_file_of_square(Square square);
 
-bool squaresAreOnTheSameFile(Square first, Square second);
-bool squaresAreOnTheSameRank(Square first, Square second);
-bool squaresAreOnTheSameDiagonal(Square first, Square second);
+bool squares_are_same_file(Square first, Square second);
+bool squares_are_on_the_same_rank(Square first, Square second);
+bool squares_are_on_the_same_diagonal(Square first, Square second);
 
 //gets all squares between two squares, excluding the start and end square
 //this only works on straight and diagonal paths
-std::array<Square, MAX_SQUARES_BETWEEN> getSquaresBetween(
+std::array<Square, MAX_SQUARES_BETWEEN> get_squares_between(
 	Square start,
 	Square end);

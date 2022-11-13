@@ -5,21 +5,21 @@ const std::array<std::array<std::array<Square, 3>, 2>, 2> SQUARES_FOR_KING_CASTL
 
 	std::array<std::array<std::array<Square, 3>, 2>, 2> result = {};
 
-	result[White][CastleShort][0] = E1;
-	result[White][CastleShort][1] = F1;
-	result[White][CastleShort][2] = G1;
+	result[white][castle_short][0] = E1;
+	result[white][castle_short][1] = F1;
+	result[white][castle_short][2] = G1;
 
-	result[White][CastleLong][0] = E1;
-	result[White][CastleLong][1] = D1;
-	result[White][CastleLong][2] = C1;
+	result[white][castle_long][0] = E1;
+	result[white][castle_long][1] = D1;
+	result[white][castle_long][2] = C1;
 
-	result[Black][CastleShort][0] = E8;
-	result[Black][CastleShort][1] = F8;
-	result[Black][CastleShort][2] = G8;
+	result[black][castle_short][0] = E8;
+	result[black][castle_short][1] = F8;
+	result[black][castle_short][2] = G8;
 
-	result[Black][CastleLong][0] = E8;
-	result[Black][CastleLong][1] = D8;
-	result[Black][CastleLong][2] = C8;
+	result[black][castle_long][0] = E8;
+	result[black][castle_long][1] = D8;
+	result[black][castle_long][2] = C8;
 
 	return result;
 }();
@@ -28,17 +28,17 @@ const std::array<std::array<std::array<Square, 2>, 2>, 2> SQUARES_FOR_ROOK_CASTL
 []()->std::array<std::array<std::array<Square, 2>, 2>, 2> {
 	std::array<std::array<std::array<Square, 2>, 2>, 2> result = {};
 
-	result[White][CastleShort][0] = H1;
-	result[White][CastleShort][1] = F1;
+	result[white][castle_short][0] = H1;
+	result[white][castle_short][1] = F1;
 
-	result[White][CastleLong][0] = A1;
-	result[White][CastleLong][1] = D1;
+	result[white][castle_long][0] = A1;
+	result[white][castle_long][1] = D1;
 
-	result[Black][CastleShort][0] = H8;
-	result[Black][CastleShort][1] = F8;
+	result[black][castle_short][0] = H8;
+	result[black][castle_short][1] = F8;
 
-	result[Black][CastleLong][0] = A8;
-	result[Black][CastleLong][1] = D8;
+	result[black][castle_long][0] = A8;
+	result[black][castle_long][1] = D8;
 
 	return result;
 }();
@@ -54,7 +54,7 @@ const std::array<BitBoard, 64> KNIGHT_ATTACK_BB = []()->std::array<BitBoard, 64>
 		for (int j = 0; j < 8; j++)
 		{
 			Direction dir = KNIGHT_DIRECTIONS[j];
-			if (destinationIsOnBoard(currSquare, dir))
+			if (destination_is_on_board(currSquare, dir))
 			{
 				currBitBoard |= BB_SQUARE[i + dir];
 			}
@@ -71,7 +71,7 @@ const std::array<std::array<BitBoard, 64>, 2> PAWN_ATTACK_BB =
 
 	std::array<std::array<BitBoard, 64>, 2> result = {};
 
-	for (int colorIdx = White; colorIdx <= Black; colorIdx++)
+	for (int colorIdx = white; colorIdx <= black; colorIdx++)
 	{
 		for (int i = A1; i <= H8; i++)
 		{
@@ -79,7 +79,7 @@ const std::array<std::array<BitBoard, 64>, 2> PAWN_ATTACK_BB =
 			for (int j = 0; j < 2; j++)
 			{
 				Direction dir = PAWN_ATTACK_DIRECTION[colorIdx][j];
-				if (destinationIsOnBoard(currSquare, dir))
+				if (destination_is_on_board(currSquare, dir))
 				{
 					result[colorIdx][i] |= BB_SQUARE[i + dir];
 				}
@@ -101,7 +101,7 @@ const std::array<BitBoard, 64> KING_ATTACKS_BB = []()->std::array<BitBoard, 64> 
 		for (int j = 0; j < 8; j++)
 		{
 			Direction dir = ALL_SLIDING_DIRECTIONS[j];
-			if (destinationIsOnBoard(currSquare, dir))
+			if (destination_is_on_board(currSquare, dir))
 			{
 				currBitBoard |= BB_SQUARE[i + dir];
 			}
@@ -137,7 +137,7 @@ const int POSITION_VALUE[2][NUMBER_OF_DIFFERENT_PIECE_TYPES - 1][64]
 
 	//white
 	{
-		//Pawn
+		//pawn
 		{0, 0, 0, 0, 0, 0, 0, 0,
 		5, 10, 10,-20,-20, 10, 10, 5,
 		5, -5,-10, 0, 0,-10, -5, 5,
@@ -147,7 +147,7 @@ const int POSITION_VALUE[2][NUMBER_OF_DIFFERENT_PIECE_TYPES - 1][64]
 		50, 50, 50, 50, 50, 50, 50, 50,
 		0, 0, 0, 0, 0, 0, 0, 0},
 
-		//Knight
+		//knight
 		{-50,-40,-30,-30,-30,-30,-40,-50,
 		-40,-20, 0, 5, 5, 0,-20,-40,
 		-30, 5, 10, 15, 15, 10, 5,-30,
@@ -157,7 +157,7 @@ const int POSITION_VALUE[2][NUMBER_OF_DIFFERENT_PIECE_TYPES - 1][64]
 		-40,-20, 0, 0, 0, 0,-20,-40,
 		-50,-40,-30,-30,-30,-30,-40,-50},
 
-		//Bishop
+		//bishop
 		{-20,-10,-10,-10,-10,-10,-10,-20,
 		-10, 5, 0, 0, 0, 0, 5,-10,
 		-10, 10, 10, 10, 10, 10, 10,-10,
@@ -167,7 +167,7 @@ const int POSITION_VALUE[2][NUMBER_OF_DIFFERENT_PIECE_TYPES - 1][64]
 		-10, 0, 0, 0, 0, 0, 0,-10,
 		-20,-10,-10,-10,-10,-10,-10,-20},
 
-		//Rook
+		//rook
 		{0,0, 0, 5, 5, 0, 0, 0,
 		-5, 0, 0, 0, 0, 0, 0, -5,
 		-5, 0, 0, 0, 0, 0, 0, -5,
@@ -177,7 +177,7 @@ const int POSITION_VALUE[2][NUMBER_OF_DIFFERENT_PIECE_TYPES - 1][64]
 		5, 10, 10, 10, 10, 10, 10, 5,
 		0, 0, 0, 0, 0, 0, 0, 0},
 
-		//Queen
+		//queen
 		{-20,-10,-10, -5, -5,-10,-10,-20,
 		-10, 0, 5, 0, 0, 0, 0,-10,
 		-10, 5, 5, 5, 5, 5, 0,-10,
@@ -189,7 +189,7 @@ const int POSITION_VALUE[2][NUMBER_OF_DIFFERENT_PIECE_TYPES - 1][64]
 	 },
 	//black
 	{
-		//Pawn
+		//pawn
 		{0, 0, 0, 0, 0, 0, 0, 0,
 		50, 50, 50, 50, 50, 50, 50, 50,
 		10, 10, 20, 30, 30, 20, 10, 10,
@@ -199,7 +199,7 @@ const int POSITION_VALUE[2][NUMBER_OF_DIFFERENT_PIECE_TYPES - 1][64]
 		 5, 10, 10,-20,-20, 10, 10, 5,
 		 0, 0, 0, 0, 0, 0, 0, 0},
 
-		 //Knight
+		 //knight
 		 {-50,-40,-30,-30,-30,-30,-40,-50,
 		 -40,-20, 0, 0, 0, 0,-20,-40,
 		 -30, 0, 10, 15, 15, 10, 0,-30,
@@ -209,7 +209,7 @@ const int POSITION_VALUE[2][NUMBER_OF_DIFFERENT_PIECE_TYPES - 1][64]
 		 -40,-20, 0, 5, 5, 0,-20,-40,
 		 -50,-40,-30,-30,-30,-30,-40,-50},
 
-		 //Bishop
+		 //bishop
 		 {-20,-10,-10,-10,-10,-10,-10,-20,
 		 -10, 0, 0, 0, 0, 0, 0,-10,
 		 -10, 0, 5, 10, 10, 5, 0,-10,
@@ -219,7 +219,7 @@ const int POSITION_VALUE[2][NUMBER_OF_DIFFERENT_PIECE_TYPES - 1][64]
 		 -10, 5, 0, 0, 0, 0, 5,-10,
 		 -20,-10,-10,-10,-10,-10,-10,-20},
 
-		 //Rook
+		 //rook
 		 {0, 0, 0, 0, 0, 0, 0, 0,
 		 5, 10, 10, 10, 10, 10, 10, 5,
 		 -5, 0, 0, 0, 0, 0, 0, -5,
@@ -229,7 +229,7 @@ const int POSITION_VALUE[2][NUMBER_OF_DIFFERENT_PIECE_TYPES - 1][64]
 		 -5, 0, 0, 0, 0, 0, 0, -5,
 		 0, 0, 0, 5, 5, 0, 0, 0},
 
-		 //Queen
+		 //queen
 		 {-20,-10,-10, -5, -5,-10,-10,-20,
 		 -10, 0, 0, 0, 0, 0, 0,-10,
 		 -10, 0, 5, 5, 5, 5, 0,-10,

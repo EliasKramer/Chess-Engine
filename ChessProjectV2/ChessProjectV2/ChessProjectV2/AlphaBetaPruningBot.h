@@ -4,9 +4,9 @@
 class AlphaBetaPruningBot : public Medicrius
 {
 public:
-	int getMove(const ChessBoard& board, const MoveList& moves) override;
+	int get_move(const ChessBoard& board, const MoveList& moves) override;
 private:
-	int getMoveScoreRecursively(
+	int get_move_score_recursively(
 		ChessBoard board,
 		int depth,
 		bool isMaximizingPlayer,

@@ -4,10 +4,10 @@ Move::Move(Square givenStart, Square givenDest, MoveFlag flag) :
 	_start(givenStart),
 	_destination(givenDest),
 	_flag(flag),
-	_colorOfPiece(ChessColor::NoColor)
+	_colorOfPiece(ChessColor::no_color)
 {
-	if ((flag == Normal ||
-		flag == EnPassant) == false)
+	if ((flag == normal ||
+		flag == en_passant) == false)
 	{
 		throw std::invalid_argument("Invalid flag for move (False constructor called)");
 	}
@@ -23,10 +23,10 @@ Move::Move(
 	_flag(flag),
 	_colorOfPiece(color)
 {
-	if ((flag == MoveFlag::PromoteQueen ||
-		flag == MoveFlag::PromoteRook ||
-		flag == MoveFlag::PromoteBishop ||
-		flag == MoveFlag::PromoteKnight) == false)
+	if ((flag == MoveFlag::promote_queen ||
+		flag == MoveFlag::promote_rook ||
+		flag == MoveFlag::promote_bishop ||
+		flag == MoveFlag::promote_knight) == false)
 	{
 		throw std::invalid_argument("Invalid flag for move (False constructor called)");
 	}
@@ -35,10 +35,10 @@ Move::Move(
 Move::Move(ChessColor col, CastlingType castleType) :
 	_start(SQUARE_NONE),
 	_destination(SQUARE_NONE),
-	_flag(Castle),
+	_flag(castle),
 	_colorOfPiece(col)
 {
-	if (_flag != Castle)
+	if (_flag != castle)
 	{
 		throw std::invalid_argument("Invalid flag for move (False constructor called)");
 	}
@@ -66,12 +66,12 @@ void Move::execute(BoardRepresentation& board) const
 {
 	//TODO Implement getting castling squares
 	//board.copySquareToPos(_start, _destination);
-	//board.delAtPos(_start);
+	//board.del_at_pos(_start);
 }
 
-std::string Move::getString() const
+std::string Move::get_string() const
 {	
-	if (_flag == Castle)
+	if (_flag == castle)
 	{
 		return CASTLE_STRING_FOR_DESTINATION.at(_destination);
 	}

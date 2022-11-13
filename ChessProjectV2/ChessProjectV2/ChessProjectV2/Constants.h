@@ -79,20 +79,20 @@ const Square START_SQUARE_KING_CASTLING[2] =
 //first dimension is color, second is castling type
 const Square DESTINATION_SQUARE_KING_CASTLING[2][2] =
 {
-	//White
+	//white
 	{G1, C1},
-	//Black
+	//black
 	{G8, C8}
 };
 
 const std::map<MoveFlag, std::string> MOVE_FLAG_STRING = {
-	{MoveFlag::Normal, ""},
-	{MoveFlag::EnPassant, ""},
-	{MoveFlag::Castle, ""},
-	{MoveFlag::PromoteQueen, "q"},
-	{MoveFlag::PromoteRook, "r"},
-	{MoveFlag::PromoteBishop, "b"},
-	{MoveFlag::PromoteKnight, "n"}
+	{MoveFlag::normal, ""},
+	{MoveFlag::en_passant, ""},
+	{MoveFlag::castle, ""},
+	{MoveFlag::promote_queen, "q"},
+	{MoveFlag::promote_rook, "r"},
+	{MoveFlag::promote_bishop, "b"},
+	{MoveFlag::promote_knight, "n"}
 };
 
 const std::map<Square, std::string> CASTLE_STRING_FOR_DESTINATION = {

@@ -18,10 +18,10 @@ public:
 	ChessPiece(ChessColor color, PieceType type);
 	ChessPiece(char fen_char);
 	
-	PieceType getType() const;
-	ChessColor getColor() const;
+	PieceType get_type() const;
+	ChessColor get_color() const;
 
-	bool isValid() const;
+	bool is_valid() const;
 };
 bool operator ==(
 	const ChessPiece& first,
