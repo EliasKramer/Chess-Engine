@@ -26,18 +26,18 @@ int get_file_of_square(Square square)
 	return square % 8;
 }
 
-bool squares_are_same_file(Square first, Square second)
+bool squares_share_file(Square first, Square second)
 {
 	return
 		get_file_of_square(first) == get_file_of_square(second);
 }
 
-bool squares_are_on_the_same_rank(Square first, Square second)
+bool squares_share_rank(Square first, Square second)
 {
 	return get_rank_of_square(first) == get_rank_of_square(second);
 }
 
-bool squares_are_on_the_same_diagonal(Square first, Square second)
+bool squares_share_diagonal(Square first, Square second)
 {
 	return
 		((first-second) % 7 == 0) || 

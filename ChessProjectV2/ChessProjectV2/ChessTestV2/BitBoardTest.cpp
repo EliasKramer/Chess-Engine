@@ -196,204 +196,204 @@ namespace BitBoardTest
 		}
 		TEST_METHOD(squares_are_on_the_same_file)
 		{
-			Assert::IsTrue(squares_are_same_file(A1, A2));
-			Assert::IsTrue(squares_are_same_file(A1, A3));
-			Assert::IsTrue(squares_are_same_file(A1, A4));
-			Assert::IsTrue(squares_are_same_file(A1, A5));
-			Assert::IsTrue(squares_are_same_file(A1, A6));
-			Assert::IsTrue(squares_are_same_file(A1, A7));
-			Assert::IsTrue(squares_are_same_file(A1, A8));
+			Assert::IsTrue(squares_share_file(A1, A2));
+			Assert::IsTrue(squares_share_file(A1, A3));
+			Assert::IsTrue(squares_share_file(A1, A4));
+			Assert::IsTrue(squares_share_file(A1, A5));
+			Assert::IsTrue(squares_share_file(A1, A6));
+			Assert::IsTrue(squares_share_file(A1, A7));
+			Assert::IsTrue(squares_share_file(A1, A8));
 
-			Assert::IsTrue(squares_are_same_file(B1, B2));
-			Assert::IsTrue(squares_are_same_file(B1, B3));
-			Assert::IsTrue(squares_are_same_file(B1, B4));
-			Assert::IsTrue(squares_are_same_file(B1, B5));
-			Assert::IsTrue(squares_are_same_file(B1, B6));
-			Assert::IsTrue(squares_are_same_file(B1, B7));
-			Assert::IsTrue(squares_are_same_file(B1, B8));
+			Assert::IsTrue(squares_share_file(B1, B2));
+			Assert::IsTrue(squares_share_file(B1, B3));
+			Assert::IsTrue(squares_share_file(B1, B4));
+			Assert::IsTrue(squares_share_file(B1, B5));
+			Assert::IsTrue(squares_share_file(B1, B6));
+			Assert::IsTrue(squares_share_file(B1, B7));
+			Assert::IsTrue(squares_share_file(B1, B8));
 
-			Assert::IsTrue(squares_are_same_file(C1, C2));
-			Assert::IsTrue(squares_are_same_file(C1, C3));
-			Assert::IsTrue(squares_are_same_file(C1, C4));
-			Assert::IsTrue(squares_are_same_file(C1, C5));
-			Assert::IsTrue(squares_are_same_file(C1, C6));
-			Assert::IsTrue(squares_are_same_file(C1, C7));
-			Assert::IsTrue(squares_are_same_file(C1, C8));
+			Assert::IsTrue(squares_share_file(C1, C2));
+			Assert::IsTrue(squares_share_file(C1, C3));
+			Assert::IsTrue(squares_share_file(C1, C4));
+			Assert::IsTrue(squares_share_file(C1, C5));
+			Assert::IsTrue(squares_share_file(C1, C6));
+			Assert::IsTrue(squares_share_file(C1, C7));
+			Assert::IsTrue(squares_share_file(C1, C8));
 
-			Assert::IsTrue(squares_are_same_file(D1, D2));
-			Assert::IsTrue(squares_are_same_file(D1, D3));
-			Assert::IsTrue(squares_are_same_file(D1, D4));
-			Assert::IsTrue(squares_are_same_file(D1, D5));
-			Assert::IsTrue(squares_are_same_file(D1, D6));
-			Assert::IsTrue(squares_are_same_file(D1, D7));
-			Assert::IsTrue(squares_are_same_file(D1, D8));
+			Assert::IsTrue(squares_share_file(D1, D2));
+			Assert::IsTrue(squares_share_file(D1, D3));
+			Assert::IsTrue(squares_share_file(D1, D4));
+			Assert::IsTrue(squares_share_file(D1, D5));
+			Assert::IsTrue(squares_share_file(D1, D6));
+			Assert::IsTrue(squares_share_file(D1, D7));
+			Assert::IsTrue(squares_share_file(D1, D8));
 
-			Assert::IsTrue(squares_are_same_file(E1, E2));
-			Assert::IsTrue(squares_are_same_file(E1, E3));
-			Assert::IsTrue(squares_are_same_file(E1, E4));
-			Assert::IsTrue(squares_are_same_file(E1, E5));
-			Assert::IsTrue(squares_are_same_file(E1, E6));
-			Assert::IsTrue(squares_are_same_file(E1, E7));
-			Assert::IsTrue(squares_are_same_file(E1, E8));
+			Assert::IsTrue(squares_share_file(E1, E2));
+			Assert::IsTrue(squares_share_file(E1, E3));
+			Assert::IsTrue(squares_share_file(E1, E4));
+			Assert::IsTrue(squares_share_file(E1, E5));
+			Assert::IsTrue(squares_share_file(E1, E6));
+			Assert::IsTrue(squares_share_file(E1, E7));
+			Assert::IsTrue(squares_share_file(E1, E8));
 
-			Assert::IsTrue(squares_are_same_file(F1, F2));
-			Assert::IsTrue(squares_are_same_file(F1, F3));
-			Assert::IsTrue(squares_are_same_file(F1, F4));
-			Assert::IsTrue(squares_are_same_file(F1, F5));
-			Assert::IsTrue(squares_are_same_file(F1, F6));
-			Assert::IsTrue(squares_are_same_file(F1, F7));
-			Assert::IsTrue(squares_are_same_file(F1, F8));
+			Assert::IsTrue(squares_share_file(F1, F2));
+			Assert::IsTrue(squares_share_file(F1, F3));
+			Assert::IsTrue(squares_share_file(F1, F4));
+			Assert::IsTrue(squares_share_file(F1, F5));
+			Assert::IsTrue(squares_share_file(F1, F6));
+			Assert::IsTrue(squares_share_file(F1, F7));
+			Assert::IsTrue(squares_share_file(F1, F8));
 
-			Assert::IsTrue(squares_are_same_file(G1, G2));
-			Assert::IsTrue(squares_are_same_file(G1, G3));
-			Assert::IsTrue(squares_are_same_file(G1, G4));
-			Assert::IsTrue(squares_are_same_file(G1, G5));
-			Assert::IsTrue(squares_are_same_file(G1, G6));
-			Assert::IsTrue(squares_are_same_file(G1, G7));
-			Assert::IsTrue(squares_are_same_file(G1, G8));
+			Assert::IsTrue(squares_share_file(G1, G2));
+			Assert::IsTrue(squares_share_file(G1, G3));
+			Assert::IsTrue(squares_share_file(G1, G4));
+			Assert::IsTrue(squares_share_file(G1, G5));
+			Assert::IsTrue(squares_share_file(G1, G6));
+			Assert::IsTrue(squares_share_file(G1, G7));
+			Assert::IsTrue(squares_share_file(G1, G8));
 			
-			Assert::IsTrue(squares_are_same_file(H1, H2));
-			Assert::IsTrue(squares_are_same_file(H1, H3));
-			Assert::IsTrue(squares_are_same_file(H1, H4));
-			Assert::IsTrue(squares_are_same_file(H1, H5));
-			Assert::IsTrue(squares_are_same_file(H1, H6));
-			Assert::IsTrue(squares_are_same_file(H1, H7));
-			Assert::IsTrue(squares_are_same_file(H1, H8));
+			Assert::IsTrue(squares_share_file(H1, H2));
+			Assert::IsTrue(squares_share_file(H1, H3));
+			Assert::IsTrue(squares_share_file(H1, H4));
+			Assert::IsTrue(squares_share_file(H1, H5));
+			Assert::IsTrue(squares_share_file(H1, H6));
+			Assert::IsTrue(squares_share_file(H1, H7));
+			Assert::IsTrue(squares_share_file(H1, H8));
 
-			Assert::IsFalse(squares_are_same_file(A1, B1));
-			Assert::IsFalse(squares_are_same_file(A1, C1));
-			Assert::IsFalse(squares_are_same_file(G7, D1));
-			Assert::IsFalse(squares_are_same_file(G7, F6));
-			Assert::IsFalse(squares_are_same_file(G7, H7));
-			Assert::IsFalse(squares_are_same_file(G7, F7));
+			Assert::IsFalse(squares_share_file(A1, B1));
+			Assert::IsFalse(squares_share_file(A1, C1));
+			Assert::IsFalse(squares_share_file(G7, D1));
+			Assert::IsFalse(squares_share_file(G7, F6));
+			Assert::IsFalse(squares_share_file(G7, H7));
+			Assert::IsFalse(squares_share_file(G7, F7));
 		}
 		TEST_METHOD(squares_are_on_the_same_rank_function)
 		{
-			Assert::IsTrue(squares_are_on_the_same_rank(A1, B1));
-			Assert::IsTrue(squares_are_on_the_same_rank(A1, C1));
-			Assert::IsTrue(squares_are_on_the_same_rank(A1, D1));
-			Assert::IsTrue(squares_are_on_the_same_rank(A1, E1));
-			Assert::IsTrue(squares_are_on_the_same_rank(A1, F1));
-			Assert::IsTrue(squares_are_on_the_same_rank(A1, G1));
-			Assert::IsTrue(squares_are_on_the_same_rank(A1, H1));
+			Assert::IsTrue(squares_share_rank(A1, B1));
+			Assert::IsTrue(squares_share_rank(A1, C1));
+			Assert::IsTrue(squares_share_rank(A1, D1));
+			Assert::IsTrue(squares_share_rank(A1, E1));
+			Assert::IsTrue(squares_share_rank(A1, F1));
+			Assert::IsTrue(squares_share_rank(A1, G1));
+			Assert::IsTrue(squares_share_rank(A1, H1));
 
-			Assert::IsTrue(squares_are_on_the_same_rank(A2, B2));
-			Assert::IsTrue(squares_are_on_the_same_rank(A2, C2));
-			Assert::IsTrue(squares_are_on_the_same_rank(A2, D2));
-			Assert::IsTrue(squares_are_on_the_same_rank(A2, E2));
-			Assert::IsTrue(squares_are_on_the_same_rank(A2, F2));
-			Assert::IsTrue(squares_are_on_the_same_rank(A2, G2));
-			Assert::IsTrue(squares_are_on_the_same_rank(A2, H2));
+			Assert::IsTrue(squares_share_rank(A2, B2));
+			Assert::IsTrue(squares_share_rank(A2, C2));
+			Assert::IsTrue(squares_share_rank(A2, D2));
+			Assert::IsTrue(squares_share_rank(A2, E2));
+			Assert::IsTrue(squares_share_rank(A2, F2));
+			Assert::IsTrue(squares_share_rank(A2, G2));
+			Assert::IsTrue(squares_share_rank(A2, H2));
 
-			Assert::IsTrue(squares_are_on_the_same_rank(A3, B3));
-			Assert::IsTrue(squares_are_on_the_same_rank(A3, C3));
-			Assert::IsTrue(squares_are_on_the_same_rank(A3, D3));
-			Assert::IsTrue(squares_are_on_the_same_rank(A3, E3));
-			Assert::IsTrue(squares_are_on_the_same_rank(A3, F3));
-			Assert::IsTrue(squares_are_on_the_same_rank(A3, G3));
-			Assert::IsTrue(squares_are_on_the_same_rank(A3, H3));
+			Assert::IsTrue(squares_share_rank(A3, B3));
+			Assert::IsTrue(squares_share_rank(A3, C3));
+			Assert::IsTrue(squares_share_rank(A3, D3));
+			Assert::IsTrue(squares_share_rank(A3, E3));
+			Assert::IsTrue(squares_share_rank(A3, F3));
+			Assert::IsTrue(squares_share_rank(A3, G3));
+			Assert::IsTrue(squares_share_rank(A3, H3));
 
-			Assert::IsTrue(squares_are_on_the_same_rank(A4, B4));
-			Assert::IsTrue(squares_are_on_the_same_rank(A4, C4));
-			Assert::IsTrue(squares_are_on_the_same_rank(A4, D4));
-			Assert::IsTrue(squares_are_on_the_same_rank(A4, E4));
-			Assert::IsTrue(squares_are_on_the_same_rank(A4, F4));
-			Assert::IsTrue(squares_are_on_the_same_rank(A4, G4));
-			Assert::IsTrue(squares_are_on_the_same_rank(A4, H4));
+			Assert::IsTrue(squares_share_rank(A4, B4));
+			Assert::IsTrue(squares_share_rank(A4, C4));
+			Assert::IsTrue(squares_share_rank(A4, D4));
+			Assert::IsTrue(squares_share_rank(A4, E4));
+			Assert::IsTrue(squares_share_rank(A4, F4));
+			Assert::IsTrue(squares_share_rank(A4, G4));
+			Assert::IsTrue(squares_share_rank(A4, H4));
 			
-			Assert::IsTrue(squares_are_on_the_same_rank(A5, B5));
-			Assert::IsTrue(squares_are_on_the_same_rank(A5, C5));
-			Assert::IsTrue(squares_are_on_the_same_rank(A5, D5));
-			Assert::IsTrue(squares_are_on_the_same_rank(A5, E5));
-			Assert::IsTrue(squares_are_on_the_same_rank(A5, F5));
-			Assert::IsTrue(squares_are_on_the_same_rank(A5, G5));
-			Assert::IsTrue(squares_are_on_the_same_rank(A5, H5));
+			Assert::IsTrue(squares_share_rank(A5, B5));
+			Assert::IsTrue(squares_share_rank(A5, C5));
+			Assert::IsTrue(squares_share_rank(A5, D5));
+			Assert::IsTrue(squares_share_rank(A5, E5));
+			Assert::IsTrue(squares_share_rank(A5, F5));
+			Assert::IsTrue(squares_share_rank(A5, G5));
+			Assert::IsTrue(squares_share_rank(A5, H5));
 			
-			Assert::IsTrue(squares_are_on_the_same_rank(A6, B6));
-			Assert::IsTrue(squares_are_on_the_same_rank(A6, C6));
-			Assert::IsTrue(squares_are_on_the_same_rank(A6, D6));
-			Assert::IsTrue(squares_are_on_the_same_rank(A6, E6));
-			Assert::IsTrue(squares_are_on_the_same_rank(A6, F6));
-			Assert::IsTrue(squares_are_on_the_same_rank(A6, G6));
-			Assert::IsTrue(squares_are_on_the_same_rank(A6, H6));
+			Assert::IsTrue(squares_share_rank(A6, B6));
+			Assert::IsTrue(squares_share_rank(A6, C6));
+			Assert::IsTrue(squares_share_rank(A6, D6));
+			Assert::IsTrue(squares_share_rank(A6, E6));
+			Assert::IsTrue(squares_share_rank(A6, F6));
+			Assert::IsTrue(squares_share_rank(A6, G6));
+			Assert::IsTrue(squares_share_rank(A6, H6));
 			
-			Assert::IsTrue(squares_are_on_the_same_rank(A7, B7));
-			Assert::IsTrue(squares_are_on_the_same_rank(A7, C7));
-			Assert::IsTrue(squares_are_on_the_same_rank(A7, D7));
-			Assert::IsTrue(squares_are_on_the_same_rank(A7, E7));
-			Assert::IsTrue(squares_are_on_the_same_rank(A7, F7));
-			Assert::IsTrue(squares_are_on_the_same_rank(A7, G7));
-			Assert::IsTrue(squares_are_on_the_same_rank(A7, H7));
+			Assert::IsTrue(squares_share_rank(A7, B7));
+			Assert::IsTrue(squares_share_rank(A7, C7));
+			Assert::IsTrue(squares_share_rank(A7, D7));
+			Assert::IsTrue(squares_share_rank(A7, E7));
+			Assert::IsTrue(squares_share_rank(A7, F7));
+			Assert::IsTrue(squares_share_rank(A7, G7));
+			Assert::IsTrue(squares_share_rank(A7, H7));
 			
-			Assert::IsTrue(squares_are_on_the_same_rank(A8, B8));
-			Assert::IsTrue(squares_are_on_the_same_rank(A8, C8));
-			Assert::IsTrue(squares_are_on_the_same_rank(A8, D8));
-			Assert::IsTrue(squares_are_on_the_same_rank(A8, E8));
-			Assert::IsTrue(squares_are_on_the_same_rank(A8, F8));
-			Assert::IsTrue(squares_are_on_the_same_rank(A8, G8));
-			Assert::IsTrue(squares_are_on_the_same_rank(A8, H8));
+			Assert::IsTrue(squares_share_rank(A8, B8));
+			Assert::IsTrue(squares_share_rank(A8, C8));
+			Assert::IsTrue(squares_share_rank(A8, D8));
+			Assert::IsTrue(squares_share_rank(A8, E8));
+			Assert::IsTrue(squares_share_rank(A8, F8));
+			Assert::IsTrue(squares_share_rank(A8, G8));
+			Assert::IsTrue(squares_share_rank(A8, H8));
 
-			Assert::IsFalse(squares_are_on_the_same_rank(A1, A2));
-			Assert::IsFalse(squares_are_on_the_same_rank(A1, A3));
-			Assert::IsFalse(squares_are_on_the_same_rank(D4, D3));
-			Assert::IsFalse(squares_are_on_the_same_rank(D4, D5));
-			Assert::IsFalse(squares_are_on_the_same_rank(D4, C6));
+			Assert::IsFalse(squares_share_rank(A1, A2));
+			Assert::IsFalse(squares_share_rank(A1, A3));
+			Assert::IsFalse(squares_share_rank(D4, D3));
+			Assert::IsFalse(squares_share_rank(D4, D5));
+			Assert::IsFalse(squares_share_rank(D4, C6));
 		}
 		TEST_METHOD(squares_are_on_the_same_diagonal_function)
 		{
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A1, B2));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A1, C3));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A1, D4));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A1, E5));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A1, F6));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A1, G7));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A1, H8));
+			Assert::IsTrue(squares_share_diagonal(A1, B2));
+			Assert::IsTrue(squares_share_diagonal(A1, C3));
+			Assert::IsTrue(squares_share_diagonal(A1, D4));
+			Assert::IsTrue(squares_share_diagonal(A1, E5));
+			Assert::IsTrue(squares_share_diagonal(A1, F6));
+			Assert::IsTrue(squares_share_diagonal(A1, G7));
+			Assert::IsTrue(squares_share_diagonal(A1, H8));
 
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A2, B3));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A2, C4));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A2, D5));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A2, E6));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A2, F7));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A2, G8));
+			Assert::IsTrue(squares_share_diagonal(A2, B3));
+			Assert::IsTrue(squares_share_diagonal(A2, C4));
+			Assert::IsTrue(squares_share_diagonal(A2, D5));
+			Assert::IsTrue(squares_share_diagonal(A2, E6));
+			Assert::IsTrue(squares_share_diagonal(A2, F7));
+			Assert::IsTrue(squares_share_diagonal(A2, G8));
 
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A3, B4));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A3, C5));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A3, D6));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A3, E7));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A3, F8));
+			Assert::IsTrue(squares_share_diagonal(A3, B4));
+			Assert::IsTrue(squares_share_diagonal(A3, C5));
+			Assert::IsTrue(squares_share_diagonal(A3, D6));
+			Assert::IsTrue(squares_share_diagonal(A3, E7));
+			Assert::IsTrue(squares_share_diagonal(A3, F8));
 
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A4, B5));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A4, C6));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A4, D7));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A4, E8));
+			Assert::IsTrue(squares_share_diagonal(A4, B5));
+			Assert::IsTrue(squares_share_diagonal(A4, C6));
+			Assert::IsTrue(squares_share_diagonal(A4, D7));
+			Assert::IsTrue(squares_share_diagonal(A4, E8));
 
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A5, B6));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A5, C7));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A5, D8));
+			Assert::IsTrue(squares_share_diagonal(A5, B6));
+			Assert::IsTrue(squares_share_diagonal(A5, C7));
+			Assert::IsTrue(squares_share_diagonal(A5, D8));
 			
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A6, B7));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(A6, C8));
+			Assert::IsTrue(squares_share_diagonal(A6, B7));
+			Assert::IsTrue(squares_share_diagonal(A6, C8));
 
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, F5));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, G6));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, H7));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, D3));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, C2));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, B1));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, D5));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, C6));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, B7));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, A8));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, F3));
-			Assert::IsTrue(squares_are_on_the_same_diagonal(E4, G2));
+			Assert::IsTrue(squares_share_diagonal(E4, F5));
+			Assert::IsTrue(squares_share_diagonal(E4, G6));
+			Assert::IsTrue(squares_share_diagonal(E4, H7));
+			Assert::IsTrue(squares_share_diagonal(E4, D3));
+			Assert::IsTrue(squares_share_diagonal(E4, C2));
+			Assert::IsTrue(squares_share_diagonal(E4, B1));
+			Assert::IsTrue(squares_share_diagonal(E4, D5));
+			Assert::IsTrue(squares_share_diagonal(E4, C6));
+			Assert::IsTrue(squares_share_diagonal(E4, B7));
+			Assert::IsTrue(squares_share_diagonal(E4, A8));
+			Assert::IsTrue(squares_share_diagonal(E4, F3));
+			Assert::IsTrue(squares_share_diagonal(E4, G2));
 			
-			Assert::IsFalse(squares_are_on_the_same_diagonal(E4, F2));
-			Assert::IsFalse(squares_are_on_the_same_diagonal(E4, G1));
-			Assert::IsFalse(squares_are_on_the_same_diagonal(E4, D2));
-			Assert::IsFalse(squares_are_on_the_same_diagonal(E4, E2));
-			Assert::IsFalse(squares_are_on_the_same_diagonal(E4, C5));
-			Assert::IsFalse(squares_are_on_the_same_diagonal(E4, C4));
-			Assert::IsFalse(squares_are_on_the_same_diagonal(E4, F6));
+			Assert::IsFalse(squares_share_diagonal(E4, F2));
+			Assert::IsFalse(squares_share_diagonal(E4, G1));
+			Assert::IsFalse(squares_share_diagonal(E4, D2));
+			Assert::IsFalse(squares_share_diagonal(E4, E2));
+			Assert::IsFalse(squares_share_diagonal(E4, C5));
+			Assert::IsFalse(squares_share_diagonal(E4, C4));
+			Assert::IsFalse(squares_share_diagonal(E4, F6));
 		}
 		TEST_METHOD(squares_between_test)
 		{
@@ -552,6 +552,26 @@ namespace BitBoardTest
 						SQUARE_NONE
 					}
 			));
+		}
+		TEST_METHOD(rank_and_file_bb_array)
+		{
+			Assert::IsTrue(FILE_A == FILE_BB[get_file_of_square(A3)]);
+			Assert::IsTrue(FILE_B == FILE_BB[get_file_of_square(B5)]);
+			Assert::IsTrue(FILE_C == FILE_BB[get_file_of_square(C4)]);
+			Assert::IsTrue(FILE_D == FILE_BB[get_file_of_square(D6)]);
+			Assert::IsTrue(FILE_E == FILE_BB[get_file_of_square(E1)]);
+			Assert::IsTrue(FILE_F == FILE_BB[get_file_of_square(F8)]);
+			Assert::IsTrue(FILE_G == FILE_BB[get_file_of_square(G7)]);
+			Assert::IsTrue(FILE_H == FILE_BB[get_file_of_square(H2)]);
+
+			Assert::IsTrue(RANK_1 == RANK_BB[get_rank_of_square(D1)]);
+			Assert::IsTrue(RANK_2 == RANK_BB[get_rank_of_square(C2)]);
+			Assert::IsTrue(RANK_3 == RANK_BB[get_rank_of_square(E3)]);
+			Assert::IsTrue(RANK_4 == RANK_BB[get_rank_of_square(A4)]);
+			Assert::IsTrue(RANK_5 == RANK_BB[get_rank_of_square(G5)]);
+			Assert::IsTrue(RANK_6 == RANK_BB[get_rank_of_square(H6)]);
+			Assert::IsTrue(RANK_7 == RANK_BB[get_rank_of_square(F7)]);
+			Assert::IsTrue(RANK_8 == RANK_BB[get_rank_of_square(B8)]);
 		}
 	};
 }

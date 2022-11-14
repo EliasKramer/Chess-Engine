@@ -842,11 +842,103 @@ MoveList ChessBoard::get_all_legal_moves() const
 
 	BitBoard attack_bb = BITBOARD_NONE;
 	
+	ChessColor opponent_color = get_opposite_color(_current_turn_color);
+
+	BitBoard own_pieces_bb = _board.pieces_of_color[_current_turn_color];
+	BitBoard opponent_pieces_bb = _board.pieces_of_color[opponent_color];
+
 	//get all squares that are under attack
 	Square king_pos = _board.king_pos[_current_turn_color];
+	Square opponent_king_pos = _board.king_pos[opponent_color];
+
+	std::vector<Square> opponent_rooks = 
+		_board.piece_positions[opponent_color][rook];
+	std::vector<Square> opponent_bishops = 
+		_board.piece_positions[opponent_color][bishop];
+	std::vector<Square> opponent_queens = 
+		_board.piece_positions[opponent_color][queen];
+	std::vector<Square> opponent_knights =
+		_board.piece_positions[opponent_color][knight];
+	std::vector<Square> opponent_pawns =
+		_board.piece_positions[opponent_color][pawn];
 	
-	
-	
+
+	for (int i = 0; i < opponent_pawns.size(); i++)
+	{
+		attack_bb |= PAWN_ATTACK_BB[opponent_color][opponent_pawns[i]];
+	}
+	for (int i = 0; i < opponent_knights.size(); i++)
+	{
+		attack_bb |= KNIGHT_ATTACK_BB[opponent_knights[i]];
+	}
+	attack_bb |= KING_ATTACKS_BB[opponent_king_pos];
+
+	BitBoard pinned_pieces = BITBOARD_NONE;
+
+	for (int i = 0; i < opponent_rooks.size(); i++)
+	{
+		if (squares_share_rank(king_pos, opponent_rooks[i]) ||
+			squares_share_file(king_pos, opponent_rooks[i]))
+		{
+			auto squares_between = get_squares_between(king_pos, opponent_rooks[i]);
+			bool king_gets_attacked_by_rook = true;
+			bool potential_pin = false;
+			Square pinnedPiece = SQUARE_NONE;
+			//if there are squares between
+			if (squares_between[0] != SQUARE_NONE)
+			{
+				//holds the bitboard that either blocks the attack or where the pinned piece can move
+				//initializing it to the current opponent piece because you can always end an attack by capturing the piece
+				BitBoard current_check_bb = BB_SQUARE[opponent_rooks[i]];
+				for (int j = 0; j < MAX_SQUARES_BETWEEN; j++)
+				{
+					Square current_square = squares_between[j];
+					BitBoard current_bb = BB_SQUARE[current_square];
+					if (current_square == SQUARE_NONE)
+					{
+						break;
+					}
+
+					if (bitboards_overlap(current_bb, own_pieces_bb))
+					{
+						//own piece is blocking the view
+						//can be a pin
+						king_gets_attacked_by_rook = false;
+						potential_pin = true;
+						pinnedPiece = current_square;
+					}
+					else if(bitboards_overlap(current_bb, opponent_pieces_bb))
+					{
+						//opponent piece blocks rook attack
+						king_gets_attacked_by_rook = false;
+						if (potential_pin)
+						{
+							potential_pin = false;
+							//if there is an opponent piece after a potential pin
+							//there can be no pin and the king is not attacked
+							break;
+						}
+					}
+					else 
+					{
+						//empty square
+						if (king_gets_attacked_by_rook)
+						{
+							current_check_bb |= current_bb;
+						}
+					}
+				}
+			}
+			else {
+				//if there are no squares between
+			}
+			if (potential_pin)
+			{
+				pinned_pieces |= BB_SQUARE[pinnedPiece];
+				//calculate moves for pinned piece
+			}
+		}
+	}
 
 	get_pawn_moves(move_list);
 	get_knight_moves(move_list);

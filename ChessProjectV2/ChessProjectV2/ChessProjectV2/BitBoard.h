@@ -43,6 +43,9 @@ enum Square : uint8_t {
 	SQUARE_NONE
 };
 
+const BitBoard RANK_BB[8] = { RANK_1, RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8 };
+const BitBoard FILE_BB[8] = { FILE_A, FILE_B, FILE_C, FILE_D, FILE_E, FILE_F, FILE_G, FILE_H };
+
 extern const std::array<BitBoard, 64> BB_SQUARE;
 
 const int NUMBER_OF_DIRECTIONS = 16;
@@ -107,9 +110,9 @@ int get_rank_of_square(Square square);
 //this is 0 based (a1 for example returns 0)
 int get_file_of_square(Square square);
 
-bool squares_are_same_file(Square first, Square second);
-bool squares_are_on_the_same_rank(Square first, Square second);
-bool squares_are_on_the_same_diagonal(Square first, Square second);
+bool squares_share_file(Square first, Square second);
+bool squares_share_rank(Square first, Square second);
+bool squares_share_diagonal(Square first, Square second);
 
 //gets all squares between two squares, excluding the start and end square
 //this only works on straight and diagonal paths
