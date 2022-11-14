@@ -2,14 +2,14 @@
 
 bool ChessBoard::destination_is_same_color(Square start, Direction direction, ChessColor color) const
 {
-	int newPos = (start + direction);
+	int new_pos = (start + direction);
 
-	if (newPos < A1 || newPos > H8)
+	if (new_pos < A1 || new_pos > H8)
 	{
 		return false;
 	}
 
-	return position_is_same_color((Square)newPos, color);
+	return position_is_same_color((Square)new_pos, color);
 }
 
 bool ChessBoard::position_is_same_color(Square pos, ChessColor color) const
@@ -36,10 +36,10 @@ void ChessBoard::add_if_destination_is_color(
 {
 	if (destination_is_on_board(start, dir))
 	{
-		Square newPos = (Square)(start + dir);
-		if (position_is_same_color(newPos, color))
+		Square new_pos = (Square)(start + dir);
+		if (position_is_same_color(new_pos, color))
 		{
-			moves.push_back(Move(start, newPos));
+			moves.push_back(Move(start, new_pos));
 		}
 	}
 }
@@ -47,54 +47,54 @@ void ChessBoard::add_if_destination_is_color(
 void ChessBoard::get_pawn_moves(MoveList& moves) const
 {
 	Direction forward = get_forward_for_color(_current_turn_color);
-	BitBoard startRank = _current_turn_color == white ? RANK_2 : RANK_7;
+	BitBoard start_rank = _current_turn_color == white ? RANK_2 : RANK_7;
 
-	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
+	for (uint8_t curr_square_idx = A1; curr_square_idx <= H8; curr_square_idx++)
 	{
-		Square currSquare = (Square)currSquareIdx;
-		BitBoard piecePosBB = BB_SQUARE[currSquareIdx];
+		Square curr_square = (Square)curr_square_idx;
+		BitBoard piece_pos_BB = BB_SQUARE[curr_square_idx];
 
 		//if the current square is a pawn and the same color
-		if ((piecePosBB &
+		if ((piece_pos_BB &
 			_board.pieces_of_type[pawn] &
 			_board.pieces_of_color[_current_turn_color]) != 0ULL)
 		{
 			//one move forward
-			if (destination_is_on_board(currSquare, forward))
+			if (destination_is_on_board(curr_square, forward))
 			{
-				Square forwardPos = (Square)(currSquare + forward);
-				BitBoard forwardPosBB = BB_SQUARE[forwardPos];
+				Square forward_pos = (Square)(curr_square + forward);
+				BitBoard forward_pos_BB = BB_SQUARE[forward_pos];
 
-				if ((forwardPosBB & _board.all_pieces) == 0ULL)
+				if ((forward_pos_BB & _board.all_pieces) == 0ULL)
 				{
-					add_pawn_move(moves, currSquare, forwardPos);
-					//moves.push_back(Move(currSquare, forwardPos));
+					add_pawn_move(moves, curr_square, forward_pos);
+					//moves.push_back(Move(curr_square, forward_pos));
 					//TODO
 					//if move ends on promotion rank it should be a promotion move
 
 					//two moves forward (only possible if one move is possible
-					Square doubleForward = (Square)(forwardPos + forward);
-					if ((piecePosBB & startRank) != 0 &&
-						destination_is_on_board(forwardPos, forward) &&
+					Square doubleForward = (Square)(forward_pos + forward);
+					if ((piece_pos_BB & start_rank) != 0 &&
+						destination_is_on_board(forward_pos, forward) &&
 						(BB_SQUARE[doubleForward] & _board.all_pieces) == 0ULL)
 					{
-						moves.push_back(Move(currSquare, doubleForward));
+						moves.push_back(Move(curr_square, doubleForward));
 					}
 				}
 			}
 
 			//taking diagonal checks
 			//this loop checks one time left and one time right
-			Direction leftAndRight[2] = { WEST, EAST };
+			Direction left_and_right[2] = { WEST, EAST };
 			for (int i = 0; i < 2; i++)
 			{
-				Direction direction = (Direction)(leftAndRight[i] + forward);
-				ChessColor opponentColor = get_opposite_color(_current_turn_color);
+				Direction direction = (Direction)(left_and_right[i] + forward);
+				ChessColor opponent_color = get_opposite_color(_current_turn_color);
 
-				if (destination_is_same_color(currSquare, direction, opponentColor)
-					&& destination_is_on_board(currSquare, direction))
+				if (destination_is_same_color(curr_square, direction, opponent_color)
+					&& destination_is_on_board(curr_square, direction))
 				{
-					add_pawn_move(moves, currSquare, (Square)(currSquare + direction));
+					add_pawn_move(moves, curr_square, (Square)(curr_square + direction));
 				}
 			}
 		}
@@ -103,37 +103,37 @@ void ChessBoard::get_pawn_moves(MoveList& moves) const
 
 void ChessBoard::get_knight_moves(MoveList& moves) const
 {
-	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
+	for (uint8_t curr_square_idx = A1; curr_square_idx <= H8; curr_square_idx++)
 	{
-		if ((BB_SQUARE[currSquareIdx] &
+		if ((BB_SQUARE[curr_square_idx] &
 			_board.pieces_of_type[knight] &
 			_board.pieces_of_color[_current_turn_color]) != 0ULL)
 		{
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, NORTH_NORTH_EAST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, EAST_NORTH_EAST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, EAST_SOUTH_EAST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, SOUTH_SOUTH_EAST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, SOUTH_SOUTH_WEST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, WEST_SOUTH_WEST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, WEST_NORTH_WEST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, NORTH_NORTH_WEST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, NORTH_NORTH_EAST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, EAST_NORTH_EAST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, EAST_SOUTH_EAST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, SOUTH_SOUTH_EAST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, SOUTH_SOUTH_WEST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, WEST_SOUTH_WEST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, WEST_NORTH_WEST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, NORTH_NORTH_WEST);
 		}
 	}
 }
 
 void ChessBoard::get_bishop_moves(MoveList& moves) const
 {
-	const int numberOfDirections = 4;
-	Direction directions[numberOfDirections] =
+	const int number_of_directions = 4;
+	Direction directions[number_of_directions] =
 	{ NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST };
 
-	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
+	for (uint8_t curr_square_idx = A1; curr_square_idx <= H8; curr_square_idx++)
 	{
-		if ((BB_SQUARE[currSquareIdx] &
+		if ((BB_SQUARE[curr_square_idx] &
 			_board.pieces_of_type[bishop] &
 			_board.pieces_of_color[_current_turn_color]) != 0ULL)
 		{
-			add_ray_moves(moves, (Square)currSquareIdx, directions, numberOfDirections);
+			add_ray_moves(moves, (Square)curr_square_idx, directions, number_of_directions);
 		}
 	}
 
@@ -141,63 +141,63 @@ void ChessBoard::get_bishop_moves(MoveList& moves) const
 
 void ChessBoard::get_rook_moves(MoveList& moves) const
 {
-	const int numberOfDirections = 4;
-	Direction directions[numberOfDirections] =
+	const int number_of_directions = 4;
+	Direction directions[number_of_directions] =
 	{ NORTH, EAST, SOUTH, WEST };
 
-	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
+	for (uint8_t curr_square_idx = A1; curr_square_idx <= H8; curr_square_idx++)
 	{
-		if ((BB_SQUARE[currSquareIdx] &
+		if ((BB_SQUARE[curr_square_idx] &
 			_board.pieces_of_type[rook] &
 			_board.pieces_of_color[_current_turn_color]) != 0ULL)
 		{
-			add_ray_moves(moves, (Square)currSquareIdx, directions, numberOfDirections);
+			add_ray_moves(moves, (Square)curr_square_idx, directions, number_of_directions);
 		}
 	}
 }
 
 void ChessBoard::get_queen_moves(MoveList& moves) const
 {
-	const int numberOfDirections = 8;
-	Direction directions[numberOfDirections] =
+	const int number_of_directions = 8;
+	Direction directions[number_of_directions] =
 	{ NORTH, EAST, SOUTH, WEST, NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST };
 
-	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
+	for (uint8_t curr_square_idx = A1; curr_square_idx <= H8; curr_square_idx++)
 	{
-		if ((BB_SQUARE[currSquareIdx] &
+		if ((BB_SQUARE[curr_square_idx] &
 			_board.pieces_of_type[queen] &
 			_board.pieces_of_color[_current_turn_color]) != 0ULL)
 		{
-			add_ray_moves(moves, (Square)currSquareIdx, directions, numberOfDirections);
+			add_ray_moves(moves, (Square)curr_square_idx, directions, number_of_directions);
 		}
 	}
 }
 
 void ChessBoard::get_king_moves(MoveList& moves) const
 {
-	for (uint8_t currSquareIdx = A1; currSquareIdx <= H8; currSquareIdx++)
+	for (uint8_t curr_square_idx = A1; curr_square_idx <= H8; curr_square_idx++)
 	{
-		if ((BB_SQUARE[currSquareIdx] &
+		if ((BB_SQUARE[curr_square_idx] &
 			_board.pieces_of_type[king] &
 			_board.pieces_of_color[_current_turn_color]) != 0ULL)
 		{
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, NORTH);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, NORTH_EAST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, EAST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, SOUTH_EAST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, SOUTH);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, SOUTH_WEST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, WEST);
-			add_if_destination_is_valid(moves, (Square)currSquareIdx, NORTH_WEST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, NORTH);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, NORTH_EAST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, EAST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, SOUTH_EAST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, SOUTH);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, SOUTH_WEST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, WEST);
+			add_if_destination_is_valid(moves, (Square)curr_square_idx, NORTH_WEST);
 		}
 	}
 }
 
 void ChessBoard::add_pawn_move(MoveList& moves, Square start, Square dest) const
 {
-	BitBoard promotionRank = _current_turn_color == white ? RANK_8 : RANK_1;
+	BitBoard promotion_rank = _current_turn_color == white ? RANK_8 : RANK_1;
 
-	if ((BB_SQUARE[dest] & promotionRank) != 0ULL)
+	if ((BB_SQUARE[dest] & promotion_rank) != 0ULL)
 	{
 		moves.push_back(Move(start, dest, _current_turn_color, MoveFlag::promote_queen));
 		moves.push_back(Move(start, dest, _current_turn_color, MoveFlag::promote_rook));
@@ -215,39 +215,39 @@ void ChessBoard::get_castling_moves(MoveList& moves) const
 	//can improve performance -> 
 	//combine all fields in a bitboard and check for the non-sliding pieces
 	//if the can take at these positions
-	for (int castlingIdx = 0; castlingIdx < 2; castlingIdx++)
+	for (int castling_idx = 0; castling_idx < 2; castling_idx++)
 	{
-		CastlingType currCastlingType = (CastlingType)castlingIdx;
+		CastlingType curr_castling_type = (CastlingType)castling_idx;
 
-		if (_can_castle[_current_turn_color][currCastlingType])
+		if (_can_castle[_current_turn_color][curr_castling_type])
 		{
-			bool castlingAllowed = true;
+			bool castling_allowed = true;
 			for (int i = 0; i < 3; i++)
 			{
-				Square currSquareToCheck =
-					SQUARES_FOR_KING_CASTLING[_current_turn_color][currCastlingType][i];
+				Square curr_square_to_check =
+					SQUARES_FOR_KING_CASTLING[_current_turn_color][curr_castling_type][i];
 
 				//square should not be attacked or should not have any piece there
-				if (field_is_under_attack(currSquareToCheck) ||
-					(i != 0 && (_board.all_pieces & BB_SQUARE[currSquareToCheck]) != 0ULL))
+				if (field_is_under_attack(curr_square_to_check) ||
+					(i != 0 && (_board.all_pieces & BB_SQUARE[curr_square_to_check]) != 0ULL))
 				{
-					castlingAllowed = false;
+					castling_allowed = false;
 				}
 			}
 			//can be done better, but has to do for now
-			if (currCastlingType == castle_long)
+			if (curr_castling_type == castle_long)
 			{
 				//square that can be in check, but has to have no piece on it
 				Square passingSquare = _current_turn_color == white ? B1 : B8;
 				if ((_board.all_pieces & BB_SQUARE[passingSquare]) != 0ULL)
 				{
-					castlingAllowed = false;
+					castling_allowed = false;
 				}
 			}
 
-			if (castlingAllowed)
+			if (castling_allowed)
 			{
-				moves.push_back(Move(_current_turn_color, currCastlingType));
+				moves.push_back(Move(_current_turn_color, curr_castling_type));
 			}
 		}
 	}
@@ -262,20 +262,20 @@ void ChessBoard::get_en_passant_move(MoveList& moves) const
 
 	Direction backwards = get_backward_for_color(_current_turn_color);
 
-	Direction directionsWhereOwnPawnCouldBe[2] =
+	Direction directions_where_own_pawn_could_be[2] =
 	{ (Direction)(backwards + EAST), (Direction)(backwards + WEST) };
 
 	for (int i = 0; i < 2; i++)
 	{
-		if (destination_is_on_board(_en_passant_square, directionsWhereOwnPawnCouldBe[i]))
+		if (destination_is_on_board(_en_passant_square, directions_where_own_pawn_could_be[i]))
 		{
-			Square ownPawnPos = (Square)(_en_passant_square + directionsWhereOwnPawnCouldBe[i]);
-			if ((BB_SQUARE[ownPawnPos] &
+			Square own_pawn_pos = (Square)(_en_passant_square + directions_where_own_pawn_could_be[i]);
+			if ((BB_SQUARE[own_pawn_pos] &
 				_board.pieces_of_color[_current_turn_color] &
 				_board.pieces_of_type[pawn]) != 0ULL)
 			{
-				Square pawnPosToDelete = (Square)(_en_passant_square + backwards);
-				moves.push_back(Move(ownPawnPos, _en_passant_square));
+				Square pawn_pos_to_delete = (Square)(_en_passant_square + backwards);
+				moves.push_back(Move(own_pawn_pos, _en_passant_square));
 			}
 		}
 	}
@@ -285,39 +285,39 @@ void ChessBoard::add_ray_moves(
 	MoveList& moves,
 	Square start,
 	Direction directions[],
-	int numberOfDirections) const
+	int number_of_directions) const
 {
-	ChessColor opponentColor = get_opposite_color(_current_turn_color);
+	ChessColor opponent_color = get_opposite_color(_current_turn_color);
 
-	for (int i = 0; i < numberOfDirections; i++)
+	for (int i = 0; i < number_of_directions; i++)
 	{
-		Direction currentDirection = directions[i];
+		Direction current_direction = directions[i];
 
-		Square currentSquare = start;
+		Square current_square = start;
 		while (true)
 		{
 			//if the new position is on the board
-			if (destination_is_on_board(currentSquare, currentDirection))
+			if (destination_is_on_board(current_square, current_direction))
 			{
 				//set the new position
-				currentSquare = (Square)(currentSquare + currentDirection);
+				current_square = (Square)(current_square + current_direction);
 
 				//if the new position is the same color as the piece to check
-				if (position_is_same_color(currentSquare, _current_turn_color))
+				if (position_is_same_color(current_square, _current_turn_color))
 				{
 					//you cannot go on a square where a piece of the same color is
 					break;
 				}
-				else if (position_is_same_color(currentSquare, opponentColor))
+				else if (position_is_same_color(current_square, opponent_color))
 				{
 					//if an opponent is on the new field you can take him,
 					//but cannot continue after that (you cannot jump over opponents)
-					moves.push_back(Move(start, currentSquare));
+					moves.push_back(Move(start, current_square));
 					break;
 				}
 				else {
 					//if there is no piece at the new position you can move there.
-					moves.push_back(Move(start, currentSquare));
+					moves.push_back(Move(start, current_square));
 				}
 			}
 			else {
@@ -332,20 +332,20 @@ bool ChessBoard::field_is_under_attack(Square pos, BitBoard moveBB) const
 {
 	//is only used for king checks and castling, so no en passant implemented
 
-	ChessColor opponentColor = get_opposite_color(_current_turn_color);
+	ChessColor opponent_color = get_opposite_color(_current_turn_color);
 
-	BitBoard newCurrentColorBB = _board.pieces_of_color[_current_turn_color] ^ moveBB;
+	BitBoard new_current_color_bb = _board.pieces_of_color[_current_turn_color] ^ moveBB;
 
-	BitBoard opponentColorBB = (_board.pieces_of_color[opponentColor] & (~moveBB));
+	BitBoard opponent_color_BB = (_board.pieces_of_color[opponent_color] & (~moveBB));
 
-	BitBoard knightBB = _board.pieces_of_type[knight];
-	BitBoard pawnsBB = _board.pieces_of_type[pawn];
-	BitBoard kingsBB = _board.pieces_of_type[king];
+	BitBoard knight_BB = _board.pieces_of_type[knight];
+	BitBoard pawns_BB = _board.pieces_of_type[pawn];
+	BitBoard kings_BB = _board.pieces_of_type[king];
 
 	//gets attacked by knight
 	if ((KNIGHT_ATTACK_BB[pos] &
-		opponentColorBB &
-		knightBB) != 0ULL)
+		opponent_color_BB &
+		knight_BB) != 0ULL)
 	{
 		return true;
 	}
@@ -355,16 +355,16 @@ bool ChessBoard::field_is_under_attack(Square pos, BitBoard moveBB) const
 	//because if the current field has a pawn on its attacking squares, 
 	//it can also be attacked by the opponent pawn
 	if ((PAWN_ATTACK_BB[_current_turn_color][pos] &
-		opponentColorBB &
-		pawnsBB) != 0ULL)
+		opponent_color_BB &
+		pawns_BB) != 0ULL)
 	{
 		return true;
 	}
 
 	//field gets attacked by king
 	if ((KING_ATTACKS_BB[pos] &
-		opponentColorBB &
-		kingsBB) != 0ULL)
+		opponent_color_BB &
+		kings_BB) != 0ULL)
 	{
 		return true;
 	}
@@ -375,60 +375,60 @@ bool ChessBoard::field_is_under_attack(Square pos, BitBoard moveBB) const
 
 bool ChessBoard::field_gets_attacked_by_sliding_piece(Square pos, BitBoard moveBB) const
 {
-	ChessColor opponentColor = get_opposite_color(_current_turn_color);
+	ChessColor opponent_color = get_opposite_color(_current_turn_color);
 
-	BitBoard queenBB = _board.pieces_of_type[queen];
-	BitBoard rookBB = _board.pieces_of_type[rook];
-	BitBoard bishopBB = _board.pieces_of_type[bishop];
+	BitBoard queen_BB = _board.pieces_of_type[queen];
+	BitBoard rook_BB = _board.pieces_of_type[rook];
+	BitBoard bishop_BB = _board.pieces_of_type[bishop];
 
-	BitBoard newCurrentColorBB = _board.pieces_of_color[_current_turn_color] ^ moveBB;
+	BitBoard new_current_color_BB = _board.pieces_of_color[_current_turn_color] ^ moveBB;
 
 	BitBoard moveBBWithoutStart = moveBB & ~_board.pieces_of_color[_current_turn_color];
 
 	//if there are 2 destination fields, it is an en passant move
-	if (((moveBBWithoutStart & _board.pieces_of_color[opponentColor]) != 0ULL) &&
-		((moveBBWithoutStart & ~_board.pieces_of_color[opponentColor]) != 0ULL))
+	if (((moveBBWithoutStart & _board.pieces_of_color[opponent_color]) != 0ULL) &&
+		((moveBBWithoutStart & ~_board.pieces_of_color[opponent_color]) != 0ULL))
 	{
-		newCurrentColorBB &= ~_board.pieces_of_color[opponentColor];
+		new_current_color_BB &= ~_board.pieces_of_color[opponent_color];
 	}
 
-	BitBoard opponentColorBB = (_board.pieces_of_color[opponentColor] & (~moveBB));
+	BitBoard opponent_color_BB = (_board.pieces_of_color[opponent_color] & (~moveBB));
 
 	for (int i = 0; i < 8; i++)
 	{
-		Direction currentDirection = ALL_SLIDING_DIRECTIONS[i];
+		Direction current_direction = ALL_SLIDING_DIRECTIONS[i];
 
-		Square currentSquare = pos;
+		Square current_square = pos;
 		while (true)
 		{
 			//if the new position would be on the board
-			if (destination_is_on_board(currentSquare, currentDirection))
+			if (destination_is_on_board(current_square, current_direction))
 			{
 				//set the new position
-				currentSquare = (Square)(currentSquare + currentDirection);
+				current_square = (Square)(current_square + current_direction);
 
 				//if the new position is the same color as the piece to check
-				if (square_overlaps_with_BB(currentSquare, newCurrentColorBB))
+				if (square_overlaps_with_BB(current_square, new_current_color_BB))
 				{
 					//you cannot go on a square where a piece of the same color is
 					break;
 				}
-				else if (square_overlaps_with_BB(currentSquare, opponentColorBB))
+				else if (square_overlaps_with_BB(current_square, opponent_color_BB))
 				{
-					BitBoard currPosBB = BB_SQUARE[currentSquare];
+					BitBoard curr_pos_BB = BB_SQUARE[current_square];
 
-					bool currDirIsDiagonal = i > 3;
+					bool curr_dir_is_diagonal = i > 3;
 
 					//found piece is a queen -> will attack no matter in which direction you are sliding
-					if ((currPosBB & queenBB) != 0ULL)
+					if ((curr_pos_BB & queen_BB) != 0ULL)
 					{
 						//is queen
 						return true;
 					}
 					//if found piece is a rook or a bishop, sliding direction matters
-					else if (currDirIsDiagonal)
+					else if (curr_dir_is_diagonal)
 					{
-						if ((currPosBB & bishopBB) != 0ULL)
+						if ((curr_pos_BB & bishop_BB) != 0ULL)
 						{
 							//is bishop
 							return true;
@@ -436,7 +436,7 @@ bool ChessBoard::field_gets_attacked_by_sliding_piece(Square pos, BitBoard moveB
 					}
 					else
 					{
-						if ((currPosBB & rookBB) != 0ULL)
+						if ((curr_pos_BB & rook_BB) != 0ULL)
 						{
 							//is rook
 							return true;
@@ -459,29 +459,29 @@ bool ChessBoard::field_gets_attacked_by_sliding_piece(Square pos, BitBoard moveB
 bool ChessBoard::move_is_legal(const Move move) const
 {
 	//if move is castle -> return true
-	if (move.getFlag() == castle)
+	if (move.get_flag() == castle)
 	{
 		//because a castling move has been checked to be legal before
 		return true;
 	}
 
-	Square start = move.getStart();
-	Square dest = move.getDestination();
+	Square start = move.get_start();
+	Square dest = move.get_destination();
 
 	//TODO
 	return true;
 	/*BitBoard BBforNextMove = move.getBBWithMoveDone();
 
-	Square kingPos = _board.king_pos[_current_turn_color];
+	Square king_pos = _board.king_pos[_current_turn_color];
 
-	return start == kingPos ?
+	return start == king_pos ?
 		!field_is_under_attack(dest, BBforNextMove) :
-		!field_is_under_attack(kingPos, BBforNextMove);*/
+		!field_is_under_attack(king_pos, BBforNextMove);*/
 }
 
 bool ChessBoard::is_capture_move(const Move move) const
 {
-	MoveFlag flag = move.getFlag();
+	MoveFlag flag = move.get_flag();
 	if (flag == castle)
 	{
 		return false;
@@ -491,16 +491,16 @@ bool ChessBoard::is_capture_move(const Move move) const
 		return true;
 	}
 
-	BitBoard oppositeColorBB = _board.pieces_of_color[get_opposite_color(_current_turn_color)];
-	BitBoard potentialCaptureField = BB_SQUARE[move.getDestination()];
+	BitBoard opposite_color_BB = _board.pieces_of_color[get_opposite_color(_current_turn_color)];
+	BitBoard potential_capture_field = BB_SQUARE[move.get_destination()];
 
-	return bitboards_overlap(oppositeColorBB, potentialCaptureField);
+	return bitboards_overlap(opposite_color_BB, potential_capture_field);
 }
 
 void ChessBoard::update_castling_rights_after_move(const Move& m)
 {
-	BitBoard start = BB_SQUARE[m.getStart()];
-	BitBoard dest = BB_SQUARE[m.getDestination()];
+	BitBoard start = BB_SQUARE[m.get_start()];
+	BitBoard dest = BB_SQUARE[m.get_destination()];
 	if (bitboards_overlap(start, SQUARES_EFFECTED_BY_CASTLING_BB) ||
 		bitboards_overlap(dest, SQUARES_EFFECTED_BY_CASTLING_BB))
 	{
@@ -513,15 +513,15 @@ void ChessBoard::update_castling_rights_after_move(const Move& m)
 
 		for (int i = 0; i < 2; i++)
 		{
-			ChessColor currCol = (ChessColor)i;
+			ChessColor curr_col = (ChessColor)i;
 			for (int j = 0; j < 2; j++)
 			{
-				CastlingType currCastleType = (CastlingType)j;
-				BitBoard fieldToCheck = BACKRANK[currCol] & CASTLINGSIDE[currCastleType];
-				if (bitboards_overlap(start, fieldToCheck) ||
-					bitboards_overlap(dest, fieldToCheck))
+				CastlingType curr_castle_type = (CastlingType)j;
+				BitBoard field_to_check = BACKRANK[curr_col] & CASTLINGSIDE[curr_castle_type];
+				if (bitboards_overlap(start, field_to_check) ||
+					bitboards_overlap(dest, field_to_check))
 				{
-					_can_castle[currCol][currCastleType] = false;
+					_can_castle[curr_col][curr_castle_type] = false;
 				}
 			}
 		}
@@ -531,15 +531,15 @@ void ChessBoard::update_castling_rights_after_move(const Move& m)
 void ChessBoard::update_en_passant_rights_after_move(const Move& m)
 {
 	_en_passant_square = SQUARE_NONE;
-	Square start = m.getStart();
+	Square start = m.get_start();
 	if (square_overlaps_with_BB(start, _board.pieces_of_type[pawn]))
 	{
-		Square dest = m.getDestination();
-		BitBoard startRankForDoubleMove = _current_turn_color == white ? RANK_2 : RANK_7;
-		BitBoard destRankForDoubleMove = _current_turn_color == white ? RANK_4 : RANK_5;
+		Square dest = m.get_destination();
+		BitBoard start_rank_for_double_move = _current_turn_color == white ? RANK_2 : RANK_7;
+		BitBoard dest_rank_for_double_move = _current_turn_color == white ? RANK_4 : RANK_5;
 
-		if (square_overlaps_with_BB(start, startRankForDoubleMove) &&
-			square_overlaps_with_BB(dest, destRankForDoubleMove))
+		if (square_overlaps_with_BB(start, start_rank_for_double_move) &&
+			square_overlaps_with_BB(dest, dest_rank_for_double_move))
 		{
 			_en_passant_square = (Square)(start + get_forward_for_color(_current_turn_color));
 		}
@@ -548,12 +548,12 @@ void ChessBoard::update_en_passant_rights_after_move(const Move& m)
 
 void ChessBoard::update_50_move_rule(const Move& m)
 {
-	BitBoard startBB = BB_SQUARE[m.getStart()];
-	BitBoard destBB = BB_SQUARE[m.getDestination()];
-	ChessColor opponentColor = get_opposite_color(_current_turn_color);
+	BitBoard start_BB = BB_SQUARE[m.get_start()];
+	BitBoard dest_BB = BB_SQUARE[m.get_destination()];
+	ChessColor opponent_color = get_opposite_color(_current_turn_color);
 
-	if (bitboards_overlap(startBB, _board.pieces_of_type[pawn]) ||
-		bitboards_overlap(destBB, _board.pieces_of_color[opponentColor]))
+	if (bitboards_overlap(start_BB, _board.pieces_of_type[pawn]) ||
+		bitboards_overlap(dest_BB, _board.pieces_of_color[opponent_color]))
 	{
 		_half_move_clock = 0;
 	}
@@ -587,36 +587,36 @@ bool ChessBoard::insufficient_material_check() const
 
 char ChessBoard::get_piece_at(Square pos) const
 {
-	BitBoard posBB = BB_SQUARE[pos];
+	BitBoard pos_BB = BB_SQUARE[pos];
 
-	if (bitboards_overlap(posBB, ~_board.all_pieces))
+	if (bitboards_overlap(pos_BB, ~_board.all_pieces))
 	{
 		return ' ';
 	}
 
-	char pieceChar = '~';
+	char piece_char = '~';
 
 	for (int i = 0; i < NUMBER_OF_DIFFERENT_PIECE_TYPES; i++)
 	{
-		PieceType currType = (PieceType)i;
+		PieceType curr_type = (PieceType)i;
 
-		if (bitboards_overlap(_board.pieces_of_type[currType], posBB))
+		if (bitboards_overlap(_board.pieces_of_type[curr_type], pos_BB))
 		{
-			pieceChar = PIECETYPE_CHAR[currType];
+			piece_char = PIECETYPE_CHAR[curr_type];
 		}
 	}
 
-	if (pieceChar == '~')
+	if (piece_char == '~')
 	{
 		throw "Could not find PieceType in the Chessboard configuration";
 	}
 
-	if (bitboards_overlap(_board.pieces_of_color[black], posBB))
+	if (bitboards_overlap(_board.pieces_of_color[black], pos_BB))
 	{
-		pieceChar = char_to_lower(pieceChar);
+		piece_char = char_to_lower(piece_char);
 	}
 
-	return pieceChar;
+	return piece_char;
 }
 
 
@@ -625,78 +625,78 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 	//set all castling rights to false at the beginning
 	for (int i = 0; i < 2; i++)
 	{
-		ChessColor currColor = (ChessColor)i;
+		ChessColor curr_color = (ChessColor)i;
 		for (int j = 0; j < 2; j++)
 		{
-			CastlingType currCastleType = (CastlingType)j;
-			_can_castle[currColor][currCastleType] = false;
+			CastlingType curr_castle_type = (CastlingType)j;
+			_can_castle[curr_color][curr_castle_type] = false;
 		}
 	}
 
-	std::string prefixForErrors = "ERROR The given FEN Code is invalid. ";
+	std::string prefix_for_errors = "ERROR The given FEN Code is invalid. ";
 
 	std::vector<std::string> split_fen_code = split_string(given_fen_code, ' ');
 	if (split_fen_code.size() != 6)
 	{
-		throw prefixForErrors + "It had not the right size";
+		throw prefix_for_errors + "It had not the right size";
 	}
 
 	//the implementation of the iteration will be a bit weird,
 	//since index 0 is a1 and in the fen code it is a8
 
-	int currRankStartIdx = 56;
-	int currFile = 0;
+	int curr_rank_start_idx = 56;
+	int curr_file = 0;
 
 	//fill the board
-	for (int currStringIdx = 0;
-		currStringIdx < split_fen_code[0].size();
-		currStringIdx++)
+	for (int curr_str_idx = 0;
+		curr_str_idx < split_fen_code[0].size();
+		curr_str_idx++)
 	{
-		char currChar = given_fen_code[currStringIdx];
+		char curr_char = given_fen_code[curr_str_idx];
 
-		int boardPos = currRankStartIdx + currFile;
+		int board_pos = curr_rank_start_idx + curr_file;
 
-		if (currChar <= '8' && currChar >= '1')
+		if (curr_char <= '8' && curr_char >= '1')
 		{
-			int fieldsToSkip = currChar - '0';
-			currFile += fieldsToSkip;
+			int fields_to_skip = curr_char - '0';
+			curr_file += fields_to_skip;
 		}
-		else if (currChar == '/')
+		else if (curr_char == '/')
 		{
-			currRankStartIdx -= 8;
-			currFile = -1;
-			currFile++;
+			curr_rank_start_idx -= 8;
+			curr_file = -1;
+			curr_file++;
 		}
 		else
 		{
-			ChessPiece piece(currChar);
+			ChessPiece piece(curr_char);
 
-			_board.set_at_position(piece, (Square)boardPos);
+			_board.set_at_position(piece, (Square)board_pos);
 
-			currFile++;
+			curr_file++;
 		}
 	}
 
 	//get the turn color
 	if (split_fen_code[1].size() != 1)
 	{
-		throw prefixForErrors + "The turn color should only occupy 1 char";
+		throw prefix_for_errors + "The turn color should only occupy 1 char";
 	}
 	_current_turn_color =
 		split_fen_code[1][0] == 'w' ? white :
 		split_fen_code[1][0] == 'b' ? black :
-		throw prefixForErrors + "The color could not be found";
+		throw prefix_for_errors + "The color could not be found";
 
 	//castling rights
 	for (int i = 0; i < split_fen_code[2].size(); i++)
 	{
-		char currChar = split_fen_code[2][i];
+		char curr_char = split_fen_code[2][i];
 
-		if (currChar != '-')
+		if (curr_char != '-')
 		{
 			_can_castle
-				[get_color_of_fen_char(currChar)]
-			[get_castling_type_of_fen_char(currChar)] = true;
+				[get_color_of_fen_char(curr_char)]
+			[get_castling_type_of_fen_char(curr_char)] = true;
 		}
 	}
 
@@ -714,8 +714,8 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 std::string ChessBoard::get_string()
 {
 	std::string result = "";
-	std::string rowSeperatorString = "\n+---+---+---+---+---+---+---+---+\n";
-	result += rowSeperatorString;
+	std::string row_seperator_string = "\n+---+---+---+---+---+---+---+---+\n";
+	result += row_seperator_string;
 
 	for (int rank = 7; rank >= 0; rank--)
 	{
@@ -728,7 +728,7 @@ std::string ChessBoard::get_string()
 
 		}
 		result += "|" + std::to_string(rank + 1);
-		result += rowSeperatorString;
+		result += row_seperator_string;
 	}
 	result += "  a   b   c   d   e   f   g   h\n";
 
@@ -743,29 +743,29 @@ std::string ChessBoard::get_fen()
 
 	for (int rank = 7; rank >= 0; rank--)
 	{
-		int emptyFields = 0;
+		int empty_fields = 0;
 		for (int file = 0; file < 8; file++)
 		{
 			Square pos = (Square)(rank * 8 + file);
-			char pieceChar = get_piece_at(pos);
+			char piece_char = get_piece_at(pos);
 
-			if (pieceChar == ' ')
+			if (piece_char == ' ')
 			{
-				emptyFields++;
+				empty_fields++;
 			}
 			else
 			{
-				if (emptyFields > 0)
+				if (empty_fields > 0)
 				{
-					result += std::to_string(emptyFields);
-					emptyFields = 0;
+					result += std::to_string(empty_fields);
+					empty_fields = 0;
 				}
-				result += pieceChar;
+				result += piece_char;
 			}
 		}
-		if (emptyFields > 0)
+		if (empty_fields > 0)
 		{
-			result += std::to_string(emptyFields);
+			result += std::to_string(empty_fields);
 		}
 		if (rank > 0)
 		{
@@ -838,27 +838,27 @@ bool ChessBoard::is_king_in_check() const
 
 MoveList ChessBoard::get_all_legal_moves() const
 {
-	MoveList moveList;
+	MoveList move_list;
 
-	BitBoard squaresUnderAttack = BITBOARD_NONE;
+	BitBoard attack_bb = BITBOARD_NONE;
 	
 	//get all squares that are under attack
-	Square kingPos = _board.king_pos[_current_turn_color];
+	Square king_pos = _board.king_pos[_current_turn_color];
 	
 	
 	
 
-	get_pawn_moves(moveList);
-	get_knight_moves(moveList);
-	get_bishop_moves(moveList);
-	get_rook_moves(moveList);
-	get_queen_moves(moveList);
-	get_king_moves(moveList);
+	get_pawn_moves(move_list);
+	get_knight_moves(move_list);
+	get_bishop_moves(move_list);
+	get_rook_moves(move_list);
+	get_queen_moves(move_list);
+	get_king_moves(move_list);
 
-	get_castling_moves(moveList);
-	get_en_passant_move(moveList);
+	get_castling_moves(move_list);
+	get_en_passant_move(move_list);
 
-	return moveList;
+	return move_list;
 }
 
 MoveList ChessBoard::get_all_legal_capture_moves() const
@@ -884,8 +884,8 @@ MoveList ChessBoard::get_all_legal_capture_moves() const
 
 void ChessBoard::make_move(const Move& move)
 {
-	Square moveStart = move.getStart();
-	Square moveDest = move.getDestination();
+	Square move_start = move.get_start();
+	Square move_dest = move.get_destination();
 
 	update_castling_rights_after_move(move);
 	update_en_passant_rights_after_move(move);
@@ -893,9 +893,9 @@ void ChessBoard::make_move(const Move& move)
 
 	move.execute(_board);
 
-	if (moveStart == _board.king_pos[_current_turn_color])
+	if (move_start == _board.king_pos[_current_turn_color])
 	{
-		_board.king_pos[_current_turn_color] = moveDest;
+		_board.king_pos[_current_turn_color] = move_dest;
 	}
 
 	if (_current_turn_color == black)

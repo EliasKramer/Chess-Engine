@@ -17,21 +17,21 @@ private:
 	Square _start;
 	Square _destination;
 	MoveFlag _flag;
-	ChessColor _colorOfPiece;
+	ChessColor _color_of_piece;
 
 	friend bool operator ==(const Move& first, const Move& second);
 	friend bool operator !=(const Move& first, const Move& second);
 public:
 	//for normal and en passant moves
-	Move(Square givenStart, Square givenDest, MoveFlag flag = MoveFlag::normal);
+	Move(Square given_start, Square given_destination, MoveFlag flag = MoveFlag::normal);
 	//for promoting moves
-	Move(Square givenStart, Square givenDest, ChessColor color ,MoveFlag flag = MoveFlag::normal);
+	Move(Square given_start, Square given_destination, ChessColor color ,MoveFlag flag = MoveFlag::normal);
 	//for castling moves
-	Move(ChessColor col, CastlingType castleType);
+	Move(ChessColor col, CastlingType castle_type);
 
-	Square getStart() const;
-	Square getDestination() const;
-	MoveFlag getFlag() const;
+	Square get_start() const;
+	Square get_destination() const;
+	MoveFlag get_flag() const;
 	
 	void execute(BoardRepresentation& board) const;
 

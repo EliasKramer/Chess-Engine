@@ -48,19 +48,19 @@ const std::array<BitBoard, 64> KNIGHT_ATTACK_BB = []()->std::array<BitBoard, 64>
 
 	for (int i = A1; i <= H8; i++)
 	{
-		BitBoard currBitBoard = BITBOARD_NONE;
+		BitBoard curr_BB = BITBOARD_NONE;
 
-		Square currSquare = (Square)i;
+		Square curr_square = (Square)i;
 		for (int j = 0; j < 8; j++)
 		{
 			Direction dir = KNIGHT_DIRECTIONS[j];
-			if (destination_is_on_board(currSquare, dir))
+			if (destination_is_on_board(curr_square, dir))
 			{
-				currBitBoard |= BB_SQUARE[i + dir];
+				curr_BB |= BB_SQUARE[i + dir];
 			}
 		}
 
-		result[i] = currBitBoard;
+		result[i] = curr_BB;
 	}
 
 	return result;
@@ -71,17 +71,17 @@ const std::array<std::array<BitBoard, 64>, 2> PAWN_ATTACK_BB =
 
 	std::array<std::array<BitBoard, 64>, 2> result = {};
 
-	for (int colorIdx = white; colorIdx <= black; colorIdx++)
+	for (int color_idx = white; color_idx <= black; color_idx++)
 	{
 		for (int i = A1; i <= H8; i++)
 		{
-			Square currSquare = (Square)i;
+			Square curr_square = (Square)i;
 			for (int j = 0; j < 2; j++)
 			{
-				Direction dir = PAWN_ATTACK_DIRECTION[colorIdx][j];
-				if (destination_is_on_board(currSquare, dir))
+				Direction dir = PAWN_ATTACK_DIRECTION[color_idx][j];
+				if (destination_is_on_board(curr_square, dir))
 				{
-					result[colorIdx][i] |= BB_SQUARE[i + dir];
+					result[color_idx][i] |= BB_SQUARE[i + dir];
 				}
 			}
 		}
@@ -95,18 +95,18 @@ const std::array<BitBoard, 64> KING_ATTACKS_BB = []()->std::array<BitBoard, 64> 
 
 	for (int i = A1; i <= H8; i++)
 	{
-		BitBoard currBitBoard = BITBOARD_NONE;
+		BitBoard curr_BB = BITBOARD_NONE;
 
-		Square currSquare = (Square)i;
+		Square curr_square = (Square)i;
 		for (int j = 0; j < 8; j++)
 		{
 			Direction dir = ALL_SLIDING_DIRECTIONS[j];
-			if (destination_is_on_board(currSquare, dir))
+			if (destination_is_on_board(curr_square, dir))
 			{
-				currBitBoard |= BB_SQUARE[i + dir];
+				curr_BB |= BB_SQUARE[i + dir];
 			}
 		}
-		result[i] = currBitBoard;
+		result[i] = curr_BB;
 	}
 	return result;
 }();
@@ -116,7 +116,7 @@ const std::array<std::string, 65> SQUARE_STRING = []()->std::array<std::string, 
 
 	for (int i = A1; i <= H8; i++)
 	{
-		Square currSquare = (Square)i;
+		Square curr_square = (Square)i;
 		char file = 'a' + (i % 8);
 		char rank = '1' + (i / 8);
 		result[i] = file;

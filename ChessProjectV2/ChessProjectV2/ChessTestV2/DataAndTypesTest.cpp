@@ -11,7 +11,7 @@ namespace DataAndTypesTests
 	TEST_CLASS(DataAndTypesTesting)
 	{
 	public:
-		TEST_METHOD(fenCharToColor)
+		TEST_METHOD(fen_char_to_color)
 		{
 			Assert::IsTrue(white == get_color_of_fen_char('D'));
 			Assert::IsTrue(black == get_color_of_fen_char('d'));
@@ -34,7 +34,7 @@ namespace DataAndTypesTests
 				Assert::IsTrue(errorMsg == "Test Error Prefix Could not convert Char to Color");
 			}
 		}
-		TEST_METHOD(fenCharToCastlingType)
+		TEST_METHOD(fen_char_to_castling_type)
 		{
 			Assert::IsTrue(castle_short == get_castling_type_of_fen_char('K'));
 			Assert::IsTrue(castle_long == get_castling_type_of_fen_char('Q'));
@@ -57,7 +57,7 @@ namespace DataAndTypesTests
 				Assert::IsTrue(errorMsg == "Error Msg Prefix Could not convert Char to CastlingType");
 			}
 		}
-		TEST_METHOD(stringToSquare)
+		TEST_METHOD(string_to_square)
 		{
 			Assert::IsTrue(SQUARE_NONE == get_square_from_string("-"));
 			Assert::IsTrue(A1 == get_square_from_string("a1"));

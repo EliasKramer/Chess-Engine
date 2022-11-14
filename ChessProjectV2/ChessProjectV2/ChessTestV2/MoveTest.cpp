@@ -10,46 +10,46 @@ namespace MoveTest
 	{
 	public:
 
-		TEST_METHOD(moveBasicFunctions)
+		TEST_METHOD(move_basic_functions)
 		{
 			Move m(A1, B3);
-			Assert::IsTrue(A1 == m.getStart());
-			Assert::IsTrue(B3 == m.getDestination());
+			Assert::IsTrue(A1 == m.get_start());
+			Assert::IsTrue(B3 == m.get_destination());
 
-			Move sameMove(A1, B3);
-			Move differentStart(A2, B3);
-			Move differentDestination(A1, B4);
-			Move differentMove(A2, B4);
+			Move same_move(A1, B3);
+			Move different_start(A2, B3);
+			Move different_destination(A1, B4);
+			Move different_move(A2, B4);
 
-			Assert::IsTrue(m == sameMove);
-			Assert::IsFalse(m == differentStart);
-			Assert::IsFalse(m == differentDestination);
-			Assert::IsFalse(m == differentMove);
+			Assert::IsTrue(m == same_move);
+			Assert::IsFalse(m == different_start);
+			Assert::IsFalse(m == different_destination);
+			Assert::IsFalse(m == different_move);
 
-			Assert::IsFalse(m != sameMove);
-			Assert::IsTrue(m != differentStart);
-			Assert::IsTrue(m != differentDestination);
-			Assert::IsTrue(m != differentMove);
+			Assert::IsFalse(m != same_move);
+			Assert::IsTrue(m != different_start);
+			Assert::IsTrue(m != different_destination);
+			Assert::IsTrue(m != different_move);
 		}
-		TEST_METHOD(testCastlingConstructor)
+		TEST_METHOD(castling_constructor)
 		{
 			Move m(white, castle_short);
-			Assert::AreEqual((int)E1, (int)m.getStart());
-			Assert::AreEqual((int)G1, (int)m.getDestination());
+			Assert::AreEqual((int)E1, (int)m.get_start());
+			Assert::AreEqual((int)G1, (int)m.get_destination());
 
 			m = Move(white, castle_long);
-			Assert::AreEqual((int)E1, (int)m.getStart());
-			Assert::AreEqual((int)C1, (int)m.getDestination());
+			Assert::AreEqual((int)E1, (int)m.get_start());
+			Assert::AreEqual((int)C1, (int)m.get_destination());
 
 			m = Move(black, castle_short);
-			Assert::AreEqual((int)E8, (int)m.getStart());
-			Assert::AreEqual((int)G8, (int)m.getDestination());
+			Assert::AreEqual((int)E8, (int)m.get_start());
+			Assert::AreEqual((int)G8, (int)m.get_destination());
 
 			m = Move(black, castle_long);
-			Assert::AreEqual((int)E8, (int)m.getStart());
-			Assert::AreEqual((int)C8, (int)m.getDestination());
+			Assert::AreEqual((int)E8, (int)m.get_start());
+			Assert::AreEqual((int)C8, (int)m.get_destination());
 		}
-		TEST_METHOD(testBitBoardGenerationOfMove)
+		TEST_METHOD(bitboard_generation_of_move)
 		{
 			//TODO
 			/*
@@ -81,13 +81,13 @@ namespace MoveTest
 
 				Assert::Fail();
 			}
-			catch (const char* errorMsg)
+			catch (const char* error_msg)
 			{
-				Assert::IsTrue(errorMsg == "ERROR. A Caslting Move does not produce a Move Bitboard");
+				Assert::IsTrue(error_msg == "ERROR. A Caslting Move does not produce a Move Bitboard");
 			}
 			*/
 		}
-		TEST_METHOD(testMoveString)
+		TEST_METHOD(test_move_string)
 		{
 			Move m(A1, A2);
 			Assert::IsTrue(m.get_string() == "a1a2");
@@ -110,11 +110,11 @@ namespace MoveTest
 			mc = Move(black, castle_long);
 			Assert::IsTrue(mc.get_string() == "O-O-O");
 		}
-		TEST_METHOD(testFlagsAndConstructor)
+		TEST_METHOD(test_flags_and_constructor)
 		{
 			//normal move right
 			Move m(A1, A2);
-			Assert::IsTrue(normal == m.getFlag());
+			Assert::IsTrue(normal == m.get_flag());
 
 			//normal move wrong
 			try 
@@ -122,22 +122,22 @@ namespace MoveTest
 				Move m(A1, A3, white, normal);
 				Assert::Fail();
 			}
-			catch (const std::invalid_argument& errorMsg)
+			catch (const std::invalid_argument& error_msg)
 			{
 				Assert::IsTrue(
-					errorMsg.what() ==
+					error_msg.what() ==
 					std::string("Invalid flag for move (False constructor called)"));
 			}
 
 			//castle constructor right
 			m = Move(white, castle_short);
-			Assert::IsTrue(castle == m.getFlag());
+			Assert::IsTrue(castle == m.get_flag());
 			m = Move(white, castle_long);
-			Assert::IsTrue(castle == m.getFlag());
+			Assert::IsTrue(castle == m.get_flag());
 			m = Move(black, castle_short);
-			Assert::IsTrue(castle == m.getFlag());
+			Assert::IsTrue(castle == m.get_flag());
 			m = Move(black, castle_long);
-			Assert::IsTrue(castle == m.getFlag());
+			Assert::IsTrue(castle == m.get_flag());
 			
 			//castle constructor wrong
 			try
@@ -145,10 +145,10 @@ namespace MoveTest
 				Move m1(E1, G1, white, castle);
 				Assert::Fail();
 			}
-			catch (const std::invalid_argument& errorMsg)
+			catch (const std::invalid_argument& error_msg)
 			{
 				Assert::IsTrue(
-					errorMsg.what() == 
+					error_msg.what() == 
 					std::string("Invalid flag for move (False constructor called)"));
 			}
 			try
@@ -156,16 +156,16 @@ namespace MoveTest
 				Move m1(E1, C1, castle);
 				Assert::Fail();
 			}
-			catch (const std::invalid_argument& errorMsg)
+			catch (const std::invalid_argument& error_msg)
 			{
 				Assert::IsTrue(
-					errorMsg.what() == 
+					error_msg.what() == 
 					std::string("Invalid flag for move (False constructor called)"));
 			}
 
 			//en passant right
 			m = Move(D5, C6, en_passant);
-			Assert::IsTrue(en_passant == m.getFlag());
+			Assert::IsTrue(en_passant == m.get_flag());
 			
 			//en passant wrong
 			try
@@ -173,22 +173,22 @@ namespace MoveTest
 				Move m1(D5, C6, white, en_passant);
 				Assert::Fail();
 			}
-			catch (const std::invalid_argument& errorMsg)
+			catch (const std::invalid_argument& error_msg)
 			{
 				Assert::IsTrue(
-					errorMsg.what() == 
+					error_msg.what() == 
 					std::string("Invalid flag for move (False constructor called)"));
 			}
 			
 			//promote right
 			m = Move(D2, D1, white, promote_queen);
-			Assert::IsTrue(promote_queen == m.getFlag());
+			Assert::IsTrue(promote_queen == m.get_flag());
 			m = Move(D2, D1, white, promote_rook);
-			Assert::IsTrue(promote_rook == m.getFlag());
+			Assert::IsTrue(promote_rook == m.get_flag());
 			m = Move(D2, D1, white, promote_bishop);
-			Assert::IsTrue(promote_bishop == m.getFlag());
+			Assert::IsTrue(promote_bishop == m.get_flag());
 			m = Move(D2, D1, white, promote_knight);
-			Assert::IsTrue(promote_knight == m.getFlag());
+			Assert::IsTrue(promote_knight == m.get_flag());
 			
 			//promote wrong
 			try
@@ -196,10 +196,10 @@ namespace MoveTest
 				Move m1(D2, D1, promote_queen);
 				Assert::Fail();
 			}
-			catch (const std::invalid_argument& errorMsg)
+			catch (const std::invalid_argument& error_msg)
 			{
 				Assert::IsTrue(
-					errorMsg.what() == 
+					error_msg.what() == 
 					std::string("Invalid flag for move (False constructor called)"));
 			}
 		}

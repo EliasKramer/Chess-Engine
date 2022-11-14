@@ -8,48 +8,48 @@ namespace HelpMethodsTest
 	TEST_CLASS(HelpMethodsTest)
 	{
 	public:
-		TEST_METHOD(testStringSplittingWithSpaces)
+		TEST_METHOD(test_splitting_string_with_spaces)
 		{
-			std::string testString = "this string is can be split into different parts";
-			std::vector<std::string> expectedResult = 
+			std::string test_string = "this string is can be split into different parts";
+			std::vector<std::string> exptected_result = 
 			{ "this", "string", "is", "can", "be", "split", "into", "different", "parts" };
 			
-			std::vector<std::string> result = split_string(testString, ' ');
-			Assert::AreEqual(expectedResult.size(), result.size());
+			std::vector<std::string> result = split_string(test_string, ' ');
+			Assert::AreEqual(exptected_result.size(), result.size());
 			for (int i = 0; i < result.size(); i++)
 			{
-				Assert::AreEqual(expectedResult[i], result[i]);
+				Assert::AreEqual(exptected_result[i], result[i]);
 			}
 		}
-		TEST_METHOD(testStringSplittingWithOtherCharacters)
+		TEST_METHOD(test_string_splitting_with_other_characters)
 		{
 			//split it with the character a
-			std::string testString = "it*can*even*be*split*with*other*characters";
-			std::vector<std::string> expectedResult = 
+			std::string test_string = "it*can*even*be*split*with*other*characters";
+			std::vector<std::string> expected_result = 
 			{ "it", "can", "even", "be", "split", "with", "other", "characters" };
 			
-			std::vector<std::string> result = split_string(testString, '*');
-			Assert::AreEqual(expectedResult.size(), result.size());
+			std::vector<std::string> result = split_string(test_string, '*');
+			Assert::AreEqual(expected_result.size(), result.size());
 			for (int i = 0; i < result.size(); i++)
 			{
-				Assert::AreEqual(expectedResult[i], result[i]);
+				Assert::AreEqual(expected_result[i], result[i]);
 			}
 		}
-		TEST_METHOD(testStringSplittingWithMultipleSplitChars)
+		TEST_METHOD(test_string_splitting_with_multiple_chars)
 		{
 			//split it with the character a
-			std::string testString = "this!!string!!!has!!!!multiple!!split!chars";
-			std::vector<std::string> expectedResult =
+			std::string test_string = "this!!string!!!has!!!!multiple!!split!chars";
+			std::vector<std::string> expected_result =
 				{ "this", "string", "has", "multiple", "split", "chars" };
 
-			std::vector<std::string> result = split_string(testString, '!');
-			Assert::AreEqual(expectedResult.size(), result.size());
+			std::vector<std::string> result = split_string(test_string, '!');
+			Assert::AreEqual(expected_result.size(), result.size());
 			for (int i = 0; i < result.size(); i++)
 			{
-				Assert::AreEqual(expectedResult[i], result[i]);
+				Assert::AreEqual(expected_result[i], result[i]);
 			}
 		}
-		TEST_METHOD(upperAndLowerCaseTest)
+		TEST_METHOD(upper_and_lower_case_test)
 		{
 			Assert::IsTrue(is_upper_case('A'));
 			Assert::IsTrue(is_upper_case('Q'));
@@ -67,12 +67,12 @@ namespace HelpMethodsTest
 			Assert::IsFalse(is_lower_case('Q'));
 			Assert::IsFalse(is_lower_case('Z'));
 		}
-		TEST_METHOD(toLowerTest)
+		TEST_METHOD(to_lower_test)
 		{
 			Assert::IsTrue('a' == char_to_lower('A'));
 			Assert::IsTrue('z' == char_to_lower('Z'));
 		}
-		TEST_METHOD(directionTesting)
+		TEST_METHOD(direction_testing)
 		{
 			Assert::IsTrue(NORTH == get_forward_for_color(white));
 			Assert::IsTrue(SOUTH == get_forward_for_color(black));
@@ -80,12 +80,12 @@ namespace HelpMethodsTest
 			Assert::IsTrue(SOUTH == get_backward_for_color(white));
 			Assert::IsTrue(NORTH == get_backward_for_color(black));
 		}
-		TEST_METHOD(oppositeColor)
+		TEST_METHOD(opposite_color)
 		{
 			Assert::IsTrue(black == get_opposite_color(white));
 			Assert::IsTrue(white == get_opposite_color(black));
 		}
-		TEST_METHOD(isRayTypeTest)
+		TEST_METHOD(is_ray_type_test)
 		{
 			Assert::IsTrue(is_ray_type(rook));
 			Assert::IsTrue(is_ray_type(bishop));

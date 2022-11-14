@@ -13,64 +13,64 @@ Game::Game(
 void Game::start()
 {
 	//this variable stores all the moves of the players as the game progresses
-	std::string movesMade = "";
+	std::string moves_made = "";
 	
 	//this loop is the game loop
 	//it will only end if the game is done
 	while (true)
 	{
-		ChessColor currentTurnColor = _board.get_current_turn_color();
-		Player& currPlayer = currentTurnColor == white ? *_white_player.get() : *_black_player.get();
+		ChessColor current_turn_color = _board.get_current_turn_color();
+		Player& curr_player = current_turn_color == white ? *_white_player.get() : *_black_player.get();
 		
 
 		//this number increases every time black makes a move
-		int currentTurnNumber = _board.get_number_of_moves_played();
+		int current_turn_number = _board.get_number_of_moves_played();
 		
 		//print board and the move number
 		std::cout 
 			<< "\n\n" 
-			<< COLOR_STRING[currentTurnColor] << " " << currPlayer.get_name() 
-			<< "'s turn " << currentTurnNumber;
+			<< COLOR_STRING[current_turn_color] << " " << curr_player.get_name() 
+			<< "'s turn " << current_turn_number;
 		std::cout << "\n" << (_board.get_game_duration_state() == MidGame ? "Mid Game" : "End Game");
 		std::cout << "\n" << _board.get_fen();
 		std::cout << _board.get_string();
 		
 		//get the move from the current player
-		MoveList legalMoves = _board.get_all_legal_moves();
+		MoveList legal_moves = _board.get_all_legal_moves();
 		//to make sure the move the player wants to play is legal, 
 		//the return value is an index of the list of all legal moves
-		int choosenMoveIdx = currPlayer.get_move(_board, legalMoves);
+		int choosen_move_idx = curr_player.get_move(_board, legal_moves);
 		//throws an error if the returned value is not a valid index
-		if (choosenMoveIdx < 0 || choosenMoveIdx >= legalMoves.size())
+		if (choosen_move_idx < 0 || choosen_move_idx >= legal_moves.size())
 		{
 			throw "move cannot be executed. returned index is invalid!";
 		}
 
 		//get the move from the list
-		Move& moveToMake = legalMoves.at(choosenMoveIdx);
+		Move& move_to_make = legal_moves.at(choosen_move_idx);
 		
 		//store the current move and print it
-		std::string currMoveStr = moveToMake.get_string();
-		std::cout << "\n" << "move: " << currMoveStr << "\n";
-		movesMade += currMoveStr + "\n";
+		std::string curr_move_string = move_to_make.get_string();
+		std::cout << "\n" << "move: " << curr_move_string << "\n";
+		moves_made += curr_move_string + "\n";
 
 		//execute the move
-		_board.make_move(moveToMake);
+		_board.make_move(move_to_make);
 
 		//get the gamestate and evaluate if the game has ended
-		GameState currGameState = _board.get_game_state();
-		if(currGameState == white_won || currGameState == black_won)
+		GameState curr_game_state = _board.get_game_state();
+		if(curr_game_state == white_won || curr_game_state == black_won)
 		{
 			std::cout << _board.get_string();
-			std::cout << "Checkmate! " << COLOR_STRING[currentTurnColor] << " wins!" << std::endl;
+			std::cout << "Checkmate! " << COLOR_STRING[current_turn_color] << " wins!" << std::endl;
 			break;
 		}
-		else if(currGameState == draw)
+		else if(curr_game_state == draw)
 		{
 			std::cout << "Draw!" << std::endl;
 			break;
 		}
-		else if(currGameState == stalemate)
+		else if(curr_game_state == stalemate)
 		{
 			std::cout << "Stalemate!" << std::endl;
 			break;
@@ -80,5 +80,5 @@ void Game::start()
 	//print the history of moves
 	std::cout << "\n\nPress any key to show move log\n";
 	system("pause");
-	std::cout << "Moves made:\n" << movesMade;
+	std::cout << "Moves made:\n" << moves_made;
 }

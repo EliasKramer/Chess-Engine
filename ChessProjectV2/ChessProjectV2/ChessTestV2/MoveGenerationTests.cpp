@@ -11,7 +11,7 @@ namespace MoveGenerationTest
 	TEST_CLASS(MoveGenerationTest)
 	{
 	public:
-		TEST_METHOD(generatingKingMoves)
+		TEST_METHOD(generating_king_moves)
 		{
 			//king is e4
 			//can move everywhere
@@ -20,59 +20,59 @@ namespace MoveGenerationTest
 			MoveList moves = board.get_all_legal_moves();
 			Assert::AreEqual(8, (int)moves.size());
 
-			Assert::IsTrue(moveListContains(Move(E4, D5), moves));
-			Assert::IsTrue(moveListContains(Move(E4, E5), moves));
-			Assert::IsTrue(moveListContains(Move(E4, F5), moves));
-			Assert::IsTrue(moveListContains(Move(E4, D4), moves));
-			Assert::IsTrue(moveListContains(Move(E4, F4), moves));
-			Assert::IsTrue(moveListContains(Move(E4, D3), moves));
-			Assert::IsTrue(moveListContains(Move(E4, E3), moves));
-			Assert::IsTrue(moveListContains(Move(E4, F3), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, D5), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, E5), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, F5), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, D4), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, F4), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, D3), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, E3), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, F3), moves));
 
 			board = ChessBoardTest("K/8/8/8/8/k/p/8 w -- - 0 1");
 			moves = board.get_all_legal_moves();
 			Assert::AreEqual(3, (int)moves.size());
 
-			Assert::IsTrue(moveListContains(Move(A8, B8), moves));
-			Assert::IsTrue(moveListContains(Move(A8, A7), moves));
-			Assert::IsTrue(moveListContains(Move(A8, B7), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, B8), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, A7), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, B7), moves));
 		}
-		TEST_METHOD(generatingKnightMoves)
+		TEST_METHOD(generating_knight_moves)
 		{
 			ChessBoardTest board("8/8/8/8/4N3/8/8/8 w -- - 0 1");
 
 			MoveList moves = board.get_all_legal_moves();
 			Assert::AreEqual(8, (int)moves.size());
 
-			Assert::IsTrue(moveListContains(Move(E4, F6), moves));
-			Assert::IsTrue(moveListContains(Move(E4, G5), moves));
-			Assert::IsTrue(moveListContains(Move(E4, G3), moves));
-			Assert::IsTrue(moveListContains(Move(E4, F2), moves));
-			Assert::IsTrue(moveListContains(Move(E4, D2), moves));
-			Assert::IsTrue(moveListContains(Move(E4, C3), moves));
-			Assert::IsTrue(moveListContains(Move(E4, C5), moves));
-			Assert::IsTrue(moveListContains(Move(E4, D6), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, F6), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, G5), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, G3), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, F2), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, D2), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, C3), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, C5), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, D6), moves));
 
 			board = ChessBoardTest("8/8/8/8/8/8/1n6/8 b -- - 0 1");
 			moves = board.get_all_legal_moves();
 			Assert::AreEqual(4, (int)moves.size());
 
-			Assert::IsTrue(moveListContains(Move(B2, A4), moves));
-			Assert::IsTrue(moveListContains(Move(B2, C4), moves));
-			Assert::IsTrue(moveListContains(Move(B2, D3), moves));
-			Assert::IsTrue(moveListContains(Move(B2, D1), moves));
+			Assert::IsTrue(move_list_contains(Move(B2, A4), moves));
+			Assert::IsTrue(move_list_contains(Move(B2, C4), moves));
+			Assert::IsTrue(move_list_contains(Move(B2, D3), moves));
+			Assert::IsTrue(move_list_contains(Move(B2, D1), moves));
 
 			board = ChessBoardTest("8/8/8/8/8/3p4/3B1n2/8 b - - 0 1");
 			moves = board.get_all_legal_moves();
 			Assert::AreEqual(5, (int)moves.size());
 
-			Assert::IsTrue(moveListContains(Move(F2, D1), moves));
-			Assert::IsTrue(moveListContains(Move(F2, E4), moves));
-			Assert::IsTrue(moveListContains(Move(F2, G4), moves));
-			Assert::IsTrue(moveListContains(Move(F2, H3), moves));
-			Assert::IsTrue(moveListContains(Move(F2, H1), moves));
+			Assert::IsTrue(move_list_contains(Move(F2, D1), moves));
+			Assert::IsTrue(move_list_contains(Move(F2, E4), moves));
+			Assert::IsTrue(move_list_contains(Move(F2, G4), moves));
+			Assert::IsTrue(move_list_contains(Move(F2, H3), moves));
+			Assert::IsTrue(move_list_contains(Move(F2, H1), moves));
 		}
-		TEST_METHOD(generatingPawnMoves)
+		TEST_METHOD(generating_pawn_moves)
 		{
 			//only forward moves
 			//black pawns on e7 g6 c5
@@ -83,19 +83,19 @@ namespace MoveGenerationTest
 
 			MoveList moves = board.get_all_legal_moves();
 			Assert::AreEqual(3, (int)moves.size());
-			Assert::IsTrue(moveListContains(Move(E2, E3), moves));
-			Assert::IsTrue(moveListContains(Move(E2, E4), moves));
-			Assert::IsTrue(moveListContains(Move(H3, H4), moves));
+			Assert::IsTrue(move_list_contains(Move(E2, E3), moves));
+			Assert::IsTrue(move_list_contains(Move(E2, E4), moves));
+			Assert::IsTrue(move_list_contains(Move(H3, H4), moves));
 
 			//black to move
 			board = ChessBoardTest("8/4p3/6p1/2p5/8/7P/4P3/8 b -- - 0 1");
 
 			moves = board.get_all_legal_moves();
 			Assert::AreEqual(4, (int)moves.size());
-			Assert::IsTrue(moveListContains(Move(E7, E6), moves));
-			Assert::IsTrue(moveListContains(Move(E7, E5), moves));
-			Assert::IsTrue(moveListContains(Move(G6, G5), moves));
-			Assert::IsTrue(moveListContains(Move(C5, C4), moves));
+			Assert::IsTrue(move_list_contains(Move(E7, E6), moves));
+			Assert::IsTrue(move_list_contains(Move(E7, E5), moves));
+			Assert::IsTrue(move_list_contains(Move(G6, G5), moves));
+			Assert::IsTrue(move_list_contains(Move(C5, C4), moves));
 
 			//white has no move. black is blocking the move
 			board = ChessBoardTest("8/8/8/8/8/2p5/2P5/8 w - - 0 1");
@@ -110,9 +110,9 @@ namespace MoveGenerationTest
 
 			moves = board.get_all_legal_moves();
 			Assert::AreEqual(3, (int)moves.size());
-			Assert::IsTrue(moveListContains(Move(H7, G6), moves));
-			Assert::IsTrue(moveListContains(Move(H7, H6), moves));
-			Assert::IsTrue(moveListContains(Move(H7, H5), moves));
+			Assert::IsTrue(move_list_contains(Move(H7, G6), moves));
+			Assert::IsTrue(move_list_contains(Move(H7, H6), moves));
+			Assert::IsTrue(move_list_contains(Move(H7, H5), moves));
 
 			//white can take blacks pieces
 			//white pawn is on e4
@@ -122,11 +122,11 @@ namespace MoveGenerationTest
 
 			moves = board.get_all_legal_moves();
 			Assert::AreEqual(3, (int)moves.size());
-			Assert::IsTrue(moveListContains(Move(E4, D5), moves));
-			Assert::IsTrue(moveListContains(Move(E4, F5), moves));
-			Assert::IsTrue(moveListContains(Move(E4, E5), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, D5), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, F5), moves));
+			Assert::IsTrue(move_list_contains(Move(E4, E5), moves));
 		}
-		TEST_METHOD(generatingRookMoves)
+		TEST_METHOD(generating_rook_moves)
 		{
 			//white rook on a1
 			//white rook on h1
@@ -139,40 +139,40 @@ namespace MoveGenerationTest
 			//first rook
 
 			//moves towards same-colored rook
-			Assert::IsTrue(moveListContains(Move(A1, B1), moves));
-			Assert::IsTrue(moveListContains(Move(A1, C1), moves));
-			Assert::IsTrue(moveListContains(Move(A1, D1), moves));
-			Assert::IsTrue(moveListContains(Move(A1, E1), moves));
-			Assert::IsTrue(moveListContains(Move(A1, F1), moves));
-			Assert::IsTrue(moveListContains(Move(A1, G1), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, B1), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, C1), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, D1), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, E1), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, F1), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, G1), moves));
 
 			//moves towards opposite-colored rook
-			Assert::IsTrue(moveListContains(Move(A1, A2), moves));
-			Assert::IsTrue(moveListContains(Move(A1, A3), moves));
-			Assert::IsTrue(moveListContains(Move(A1, A4), moves));
-			Assert::IsTrue(moveListContains(Move(A1, A5), moves));
-			Assert::IsTrue(moveListContains(Move(A1, A6), moves));
-			Assert::IsTrue(moveListContains(Move(A1, A7), moves));
-			Assert::IsTrue(moveListContains(Move(A1, A8), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, A2), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, A3), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, A4), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, A5), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, A6), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, A7), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, A8), moves));
 
 			//second rook
 
 			//moves towards same-colored rook
-			Assert::IsTrue(moveListContains(Move(H1, G1), moves));
-			Assert::IsTrue(moveListContains(Move(H1, F1), moves));
-			Assert::IsTrue(moveListContains(Move(H1, E1), moves));
-			Assert::IsTrue(moveListContains(Move(H1, D1), moves));
-			Assert::IsTrue(moveListContains(Move(H1, C1), moves));
-			Assert::IsTrue(moveListContains(Move(H1, B1), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, G1), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, F1), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, E1), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, D1), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, C1), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, B1), moves));
 
 			//moves towards opposite-colored rook
-			Assert::IsTrue(moveListContains(Move(H1, H2), moves));
-			Assert::IsTrue(moveListContains(Move(H1, H3), moves));
-			Assert::IsTrue(moveListContains(Move(H1, H4), moves));
-			Assert::IsTrue(moveListContains(Move(H1, H5), moves));
-			Assert::IsTrue(moveListContains(Move(H1, H6), moves));
-			Assert::IsTrue(moveListContains(Move(H1, H7), moves));
-			Assert::IsTrue(moveListContains(Move(H1, H8), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, H2), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, H3), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, H4), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, H5), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, H6), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, H7), moves));
+			Assert::IsTrue(move_list_contains(Move(H1, H8), moves));
 
 			board = ChessBoardTest("r6r/8/8/8/8/8/8/R6R b - - 0 1");
 			moves = board.get_all_legal_moves();
@@ -182,40 +182,40 @@ namespace MoveGenerationTest
 			//first rook
 
 			//moves towards same-colored rook
-			Assert::IsTrue(moveListContains(Move(A8, B8), moves));
-			Assert::IsTrue(moveListContains(Move(A8, C8), moves));
-			Assert::IsTrue(moveListContains(Move(A8, D8), moves));
-			Assert::IsTrue(moveListContains(Move(A8, E8), moves));
-			Assert::IsTrue(moveListContains(Move(A8, F8), moves));
-			Assert::IsTrue(moveListContains(Move(A8, G8), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, B8), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, C8), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, D8), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, E8), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, F8), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, G8), moves));
 
 			//moves towards opposite-colored rook
-			Assert::IsTrue(moveListContains(Move(A8, A7), moves));
-			Assert::IsTrue(moveListContains(Move(A8, A6), moves));
-			Assert::IsTrue(moveListContains(Move(A8, A5), moves));
-			Assert::IsTrue(moveListContains(Move(A8, A4), moves));
-			Assert::IsTrue(moveListContains(Move(A8, A3), moves));
-			Assert::IsTrue(moveListContains(Move(A8, A2), moves));
-			Assert::IsTrue(moveListContains(Move(A8, A1), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, A7), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, A6), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, A5), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, A4), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, A3), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, A2), moves));
+			Assert::IsTrue(move_list_contains(Move(A8, A1), moves));
 
 			//second rook
 
 			//moves towards same-colored rook
-			Assert::IsTrue(moveListContains(Move(H8, G8), moves));
-			Assert::IsTrue(moveListContains(Move(H8, F8), moves));
-			Assert::IsTrue(moveListContains(Move(H8, E8), moves));
-			Assert::IsTrue(moveListContains(Move(H8, D8), moves));
-			Assert::IsTrue(moveListContains(Move(H8, C8), moves));
-			Assert::IsTrue(moveListContains(Move(H8, B8), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, G8), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, F8), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, E8), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, D8), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, C8), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, B8), moves));
 
 			//moves towards opposite-colored rook
-			Assert::IsTrue(moveListContains(Move(H8, H7), moves));
-			Assert::IsTrue(moveListContains(Move(H8, H6), moves));
-			Assert::IsTrue(moveListContains(Move(H8, H5), moves));
-			Assert::IsTrue(moveListContains(Move(H8, H4), moves));
-			Assert::IsTrue(moveListContains(Move(H8, H3), moves));
-			Assert::IsTrue(moveListContains(Move(H8, H2), moves));
-			Assert::IsTrue(moveListContains(Move(H8, H1), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, H7), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, H6), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, H5), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, H4), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, H3), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, H2), moves));
+			Assert::IsTrue(move_list_contains(Move(H8, H1), moves));
 
 			//gets 0 moves when blocked completely
 			board = ChessBoardTest("8/8/8/7p/6pP/6PR/7P/8 w - - 0 1");
@@ -223,171 +223,171 @@ namespace MoveGenerationTest
 
 			Assert::AreEqual(0, (int)moves.size());
 		}
-		TEST_METHOD(generatingBishopMoves)
+		TEST_METHOD(generating_bishop_moves)
 		{
 			ChessBoardTest board("8/8/1p6/8/3B4/8/8/B7 w - - 0 1");
 			MoveList moves = board.get_all_legal_moves();
 			Assert::AreEqual(13, (int)moves.size());
 
 			//first bishop
-			Assert::IsTrue(moveListContains(Move(A1, B2), moves));
-			Assert::IsTrue(moveListContains(Move(A1, C3), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, B2), moves));
+			Assert::IsTrue(move_list_contains(Move(A1, C3), moves));
 
 			//second bishop
-			Assert::IsTrue(moveListContains(Move(D4, C3), moves));
-			Assert::IsTrue(moveListContains(Move(D4, B2), moves));
+			Assert::IsTrue(move_list_contains(Move(D4, C3), moves));
+			Assert::IsTrue(move_list_contains(Move(D4, B2), moves));
 
-			Assert::IsTrue(moveListContains(Move(D4, C5), moves));
-			Assert::IsTrue(moveListContains(Move(D4, B6), moves));
+			Assert::IsTrue(move_list_contains(Move(D4, C5), moves));
+			Assert::IsTrue(move_list_contains(Move(D4, B6), moves));
 
-			Assert::IsTrue(moveListContains(Move(D4, E5), moves));
-			Assert::IsTrue(moveListContains(Move(D4, F6), moves));
-			Assert::IsTrue(moveListContains(Move(D4, G7), moves));
-			Assert::IsTrue(moveListContains(Move(D4, H8), moves));
+			Assert::IsTrue(move_list_contains(Move(D4, E5), moves));
+			Assert::IsTrue(move_list_contains(Move(D4, F6), moves));
+			Assert::IsTrue(move_list_contains(Move(D4, G7), moves));
+			Assert::IsTrue(move_list_contains(Move(D4, H8), moves));
 
-			Assert::IsTrue(moveListContains(Move(D4, E3), moves));
-			Assert::IsTrue(moveListContains(Move(D4, F2), moves));
-			Assert::IsTrue(moveListContains(Move(D4, G1), moves));
+			Assert::IsTrue(move_list_contains(Move(D4, E3), moves));
+			Assert::IsTrue(move_list_contains(Move(D4, F2), moves));
+			Assert::IsTrue(move_list_contains(Move(D4, G1), moves));
 		}
-		TEST_METHOD(generatingQueenMoves)
+		TEST_METHOD(generating_queen_moves)
 		{
 			ChessBoardTest board("8/8/6p1/6P1/8/1n2Q3/8/8 w - - 0 1");
 
 			MoveList moves = board.get_all_legal_moves();
 			Assert::AreEqual(22, (int)moves.size());
 
-			Assert::IsTrue(moveListContains(Move(E3, E4), moves));
-			Assert::IsTrue(moveListContains(Move(E3, E5), moves));
-			Assert::IsTrue(moveListContains(Move(E3, E6), moves));
-			Assert::IsTrue(moveListContains(Move(E3, E7), moves));
-			Assert::IsTrue(moveListContains(Move(E3, E8), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, E4), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, E5), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, E6), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, E7), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, E8), moves));
 
-			Assert::IsTrue(moveListContains(Move(E3, F4), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, F4), moves));
 
-			Assert::IsTrue(moveListContains(Move(E3, F3), moves));
-			Assert::IsTrue(moveListContains(Move(E3, G3), moves));
-			Assert::IsTrue(moveListContains(Move(E3, H3), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, F3), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, G3), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, H3), moves));
 
-			Assert::IsTrue(moveListContains(Move(E3, F2), moves));
-			Assert::IsTrue(moveListContains(Move(E3, G1), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, F2), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, G1), moves));
 
-			Assert::IsTrue(moveListContains(Move(E3, E2), moves));
-			Assert::IsTrue(moveListContains(Move(E3, E1), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, E2), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, E1), moves));
 
-			Assert::IsTrue(moveListContains(Move(E3, D2), moves));
-			Assert::IsTrue(moveListContains(Move(E3, C1), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, D2), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, C1), moves));
 
-			Assert::IsTrue(moveListContains(Move(E3, D3), moves));
-			Assert::IsTrue(moveListContains(Move(E3, C3), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, D3), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, C3), moves));
 
-			Assert::IsTrue(moveListContains(Move(E3, D4), moves));
-			Assert::IsTrue(moveListContains(Move(E3, C5), moves));
-			Assert::IsTrue(moveListContains(Move(E3, B6), moves));
-			Assert::IsTrue(moveListContains(Move(E3, A7), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, D4), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, C5), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, B6), moves));
+			Assert::IsTrue(move_list_contains(Move(E3, A7), moves));
 		}
 		//started to only test legal positions here (with both kings)
-		TEST_METHOD(generatingEnPassantMoves)
+		TEST_METHOD(generating_en_passant_moves)
 		{
 			ChessBoardTest board("7k/8/8/4Pp2/8/8/8/K7 w - f6 0 1");
 			MoveList moves = board.get_all_legal_moves();
-			Assert::IsTrue(moveListContains(Move(E5, F6), moves));
+			Assert::IsTrue(move_list_contains(Move(E5, F6), moves));
 
 			board = ChessBoardTest("7k/8/8/4Pp2/8/8/8/K7 w - - 0 1");
 			moves = board.get_all_legal_moves();
-			Assert::IsFalse(moveListContains(Move(E5, F6), moves));
+			Assert::IsFalse(move_list_contains(Move(E5, F6), moves));
 
 			board = ChessBoardTest("7k/8/8/8/6pP/8/8/K7 b - h3 0 1");
 			moves = board.get_all_legal_moves();
-			Assert::IsTrue(moveListContains(Move(G4, H3), moves));
+			Assert::IsTrue(move_list_contains(Move(G4, H3), moves));
 
 			board = ChessBoardTest("7k/8/8/8/8/2Pp4/8/K7 b - - 0 1");
 			moves = board.get_all_legal_moves();
-			Assert::IsFalse(moveListContains(Move(D3, C2), moves));
+			Assert::IsFalse(move_list_contains(Move(D3, C2), moves));
 		}
-		TEST_METHOD(generatingCastlingMoves)
+		TEST_METHOD(generating_castle_moves)
 		{
 			//nothing blocked. every caslte move possible
 			//white
 			ChessBoardTest board("r3k2r/8/8/8/8/8/8/R3K2R w KQkq - 0 1");
 			MoveList moves = board.get_all_legal_moves();
 
-			Assert::IsTrue(moveListContains(Move(E1, G1), moves));
-			Assert::IsTrue(moveListContains(Move(E1, C1), moves));
+			Assert::IsTrue(move_list_contains(Move(E1, G1), moves));
+			Assert::IsTrue(move_list_contains(Move(E1, C1), moves));
 
 			//black
 			board = ChessBoardTest("r3k2r/8/8/8/8/8/8/R3K2R b KQkq - 0 1");
 			moves = board.get_all_legal_moves();
 
-			Assert::IsTrue(moveListContains(Move(E8, G8), moves));
-			Assert::IsTrue(moveListContains(Move(E8, C8), moves));
+			Assert::IsTrue(move_list_contains(Move(E8, G8), moves));
+			Assert::IsTrue(move_list_contains(Move(E8, C8), moves));
 
 			//caslting is not allowed.(fen string)
 			//white
 			board = ChessBoardTest("r3k2r/8/8/8/8/8/8/R3K2R w kq - 0 1");
 			moves = board.get_all_legal_moves();
 
-			Assert::IsFalse(moveListContains(Move(E1, G1), moves));
-			Assert::IsFalse(moveListContains(Move(E1, C1), moves));
+			Assert::IsFalse(move_list_contains(Move(E1, G1), moves));
+			Assert::IsFalse(move_list_contains(Move(E1, C1), moves));
 
 			//black
 			board = ChessBoardTest("r3k2r/8/8/8/8/8/8/R3K2R b KQ - 0 1");
 			moves = board.get_all_legal_moves();
 
-			Assert::IsFalse(moveListContains(Move(E8, G8), moves));
-			Assert::IsFalse(moveListContains(Move(E8, C8), moves));
+			Assert::IsFalse(move_list_contains(Move(E8, G8), moves));
+			Assert::IsFalse(move_list_contains(Move(E8, C8), moves));
 
 			//cant castle left and right (path blocked)
 			//white
 			board = ChessBoardTest("4k3/8/8/8/3r1r2/8/8/R3K2R w KQ - 0 1");
 			moves = board.get_all_legal_moves();
 
-			Assert::IsFalse(moveListContains(Move(E1, G1), moves));
-			Assert::IsFalse(moveListContains(Move(E1, C1), moves));
+			Assert::IsFalse(move_list_contains(Move(E1, G1), moves));
+			Assert::IsFalse(move_list_contains(Move(E1, C1), moves));
 
 			board = ChessBoardTest("4k3/8/8/8/2r3r1/8/8/R3K2R w KQ - 0 1");
 			moves = board.get_all_legal_moves();
 
-			Assert::IsFalse(moveListContains(Move(E1, G1), moves));
-			Assert::IsFalse(moveListContains(Move(E1, C1), moves));
+			Assert::IsFalse(move_list_contains(Move(E1, G1), moves));
+			Assert::IsFalse(move_list_contains(Move(E1, C1), moves));
 
 			board = ChessBoardTest("4k3/8/8/8/4r3/8/8/R3K2R w KQ - 0 1");
 			moves = board.get_all_legal_moves();
 
-			Assert::IsFalse(moveListContains(Move(E1, G1), moves));
-			Assert::IsFalse(moveListContains(Move(E1, C1), moves));
+			Assert::IsFalse(move_list_contains(Move(E1, G1), moves));
+			Assert::IsFalse(move_list_contains(Move(E1, C1), moves));
 
 			board = ChessBoardTest("4k3/8/8/7r/rr6/8/8/R3K2R w KQ - 0 1");
 			moves = board.get_all_legal_moves();
 
-			Assert::IsTrue(moveListContains(Move(E1, G1), moves));
-			Assert::IsTrue(moveListContains(Move(E1, C1), moves));
+			Assert::IsTrue(move_list_contains(Move(E1, G1), moves));
+			Assert::IsTrue(move_list_contains(Move(E1, C1), moves));
 
 			//black
 			board = ChessBoardTest("r3k2r/8/8/3R1R2/8/8/8/4K3 b kq - 1 1");
 			moves = board.get_all_legal_moves();
 
-			Assert::IsFalse(moveListContains(Move(E8, G8), moves));
-			Assert::IsFalse(moveListContains(Move(E8, C8), moves));
+			Assert::IsFalse(move_list_contains(Move(E8, G8), moves));
+			Assert::IsFalse(move_list_contains(Move(E8, C8), moves));
 
 			board = ChessBoardTest("r3k2r/8/8/2R3R1/8/8/8/4K3 b kq - 1 1");
 			moves = board.get_all_legal_moves();
 
-			Assert::IsFalse(moveListContains(Move(E8, G8), moves));
-			Assert::IsFalse(moveListContains(Move(E8, C8), moves));
+			Assert::IsFalse(move_list_contains(Move(E8, G8), moves));
+			Assert::IsFalse(move_list_contains(Move(E8, C8), moves));
 
 			board = ChessBoardTest("r3k2r/8/8/4R3/8/8/8/4K3 b kq - 1 1");
 			moves = board.get_all_legal_moves();
 
-			Assert::IsFalse(moveListContains(Move(E8, G8), moves));
-			Assert::IsFalse(moveListContains(Move(E8, C8), moves));
+			Assert::IsFalse(move_list_contains(Move(E8, G8), moves));
+			Assert::IsFalse(move_list_contains(Move(E8, C8), moves));
 
 			board = ChessBoardTest("r3k2r/8/8/RR5R/8/8/8/4K3 b kq - 1 1");
 			moves = board.get_all_legal_moves();
 
-			Assert::IsTrue(moveListContains(Move(E8, G8), moves));
-			Assert::IsTrue(moveListContains(Move(E8, C8), moves));
+			Assert::IsTrue(move_list_contains(Move(E8, G8), moves));
+			Assert::IsTrue(move_list_contains(Move(E8, C8), moves));
 		}
-		TEST_METHOD(generatePseudoLegalMovesAtDepthOne)
+		TEST_METHOD(get_pseudolegal_moves_depth_1)
 		{
 			ChessBoardTest board("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
 			MoveList moves = board.get_all_legal_moves();
@@ -397,7 +397,7 @@ namespace MoveGenerationTest
 			moves = board.get_all_legal_moves();
 			Assert::AreEqual(16, (int)moves.size());
 		}
-		TEST_METHOD(generateLegalMovesAtDepthOne)
+		TEST_METHOD(generate_legal_moves_depth_1)
 		{
 			ChessBoardTest board("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 1");
 			MoveList moves = board.get_all_legal_moves();
@@ -419,7 +419,7 @@ namespace MoveGenerationTest
 			moves = board.get_all_legal_moves();
 			Assert::AreEqual(46, (int)moves.size());
 		}
-		TEST_METHOD(startingFenMoveGen)
+		TEST_METHOD(starting_fen_move_gen)
 		{
 			ChessBoardTest board(STARTING_FEN);
 			MoveList moves = board.get_all_legal_moves();
@@ -430,23 +430,23 @@ namespace MoveGenerationTest
 			moves = board.get_all_legal_moves();
 			Assert::AreEqual(0, (int)moves.size());
 		}
-		TEST_METHOD(testGettingOnlyCaptureMoves)
+		TEST_METHOD(get_only_capture_moves)
 		{
 			//starting fen
 			ChessBoardTest board(STARTING_FEN);
 			MoveList moves = board.get_all_legal_moves();
-			MoveList captureMoves = board.get_all_legal_capture_moves();
+			MoveList capture_moves = board.get_all_legal_capture_moves();
 
 			Assert::AreEqual(20, (int)moves.size());
-			Assert::AreEqual(0, (int)captureMoves.size());
+			Assert::AreEqual(0, (int)capture_moves.size());
 
 			//custom fen
 			board = ChessBoardTest("4k3/6B1/5r2/1pPN2P1/3Q4/5R2/8/4K3 w - b6 0 1");
 			moves = board.get_all_legal_moves();
-			captureMoves = board.get_all_legal_capture_moves();
+			capture_moves = board.get_all_legal_capture_moves();
 			
 			Assert::AreEqual(51, (int)moves.size());
-			Assert::AreEqual(6, (int)captureMoves.size());
+			Assert::AreEqual(6, (int)capture_moves.size());
 		}
 	};
 }

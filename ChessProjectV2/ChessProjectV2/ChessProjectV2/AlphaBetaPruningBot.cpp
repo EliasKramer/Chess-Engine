@@ -4,90 +4,90 @@ int AlphaBetaPruningBot::get_move(const ChessBoard& board, const MoveList& moves
 {
 	auto begin = std::chrono::high_resolution_clock::now();
 
-	bool isWhiteToMove = board.get_current_turn_color() == white;
-	int colorMult = isWhiteToMove ? 1 : -1;
+	bool is_white_to_move = board.get_current_turn_color() == white;
+	int color_mult = is_white_to_move ? 1 : -1;
 
-	int endPointsEvaluated = 0;
-	int nodesSearched = 0;
-	int branchesPruned = 0;
+	int end_points_evaluated = 0;
+	int nodes_searched = 0;
+	int branches_pruned = 0;
 
 	int depth = 5;
 
-	int bestMoveScore = INT_MIN;
-	int bestMoveIdx = 0;
+	int best_move_score = INT_MIN;
+	int best_move_idx = 0;
 
-	int moveIdx = 0;
+	int curr_move_idx = 0;
 	for (const Move& curr : moves)
 	{
-		ChessBoard boardCopy = board;
-		boardCopy.make_move(curr);
+		ChessBoard board_copy = board;
+		board_copy.make_move(curr);
 
-		int endstatesBefore = endPointsEvaluated;
+		int end_states_before = end_points_evaluated;
 
-		int moveScore =
+		int move_score =
 			get_move_score_recursively(
-				boardCopy,
+				board_copy,
 				depth - 1,
-				!isWhiteToMove,
+				!is_white_to_move,
 				BLACK_WIN_EVAL_VALUE,
 				WHITE_WIN_EVAL_VALUE,
-				nodesSearched,
-				endPointsEvaluated,
-				branchesPruned
+				nodes_searched,
+				end_points_evaluated,
+				branches_pruned
 			);
 
-		int currScore = colorMult * moveScore;
+		int curr_score = color_mult * move_score;
 
 		
 		std::cout
 			<< "Move: " << curr.get_string()
-			<< ", Score: " << currScore
-			<< ", Endstates Evaluated: " << endPointsEvaluated - endstatesBefore
+			<< ", Score: " << curr_score
+			<< ", Endstates Evaluated: " << end_points_evaluated - end_states_before
 			<< std::endl;
 		
 
-		if (currScore > bestMoveScore)
+		if (curr_score > best_move_score)
 		{
-			bestMoveScore = currScore;
-			bestMoveIdx = moveIdx;
+			best_move_score = curr_score;
+			best_move_idx = curr_move_idx;
 		}
 
-		moveIdx++;
+		curr_move_idx++;
 	}
 
 	auto end = std::chrono::high_resolution_clock::now();
 
 	long long duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
 
-	std::string additionalInfo = "Pruned Branches: " + std::to_string(branchesPruned);
+	std::string additional_info = "Pruned Branches: " + std::to_string(branches_pruned);
 	
 	print_search_statistics(
 		"Minimax with Alpha Beta Pruning",
-		nodesSearched,
-		endPointsEvaluated,
+		nodes_searched,
+		end_points_evaluated,
 		depth,
-		moves[bestMoveIdx],
-		bestMoveScore,
+		moves[best_move_idx],
+		best_move_score,
 		duration,
-		additionalInfo);
+		additional_info);
 
-	return bestMoveIdx;
+	return best_move_idx;
 }
 
 int AlphaBetaPruningBot::get_move_score_recursively(
 	ChessBoard board,
 	int depth,
-	bool isMaximizingPlayer,
+	bool is_maximizing_player,
 	int alpha,
 	int beta,
-	int& nodesSearched,
-	int& endStatesSearched,
-	int& prunedBranches)
+	int& nodes_searched,
+	int& end_states_searched,
+	int& pruned_branches)
 {
 	if (depth == 0)
 	{
-		endStatesSearched++;
-		nodesSearched++;
+		end_states_searched++;
+		nodes_searched++;
 		return evaluate_board(board);
 	}
 	else
@@ -97,8 +97,8 @@ int AlphaBetaPruningBot::get_move_score_recursively(
 		//no more moves
 		if (moves.size() == 0)
 		{
-			nodesSearched++;
-			endStatesSearched++;
+			nodes_searched++;
+			end_states_searched++;
 			//dont know if this works
 			return board.is_king_in_check() ?
 				(board.get_current_turn_color() == white ?
@@ -110,46 +110,46 @@ int AlphaBetaPruningBot::get_move_score_recursively(
 					GAME_STATE_EVALUATION[white_won] + depth)
 				: 0;
 		}
-		int bestEval = isMaximizingPlayer ? INT_MIN : INT_MAX;
+		int best_eval = is_maximizing_player ? INT_MIN : INT_MAX;
 		for (Move curr : moves)
 		{
-			ChessBoard copyBoard = board.get_copy_by_value();
-			copyBoard.make_move(curr);
+			ChessBoard copy_board = board.get_copy_by_value();
+			copy_board.make_move(curr);
 
-			nodesSearched++;
+			nodes_searched++;
 			int evaluation =
 				get_move_score_recursively(
-					copyBoard,
+					copy_board,
 					depth - 1,
-					!isMaximizingPlayer,
+					!is_maximizing_player,
 					-alpha,
 					-beta,
-					nodesSearched,
-					endStatesSearched,
-					prunedBranches
+					nodes_searched,
+					end_states_searched,
+					pruned_branches
 				);
 
-			if (isMaximizingPlayer)
+			if (is_maximizing_player)
 			{
-				bestEval = std::max(bestEval, evaluation);
+				best_eval = std::max(best_eval, evaluation);
 				alpha = std::max(alpha, evaluation);
 				if (beta <= alpha)
 				{
-					prunedBranches++;
+					pruned_branches++;
 					break;
 				}
 			}
 			else
 			{
-				bestEval = std::min(bestEval, evaluation);
+				best_eval = std::min(best_eval, evaluation);
 				beta = std::min(beta, evaluation);
 				if (beta <= alpha)
 				{
-					prunedBranches++;
+					pruned_branches++;
 					break;
 				}
 			}
 		}
-		return bestEval;
+		return best_eval;
 	}
 }

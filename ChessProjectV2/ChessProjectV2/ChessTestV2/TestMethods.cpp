@@ -1,10 +1,10 @@
 #include "TestMethods.h"
 
-bool moveListContains(Move m, const MoveList& moves)
+bool move_list_contains(Move m, const MoveList& moves)
 {
-	for (const Move& currMoveToCheck : moves)
+	for (const Move& curr_move_to_check : moves)
 	{
-		if (currMoveToCheck == m)
+		if (curr_move_to_check == m)
 		{
 			return true;
 		}
@@ -12,7 +12,9 @@ bool moveListContains(Move m, const MoveList& moves)
 	return false;
 }
 
-bool squaresBetweenAreSame(std::array<Square, MAX_SQUARES_BETWEEN> first, std::array<Square, MAX_SQUARES_BETWEEN> second)
+bool squares_between_are_same(
+	std::array<Square, MAX_SQUARES_BETWEEN> first,
+	std::array<Square, MAX_SQUARES_BETWEEN> second)
 {
 	for(int i = 0; i < MAX_SQUARES_BETWEEN; i++)
 	{
@@ -24,12 +26,12 @@ bool squaresBetweenAreSame(std::array<Square, MAX_SQUARES_BETWEEN> first, std::a
 	return true;
 }
 
-int numberOfMovesAfterDepth(const ChessBoard& board, int depth)
+int number_of_moves_after_depth(const ChessBoard& board, int depth)
 {
-	MoveList listOfMoves = board.get_all_legal_moves();
+	MoveList list_of_moves = board.get_all_legal_moves();
 	if (depth == 1)
 	{
-		return listOfMoves.size();
+		return list_of_moves.size();
 	}
 	else if (depth == 0)
 	{
@@ -37,148 +39,150 @@ int numberOfMovesAfterDepth(const ChessBoard& board, int depth)
 	}
 	else
 	{
-		int allMovesCount = 0;
-		for (const Move& curr : listOfMoves)
+		int all_moves_count = 0;
+		for (const Move& curr : list_of_moves)
 		{
-			ChessBoard copyBoard = board.get_copy_by_value();
-			copyBoard.make_move(curr);
+			ChessBoard copy_board = board.get_copy_by_value();
+			copy_board.make_move(curr);
 
-			allMovesCount += numberOfMovesAfterDepth(copyBoard, depth - 1);
+			all_moves_count += number_of_moves_after_depth(copy_board, depth - 1);
 		}
-		return allMovesCount;
+		return all_moves_count;
 	}
 }
 
-MoveList getAllMovesAtDepth(const ChessBoard& board, int depth)
+MoveList get_all_moves_at_depth(const ChessBoard& board, int depth)
 {
-	MoveList listOfMoves = board.get_all_legal_moves();
+	MoveList list_of_moves = board.get_all_legal_moves();
 	if (depth == 1)
 	{
-		return listOfMoves;
+		return list_of_moves;
 	}
 	else
 	{
 		MoveList moves;
-		for (const Move& curr : listOfMoves)
+		for (const Move& curr : list_of_moves)
 		{
-			ChessBoard copyBoard = board.get_copy_by_value();
-			copyBoard.make_move(curr);
+			ChessBoard copy_board = board.get_copy_by_value();
+			copy_board.make_move(curr);
 
-			for (Move& currMoveToAdd :
-				getAllMovesAtDepth(copyBoard, depth - 1))
+			for (Move& curr_move_to_add :
+				get_all_moves_at_depth(copy_board, depth - 1))
 			{
-				moves.push_back(std::move(currMoveToAdd));
+				moves.push_back(std::move(curr_move_to_add));
 			}
 		}
 		return moves;
 	}
 }
 
-int getNumberOfEnPassantMoves(const MoveList& moves)
+int get_number_of_en_passant_moves(const MoveList& moves)
 {
-	int retVal = 0;
+	int ret_val = 0;
 	for (const Move& curr : moves)
 	{
-		if (curr.getFlag() == en_passant)
+		if (curr.get_flag() == en_passant)
 		{
-			retVal++;
+			ret_val++;
 		}
 	}
-	return retVal;
+	return ret_val;
 }
 
-int getNumberOfPromotionMoves(const MoveList& moves)
+int get_number_of_promotion_moves(const MoveList& moves)
 {
-	int retVal = 0;
+	int ret_val = 0;
 	for (const Move& curr : moves)
 	{
-		if (curr.getFlag() == promote_queen ||
-			curr.getFlag() == promote_rook ||
-			curr.getFlag() == promote_bishop ||
-			curr.getFlag() == promote_knight)
+		if (curr.get_flag() == promote_queen ||
+			curr.get_flag() == promote_rook ||
+			curr.get_flag() == promote_bishop ||
+			curr.get_flag() == promote_knight)
 		{
-			retVal++;
+			ret_val++;
 		}
 	}
-	return retVal;
+	return ret_val;
 }
 
-int getNumberOfCastlingMoves(const MoveList& moves)
+int get_number_of_castling_moves(const MoveList& moves)
 {
-	int retVal = 0;
+	int ret_val = 0;
 	for (const Move& curr : moves)
 	{
-		if (curr.getFlag() == castle)
+		if (curr.get_flag() == castle)
 		{
-			retVal++;
+			ret_val++;
 		}
 	}
-	return retVal;
+	return ret_val;
 }
 
-std::vector<std::string> getAllMoveStringsAtDepth(
-	const ChessBoard& board, std::string currStr, int depth)
+std::vector<std::string> get_all_move_strings_at_depth(
+	const ChessBoard& board, std::string curr_string, int depth)
 {
-	MoveList listOfMoves = board.get_all_legal_moves();
+	MoveList list_of_moves = board.get_all_legal_moves();
 	if (depth == 1)
 	{
-		std::vector<std::string> listOfStringMoves = {};
-		for (Move& currMoveToAdd : listOfMoves)
+		std::vector<std::string> list_of_string_moves = {};
+		for (Move& curr_move_to_add : list_of_moves)
 		{
 			std::string stringToAdd =
-				currStr
-				+ SQUARE_STRING[currMoveToAdd.getStart()] + "->"
-				+ SQUARE_STRING[currMoveToAdd.getDestination()] + ", ";
+				curr_string
+				+ SQUARE_STRING[curr_move_to_add.get_start()] + "->"
+				+ SQUARE_STRING[curr_move_to_add.get_destination()] + ", ";
 
-			listOfStringMoves.push_back(stringToAdd);
+			list_of_string_moves.push_back(stringToAdd);
 		}
-		return listOfStringMoves;
+		return list_of_string_moves;
 	}
 	else
 	{
-		std::vector<std::string> listOfStringMoves = {};
-		for (const Move& curr : listOfMoves)
+		std::vector<std::string> list_of_string_moves = {};
+		for (const Move& curr : list_of_moves)
 		{
-			ChessBoard copyBoard = board.get_copy_by_value();
-			copyBoard.make_move(curr);
+			ChessBoard copy_board = board.get_copy_by_value();
+			copy_board.make_move(curr);
 
-			std::string currMoveString = currStr
-				+ SQUARE_STRING[curr.getStart()] + "->"
-				+ SQUARE_STRING[curr.getDestination()] + ", ";
+			std::string curr_move_string = curr_string
+				+ SQUARE_STRING[curr.get_start()] + "->"
+				+ SQUARE_STRING[curr.get_destination()] + ", ";
 
 			std::vector<std::string> recursion =
-				getAllMoveStringsAtDepth(copyBoard, currMoveString, depth - 1);
+				get_all_move_strings_at_depth(copy_board, curr_move_string, depth - 1);
 
-			listOfStringMoves.insert(
-				listOfStringMoves.end(),
+			list_of_string_moves.insert(
+				list_of_string_moves.end(),
 				recursion.begin(),
 				recursion.end()
 			);
 		}
-		return listOfStringMoves;
+		return list_of_string_moves;
 	}
 }
 
-std::vector<std::pair<std::string, int>> getNumberOfMovesAfterFirstMove(const ChessBoard& board, int depth)
+std::vector<std::pair<std::string, int>> get_number_of_moves_after_first_move(
+	const ChessBoard& board,
+	int depth)
 {
 	std::vector<std::pair<std::string, int>> result;
 
-	MoveList listOfMoves = board.get_all_legal_moves();
+	MoveList list_of_moves = board.get_all_legal_moves();
 
-	for (const Move& curr : listOfMoves)
+	for (const Move& curr : list_of_moves)
 	{
-		ChessBoard copyBoard = board.get_copy_by_value();
-		copyBoard.make_move(curr);
+		ChessBoard copy_board = board.get_copy_by_value();
+		copy_board.make_move(curr);
 
 		//TODO replace with getString
-		std::string currMoveString =
-			SQUARE_STRING[curr.getStart()]
-			+ SQUARE_STRING[curr.getDestination()];
+		std::string curr_move_string =
+			SQUARE_STRING[curr.get_start()]
+			+ SQUARE_STRING[curr.get_destination()];
 
-		std::pair<std::string, int> currItem =
-			std::make_pair(currMoveString, numberOfMovesAfterDepth(copyBoard, depth - 1));
+		std::pair<std::string, int> curr_item =
+			std::make_pair(curr_move_string, number_of_moves_after_depth(copy_board, depth - 1));
 
-		result.push_back(currItem);
+		result.push_back(curr_item);
 	}
 	return result;
 }

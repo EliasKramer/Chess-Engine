@@ -10,7 +10,7 @@ namespace BitBoardTest
 	{
 	public:
 
-		TEST_METHOD(BitBoardInitialising)
+		TEST_METHOD(bitboard_initializing)
 		{
 			Assert::AreEqual(0ULL, BITBOARD_NONE);
 			Assert::AreEqual(0xffffffffffffffffULL, BITBOARD_ALL);
@@ -109,7 +109,7 @@ namespace BitBoardTest
 			Assert::AreNotEqual(0x1ULL, BB_SQUARE[B2]);
 			Assert::AreNotEqual(0x80000000000000ULL, BB_SQUARE[H8]);
 		}
-		TEST_METHOD(SquaresAreTheSameAsOverlappingFilesAndRanks)
+		TEST_METHOD(squares_overlap_files_and_ranks)
 		{
 			Assert::AreEqual(BB_SQUARE[A1], FILE_A & RANK_1);
 			Assert::AreEqual(BB_SQUARE[B1], FILE_B & RANK_1);
@@ -183,7 +183,7 @@ namespace BitBoardTest
 			Assert::AreEqual(BB_SQUARE[G8], FILE_G & RANK_8);
 			Assert::AreEqual(BB_SQUARE[H8], FILE_H & RANK_8);
 		}
-		TEST_METHOD(overlappingSquareWithBBTest)
+		TEST_METHOD(square_overlaps_bb_function)
 		{
 			Assert::IsTrue(square_overlaps_with_BB(A1, FILE_A));
 			Assert::IsTrue(square_overlaps_with_BB(A1, RANK_1));
@@ -194,7 +194,7 @@ namespace BitBoardTest
 			Assert::IsFalse(square_overlaps_with_BB(H8, RANK_7));
 			Assert::IsFalse(square_overlaps_with_BB(H8, FILE_G));
 		}
-		TEST_METHOD(SquaresAreOnTheSameFile)
+		TEST_METHOD(squares_are_on_the_same_file)
 		{
 			Assert::IsTrue(squares_are_same_file(A1, A2));
 			Assert::IsTrue(squares_are_same_file(A1, A3));
@@ -267,7 +267,7 @@ namespace BitBoardTest
 			Assert::IsFalse(squares_are_same_file(G7, H7));
 			Assert::IsFalse(squares_are_same_file(G7, F7));
 		}
-		TEST_METHOD(SquaresAreOnTheSameRank)
+		TEST_METHOD(squares_are_on_the_same_rank_function)
 		{
 			Assert::IsTrue(squares_are_on_the_same_rank(A1, B1));
 			Assert::IsTrue(squares_are_on_the_same_rank(A1, C1));
@@ -339,7 +339,7 @@ namespace BitBoardTest
 			Assert::IsFalse(squares_are_on_the_same_rank(D4, D5));
 			Assert::IsFalse(squares_are_on_the_same_rank(D4, C6));
 		}
-		TEST_METHOD(SquaresAreOnTheSameDiagonal)
+		TEST_METHOD(squares_are_on_the_same_diagonal_function)
 		{
 			Assert::IsTrue(squares_are_on_the_same_diagonal(A1, B2));
 			Assert::IsTrue(squares_are_on_the_same_diagonal(A1, C3));
@@ -395,10 +395,10 @@ namespace BitBoardTest
 			Assert::IsFalse(squares_are_on_the_same_diagonal(E4, C4));
 			Assert::IsFalse(squares_are_on_the_same_diagonal(E4, F6));
 		}
-		TEST_METHOD(SquaresBetweenTest)
+		TEST_METHOD(squares_between_test)
 		{
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(A1, A2),
 					{
 						SQUARE_NONE,
@@ -411,7 +411,7 @@ namespace BitBoardTest
 			));
 
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(SQUARE_NONE, A2),
 					{
 						SQUARE_NONE,
@@ -424,7 +424,7 @@ namespace BitBoardTest
 			));
 			
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(A1, SQUARE_NONE),
 					{
 						SQUARE_NONE,
@@ -437,7 +437,7 @@ namespace BitBoardTest
 			));
 
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(SQUARE_NONE, SQUARE_NONE),
 					{
 						SQUARE_NONE,
@@ -450,7 +450,7 @@ namespace BitBoardTest
 			));
 			
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(A1, A1),
 					{
 						SQUARE_NONE,
@@ -463,7 +463,7 @@ namespace BitBoardTest
 			));
 			
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(A1, A3),
 					{
 						A2,
@@ -476,7 +476,7 @@ namespace BitBoardTest
 			));
 
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(A1, C3),
 					{
 						B2,
@@ -489,7 +489,7 @@ namespace BitBoardTest
 			));
 
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(B1, G6),
 					{
 						C2,
@@ -502,7 +502,7 @@ namespace BitBoardTest
 			));
 
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(D3, B1),
 					{
 						C2,
@@ -515,7 +515,7 @@ namespace BitBoardTest
 			));
 
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(D3, H7),
 					{
 						E4,
@@ -528,7 +528,7 @@ namespace BitBoardTest
 			));
 			
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(D3, A6),
 					{
 						C4,
@@ -541,7 +541,7 @@ namespace BitBoardTest
 			));
 
 			Assert::IsTrue(
-				squaresBetweenAreSame(
+				squares_between_are_same(
 					get_squares_between(D3, F1),
 					{
 						E2,

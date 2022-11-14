@@ -8,7 +8,7 @@ namespace MedicriusTest
 	TEST_CLASS(MedicriusTest)
 	{
 	public:
-		TEST_METHOD(testEvaluation)
+		TEST_METHOD(test_evaluation)
 		{
 			//https://www.chess.com/analysis
 			Medicrius medicrius;

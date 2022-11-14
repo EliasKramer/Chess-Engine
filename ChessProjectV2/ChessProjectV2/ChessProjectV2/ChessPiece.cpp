@@ -7,20 +7,20 @@ ChessPiece::ChessPiece(
 	_type(type)
 {}
 
-ChessPiece::ChessPiece(char fenChar)
+ChessPiece::ChessPiece(char fen_char)
 {
 	_color = get_color_of_fen_char(
-		fenChar,
+		fen_char,
 		"ERROR Chess Piece could not be created.");
 
 	
-	if (is_upper_case(fenChar))
+	if (is_upper_case(fen_char))
 	{
-		fenChar = tolower(fenChar);
+		fen_char = tolower(fen_char);
 	}
 
 	//TODO CHANGE THIS TO ARRAY 
-	switch (fenChar)
+	switch (fen_char)
 	{
 	case 'p':
 		_type = pawn;

@@ -1,14 +1,14 @@
 #include "BitBoard.h"
 
 const std::array<BitBoard, 64> BB_SQUARE = []()->std::array<BitBoard, 64> {
-	std::array<BitBoard, 64> retVal = {};
+	std::array<BitBoard, 64> ret_val = {};
 
 	for (int i = A1; i <= H8; i++)
 	{
-		retVal[i] = 1ULL << i;
+		ret_val[i] = 1ULL << i;
 	}
 
-	return retVal;
+	return ret_val;
 }();
 
 bool operator!=(const Square first, const Square second)
@@ -75,31 +75,31 @@ std::array<Square, MAX_SQUARES_BETWEEN> get_squares_between(
 	//check could be implemented wether 
 	//the squares are on the same file, rank or diagonal
 
-	int startFile = get_file_of_square(start);
-	int startRank = get_rank_of_square(start);
-	int endFile = get_file_of_square(end);
-	int endRank = get_rank_of_square(end);
+	int start_file = get_file_of_square(start);
+	int start_rank = get_rank_of_square(start);
+	int end_file = get_file_of_square(end);
+	int end_rank = get_rank_of_square(end);
 	
-	int fileDiff = endFile - startFile;
-	int rankDiff = endRank - startRank;
+	int file_diff = end_file - start_file;
+	int rank_diff = end_rank - start_rank;
 
-	if (abs(fileDiff) <= 1 && abs(rankDiff) <= 1)
+	if (abs(file_diff) <= 1 && abs(rank_diff) <= 1)
 	{
 		return result;
 	}
 
-	int rankDir = rankDiff == 0 ? 0 : rankDiff > 0 ? 1 : -1;
-	int fileDir = fileDiff == 0 ? 0 : fileDiff > 0 ? 1 : -1;
+	int rank_dir = rank_diff == 0 ? 0 : rank_diff > 0 ? 1 : -1;
+	int file_dir = file_diff == 0 ? 0 : file_diff > 0 ? 1 : -1;
 
-	int rank = startRank + rankDir;
-	int file = startFile + fileDir;
+	int rank = start_rank + rank_dir;
+	int file = start_file + file_dir;
 
 	int i = 0;
-	while (!(rank == endRank && file == endFile))
+	while (!(rank == end_rank && file == end_file))
 	{
 		result[i] = (Square)(rank * 8 + file);
-		rank += rankDir;
-		file += fileDir;
+		rank += rank_dir;
+		file += file_dir;
 		i++;
 	}
 

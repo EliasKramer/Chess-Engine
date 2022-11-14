@@ -1,28 +1,28 @@
 #include "HelpMethods.h"
 
 std::vector<std::string> split_string(
-	std::string inputString,
-	char charToSplit)
+	std::string input_string,
+	char char_to_split)
 {
-	std::vector<std::string> splittedString;
-	std::string tempString;
-	for (int i = 0; i < inputString.size(); i++)
+	std::vector<std::string> splitted_string;
+	std::string temp_string;
+	for (int i = 0; i < input_string.size(); i++)
 	{
-		if (inputString[i] == charToSplit)
+		if (input_string[i] == char_to_split)
 		{
-			if (tempString != "")
+			if (temp_string != "")
 			{
-				splittedString.push_back(tempString);
+				splitted_string.push_back(temp_string);
 			}
-			tempString.clear();
+			temp_string.clear();
 		}
 		else
 		{
-			tempString.push_back(inputString[i]);
+			temp_string.push_back(input_string[i]);
 		}
 	}
-	splittedString.push_back(tempString);
-	return splittedString;
+	splitted_string.push_back(temp_string);
+	return splitted_string;
 }
 
 bool is_upper_case(char c)
@@ -40,14 +40,16 @@ char char_to_lower(char c)
 	return (c + ('a' - 'A'));
 }
 
-ChessColor get_color_of_fen_char(char c, std::string errorMsgPrefix)
+ChessColor get_color_of_fen_char(char c, std::string error_msg_prefix)
 {
 	return is_upper_case(c) ? white :
 		is_lower_case(c) ? black :
-		throw errorMsgPrefix + " Could not convert Char to Color";
+		throw error_msg_prefix + " Could not convert Char to Color";
 }
 
-CastlingType get_castling_type_of_fen_char(char c, std::string errorMsgPrefix)
+CastlingType get_castling_type_of_fen_char(
+	char c, 
+	std::string error_msg_prefix)
 {
 	if (is_upper_case(c))
 	{
@@ -55,12 +57,12 @@ CastlingType get_castling_type_of_fen_char(char c, std::string errorMsgPrefix)
 	}
 	return c == 'q' ? castle_long :
 		c == 'k' ? castle_short :
-		throw errorMsgPrefix + " Could not convert Char to CastlingType";
+		throw error_msg_prefix + " Could not convert Char to CastlingType";
 }
 
 Square get_square_from_string(
 	std::string str,
-	std::string errorMsgPrefix)
+	std::string error_msg_prefix)
 {
 	if (str == "-")
 	{
@@ -78,7 +80,7 @@ Square get_square_from_string(
 			return (Square)idx;
 		}
 	}
-	throw errorMsgPrefix + " Could not convert String to Square";
+	throw error_msg_prefix + " Could not convert String to Square";
 }
 
 Direction get_forward_for_color(ChessColor color)

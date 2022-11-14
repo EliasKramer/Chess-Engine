@@ -1,10 +1,10 @@
 #include "Move.h"
 
-Move::Move(Square givenStart, Square givenDest, MoveFlag flag) :
-	_start(givenStart),
-	_destination(givenDest),
+Move::Move(Square given_start, Square given_dest, MoveFlag flag) :
+	_start(given_start),
+	_destination(given_dest),
 	_flag(flag),
-	_colorOfPiece(ChessColor::no_color)
+	_color_of_piece(ChessColor::no_color)
 {
 	if ((flag == normal ||
 		flag == en_passant) == false)
@@ -14,14 +14,14 @@ Move::Move(Square givenStart, Square givenDest, MoveFlag flag) :
 }
 
 Move::Move(
-	Square givenStart,
-	Square givenDest,
+	Square given_start,
+	Square given_dest,
 	ChessColor color,
 	MoveFlag flag) :
-	_start(givenStart),
-	_destination(givenDest),
+	_start(given_start),
+	_destination(given_dest),
 	_flag(flag),
-	_colorOfPiece(color)
+	_color_of_piece(color)
 {
 	if ((flag == MoveFlag::promote_queen ||
 		flag == MoveFlag::promote_rook ||
@@ -32,11 +32,11 @@ Move::Move(
 	}
 }
 
-Move::Move(ChessColor col, CastlingType castleType) :
+Move::Move(ChessColor col, CastlingType castle_type) :
 	_start(SQUARE_NONE),
 	_destination(SQUARE_NONE),
 	_flag(castle),
-	_colorOfPiece(col)
+	_color_of_piece(col)
 {
 	if (_flag != castle)
 	{
@@ -44,20 +44,20 @@ Move::Move(ChessColor col, CastlingType castleType) :
 	}
 
 	_start = START_SQUARE_KING_CASTLING[col];
-	_destination = DESTINATION_SQUARE_KING_CASTLING[col][castleType];
+	_destination = DESTINATION_SQUARE_KING_CASTLING[col][castle_type];
 }
 
-Square Move::getStart() const
+Square Move::get_start() const
 {
 	return _start;
 }
 
-Square Move::getDestination() const
+Square Move::get_destination() const
 {
 	return _destination;
 }
 
-MoveFlag Move::getFlag() const
+MoveFlag Move::get_flag() const
 {
 	return _flag;
 }

@@ -1,83 +1,89 @@
 #include "UnoptimizedMinimaxBot.h"
 
-int UnoptimizedMinimaxBot::get_move(const ChessBoard& board, const MoveList& moves)
+int UnoptimizedMinimaxBot::get_move(
+	const ChessBoard& board,
+	const MoveList& moves)
 {
 	//multithreading would also be useful here
 
 	const auto begin = std::chrono::high_resolution_clock::now();
 
 	//needs to choose the greatest negative numbner if black
-	const int colorMult = board.get_current_turn_color() == white ? 1 : -1;
+	const int color_mult = board.get_current_turn_color() == white ? 1 : -1;
 
 	//every evaluated game state
-	int endPointsEvaluated = 0;
+	int end_points_evaluated = 0;
 	//every game state that is found
-	int nodesSearched = 0;
+	int nodes_searched = 0;
 
 	//the depth to search to
 	const int depth = 3;
 
 	//the score of the current best move
-	int bestMoveScore = INT_MIN;
+	int best_move_score = INT_MIN;
 	//the beste current move index of the given possible moves
-	int bestMoveIdx = 0;
+	int best_move_idx = 0;
 	
 	//current move index
-	int moveIdx = 0;
+	int move_idx = 0;
 	for (const Move& curr : moves)
 	{
-		ChessBoard boardCopy = board;
-		boardCopy.make_move(curr);
+		ChessBoard board_copy = board;
+		board_copy.make_move(curr);
 
-		const int endstatesBefore = endPointsEvaluated;
+		const int endstates_before = end_points_evaluated;
 
-		const int moveScore =
+		const int moce_score =
 			minimax(
-				boardCopy,
+				board_copy,
 				depth - 1,
-				nodesSearched,
-				endPointsEvaluated
+				nodes_searched,
+				end_points_evaluated
 			);
 
-		const int currScore = colorMult * moveScore;
+		const int curr_score = color_mult * moce_score;
 
 		/*
 		std::cout
 			<< "Move: " << curr.get()->getString()
-			<< ", Score: " << currScore
-			<< ", Endstates Evaluated: " << endPointsEvaluated - endstatesBefore
+			<< ", Score: " << curr_score
+			<< ", Endstates Evaluated: " << end_points_evaluated - endstates_before
 			<< std::endl;
 		*/
 
-		if (currScore > bestMoveScore)
+		if (curr_score > best_move_score)
 		{
-			bestMoveScore = currScore;
-			bestMoveIdx = moveIdx;
+			best_move_score = curr_score;
+			best_move_idx = move_idx;
 		}
 
-		moveIdx++;
+		move_idx++;
 	}
 
 	const auto end = std::chrono::high_resolution_clock::now();
 
 	print_search_statistics(
 		"Pure Minimax", 
-		nodesSearched, 
-		endPointsEvaluated,
+		nodes_searched, 
+		end_points_evaluated,
 		depth,
-		moves[bestMoveIdx], 
-		bestMoveScore, 
+		moves[best_move_idx], 
+		best_move_score, 
 		std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count());
 	
-	return bestMoveIdx;
+	return best_move_idx;
 }
 
-int UnoptimizedMinimaxBot::minimax(ChessBoard board, int depth, int& nodesSearched, int& endStatesSearched)
+int UnoptimizedMinimaxBot::minimax(
+	ChessBoard board,
+	int depth,
+	int& nodes_searched,
+	int& end_states_searched)
 {
 	if (depth == 0)
 	{
-		endStatesSearched++;
-		nodesSearched++;
+		end_states_searched++;
+		nodes_searched++;
 		return evaluate_board(board);
 	}
 	else
@@ -87,8 +93,8 @@ int UnoptimizedMinimaxBot::minimax(ChessBoard board, int depth, int& nodesSearch
 		//no more moves
 		if (moves.size() == 0)
 		{
-			nodesSearched++;
-			endStatesSearched++;
+			nodes_searched++;
+			end_states_searched++;
 			return board.is_king_in_check() ?
 				(board.get_current_turn_color() == white ?
 					//when the depth is very high, the checkmate can be done earlier
@@ -99,26 +105,26 @@ int UnoptimizedMinimaxBot::minimax(ChessBoard board, int depth, int& nodesSearch
 					GAME_STATE_EVALUATION[white_won] + depth)
 				: 0;
 		}
-		int bestEval = INT_MIN;
+		int best_eval = INT_MIN;
 		for (Move& curr : moves)
 		{
-			ChessBoard copyBoard = board.get_copy_by_value();
-			copyBoard.make_move(curr);
+			ChessBoard copy_board = board.get_copy_by_value();
+			copy_board.make_move(curr);
 
-			nodesSearched++;
+			nodes_searched++;
 			int evaluation =
 				-minimax(
-					copyBoard,
+					copy_board,
 					depth - 1,
-					nodesSearched,
-					endStatesSearched);
+					nodes_searched,
+					end_states_searched);
 
-			if (evaluation > bestEval)
+			if (evaluation > best_eval)
 			{
-				bestEval = evaluation;
+				best_eval = evaluation;
 			}
 		}
 
-		return bestEval;
+		return best_eval;
 	}
 }

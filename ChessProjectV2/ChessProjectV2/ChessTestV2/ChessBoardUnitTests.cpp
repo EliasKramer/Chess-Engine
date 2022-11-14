@@ -12,7 +12,7 @@ namespace ChessBoardUnitTest
 	TEST_CLASS(ChessBoardUnitTest)
 	{
 	public:
-		TEST_METHOD(fenNotationSetup)
+		TEST_METHOD(fen_notation_setup)
 		{
 			ChessBoardTest boardFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 
@@ -47,7 +47,7 @@ namespace ChessBoardUnitTest
 
 			Assert::IsTrue(1 == boardFen.get_move_number());
 		}
-		TEST_METHOD(fenNotationTests)
+		TEST_METHOD(fen_notation_test)
 		{
 			ChessBoardTest board("8/8/8/8/8/8/8/8 w KQkq e3 0 1");
 			Assert::IsTrue(E3 == board.get_en_passant_square());
@@ -76,11 +76,11 @@ namespace ChessBoardUnitTest
 			Assert::IsTrue(BB_SQUARE[D1] == board.get_all_pieces_of_type(bishop));
 			Assert::IsTrue(BB_SQUARE[D1] == board.get_all_pieces_of_color(white));
 		}
-		TEST_METHOD(startingPositionTest)
+		TEST_METHOD(starting_position_test)
 		{
 			Assert::IsTrue(STARTING_FEN == "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 		}
-		TEST_METHOD(fieldIsUnderattackByPawn)
+		TEST_METHOD(field_is_under_attack_by_pawn)
 		{
 			ChessBoardTest board("8/8/8/8/2p5/3K4/8/8 w - - 0 1");
 			Assert::IsTrue(board.field_is_under_attack(D3));
@@ -97,7 +97,7 @@ namespace ChessBoardUnitTest
 			board = ChessBoardTest("8/8/8/8/8/3k4/3P4/8 b - - 0 1");
 			Assert::IsFalse(board.field_is_under_attack(D3));
 		}
-		TEST_METHOD(fieldIsUnderattackByKnight)
+		TEST_METHOD(field_is_under_attack_by_knight)
 		{
 			ChessBoardTest board("8/8/8/3k4/8/4N3/8/8 b - - 0 1");
 			Assert::IsTrue(board.field_is_under_attack(D5));
@@ -115,7 +115,7 @@ namespace ChessBoardUnitTest
 			Assert::IsFalse(board.field_is_under_attack(F3));
 		}
 		//started to only test legal positions here (with both kings)
-		TEST_METHOD(fieldIsUnderAttackByKing)
+		TEST_METHOD(field_is_under_attack_by_king)
 		{
 			ChessBoardTest board("8/1K6/8/8/4k3/5P2/8/8 w  - - 0 1");
 			Assert::IsTrue(board.field_is_under_attack(F5));
@@ -158,7 +158,7 @@ namespace ChessBoardUnitTest
 			Assert::IsTrue(board.field_is_under_attack(D6));
 			Assert::IsFalse(board.field_is_under_attack(D4));
 		}
-		TEST_METHOD(isUnderAttackAfterMove)
+		TEST_METHOD(is_under_attack_after_move)
 		{
 			//TODO REIMPLEMENT THIS
 			/*
@@ -188,14 +188,14 @@ namespace ChessBoardUnitTest
 			Assert::IsFalse(board.fieldIsUnderAttackWithMoveBB(G6, m4.getBBWithMoveDone()));
 			*/
 		}
-		TEST_METHOD(legalMovesCheck)
+		TEST_METHOD(legal_move_check)
 		{
 			//not matter what castle move, it will be always legal,
 			//because it has been checked for legality before
 			ChessBoardTest board(EMPTY_FEN);
 			Assert::IsTrue(board.move_is_legal(Move(white, castle_long)));
 		}
-		TEST_METHOD(equalCheck)
+		TEST_METHOD(equal_board_check)
 		{
 			ChessBoardTest board1("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 			ChessBoardTest board2(STARTING_FEN);
@@ -251,7 +251,7 @@ namespace ChessBoardUnitTest
 			Assert::IsFalse(board1 == board2);
 			Assert::IsTrue(board1 != board2);
 		}
-		TEST_METHOD(copyBoardTest)
+		TEST_METHOD(copy_board_test)
 		{
 			ChessBoard board1(STARTING_FEN);
 			ChessBoard board2 = board1.get_copy_by_value();
