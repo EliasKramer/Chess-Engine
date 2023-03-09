@@ -33,7 +33,7 @@ A Fen String represents a board, so you can set up a testing position with only 
 Description: https://www.chess.com/terms/fen-chess <br>
 Set up a board: https://www.chess.com/analysis <br>
 
-### V2 has 2 possible Players right now:
+### V2 has 3 possible Players right now:
 - HumanPlayer (A Player that plays with console input)
 - RandomPlayer (A Player that picks its moves randomly)
 - Medicrius (Work in Progress. A Chess Algorithm, that finds some reasonable good moves)
