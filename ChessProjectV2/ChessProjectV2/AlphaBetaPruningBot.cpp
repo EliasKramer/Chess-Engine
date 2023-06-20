@@ -11,7 +11,7 @@ int AlphaBetaPruningBot::getMove(const ChessBoard& board, const UniqueMoveList& 
 	int nodesSearched = 0;
 	int branchesPruned = 0;
 
-	int depth = 5;
+	int depth = 3;
 
 	int bestMoveScore = INT_MIN;
 	int bestMoveIdx = 0;
@@ -38,13 +38,13 @@ int AlphaBetaPruningBot::getMove(const ChessBoard& board, const UniqueMoveList& 
 
 		int currScore = colorMult * moveScore;
 
-		
+		/*
 		std::cout
 			<< "Move: " << curr.get()->getString()
 			<< ", Score: " << currScore
 			<< ", Endstates Evaluated: " << endPointsEvaluated - endstatesBefore
 			<< std::endl;
-		
+		*/
 
 		if (currScore > bestMoveScore)
 		{
@@ -61,6 +61,7 @@ int AlphaBetaPruningBot::getMove(const ChessBoard& board, const UniqueMoveList& 
 
 	std::string additionalInfo = "Pruned Branches: " + std::to_string(branchesPruned);
 	
+	/*
 	printSearchStatistics(
 		"Minimax with Alpha Beta Pruning",
 		nodesSearched,
@@ -70,6 +71,7 @@ int AlphaBetaPruningBot::getMove(const ChessBoard& board, const UniqueMoveList& 
 		bestMoveScore,
 		duration,
 		additionalInfo);
+	*/
 
 	return bestMoveIdx;
 }

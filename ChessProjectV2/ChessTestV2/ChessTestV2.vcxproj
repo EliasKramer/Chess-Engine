@@ -171,6 +171,7 @@
     <ClCompile Include="..\ChessProjectV2\MoveEnPassant.cpp" />
     <ClCompile Include="..\ChessProjectV2\MovePromote.cpp" />
     <ClCompile Include="..\ChessProjectV2\Player.cpp" />
+    <ClCompile Include="..\ChessProjectV2\RandomPlayer.cpp" />
     <ClCompile Include="BitBoardTest.cpp" />
     <ClCompile Include="ChessBoardUnitTests.cpp" />
     <ClCompile Include="ChessTestV2.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="..\ChessProjectV2\MoveEnPassant.h" />
     <ClInclude Include="..\ChessProjectV2\MovePromote.h" />
     <ClInclude Include="..\ChessProjectV2\Player.h" />
+    <ClInclude Include="..\ChessProjectV2\RandomPlayer.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="TestMethods.h" />
   </ItemGroup>
