@@ -117,6 +117,9 @@
     <ClCompile Include="..\ChessProjectV2\Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ChessProjectV2\RandomPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -168,6 +171,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\ChessProjectV2\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChessProjectV2\RandomPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

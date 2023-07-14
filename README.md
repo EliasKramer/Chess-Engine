@@ -1,4 +1,4 @@
-# ChessCpp
+# Chess Engine
 I tried to program chess in c# before, but the program was terrible. <br>
 So i started programming in c++ and made chess.
 ## Version 1:

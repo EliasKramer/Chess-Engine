@@ -5,6 +5,8 @@
 #include "../ChessProjectV2/ChessBoardTest.h"
 #include "../ChessProjectV2/Move.h"
 #include "../ChessProjectV2/MoveEnPassant.h"
+#include <unordered_set>
+#include "../ChessProjectV2/RandomPlayer.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -258,6 +260,29 @@ namespace ChessBoardUnitTest
 			board1 = ChessBoard("r2q1rk1/pP1p2pp/Q4n2/bbp1p3/Np6/1B3NBn/pPPP1PPP/R3K2R b KQ - 0 1");
 			board2 = board1.getCopyByValue();
 			Assert::IsTrue(board1 == board2);
+		}
+		TEST_METHOD(hashing_test)
+		{
+			int hashset_sum = 0;
+			int move_sum = 0;
+			for (int i = 0; i < 100; i++)
+			{
+				ChessBoard board(STARTING_FEN);
+				RandomPlayer bot;
+				std::unordered_set<ChessBoard, chess_board_hasher> hashset;
+
+				while (board.getGameState() == GameState::Ongoing)
+				{
+					hashset.insert(board);
+					auto moves = board.getAllLegalMoves();
+					int move_idx = bot.getMove(board, moves);
+					board.makeMove(*moves[move_idx].get());
+				}
+				hashset_sum += hashset.size();
+				move_sum += (board.getNumberOfMovesPlayed() * 2);
+			}
+			float hashset_move_percent = (((float)hashset_sum / (float)move_sum) * 100);
+			Assert::IsTrue(hashset_move_percent > 97);
 		}
 	};
 }
