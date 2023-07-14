@@ -1,9 +1,11 @@
 #pragma once
 #include "Medicrius.h"
-
 class AlphaBetaPruningBot : public Medicrius
 {
 public:
+	AlphaBetaPruningBot();
+	AlphaBetaPruningBot(int depth);
+
 	int getMove(const ChessBoard& board, const UniqueMoveList& moves) override;
 private:
 	int getMoveScoreRecursively(

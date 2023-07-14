@@ -1,5 +1,6 @@
-#include "ChessBoard.h"
-
+﻿#include "ChessBoard.h"
+#include <iostream>
+#include <random>
 bool ChessBoard::destinationIsSameColor(Square start, Direction direction, ChessColor color) const
 {
 	int newPos = (start + direction);
@@ -48,6 +49,8 @@ UniqueMoveList ChessBoard::getAllPseudoLegalMoves() const
 {
 	UniqueMoveList moveList;
 
+	getCastlingMoves(moveList);
+
 	getPawnMoves(moveList);
 	getKnightMoves(moveList);
 	getBishopMoves(moveList);
@@ -55,7 +58,6 @@ UniqueMoveList ChessBoard::getAllPseudoLegalMoves() const
 	getQueenMoves(moveList);
 	getKingMoves(moveList);
 
-	getCastlingMoves(moveList);
 	getEnPassantMove(moveList);
 
 	return moveList;
@@ -264,8 +266,7 @@ void ChessBoard::getCastlingMoves(UniqueMoveList& moves) const
 
 			if (castlingAllowed)
 			{
-				moves.push_back(
-					std::make_unique<MoveCastle>(_currentTurnColor, currCastlingType));
+				moves.push_back(std::make_unique<MoveCastle>(_currentTurnColor, currCastlingType));
 			}
 		}
 	}
@@ -333,6 +334,7 @@ void ChessBoard::addRayMoves(
 					//if an opponent is on the new field you can take him,
 					//but cannot continue after that (you cannot jump over opponents)
 					moves.push_back(std::make_unique<Move>(start, currentSquare));
+
 					break;
 				}
 				else {
@@ -431,6 +433,8 @@ bool ChessBoard::fieldGetsAttackedBySlidingPiece(Square pos, BitBoard moveBB) co
 				if (squareOverlapsWithBB(currentSquare, newCurrentColorBB))
 				{
 					//you cannot go on a square where a piece of the same color is
+					//your piece blocks the sliding attack
+
 					break;
 				}
 				else if (squareOverlapsWithBB(currentSquare, opponentColorBB))
@@ -515,7 +519,7 @@ bool ChessBoard::isCaptureMove(const std::unique_ptr<Move>& move) const
 	return bitboardsOverlap(oppositeColorBB, potentialCaptureField);
 }
 
-void ChessBoard::udpateCastlingRightsAfterMove(Move& m)
+void ChessBoard::udpateCastlingRightsAfterMove(const Move& m)
 {
 	BitBoard start = BB_SQUARE[m.getStart()];
 	BitBoard dest = BB_SQUARE[m.getDestination()];
@@ -546,7 +550,7 @@ void ChessBoard::udpateCastlingRightsAfterMove(Move& m)
 	}
 }
 
-void ChessBoard::updateEnPassantRightsAfterMove(Move& m)
+void ChessBoard::updateEnPassantRightsAfterMove(const Move& m)
 {
 	_enPassantSquare = SQUARE_NONE;
 	Square start = m.getStart();
@@ -564,7 +568,7 @@ void ChessBoard::updateEnPassantRightsAfterMove(Move& m)
 	}
 }
 
-void ChessBoard::update50MoveRule(Move& m)
+void ChessBoard::update50MoveRule(const Move& m)
 {
 	BitBoard startBB = BB_SQUARE[m.getStart()];
 	BitBoard destBB = BB_SQUARE[m.getDestination()];
@@ -603,6 +607,18 @@ bool ChessBoard::insufficientMaterialCheck() const
 	return false;
 }
 
+bool ChessBoard::threeFoldRuleCheck() const
+{
+	chess_board_hasher hasher;
+	const size_t hash = hasher(*this);
+
+	if (_moveRepetitionTable.find(hash) != _moveRepetitionTable.end())
+	{
+		return _moveRepetitionTable.at(hash) >= 3;
+	}
+	return false;
+}
+
 char ChessBoard::getPieceCharAt(Square pos) const
 {
 	BitBoard posBB = BB_SQUARE[pos];
@@ -626,7 +642,12 @@ char ChessBoard::getPieceCharAt(Square pos) const
 
 	if (pieceChar == '~')
 	{
-		throw "Could not find PieceType in the Chessboard configuration";
+		std::cout
+			<< "Could not find PieceType on pos" << pos <<
+			" in the Chessboard configuration\n"
+			<< getString() << "\n";
+
+		return ' ';
 	}
 
 	if (bitboardsOverlap(_board.PiecesOfColor[Black], posBB))
@@ -638,7 +659,7 @@ char ChessBoard::getPieceCharAt(Square pos) const
 }
 
 
-ChessBoard::ChessBoard(std::string given_fen_code)
+ChessBoard::ChessBoard(const std::string& given_fen_code)
 {
 	//set all castling rights to false at the beginning
 	for (int i = 0; i < 2; i++)
@@ -736,7 +757,7 @@ ChessBoard::ChessBoard(std::string given_fen_code)
 	_moveNumber = std::stoi(split_fen_code[5]);
 }
 
-std::string ChessBoard::getString()
+std::string ChessBoard::getString() const
 {
 	std::string result = "";
 	std::string rowSeperatorString = "\n+---+---+---+---+---+---+---+---+\n";
@@ -760,7 +781,7 @@ std::string ChessBoard::getString()
 	return result;
 }
 
-std::string ChessBoard::getFen()
+std::string ChessBoard::getFen() const
 {
 	std::string result = "";
 
@@ -902,7 +923,7 @@ UniqueMoveList ChessBoard::getAllLegalCaptureMoves() const
 	return list;
 }
 
-void ChessBoard::makeMove(Move& move)
+void ChessBoard::makeMove(const Move& move)
 {
 	Square moveStart = move.getStart();
 	Square moveDest = move.getDestination();
@@ -921,6 +942,18 @@ void ChessBoard::makeMove(Move& move)
 	if (_currentTurnColor == Black)
 	{
 		_moveNumber++;
+	}
+
+	chess_board_hasher hasher;
+	size_t hash = hasher(*this);
+	if (_moveRepetitionTable.find(hash) == _moveRepetitionTable.end())
+	{
+		_moveRepetitionTable[hash] = 1;
+	}
+	else
+	{
+		//if the hash is already in the table, increment the counter (this is needed for the 3-fold repetition rule
+		_moveRepetitionTable[hash]++;
 	}
 
 	_currentTurnColor = getOppositeColor(_currentTurnColor);
@@ -963,8 +996,11 @@ GameState ChessBoard::getGameState() const
 			return Stalemate;
 		}
 	}
+	chess_board_hasher hasher;
+	size_t hash = hasher(*this);
 	if (_halfMoveClock == 50 ||
-		insufficientMaterialCheck())
+		insufficientMaterialCheck() ||
+		threeFoldRuleCheck())
 	{
 		return Draw;
 	}
@@ -1049,4 +1085,48 @@ bool operator==(const ChessBoard& first, const ChessBoard& second)
 bool operator!=(const ChessBoard& first, const ChessBoard& second)
 {
 	return !(first == second);
+}
+size_t chess_board_hasher::operator()(const ChessBoard& board) const
+{
+	static std::random_device rd;
+	static std::mt19937_64 generator(rd());
+	static std::uniform_int_distribution<BitBoard> distribution(0, std::numeric_limits<BitBoard>::max());
+
+	const static BitBoard black_to_move_zobrist = distribution(generator);
+
+	const static std::array<std::array<BitBoard, 6>, 2> zobrist_table =
+		[]()->std::array<std::array<BitBoard, 6>, 2>
+	{
+		std::array<std::array<BitBoard, 6>, 2> result = {};
+
+		for (int i = 0; i < 2; i++)
+		{
+			for (int j = 0; j < 6; j++)
+			{
+				result[i][j] = distribution(generator);
+			}
+		}
+
+		return result;
+	}();
+
+	const BoardRepresentation& rep = board.getBoardRepresentation();
+
+	BitBoard hash = 0ULL;
+
+	if (board.getCurrentTurnColor() == ChessColor::Black)
+	{
+		hash ^= black_to_move_zobrist;
+	}
+
+	for (int piece_type = 0; piece_type < 6; piece_type++)
+	{
+		for (int color = 0; color < 2; color++)
+		{
+			BitBoard piece_table = (rep.PiecesOfType[piece_type] | rep.PiecesOfColor[color]) ^ zobrist_table[color][piece_type];
+			hash ^= piece_table;
+		}
+	}
+
+	return hash;
 }

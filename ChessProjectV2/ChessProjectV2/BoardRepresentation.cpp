@@ -1,5 +1,5 @@
 #include "BoardRepresentation.h"
-
+#include <iostream>
 BoardRepresentation::BoardRepresentation()
 	:
 	AllPieces(BITBOARD_NONE),
@@ -14,8 +14,8 @@ BoardRepresentation::BoardRepresentation()
 	BITBOARD_NONE,
 	BITBOARD_NONE,
 	BITBOARD_NONE },
-	
-	KingPos{E1, E8}
+
+	KingPos{ E1, E8 }
 {}
 
 ChessPiece BoardRepresentation::getPieceAt(Square square) const
@@ -52,12 +52,22 @@ ChessPiece BoardRepresentation::getPieceAt(Square square) const
 
 	if (!foundColor || !foundType)
 	{
-		throw "There was no piece found at the given square";
+		std::cout << "exception. no piece found at square: " << std::to_string(square) << "\n"
+			<< "PiecesOfColor[White]: " << PiecesOfColor[White] << "\n"
+			<< "PiecesOfColor[Black]: " << PiecesOfColor[Black] << "\n"
+			<< "PiecesOfType[King]: " << PiecesOfType[King] << "\n"
+			<< "PiecesOfType[Queen]: " << PiecesOfType[Queen] << "\n"
+			<< "PiecesOfType[Rook]: " << PiecesOfType[Rook] << "\n"
+			<< "PiecesOfType[Bishop]: " << PiecesOfType[Bishop] << "\n"
+			<< "PiecesOfType[Knight]: " << PiecesOfType[Knight] << "\n"
+			<< "PiecesOfType[Pawn]: " << PiecesOfType[Pawn] << "\n"
+			<< "squareBB: " << squareBB << "\n"
+			<< "AllPieces: " << AllPieces << "\n";
+		throw std::exception("There was no piece found at the given square");
 	}
 
 	return ChessPiece(colFound, typeFound);
 }
-
 
 void BoardRepresentation::copySquareToPos(Square copyField, Square pasteField)
 {
@@ -68,7 +78,7 @@ void BoardRepresentation::copySquareToPos(Square copyField, Square pasteField)
 	{
 		ChessColor currCol = (ChessColor)i;
 
-		if ((PiecesOfColor[currCol] & copyPos) != 0)
+		if ((PiecesOfColor[currCol] & copyPos) != 0) //curr color has is 
 		{
 			PiecesOfColor[currCol] = PiecesOfColor[currCol] | pastePos;
 		}
@@ -100,6 +110,9 @@ void BoardRepresentation::copySquareToPos(Square copyField, Square pasteField)
 
 void BoardRepresentation::setAtPosition(ChessPiece piece, Square position)
 {
+	if (AllPieces != (PiecesOfColor[White] | PiecesOfColor[Black]))
+		throw std::exception("AllPieces is not equal to the sum of PiecesOfColor[White] and PiecesOfColor[Black]");
+
 	BitBoard piecePos = BB_SQUARE[position];
 
 	setPieceBitBoard(piece, piecePos);
@@ -154,5 +167,5 @@ bool operator==(const BoardRepresentation& first, const BoardRepresentation& sec
 
 bool operator!=(const BoardRepresentation& first, const BoardRepresentation& second)
 {
-    return !(first == second);
+	return !(first == second);
 }
