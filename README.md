@@ -36,7 +36,7 @@ Set up a board: https://www.chess.com/analysis <br>
 ### V2 has 3 possible Players right now:
 - HumanPlayer (A Player that plays with console input)
 - RandomPlayer (A Player that picks its moves randomly)
-- Medicrius (Work in Progress. A Chess Algorithm, that finds some reasonable good moves)
+- Medicrius (Work in Progress. A Chess Algorithm, that finds some reasonably good moves)
 
 ## Future:
 Adding an algorithm, that can actually win chess. <br>
