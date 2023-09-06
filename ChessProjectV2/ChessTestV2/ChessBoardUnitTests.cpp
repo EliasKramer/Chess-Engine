@@ -315,6 +315,37 @@ namespace ChessBoardUnitTest
 
 			Assert::AreEqual((int)Draw, (int)board.getGameState());
 		}
+		TEST_METHOD(three_fold_rep_test_and_copy_board_by_value)
+		{
+			ChessBoard board("1k6/5ppp/8/p1p2P2/P1Pbp2P/1P6/6P1/6KR w - - 21 30");
+			//1st rep
+			Move m_w(G1, H2);
+			board.makeMove(m_w);
+			Move m_b(D4, E5);
+			board.makeMove(m_b);
+
+			//2nd rep
+			m_w = Move(H2, G1);
+			board.makeMove(m_w);
+			m_b = Move(E5, D4);
+			board.makeMove(m_b);
+
+			//3rd rep
+			m_w = Move(G1, H2);
+			board.makeMove(m_w);
+			m_b = Move(D4, E5);
+			board.makeMove(m_b);
+
+			ChessBoard board2 = board.getCopyByValue();
+
+			//4th rep
+			m_w = Move(H2, G1);
+			board2.makeMove(m_w);
+			m_b = Move(E5, D4);
+			board2.makeMove(m_b);
+
+			Assert::AreEqual((int)Draw, (int)board2.getGameState());
+		}
 		TEST_METHOD(hash_test_2)
 		{
 			ChessBoard board1("1k6/5ppp/8/p1p2P2/P1Pbp2P/1P6/6P1/6KR w - - 29 34");

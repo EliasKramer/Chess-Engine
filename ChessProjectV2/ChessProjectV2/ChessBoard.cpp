@@ -996,6 +996,8 @@ ChessBoard ChessBoard::getCopyByValue() const
 
 	board._moveNumber = _moveNumber;
 
+	board._moveRepetitionTable = _moveRepetitionTable;
+
 	return board;
 }
 
